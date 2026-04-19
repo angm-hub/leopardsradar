@@ -1,21 +1,10 @@
 import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
+import type { Player, PositionCode } from "@/types/player";
 
-export type Position = "GK" | "DEF" | "MID" | "ATT";
+export type { Player } from "@/types/player";
 
-export interface Player {
-  slug: string;
-  name: string;
-  photoUrl: string;
-  club: string;
-  clubLogoUrl: string;
-  position: Position;
-  stats: { matches: number; goals: number; assists: number; minutes: number };
-  marketValue: string;
-  isCaptain?: boolean;
-}
-
-const POSITION_DOT: Record<Position, string> = {
+const POSITION_DOT: Record<PositionCode, string> = {
   GK: "bg-pos-gk",
   DEF: "bg-pos-def",
   MID: "bg-pos-mid",
