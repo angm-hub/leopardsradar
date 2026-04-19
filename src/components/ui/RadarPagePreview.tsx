@@ -45,6 +45,7 @@ export function RadarPagePreview() {
           )
           .in("player_category", ["radar", "heritage"])
           .eq("tier", "tier1")
+          .neq("eligibility_status", "ineligible")
           .gt("market_value_eur", 0)
           .order("market_value_eur", { ascending: false, nullsFirst: false })
           .limit(3),
@@ -52,7 +53,8 @@ export function RadarPagePreview() {
           .from("players")
           .select("id", { count: "exact", head: true })
           .in("player_category", ["radar", "heritage"])
-          .eq("tier", "tier1"),
+          .eq("tier", "tier1")
+          .neq("eligibility_status", "ineligible"),
       ]);
 
       if (cancelled) return;
