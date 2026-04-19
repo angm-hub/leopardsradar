@@ -1,98 +1,83 @@
+import { Link } from "react-router-dom";
 import SectionWithMockup from "./SectionWithMockup";
-import LineupPitch, { type LineupPlayer } from "@/components/ui/LineupPitch";
 import BrowserFrame from "@/components/ui/BrowserFrame";
 import { ResidualGradient } from "@/components/ui/GradientBackgrounds";
+import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
+import { useBestXI } from "@/hooks/useBestXI";
 
-const mockLineup: LineupPlayer[] = [
-  {
-    name: "Mpasi-Nzau",
-    position: "GK",
-    photoUrl:
-      "https://images.unsplash.com/photo-1566577134624-a1bcda9faf3a?w=200&q=80",
-    club: "Le Havre",
-    nationalityFlag: "🇫🇷",
-  },
-  {
-    name: "Wan-Bissaka",
-    position: "RB",
-    photoUrl:
-      "https://images.unsplash.com/photo-1552058544-f2b08422138a?w=200&q=80",
-    club: "West Ham",
-    nationalityFlag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-  },
-  {
-    name: "Mbemba",
-    position: "CB",
-    photoUrl:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80",
-    club: "Lille",
-    nationalityFlag: "🇫🇷",
-  },
-  {
-    name: "Tuanzebe",
-    position: "CB",
-    photoUrl:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80",
-    club: "Burnley",
-    nationalityFlag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-  },
-  {
-    name: "Masuaku",
-    position: "LB",
-    photoUrl:
-      "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=200&q=80",
-    club: "Lens",
-    nationalityFlag: "🇫🇷",
-  },
-  {
-    name: "Sadiki",
-    position: "CM",
-    photoUrl:
-      "https://images.unsplash.com/photo-1513956589380-bad6acb9b9d4?w=200&q=80",
-    club: "Sunderland",
-    nationalityFlag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-  },
-  {
-    name: "Kayembe",
-    position: "CM",
-    photoUrl:
-      "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=200&q=80",
-    club: "Watford",
-    nationalityFlag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-  },
-  {
-    name: "Moutoussamy",
-    position: "CM",
-    photoUrl:
-      "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=200&q=80",
-    club: "Atromitos",
-    nationalityFlag: "🇬🇷",
-  },
-  {
-    name: "Bongonda",
-    position: "LW",
-    photoUrl:
-      "https://images.unsplash.com/photo-1502685104226-ee32379fefbe?w=200&q=80",
-    club: "Spartak",
-    nationalityFlag: "🇷🇺",
-  },
-  {
-    name: "Mayele",
-    position: "ST",
-    photoUrl:
-      "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&q=80",
-    club: "Pyramids",
-    nationalityFlag: "🇪🇬",
-  },
-  {
-    name: "Bakambu",
-    position: "RW",
-    photoUrl:
-      "https://images.unsplash.com/photo-1504593811423-6dd665756598?w=200&q=80",
-    club: "Real Betis",
-    nationalityFlag: "🇪🇸",
-  },
-];
+function BestXIList() {
+  const { data, loading } = useBestXI();
+
+  if (loading) {
+    return (
+      <div className="bg-background p-6 space-y-2">
+        {Array.from({ length: 11 }).map((_, i) => (
+          <div key={i} className="h-12 rounded-lg bg-card animate-pulse" />
+        ))}
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="bg-background p-10 text-center">
+        <p className="font-serif text-xl text-foreground">
+          Première composition à venir
+        </p>
+        <p className="mt-2 text-sm text-muted">
+          Le Best XI Diaspora arrive bientôt.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-background">
+      <div className="px-6 pt-6 pb-4 border-b border-border">
+        <p className="text-[10px] uppercase tracking-[0.2em] text-primary">
+          Best XI · {data.formation}
+        </p>
+        <h3 className="mt-2 font-serif text-2xl font-semibold leading-tight">
+          {data.title}
+        </h3>
+      </div>
+      <ul className="divide-y divide-border">
+        {data.slots.map((slot, idx) => {
+          const p = data.playersById[slot.player_id];
+          if (!p) return null;
+          return (
+            <li key={`${slot.position}-${idx}`}>
+              <Link
+                to={`/player/${p.slug}`}
+                className="flex items-center gap-3 px-6 py-2.5 hover:bg-card transition-colors"
+              >
+                <span className="font-mono text-[10px] uppercase tracking-wider text-primary w-10 shrink-0">
+                  {slot.position}
+                </span>
+                <PlayerAvatar
+                  name={p.name}
+                  src={p.image_url}
+                  className="h-9 w-9 shrink-0 rounded-full border border-border"
+                  initialsClassName="text-xs"
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="font-serif text-sm font-semibold truncate">
+                    {p.name}
+                  </p>
+                  {p.current_club && (
+                    <p className="text-[11px] text-muted truncate">
+                      {p.current_club}
+                    </p>
+                  )}
+                </div>
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}
 
 export function BestXIPreviewSection() {
   return (
@@ -109,11 +94,7 @@ export function BestXIPreviewSection() {
         secondaryImageSrc="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600&q=80"
         primaryNode={
           <BrowserFrame url="leopardsradar.com/best-xi">
-            <LineupPitch
-              formation="4-3-3"
-              players={mockLineup}
-              date="Sem. 16 · 2026"
-            />
+            <BestXIList />
           </BrowserFrame>
         }
       />
