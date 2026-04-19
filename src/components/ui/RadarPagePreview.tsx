@@ -1,44 +1,77 @@
+import { useEffect, useState } from "react";
 import { Crosshair } from "lucide-react";
+import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
+import { flagFor, formatMarketValue } from "@/lib/playerHelpers";
 
-interface RadarMockPlayer {
+interface RadarTeaserPlayer {
   name: string;
-  role: string;
-  narrative: string;
-  photoUrl: string;
-  flag: string;
+  slug: string;
+  current_club: string | null;
+  position: string | null;
+  market_value_eur: number | null;
+  image_url: string | null;
+  age: number | null;
+  nationalities: string[];
+  other_nationalities: string[];
 }
 
-const MOCK: RadarMockPlayer[] = [
-  {
-    name: "Rayan Cherki",
-    role: "AM · Lyon",
-    narrative:
-      "Mère congolaise. A déjà évoqué un intérêt pour les Léopards en interview.",
-    photoUrl:
-      "https://images.unsplash.com/photo-1502767089025-6572583495b9?w=200&q=80",
-    flag: "🇫🇷",
-  },
-  {
-    name: "Noah Mbamba",
-    role: "CM · Leverkusen",
-    narrative:
-      "Né en Belgique, racines kinoises. Éligible via grand-père maternel.",
-    photoUrl:
-      "https://images.unsplash.com/photo-1521119989659-a83eee488004?w=200&q=80",
-    flag: "🇧🇪",
-  },
-  {
-    name: "Désiré Doué",
-    role: "FW · PSG",
-    narrative:
-      "Famille originaire de Mbuji-Mayi. Convoité aussi par la Côte d'Ivoire.",
-    photoUrl:
-      "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=200&q=80",
-    flag: "🇫🇷",
-  },
-];
+function normalizeJsonbArray(value: unknown): string[] {
+  if (Array.isArray(value)) return value.filter((v): v is string => typeof v === "string");
+  if (typeof value === "string") {
+    try {
+      const parsed = JSON.parse(value);
+      return Array.isArray(parsed) ? parsed.filter((v) => typeof v === "string") : [];
+    } catch {
+      return [];
+    }
+  }
+  return [];
+}
 
 export function RadarPagePreview() {
+  const [players, setPlayers] = useState<RadarTeaserPlayer[]>([]);
+  const [count, setCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const [topRes, countRes] = await Promise.all([
+        supabase
+          .from("players")
+          .select(
+            "name, slug, current_club, position, market_value_eur, image_url, age, nationalities, other_nationalities",
+          )
+          .in("player_category", ["radar", "heritage"])
+          .eq("tier", "tier1")
+          .gt("market_value_eur", 0)
+          .order("market_value_eur", { ascending: false, nullsFirst: false })
+          .limit(3),
+        supabase
+          .from("players")
+          .select("id", { count: "exact", head: true })
+          .in("player_category", ["radar", "heritage"])
+          .eq("tier", "tier1"),
+      ]);
+
+      if (cancelled) return;
+      if (topRes.data) {
+        setPlayers(
+          topRes.data.map((p) => ({
+            ...p,
+            nationalities: normalizeJsonbArray(p.nationalities),
+            other_nationalities: normalizeJsonbArray(p.other_nationalities),
+          })) as RadarTeaserPlayer[],
+        );
+      }
+      if (typeof countRes.count === "number") setCount(countRes.count);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <div className="relative w-full bg-background text-foreground">
       {/* Header */}
@@ -51,42 +84,53 @@ export function RadarPagePreview() {
           Le Radar.
         </h3>
         <p className="mt-2 text-xs text-muted max-w-sm">
-          27 profils suivis. Mise à jour chaque dimanche.
+          {count !== null ? `${count} profils suivis.` : "Profils suivis."} Mise à jour chaque dimanche.
         </p>
       </div>
 
       {/* Cards */}
       <div className="px-6 py-6 flex flex-col gap-3">
-        {MOCK.map((p) => (
-          <div
-            key={p.name}
-            className="flex items-start gap-3 rounded-xl border border-border bg-card p-3"
-          >
-            <div className="h-12 w-12 shrink-0 overflow-hidden rounded-lg border border-border">
-              <img
-                src={p.photoUrl}
-                alt=""
-                aria-hidden
-                className="h-full w-full object-cover"
-                loading="lazy"
+        {players.map((p) => {
+          const flags = [...p.nationalities, ...p.other_nationalities].slice(0, 3);
+          return (
+            <Link
+              key={p.slug}
+              to={`/player/${p.slug}`}
+              className="flex items-start gap-3 rounded-xl border border-border bg-card p-3 hover:border-border-hover transition-colors"
+            >
+              <PlayerAvatar
+                name={p.name}
+                src={p.image_url}
+                className="h-12 w-12 shrink-0 rounded-lg border border-border"
+                initialsClassName="text-sm"
               />
-            </div>
-            <div className="min-w-0 flex-1">
-              <div className="flex items-center justify-between gap-2">
-                <span className="font-serif text-sm font-semibold truncate">
-                  {p.name}
-                </span>
-                <span className="text-[10px] leading-none">{p.flag}</span>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-serif text-sm font-semibold truncate">
+                    {p.name}
+                  </span>
+                  <span className="flex items-center gap-0.5 text-[10px] leading-none">
+                    {flags.map((f) => (
+                      <span key={f} title={f}>{flagFor(f)}</span>
+                    ))}
+                  </span>
+                </div>
+                <div className="text-[10px] uppercase tracking-wider text-primary/80 mt-0.5 truncate">
+                  {p.position ? `${p.position}` : ""}
+                  {p.position && p.current_club ? " · " : ""}
+                  {p.current_club ?? ""}
+                </div>
+                <p className="mt-1 text-[11px] leading-snug text-muted">
+                  {formatMarketValue(p.market_value_eur)}
+                  {p.age ? ` · ${p.age} ans` : ""}
+                </p>
               </div>
-              <div className="text-[10px] uppercase tracking-wider text-primary/80 mt-0.5">
-                {p.role}
-              </div>
-              <p className="mt-1 text-[11px] leading-snug text-muted line-clamp-2">
-                {p.narrative}
-              </p>
-            </div>
-          </div>
-        ))}
+            </Link>
+          );
+        })}
+        {players.length === 0 && (
+          <p className="text-xs text-muted">Profils à venir.</p>
+        )}
       </div>
 
       {/* Edge fade */}
