@@ -1,6 +1,9 @@
 import { motion } from "framer-motion";
 import { Globe, Trophy, MapPin, Calendar } from "lucide-react";
 import { Pill } from "@/components/ui/Pill";
+import { useHomeStats } from "@/hooks/useHomeStats";
+import { usePlayers } from "@/hooks/usePlayers";
+import { formatMarketValue } from "@/lib/playerHelpers";
 
 const cardBase =
   "relative overflow-hidden rounded-2xl bg-card border border-border";
@@ -26,6 +29,25 @@ function getCountdown() {
 
 export function StatsSection() {
   const { days, hours } = getCountdown();
+  const { stats } = useHomeStats();
+  const { players: rosterPlayers } = usePlayers({ category: "roster" });
+
+  // Top scorer from roster
+  const topScorer = [...rosterPlayers]
+    .sort((a, b) => (b.season_goals ?? 0) - (a.season_goals ?? 0))[0];
+
+  // Tier 1 ratio
+  const tier1Count = rosterPlayers.filter((p) => p.tier === "tier1").length;
+  const tier1Ratio = rosterPlayers.length
+    ? Math.round((tier1Count / rosterPlayers.length) * 100)
+    : 0;
+
+  const totalValueLabel = stats?.total_market_value
+    ? formatMarketValue(stats.total_market_value)
+    : "—";
+  const totalPlayers = stats?.total_roster ?? 0;
+  const totalCountries = stats?.total_countries ?? 0;
+  const avgAge = stats?.avg_age ? Math.round(stats.avg_age) : 0;
 
   return (
     <section className="py-32 bg-background">
@@ -57,19 +79,19 @@ export function StatsSection() {
                 Valeur marchande cumulée
               </span>
               <div className="mt-4 font-mono text-6xl md:text-7xl font-bold text-foreground leading-none">
-                184M €
+                {totalValueLabel}
               </div>
             </div>
 
             <div className="relative mt-8">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted">Joueurs en top 5 européen</span>
-                <span className="text-foreground font-medium">80%</span>
+                <span className="text-foreground font-medium">{tier1Ratio}%</span>
               </div>
               <div className="mt-2 h-2 w-full rounded-full bg-border overflow-hidden">
                 <motion.div
                   initial={{ width: 0 }}
-                  whileInView={{ width: "80%" }}
+                  whileInView={{ width: `${tier1Ratio}%` }}
                   viewport={{ once: true }}
                   transition={{ duration: 1.2, ease: "easeOut", delay: 0.3 }}
                   className="h-full rounded-full bg-gradient-to-r from-primary to-success"
@@ -84,7 +106,7 @@ export function StatsSection() {
             </div>
           </motion.div>
 
-          {/* CARD B — 35 JOUEURS */}
+          {/* CARD B — JOUEURS */}
           <motion.div
             {...fadeUp(0.1)}
             className={`${cardBase} md:col-span-1 md:row-span-1 p-6 flex flex-col justify-between`}
@@ -94,13 +116,13 @@ export function StatsSection() {
             </span>
             <div>
               <div className="font-mono text-5xl font-bold text-foreground leading-none">
-                35
+                {totalPlayers}
               </div>
               <p className="mt-2 text-xs text-muted">dans le roster actif</p>
             </div>
           </motion.div>
 
-          {/* CARD C — 12 PAYS */}
+          {/* CARD C — PAYS */}
           <motion.div
             {...fadeUp(0.2)}
             className={`${cardBase} md:col-span-1 md:row-span-1 p-6 flex flex-col justify-between`}
@@ -110,7 +132,7 @@ export function StatsSection() {
             </span>
             <div>
               <div className="font-mono text-5xl font-bold text-foreground leading-none">
-                12
+                {totalCountries}
               </div>
               <p className="mt-2 text-xs text-muted">où les Léopards évoluent</p>
             </div>
@@ -136,7 +158,7 @@ export function StatsSection() {
             </div>
           </motion.div>
 
-          {/* CARD E — 27 ANS */}
+          {/* CARD E — ÂGE MOYEN */}
           <motion.div
             {...fadeUp(0.4)}
             className={`${cardBase} md:col-span-1 md:row-span-1 p-6 flex flex-col justify-between`}
@@ -146,7 +168,7 @@ export function StatsSection() {
             </span>
             <div>
               <div className="font-mono text-5xl font-bold text-foreground leading-none">
-                27
+                {avgAge}
               </div>
               <p className="mt-2 text-xs text-muted">ans · génération pic</p>
             </div>
@@ -157,20 +179,36 @@ export function StatsSection() {
             {...fadeUp(0.5)}
             className={`${cardBase} md:col-span-1 md:row-span-1 p-5 flex items-center gap-4`}
           >
-            <img
-              src="https://images.unsplash.com/photo-1546519638-68e109498ffc?w=160&h=160&fit=crop&crop=faces"
-              alt="Fiston Mayele"
-              loading="lazy"
-              className="h-16 w-16 rounded-xl object-cover ring-1 ring-border shrink-0"
-            />
+            <div className="h-16 w-16 rounded-xl bg-gradient-to-br from-[#00A651] to-[#004d25] flex items-center justify-center text-foreground font-bold text-lg shrink-0 ring-1 ring-border overflow-hidden">
+              {topScorer?.image_url ? (
+                <img
+                  src={topScorer.image_url}
+                  alt={topScorer.name}
+                  loading="lazy"
+                  className="h-full w-full object-cover"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).style.display = "none";
+                  }}
+                />
+              ) : (
+                topScorer?.name
+                  ?.split(" ")
+                  .map((n) => n[0])
+                  .slice(0, 2)
+                  .join("")
+                  .toUpperCase() ?? "—"
+              )}
+            </div>
             <div className="min-w-0">
               <span className="text-[10px] uppercase tracking-[0.2em] text-muted">
                 Top scoreur
               </span>
               <p className="mt-1 font-serif text-base text-foreground truncate">
-                Fiston Mayele
+                {topScorer?.name ?? "—"}
               </p>
-              <p className="font-mono text-sm text-primary">15 buts</p>
+              <p className="font-mono text-sm text-primary">
+                {topScorer ? `${topScorer.season_goals ?? 0} buts` : "—"}
+              </p>
             </div>
           </motion.div>
 
@@ -241,16 +279,15 @@ export function StatsSection() {
 
 /* Minimal world map silhouette w/ yellow diaspora dots */
 function MiniWorldMap() {
-  // Approximate dot positions (x%, y%) for known leagues
   const dots = [
-    { x: 48, y: 42 }, // Europe
+    { x: 48, y: 42 },
     { x: 50, y: 45 },
     { x: 46, y: 40 },
     { x: 52, y: 44 },
-    { x: 53, y: 50 }, // North Africa
-    { x: 55, y: 60 }, // Central Africa (RDC)
-    { x: 70, y: 38 }, // Russia
-    { x: 25, y: 45 }, // Americas
+    { x: 53, y: 50 },
+    { x: 55, y: 60 },
+    { x: 70, y: 38 },
+    { x: 25, y: 45 },
   ];
   return (
     <svg
@@ -259,7 +296,6 @@ function MiniWorldMap() {
       preserveAspectRatio="xMidYMid slice"
       aria-hidden
     >
-      {/* dotted continents pattern */}
       <defs>
         <pattern id="dots" width="2" height="2" patternUnits="userSpaceOnUse">
           <circle cx="0.5" cy="0.5" r="0.3" fill="hsl(var(--border-hover, 240 5% 18%))" opacity="0.6" />
