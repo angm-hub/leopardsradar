@@ -49,9 +49,21 @@ export function RosterPreviewSection() {
             ))}
           </div>
         ) : players.length === 0 ? (
-          <p className="mt-12 text-center text-muted-light py-16">
-            Données en cours de chargement…
-          </p>
+          <div className="mt-12 flex flex-col items-center justify-center text-center py-20 gap-3">
+            <Search className="h-12 w-12 text-foreground" style={{ opacity: 0.3 }} />
+            <h3 className="font-serif text-2xl text-foreground">
+              Les données arrivent bientôt.
+            </h3>
+            <p className="text-muted">
+              Le roster se met à jour chaque dimanche soir.
+            </p>
+            <a
+              href="/newsletter"
+              className="mt-2 text-sm text-primary hover:underline underline-offset-4"
+            >
+              S'abonner à la newsletter pour être prévenu →
+            </a>
+          </div>
         ) : (
           <>
             {/* Mobile: horizontal scroll */}
