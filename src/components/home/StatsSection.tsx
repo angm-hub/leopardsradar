@@ -31,7 +31,7 @@ function getCountdown() {
 
 export function StatsSection() {
   const { days, hours } = getCountdown();
-  const { stats } = useHomeStats();
+  const { stats, loading: statsLoading } = useHomeStats();
   const { players: rosterPlayers } = usePlayers({ category: "roster" });
   const { players: radarPlayers } = usePlayers({ categories: ["radar", "heritage"] });
 
@@ -43,9 +43,11 @@ export function StatsSection() {
     : 0;
 
   const hasMarketValue = !!stats?.total_market_value && stats.total_market_value > 0;
-  const totalValueLabel = hasMarketValue
-    ? formatMarketValue(stats!.total_market_value)
-    : "À venir";
+  const totalValueLabel = statsLoading
+    ? "—"
+    : hasMarketValue
+      ? formatMarketValue(stats!.total_market_value)
+      : "À venir";
   const totalPlayers = stats?.total_roster ?? 0;
   const totalCountries = stats?.total_countries ?? 0;
   const avgAge = stats?.avg_age ? Math.round(stats.avg_age) : 0;
