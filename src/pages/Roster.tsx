@@ -3,9 +3,10 @@ import { Search, X } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import PlayerCard from "@/components/home/PlayerCard";
+import PlayerCardSkeleton from "@/components/ui/PlayerCardSkeleton";
 import { Button } from "@/components/ui/ButtonPrimitive";
 import { Select } from "@/components/ui/SelectPrimitive";
-import { MOCK_PLAYERS } from "@/data/mockPlayers";
+import { usePlayers } from "@/hooks/usePlayers";
 import type { League, PositionCode } from "@/types/player";
 
 type PositionFilter = "ALL" | PositionCode;
@@ -48,6 +49,7 @@ const SORT_OPTIONS: { value: SortKey; label: string }[] = [
 ];
 
 const Roster = () => {
+  const { players, loading, error } = usePlayers({ category: "Roster" });
   const [position, setPosition] = useState<PositionFilter>("ALL");
   const [league, setLeague] = useState<LeagueFilter>("ALL");
   const [age, setAge] = useState<AgeFilter>("ALL");
@@ -71,7 +73,7 @@ const Roster = () => {
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    let list = MOCK_PLAYERS.filter((p) => {
+    let list = players.filter((p) => {
       if (position !== "ALL" && p.position !== position) return false;
       if (league !== "ALL" && p.league !== league) return false;
       if (age === "U23" && p.age >= 23) return false;
@@ -88,7 +90,7 @@ const Roster = () => {
     });
 
     return list;
-  }, [position, league, age, sort, query]);
+  }, [players, position, league, age, sort, query]);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -108,7 +110,7 @@ const Roster = () => {
             Roster Léopards
           </h1>
           <p className="mt-3 text-lg text-muted-light">
-            {MOCK_PLAYERS.length} joueurs appelés ou éligibles — Saison 2025/26
+            {loading ? "Chargement…" : `${players.length} joueurs appelés ou éligibles`} — Saison 2025/26
           </p>
         </header>
 
@@ -166,13 +168,28 @@ const Roster = () => {
 
         {/* Grid */}
         <section className="container-site py-12">
-          {filtered.length === 0 ? (
+          {loading ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <PlayerCardSkeleton key={i} />
+              ))}
+            </div>
+          ) : error ? (
+            <div className="flex flex-col items-center justify-center py-20 gap-3 text-center">
+              <p className="text-muted-light">Données en cours de chargement…</p>
+              <p className="text-xs text-muted">{error}</p>
+            </div>
+          ) : filtered.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 gap-5">
               <Search className="h-10 w-10 text-foreground/30" />
-              <p className="text-muted-light">Aucun joueur ne correspond.</p>
-              <Button variant="outline" size="sm" onClick={reset}>
-                Réinitialiser les filtres
-              </Button>
+              <p className="text-muted-light">
+                {players.length === 0 ? "Aucun joueur trouvé." : "Aucun joueur ne correspond."}
+              </p>
+              {players.length > 0 ? (
+                <Button variant="outline" size="sm" onClick={reset}>
+                  Réinitialiser les filtres
+                </Button>
+              ) : null}
             </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">

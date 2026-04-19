@@ -5,7 +5,10 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/ButtonPrimitive";
 import { Select } from "@/components/ui/SelectPrimitive";
-import MOCK_PLAYERS from "@/data/mockPlayers";
+import PlayerCardSkeleton from "@/components/ui/PlayerCardSkeleton";
+import { usePlayers } from "@/hooks/usePlayers";
+import { supabase } from "@/lib/supabase";
+import { toast } from "sonner";
 
 const ELIGIBILITY = [
   { value: "ALL", label: "Toutes" },
@@ -41,16 +44,13 @@ const PRIORITY = [
 ];
 
 export default function Radar() {
+  const { players: radarPlayers, loading, error } = usePlayers({ category: "Radar" });
   const [eligibility, setEligibility] = useState("ALL");
   const [nation, setNation] = useState("ALL");
   const [age, setAge] = useState("ALL");
   const [priority, setPriority] = useState("ALL");
   const [explainerOpen, setExplainerOpen] = useState(false);
-
-  const radarPlayers = useMemo(
-    () => MOCK_PLAYERS.filter((p) => p.category === "Radar"),
-    [],
-  );
+  const [submitting, setSubmitting] = useState(false);
 
   const filtered = useMemo(() => {
     return radarPlayers.filter((p) => {
@@ -60,16 +60,35 @@ export default function Radar() {
       if (age === "U23" && p.age >= 23) return false;
       if (age === "23-27" && (p.age < 23 || p.age > 27)) return false;
       if (age === "27+" && p.age <= 27) return false;
-      // priority is mock — accept all
       void priority;
       return true;
     });
   }, [radarPlayers, eligibility, nation, age, priority]);
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    (e.currentTarget as HTMLFormElement).reset();
-    alert("Merci, on regarde ça dès cette semaine.");
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const payload = {
+      email: String(formData.get("email") ?? ""),
+      player_name: String(formData.get("player_name") ?? ""),
+      sources: String(formData.get("sources") ?? ""),
+    };
+    setSubmitting(true);
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error: err } = await (supabase as any)
+        .from("contact_suggestions")
+        .insert(payload);
+      if (err) throw err;
+      form.reset();
+      toast.success("Merci, on regarde ça dès cette semaine.");
+    } catch (err) {
+      console.error("[Radar suggestion]", err);
+      toast.error("Impossible d'envoyer. Réessaie dans un instant.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
