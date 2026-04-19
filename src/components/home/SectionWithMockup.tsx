@@ -13,6 +13,7 @@ interface SectionWithMockupProps {
   secondaryImageSrc: string;
   primaryNode?: ReactNode;
   reverseLayout?: boolean;
+  className?: string;
 }
 
 const containerVariants: Variants = {
@@ -53,9 +54,10 @@ export function SectionWithMockup({
   secondaryImageSrc,
   primaryNode,
   reverseLayout = false,
+  className,
 }: SectionWithMockupProps) {
   return (
-    <section className="relative py-24 md:py-40 bg-background overflow-hidden">
+    <section className={cn("relative py-24 md:py-32 overflow-hidden bg-background", className)}>
       <motion.div
         variants={containerVariants}
         initial="hidden"
