@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      best_xi: {
+        Row: {
+          created_at: string
+          editorial_note: string | null
+          formation: string
+          id: string
+          is_published: boolean
+          players: Json
+          published_at: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          editorial_note?: string | null
+          formation: string
+          id?: string
+          is_published?: boolean
+          players: Json
+          published_at?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          editorial_note?: string | null
+          formation?: string
+          id?: string
+          is_published?: boolean
+          players?: Json
+          published_at?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       newsletter_subscribers: {
         Row: {
           confirmation_token: string
