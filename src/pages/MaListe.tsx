@@ -5,6 +5,8 @@ import { useMaListeStore } from "@/store/maListeStore";
 import { IntroScreen } from "@/components/ma-liste/IntroScreen";
 import { FormationPicker } from "@/components/ma-liste/FormationPicker";
 import { LineupBuilder } from "@/components/ma-liste/LineupBuilder";
+import { BenchBuilder } from "@/components/ma-liste/BenchBuilder";
+import { CaptainSelector } from "@/components/ma-liste/CaptainSelector";
 
 const stepFade = {
   initial: { opacity: 0, y: 16 },
@@ -44,12 +46,8 @@ export default function MaListe() {
             {currentStep === "intro" && <IntroScreen />}
             {currentStep === "formation" && <FormationPicker />}
             {currentStep === "lineup" && <LineupBuilder />}
-            {currentStep === "bench" && (
-              <Placeholder label="Banc" prompt="Prompt 4/5" />
-            )}
-            {currentStep === "captain" && (
-              <Placeholder label="Capitaine" prompt="Prompt 4/5" />
-            )}
+            {currentStep === "bench" && <BenchBuilder />}
+            {currentStep === "captain" && <CaptainSelector />}
             {currentStep === "recap" && (
               <Placeholder label="Récap" prompt="Prompt 5/5" />
             )}
