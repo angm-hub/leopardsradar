@@ -157,6 +157,8 @@ export function Navbar() {
           </Link>
         </aside>
       </div>
+
+      <CommandPalette open={paletteOpen} onOpenChange={setPaletteOpen} />
     </header>
   );
 }
