@@ -12,6 +12,8 @@ import About from "./pages/About.tsx";
 import Newsletter from "./pages/Newsletter.tsx";
 import NewsletterConfirm from "./pages/NewsletterConfirm.tsx";
 import NewsletterUnsubscribe from "./pages/NewsletterUnsubscribe.tsx";
+import Auth from "./pages/Auth.tsx";
+import AdminPhotos from "./pages/AdminPhotos.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -32,6 +34,8 @@ const App = () => (
           <Route path="/newsletter" element={<Newsletter />} />
           <Route path="/newsletter/confirm" element={<NewsletterConfirm />} />
           <Route path="/newsletter/unsubscribe" element={<NewsletterUnsubscribe />} />
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/admin/photos" element={<AdminPhotos />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
