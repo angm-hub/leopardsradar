@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { ReactNode } from "react";
+import { StrongGradient } from "@/components/ui/GradientBackgrounds";
 
 interface EditorialSeparatorProps {
   variant: "quote" | "bignumber" | "headline";
@@ -18,7 +19,8 @@ const fadeUp = {
 const EditorialSeparator = ({ variant, content, author, context }: EditorialSeparatorProps) => {
   if (variant === "quote") {
     return (
-      <section className="py-32 bg-background">
+      <section className="relative py-24 md:py-32 bg-background overflow-hidden">
+        <StrongGradient intensity={0.9} position="center" />
         <motion.div {...fadeUp} className="max-w-4xl mx-auto px-6 text-center relative">
           <span
             aria-hidden
@@ -50,8 +52,9 @@ const EditorialSeparator = ({ variant, content, author, context }: EditorialSepa
 
   if (variant === "bignumber") {
     return (
-      <section className="py-40 bg-background overflow-hidden">
-        <motion.div {...fadeUp} className="max-w-5xl mx-auto px-6 text-center">
+      <section className="relative py-24 md:py-32 bg-background overflow-hidden">
+        <StrongGradient intensity={1} position="center" />
+        <motion.div {...fadeUp} className="max-w-5xl mx-auto px-6 text-center relative">
           <div className="font-mono text-[8rem] md:text-[16rem] leading-none font-bold text-primary tracking-tighter">
             {content}
           </div>
