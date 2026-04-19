@@ -28,3 +28,19 @@
     text-wrap: balance;
   }
 }
+
+@media (max-width: 768px) {
+  [class*="animate-gradient-drift"] {
+    animation: none !important;
+    transform: none !important;
+  }
+  .gradient-strong-layer {
+    opacity: 0.7;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [class*="animate-gradient-drift"] {
+    animation: none !important;
+  }
+}

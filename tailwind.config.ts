@@ -53,6 +53,8 @@ const config: Config = {
         marquee: "marquee 40s linear infinite",
         "marquee-reverse": "marquee-reverse 45s linear infinite",
         shimmer: "shimmer 2s linear infinite",
+        "gradient-drift-1": "gradient-drift-1 22s ease-in-out infinite",
+        "gradient-drift-2": "gradient-drift-2 32s ease-in-out infinite",
       },
       keyframes: {
         fadeIn: {
@@ -74,6 +76,15 @@ const config: Config = {
         shimmer: {
           "0%": { transform: "translateX(-100%)" },
           "100%": { transform: "translateX(100%)" },
+        },
+        "gradient-drift-1": {
+          "0%, 100%": { transform: "translate(0, 0) scale(1)", opacity: "1" },
+          "33%": { transform: "translate(3%, -2%) scale(1.1)", opacity: "0.8" },
+          "66%": { transform: "translate(-2%, 3%) scale(0.95)", opacity: "0.9" },
+        },
+        "gradient-drift-2": {
+          "0%, 100%": { transform: "translate(0, 0) scale(1.1)", opacity: "0.7" },
+          "50%": { transform: "translate(-4%, 2%) scale(1)", opacity: "1" },
         },
       },
     },
