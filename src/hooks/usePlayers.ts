@@ -10,6 +10,7 @@ interface Filters {
   search?: string;
   limit?: number;
   orderBy?: { column: keyof DBPlayer; ascending?: boolean };
+  excludeEligibilityStatus?: string;
 }
 
 function normalizeJsonbArray(value: unknown): string[] {
