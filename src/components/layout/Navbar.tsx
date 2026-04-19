@@ -69,12 +69,17 @@ export function Navbar() {
               to={link.href}
               className={({ isActive }) =>
                 cn(
-                  "text-sm transition-colors hover:text-foreground",
+                  "relative inline-flex items-center gap-1.5 text-sm transition-colors hover:text-foreground",
                   isActive ? "text-foreground" : "text-foreground/70",
                 )
               }
             >
               {link.label}
+              {link.badge ? (
+                <span className="rounded-sm bg-primary text-primary-foreground px-1.5 py-px text-[9px] font-bold uppercase tracking-wider leading-none">
+                  {link.badge}
+                </span>
+              ) : null}
             </NavLink>
           ))}
         </nav>
@@ -144,9 +149,14 @@ export function Navbar() {
                 key={link.href}
                 to={link.href}
                 onClick={() => setOpen(false)}
-                className="text-base text-foreground/85 hover:text-foreground transition-colors"
+                className="inline-flex items-center gap-2 text-base text-foreground/85 hover:text-foreground transition-colors"
               >
                 {link.label}
+                {link.badge ? (
+                  <span className="rounded-sm bg-primary text-primary-foreground px-1.5 py-px text-[9px] font-bold uppercase tracking-wider leading-none">
+                    {link.badge}
+                  </span>
+                ) : null}
               </Link>
             ))}
           </nav>
