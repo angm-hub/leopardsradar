@@ -96,6 +96,7 @@ const mockLineup: LineupPlayer[] = [
 export function BestXIPreviewSection() {
   return (
     <SectionWithMockup
+      className="bg-card/30"
       reverseLayout
       badge="BEST XI DIASPORA"
       title={<>Notre composition rêvée, chaque semaine.</>}
