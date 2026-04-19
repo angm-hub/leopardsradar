@@ -203,12 +203,12 @@ export default function PlayerPage() {
                   </div>
                 ) : null}
 
-                <div className="rounded-card border border-border bg-card/60 p-6 backdrop-blur-sm max-w-sm">
-                  <StatBlock
-                    label="Valeur marchande"
-                    value={formatMarketValue(player.market_value_eur)}
-                  />
-                </div>
+                <p className="text-sm text-muted-light">
+                  <span className="text-muted">Valeur marchande · </span>
+                  <span className="text-foreground">
+                    {formatMarketValue(player.market_value_eur)}
+                  </span>
+                </p>
 
                 <div className="flex flex-wrap gap-3">
                   {player.transfermarkt_id ? (

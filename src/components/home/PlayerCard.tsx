@@ -33,7 +33,9 @@ export function PlayerCard({ player, className }: PlayerCardProps) {
         initialsClassName="text-6xl"
       />
 
+      {/* Bottom legibility overlay — protects name/club from busy photo backgrounds */}
       <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-3/5 bg-gradient-to-t from-background via-background/80 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
 
       {/* Top-left: position badge */}
       {position ? (

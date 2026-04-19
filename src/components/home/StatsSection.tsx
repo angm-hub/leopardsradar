@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { Globe, Trophy, MapPin, Calendar } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Globe, Trophy, MapPin, Calendar, Radar as RadarIcon, ArrowUpRight } from "lucide-react";
 import { Pill } from "@/components/ui/Pill";
 import { useHomeStats } from "@/hooks/useHomeStats";
 import { usePlayers } from "@/hooks/usePlayers";
@@ -32,23 +33,23 @@ export function StatsSection() {
   const { days, hours } = getCountdown();
   const { stats } = useHomeStats();
   const { players: rosterPlayers } = usePlayers({ category: "roster" });
+  const { players: radarPlayers } = usePlayers({ categories: ["radar", "heritage"] });
 
-  // Top scorer from roster
-  const topScorer = [...rosterPlayers]
-    .sort((a, b) => (b.season_goals ?? 0) - (a.season_goals ?? 0))[0];
-
-  // Tier 1 ratio
-  const tier1Count = rosterPlayers.filter((p) => p.tier === "tier1").length;
-  const tier1Ratio = rosterPlayers.length
-    ? Math.round((tier1Count / rosterPlayers.length) * 100)
+  // Tier 1 ratio — calculated across roster + radar (real "top 5 European" exposure)
+  const allPlayers = [...rosterPlayers, ...radarPlayers];
+  const tier1Count = allPlayers.filter((p) => p.tier === "tier1").length;
+  const tier1Ratio = allPlayers.length
+    ? Math.round((tier1Count / allPlayers.length) * 100)
     : 0;
 
-  const totalValueLabel = stats?.total_market_value
-    ? formatMarketValue(stats.total_market_value)
-    : "—";
+  const hasMarketValue = !!stats?.total_market_value && stats.total_market_value > 0;
+  const totalValueLabel = hasMarketValue
+    ? formatMarketValue(stats!.total_market_value)
+    : "À venir";
   const totalPlayers = stats?.total_roster ?? 0;
   const totalCountries = stats?.total_countries ?? 0;
   const avgAge = stats?.avg_age ? Math.round(stats.avg_age) : 0;
+  const totalRadar = stats?.total_radar ?? radarPlayers.length;
 
   return (
     <section className="relative py-24 md:py-32 bg-background overflow-hidden">
@@ -80,7 +81,13 @@ export function StatsSection() {
               <span className="text-xs uppercase tracking-[0.2em] text-muted">
                 Valeur marchande cumulée
               </span>
-              <div className="mt-4 font-mono text-6xl md:text-7xl font-bold text-foreground leading-none">
+              <div
+                className={`mt-4 font-mono font-bold leading-none ${
+                  hasMarketValue
+                    ? "text-6xl md:text-7xl text-foreground"
+                    : "text-4xl md:text-5xl text-muted"
+                }`}
+              >
                 {totalValueLabel}
               </div>
             </div>
@@ -176,42 +183,28 @@ export function StatsSection() {
             </div>
           </motion.div>
 
-          {/* CARD F — Top scoreur */}
-          <motion.div
-            {...fadeUp(0.5)}
-            className={`${cardBase} md:col-span-1 md:row-span-1 p-5 flex items-center gap-4`}
-          >
-            <div className="h-16 w-16 rounded-xl bg-gradient-to-br from-[#00A651] to-[#004d25] flex items-center justify-center text-foreground font-bold text-lg shrink-0 ring-1 ring-border overflow-hidden">
-              {topScorer?.image_url ? (
-                <img
-                  src={topScorer.image_url}
-                  alt={topScorer.name}
-                  loading="lazy"
-                  className="h-full w-full object-cover"
-                  onError={(e) => {
-                    (e.currentTarget as HTMLImageElement).style.display = "none";
-                  }}
-                />
-              ) : (
-                topScorer?.name
-                  ?.split(" ")
-                  .map((n) => n[0])
-                  .slice(0, 2)
-                  .join("")
-                  .toUpperCase() ?? "—"
-              )}
-            </div>
-            <div className="min-w-0">
-              <span className="text-[10px] uppercase tracking-[0.2em] text-muted">
-                Top scoreur
-              </span>
-              <p className="mt-1 font-serif text-base text-foreground truncate">
-                {topScorer?.name ?? "—"}
-              </p>
-              <p className="font-mono text-sm text-primary">
-                {topScorer ? `${topScorer.season_goals ?? 0} buts` : "—"}
-              </p>
-            </div>
+          {/* CARD F — Radar talents */}
+          <motion.div {...fadeUp(0.5)} className={`${cardBase} md:col-span-1 md:row-span-1 p-0`}>
+            <Link
+              to="/radar"
+              className="group relative h-full w-full p-5 flex items-center gap-4 transition-colors hover:bg-card-hover"
+            >
+              <div className="h-16 w-16 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20 flex items-center justify-center shrink-0">
+                <RadarIcon className="h-7 w-7 text-primary" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <span className="text-[10px] uppercase tracking-[0.2em] text-muted">
+                  Radar
+                </span>
+                <p className="mt-1 font-mono text-2xl font-bold text-foreground leading-none">
+                  {totalRadar}
+                </p>
+                <p className="mt-1 text-xs text-muted truncate">
+                  talents éligibles trackés
+                </p>
+              </div>
+              <ArrowUpRight className="h-4 w-4 text-muted group-hover:text-primary transition-colors shrink-0" />
+            </Link>
           </motion.div>
 
           {/* CARD G — Prochain match */}

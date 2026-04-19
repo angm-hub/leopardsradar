@@ -118,14 +118,23 @@ export default function Radar() {
     return () => clearTimeout(t);
   }, [query]);
 
-  // Build dynamic nation dropdown from `other_nationalities` distinct values
+  // Build dynamic nation dropdown from `other_nationalities` with counts per nationality
   const nationOptions = useMemo(() => {
-    const set = new Set<string>();
-    players.forEach((p) => p.other_nationalities.forEach((n) => set.add(n)));
-    const sorted = Array.from(set).sort((a, b) => a.localeCompare(b));
+    const counts = new Map<string, number>();
+    players.forEach((p) =>
+      p.other_nationalities.forEach((n) => counts.set(n, (counts.get(n) ?? 0) + 1)),
+    );
+    const sorted = Array.from(counts.entries()).sort((a, b) => {
+      // Sort by count desc, then alpha
+      if (b[1] !== a[1]) return b[1] - a[1];
+      return a[0].localeCompare(b[0]);
+    });
     return [
-      { value: "ALL", label: "Toutes nationalités" },
-      ...sorted.map((n) => ({ value: n, label: `${flagFor(n)} ${n}` })),
+      { value: "ALL", label: `Toutes nationalités (${players.length})` },
+      ...sorted.map(([n, count]) => ({
+        value: n,
+        label: `${flagFor(n)} ${n} (${count})`,
+      })),
     ];
   }, [players]);
 

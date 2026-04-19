@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/ButtonPrimitive";
 import { Pill } from "@/components/ui/Pill";
 import { AuroraShader } from "@/components/ui/AuroraShader";
+import { useNewsletterCount } from "@/hooks/useNewsletterCount";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -18,6 +19,11 @@ const itemVariants: Variants = {
 };
 
 export function LeopardsHero() {
+  const { count } = useNewsletterCount();
+  const subscriberLabel =
+    count && count > 0
+      ? `Rejoint par ${count} fan${count > 1 ? "s" : ""} passionné${count > 1 ? "s" : ""}`
+      : "Rejoins les premiers abonnés";
   return (
     <section className="relative min-h-screen overflow-hidden bg-background">
       <AuroraShader className="absolute inset-0 h-full w-full" />
@@ -83,7 +89,7 @@ export function LeopardsHero() {
               ))}
             </div>
             <span className="text-sm text-foreground/50">
-              Rejoint par 247 fans passionnés
+              {subscriberLabel}
             </span>
           </motion.div>
         </motion.div>
