@@ -14,13 +14,295 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      newsletter_subscribers: {
+        Row: {
+          confirmation_token: string
+          confirmed_at: string | null
+          created_at: string
+          email: string
+          id: string
+          is_active: boolean
+          source: string | null
+          unsubscribed_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          confirmation_token?: string
+          confirmed_at?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          is_active?: boolean
+          source?: string | null
+          unsubscribed_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          confirmation_token?: string
+          confirmed_at?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          is_active?: boolean
+          source?: string | null
+          unsubscribed_at?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      players: {
+        Row: {
+          age: number | null
+          agent: string | null
+          caps_rdc: number | null
+          contract_expires: string | null
+          country_of_birth: string | null
+          created_at: string
+          current_club: string | null
+          current_club_id: string | null
+          date_of_birth: string | null
+          eligibility_note: string | null
+          eligibility_status: string | null
+          foot: string | null
+          height_cm: number | null
+          id: number
+          image_url: string | null
+          is_binational: boolean | null
+          market_value_eur: number | null
+          name: string
+          nationalities: Json | null
+          on_loan_from: string | null
+          other_nationalities: Json | null
+          place_of_birth: string | null
+          player_category: string | null
+          position: string | null
+          season_assists: number | null
+          season_games: number | null
+          season_goals: number | null
+          season_minutes: number | null
+          season_rating: number | null
+          slug: string
+          source_urls: string[] | null
+          tier: string | null
+          transfermarkt_id: string | null
+          updated_at: string
+          verified: boolean | null
+        }
+        Insert: {
+          age?: number | null
+          agent?: string | null
+          caps_rdc?: number | null
+          contract_expires?: string | null
+          country_of_birth?: string | null
+          created_at?: string
+          current_club?: string | null
+          current_club_id?: string | null
+          date_of_birth?: string | null
+          eligibility_note?: string | null
+          eligibility_status?: string | null
+          foot?: string | null
+          height_cm?: number | null
+          id?: number
+          image_url?: string | null
+          is_binational?: boolean | null
+          market_value_eur?: number | null
+          name: string
+          nationalities?: Json | null
+          on_loan_from?: string | null
+          other_nationalities?: Json | null
+          place_of_birth?: string | null
+          player_category?: string | null
+          position?: string | null
+          season_assists?: number | null
+          season_games?: number | null
+          season_goals?: number | null
+          season_minutes?: number | null
+          season_rating?: number | null
+          slug: string
+          source_urls?: string[] | null
+          tier?: string | null
+          transfermarkt_id?: string | null
+          updated_at?: string
+          verified?: boolean | null
+        }
+        Update: {
+          age?: number | null
+          agent?: string | null
+          caps_rdc?: number | null
+          contract_expires?: string | null
+          country_of_birth?: string | null
+          created_at?: string
+          current_club?: string | null
+          current_club_id?: string | null
+          date_of_birth?: string | null
+          eligibility_note?: string | null
+          eligibility_status?: string | null
+          foot?: string | null
+          height_cm?: number | null
+          id?: number
+          image_url?: string | null
+          is_binational?: boolean | null
+          market_value_eur?: number | null
+          name?: string
+          nationalities?: Json | null
+          on_loan_from?: string | null
+          other_nationalities?: Json | null
+          place_of_birth?: string | null
+          player_category?: string | null
+          position?: string | null
+          season_assists?: number | null
+          season_games?: number | null
+          season_goals?: number | null
+          season_minutes?: number | null
+          season_rating?: number | null
+          slug?: string
+          source_urls?: string[] | null
+          tier?: string | null
+          transfermarkt_id?: string | null
+          updated_at?: string
+          verified?: boolean | null
+        }
+        Relationships: []
+      }
     }
     Views: {
-      [_ in never]: never
+      v_home_stats: {
+        Row: {
+          avg_age: number | null
+          total_clubs: number | null
+          total_countries: number | null
+          total_heritage: number | null
+          total_market_value: number | null
+          total_players: number | null
+          total_radar: number | null
+          total_roster: number | null
+        }
+        Relationships: []
+      }
+      v_newsletter_count: {
+        Row: {
+          active_count: number | null
+        }
+        Relationships: []
+      }
+      v_players_tier1: {
+        Row: {
+          age: number | null
+          agent: string | null
+          caps_rdc: number | null
+          contract_expires: string | null
+          country_of_birth: string | null
+          created_at: string | null
+          current_club: string | null
+          current_club_id: string | null
+          date_of_birth: string | null
+          eligibility_note: string | null
+          eligibility_status: string | null
+          foot: string | null
+          height_cm: number | null
+          id: number | null
+          image_url: string | null
+          is_binational: boolean | null
+          market_value_eur: number | null
+          name: string | null
+          nationalities: Json | null
+          on_loan_from: string | null
+          other_nationalities: Json | null
+          place_of_birth: string | null
+          player_category: string | null
+          position: string | null
+          season_assists: number | null
+          season_games: number | null
+          season_goals: number | null
+          season_minutes: number | null
+          season_rating: number | null
+          slug: string | null
+          source_urls: string[] | null
+          tier: string | null
+          transfermarkt_id: string | null
+          updated_at: string | null
+          verified: boolean | null
+        }
+        Insert: {
+          age?: number | null
+          agent?: string | null
+          caps_rdc?: number | null
+          contract_expires?: string | null
+          country_of_birth?: string | null
+          created_at?: string | null
+          current_club?: string | null
+          current_club_id?: string | null
+          date_of_birth?: string | null
+          eligibility_note?: string | null
+          eligibility_status?: string | null
+          foot?: string | null
+          height_cm?: number | null
+          id?: number | null
+          image_url?: string | null
+          is_binational?: boolean | null
+          market_value_eur?: number | null
+          name?: string | null
+          nationalities?: Json | null
+          on_loan_from?: string | null
+          other_nationalities?: Json | null
+          place_of_birth?: string | null
+          player_category?: string | null
+          position?: string | null
+          season_assists?: number | null
+          season_games?: number | null
+          season_goals?: number | null
+          season_minutes?: number | null
+          season_rating?: number | null
+          slug?: string | null
+          source_urls?: string[] | null
+          tier?: string | null
+          transfermarkt_id?: string | null
+          updated_at?: string | null
+          verified?: boolean | null
+        }
+        Update: {
+          age?: number | null
+          agent?: string | null
+          caps_rdc?: number | null
+          contract_expires?: string | null
+          country_of_birth?: string | null
+          created_at?: string | null
+          current_club?: string | null
+          current_club_id?: string | null
+          date_of_birth?: string | null
+          eligibility_note?: string | null
+          eligibility_status?: string | null
+          foot?: string | null
+          height_cm?: number | null
+          id?: number | null
+          image_url?: string | null
+          is_binational?: boolean | null
+          market_value_eur?: number | null
+          name?: string | null
+          nationalities?: Json | null
+          on_loan_from?: string | null
+          other_nationalities?: Json | null
+          place_of_birth?: string | null
+          player_category?: string | null
+          position?: string | null
+          season_assists?: number | null
+          season_games?: number | null
+          season_goals?: number | null
+          season_minutes?: number | null
+          season_rating?: number | null
+          slug?: string | null
+          source_urls?: string[] | null
+          tier?: string | null
+          transfermarkt_id?: string | null
+          updated_at?: string | null
+          verified?: boolean | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
-      [_ in never]: never
+      show_limit: { Args: never; Returns: number }
+      show_trgm: { Args: { "": string }; Returns: string[] }
     }
     Enums: {
       [_ in never]: never
