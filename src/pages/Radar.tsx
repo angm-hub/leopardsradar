@@ -150,6 +150,8 @@ export default function Radar() {
 
   const filtered = useMemo(() => {
     return players.filter((p) => {
+      // Hide cap-tied (ineligible) profiles per product spec
+      if (p.eligibility_status === "ineligible") return false;
       if (position !== "ALL" && p.position !== position) return false;
       if (tier !== "ALL" && p.tier !== tier) return false;
       if (nation !== "ALL" && !p.other_nationalities.includes(nation)) return false;
