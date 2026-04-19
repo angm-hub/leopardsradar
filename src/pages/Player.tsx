@@ -317,11 +317,11 @@ export default function PlayerPage() {
         </section>
 
         {/* SIMILAR */}
-        {similar.length ? (
+        {similarFiltered.length ? (
           <section className="container-site py-24">
             <h2 className="font-serif text-4xl text-foreground">Dans la même équipe.</h2>
             <div className="mt-10 flex gap-5 overflow-x-auto pb-4 md:grid md:grid-cols-4 md:overflow-visible lg:grid-cols-5">
-              {similar.map((p) => (
+              {similarFiltered.map((p) => (
                 <div key={p.slug} className="min-w-[220px] md:min-w-0">
                   <PlayerCard player={p} />
                 </div>
