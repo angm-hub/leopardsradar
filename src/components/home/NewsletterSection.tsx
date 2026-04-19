@@ -79,7 +79,7 @@ export function NewsletterSection() {
               onChange={(e) => setEmail(e.target.value)}
               className="flex-1 bg-background border border-border rounded-button px-5 py-4 text-foreground placeholder:text-muted focus:border-primary outline-none transition-colors"
             />
-            <Button type="submit" variant="primary" size="lg">
+            <Button type="submit" variant="shimmer" size="lg">
               Recevoir
             </Button>
           </form>
