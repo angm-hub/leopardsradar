@@ -7,6 +7,7 @@ import { FormationPicker } from "@/components/ma-liste/FormationPicker";
 import { LineupBuilder } from "@/components/ma-liste/LineupBuilder";
 import { BenchBuilder } from "@/components/ma-liste/BenchBuilder";
 import { CaptainSelector } from "@/components/ma-liste/CaptainSelector";
+import { ListRecap } from "@/components/ma-liste/ListRecap";
 
 const stepFade = {
   initial: { opacity: 0, y: 16 },
@@ -48,12 +49,8 @@ export default function MaListe() {
             {currentStep === "lineup" && <LineupBuilder />}
             {currentStep === "bench" && <BenchBuilder />}
             {currentStep === "captain" && <CaptainSelector />}
-            {currentStep === "recap" && (
-              <Placeholder label="Récap" prompt="Prompt 5/5" />
-            )}
-            {currentStep === "share" && (
-              <Placeholder label="Partage" prompt="Prompt 5/5" />
-            )}
+            {currentStep === "recap" && <ListRecap />}
+            {currentStep === "share" && <ListRecap />}
           </motion.div>
         </AnimatePresence>
       </main>

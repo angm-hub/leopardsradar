@@ -7,6 +7,7 @@ import ClubsMarqueeSection from "@/components/home/ClubsMarqueeSection";
 import BestXIPreviewSection from "@/components/home/BestXIPreviewSection";
 import NewsletterSection from "@/components/home/NewsletterSection";
 import EditorialSeparator from "@/components/home/EditorialSeparator";
+import { MaListeCTA } from "@/components/home/MaListeCTA";
 
 const Divider = () => (
   <div className="w-12 h-px bg-primary/30 mx-auto" />
@@ -19,6 +20,8 @@ const Home = () => {
       <main className="flex-1">
         <LeopardsHero />
         <StatsSection />
+        <Divider />
+        <MaListeCTA />
         <Divider />
         <EditorialSeparator
           variant="bignumber"
