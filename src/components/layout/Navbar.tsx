@@ -5,10 +5,11 @@ import { Button } from "@/components/ui/ButtonPrimitive";
 import { CommandPalette } from "@/components/ui/CommandPalette";
 import { cn } from "@/lib/utils";
 
-const NAV_LINKS = [
+const NAV_LINKS: Array<{ label: string; href: string; badge?: string }> = [
   { label: "Roster", href: "/roster" },
   { label: "Radar", href: "/radar" },
   { label: "Best XI", href: "/best-xi" },
+  { label: "Ma Liste", href: "/ma-liste", badge: "NOUVEAU" },
   { label: "À propos", href: "/about" },
   { label: "Newsletter", href: "/newsletter" },
 ];
