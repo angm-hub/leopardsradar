@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/ButtonPrimitive";
+import { CommandPalette } from "@/components/ui/CommandPalette";
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
@@ -15,12 +16,25 @@ const NAV_LINKS = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Global ⌘K / Ctrl+K shortcut
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setPaletteOpen((v) => !v);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, []);
 
   useEffect(() => {
@@ -64,7 +78,16 @@ export function Navbar() {
           ))}
         </nav>
 
-        <div className="hidden md:block">
+        <div className="hidden md:flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => setPaletteOpen(true)}
+            aria-label="Ouvrir la recherche (⌘K)"
+            className="inline-flex items-center gap-1.5 rounded border border-border bg-card px-2 py-1 text-xs font-mono text-muted-foreground hover:text-foreground hover:border-border-hover transition-colors"
+          >
+            <span aria-hidden>⌘</span>
+            <span>K</span>
+          </button>
           <Link to="/newsletter">
             <Button variant="primary" size="sm">
               S'abonner
@@ -134,6 +157,8 @@ export function Navbar() {
           </Link>
         </aside>
       </div>
+
+      <CommandPalette open={paletteOpen} onOpenChange={setPaletteOpen} />
     </header>
   );
 }
