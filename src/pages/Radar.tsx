@@ -164,12 +164,33 @@ export default function Radar() {
               value={priority}
               onChange={(e) => setPriority(e.target.value)}
             />
-            <span className="ml-auto text-sm text-muted">{filtered.length} profils</span>
+            <span className="ml-auto text-sm text-muted">
+              {loading ? "…" : `${filtered.length} profils`}
+            </span>
           </div>
         </div>
 
         {/* Cards */}
         <div className="container-site flex flex-col gap-6 py-12">
+          {loading ? (
+            Array.from({ length: 3 }).map((_, i) => (
+              <div
+                key={i}
+                className="h-[220px] animate-shimmer rounded-card border border-border bg-gradient-to-r from-card via-card-hover to-card"
+                style={{ backgroundSize: "200% 100%" }}
+              />
+            ))
+          ) : error ? (
+            <p className="py-16 text-center text-muted-light">
+              Données en cours de chargement…
+            </p>
+          ) : filtered.length === 0 ? (
+            <p className="py-16 text-center text-muted-light">
+              {radarPlayers.length === 0
+                ? "Aucun profil radar pour l'instant."
+                : "Aucun joueur ne correspond à ces filtres."}
+            </p>
+          ) : null}
           {filtered.map((p) => (
             <article
               key={p.slug}
@@ -246,25 +267,28 @@ export default function Radar() {
             </p>
             <form onSubmit={onSubmit} className="mt-6 flex flex-col gap-3">
               <input
+                name="email"
                 type="email"
                 required
                 placeholder="Ton email"
                 className="w-full rounded-button border border-border bg-background px-5 py-3 text-foreground outline-none transition-colors focus:border-primary"
               />
               <input
+                name="player_name"
                 type="text"
                 required
                 placeholder="Nom du joueur"
                 className="w-full rounded-button border border-border bg-background px-5 py-3 text-foreground outline-none transition-colors focus:border-primary"
               />
               <textarea
+                name="sources"
                 required
                 rows={3}
                 placeholder="Sources / liens"
                 className="w-full rounded-button border border-border bg-background px-5 py-3 text-foreground outline-none transition-colors focus:border-primary"
               />
-              <Button type="submit" variant="primary" size="lg">
-                Envoyer ma suggestion
+              <Button type="submit" variant="primary" size="lg" disabled={submitting}>
+                {submitting ? "Envoi…" : "Envoyer ma suggestion"}
               </Button>
             </form>
           </div>
