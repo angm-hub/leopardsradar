@@ -1,8 +1,12 @@
 import { useState, type FormEvent } from "react";
-import { Activity, Sparkles, Feather } from "lucide-react";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
+import { Activity, Sparkles, Feather, Loader2 } from "lucide-react";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
 import { Button } from "@/components/ui/ButtonPrimitive";
+import { supabase } from "@/integrations/supabase/client";
+import { useNewsletterCount } from "@/hooks/useNewsletterCount";
+import { toast } from "sonner";
+import { z } from "zod";
 
 const PREVIEWS = [
   {
@@ -22,29 +26,60 @@ const PREVIEWS = [
   },
 ];
 
-const EDITIONS = [
-  { date: "12 avr. 2026", title: "Wissa flambe à Newcastle, Sadiki déjà patron" },
-  { date: "05 avr. 2026", title: "Le retour de Bolasie au Brésil, vrai signal ?" },
-  { date: "29 mars 2026", title: "Mukau, l'avenir du milieu congolais" },
-  { date: "22 mars 2026", title: "Top 5 des U23 à suivre cette saison" },
-  { date: "15 mars 2026", title: "Mbemba : portrait d'un capitaine" },
-  { date: "08 mars 2026", title: "Diaspora belge : qui peut basculer ?" },
-];
+const emailSchema = z
+  .string()
+  .trim()
+  .email({ message: "Adresse email invalide" })
+  .max(255);
 
 export default function Newsletter() {
   const [email, setEmail] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const { count } = useNewsletterCount();
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setEmail("");
-    alert("Merci ! Première édition vendredi.");
+    const parsed = emailSchema.safeParse(email);
+    if (!parsed.success) {
+      toast.error(parsed.error.errors[0]?.message ?? "Email invalide");
+      return;
+    }
+    setSubmitting(true);
+    try {
+      const { error } = await supabase
+        .from("newsletter_subscribers")
+        .insert({ email: parsed.data, source: "newsletter_page" });
+      if (error) {
+        if (error.code === "23505") {
+          toast.success(
+            "Tu es déjà dans la liste. Vérifie ta boîte mail.",
+          );
+        } else {
+          throw error;
+        }
+      } else {
+        try {
+          await supabase.functions.invoke("send-newsletter-confirmation", {
+            body: { email: parsed.data },
+          });
+        } catch (err) {
+          console.warn("[newsletter] confirmation email not sent yet", err);
+        }
+        toast.success("Vérifie ta boîte mail pour confirmer.");
+        setEmail("");
+      }
+    } catch (err) {
+      console.error("[newsletter]", err);
+      toast.error("Une erreur est survenue. Réessaie dans un instant.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
       <main>
-        {/* Hero */}
         <section className="container-site pt-32 pb-16">
           <div className="mx-auto max-w-3xl text-center">
             <h1 className="font-serif text-6xl font-semibold text-foreground">
@@ -64,20 +99,27 @@ export default function Newsletter() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="ton@email.com"
-                className="flex-1 rounded-button border border-border bg-card px-5 py-4 text-foreground outline-none transition-colors focus:border-primary"
+                disabled={submitting}
+                className="flex-1 rounded-button border border-border bg-card px-5 py-4 text-foreground outline-none transition-colors focus:border-primary disabled:opacity-60"
               />
-              <Button type="submit" variant="primary" size="lg">
-                S'abonner
+              <Button type="submit" variant="primary" size="lg" disabled={submitting}>
+                {submitting ? (
+                  <span className="inline-flex items-center gap-2">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Envoi…
+                  </span>
+                ) : (
+                  "S'abonner"
+                )}
               </Button>
             </form>
 
             <p className="mt-4 text-sm text-muted">
-              247 abonnés · 0 spam · Se désabonner en 1 clic
+              {count !== null ? `${count} abonnés` : "Rejoins les fans"} · 0 spam · Se désabonner en 1 clic
             </p>
           </div>
         </section>
 
-        {/* Previews */}
         <section className="container-site py-16">
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
             {PREVIEWS.map(({ icon: Icon, title, desc }) => (
@@ -93,31 +135,6 @@ export default function Newsletter() {
               </div>
             ))}
           </div>
-        </section>
-
-        {/* Archive */}
-        <section className="container-site py-16">
-          <h2 className="mb-8 font-serif text-3xl text-foreground">
-            Éditions précédentes.
-          </h2>
-          <ul className="flex flex-col gap-3">
-            {EDITIONS.map((ed) => (
-              <li key={ed.title}>
-                <a
-                  href="#"
-                  className="flex items-center justify-between gap-4 rounded-card border border-border bg-card p-6 transition-colors hover:border-border-hover"
-                >
-                  <div className="flex flex-col">
-                    <span className="text-sm text-muted">{ed.date}</span>
-                    <span className="font-serif text-lg text-foreground">
-                      {ed.title}
-                    </span>
-                  </div>
-                  <span className="text-sm text-primary">Lire →</span>
-                </a>
-              </li>
-            ))}
-          </ul>
         </section>
       </main>
       <Footer />

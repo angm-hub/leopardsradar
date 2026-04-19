@@ -295,7 +295,12 @@ export type Database = {
       }
     }
     Functions: {
+      confirm_newsletter_subscription: {
+        Args: { _token: string }
+        Returns: Json
+      }
       get_newsletter_count: { Args: never; Returns: number }
+      unsubscribe_newsletter: { Args: { _token: string }; Returns: Json }
     }
     Enums: {
       [_ in never]: never
