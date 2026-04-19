@@ -50,7 +50,7 @@ export function StatsSection() {
   const avgAge = stats?.avg_age ? Math.round(stats.avg_age) : 0;
 
   return (
-    <section className="py-32 bg-background">
+    <section className="py-24 md:py-32 bg-background">
       <div className="container-site max-w-7xl">
         {/* Header */}
         <div className="flex flex-col gap-4 mb-12 max-w-2xl">
