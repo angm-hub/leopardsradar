@@ -164,6 +164,87 @@ export type Database = {
         }
         Relationships: []
       }
+      user_lists: {
+        Row: {
+          avg_age: number | null
+          bench: Json
+          captain_id: number | null
+          created_at: string
+          email: string | null
+          formation: string
+          id: string
+          is_submitted: boolean
+          locale: string | null
+          platforms_shared: string[]
+          radar_count: number
+          referrer: string | null
+          roster_count: number
+          session_id: string
+          shared_count: number
+          starting_xi: Json
+          total_market_value_eur: number | null
+          updated_at: string
+          user_agent: string | null
+        }
+        Insert: {
+          avg_age?: number | null
+          bench: Json
+          captain_id?: number | null
+          created_at?: string
+          email?: string | null
+          formation: string
+          id?: string
+          is_submitted?: boolean
+          locale?: string | null
+          platforms_shared?: string[]
+          radar_count?: number
+          referrer?: string | null
+          roster_count?: number
+          session_id: string
+          shared_count?: number
+          starting_xi: Json
+          total_market_value_eur?: number | null
+          updated_at?: string
+          user_agent?: string | null
+        }
+        Update: {
+          avg_age?: number | null
+          bench?: Json
+          captain_id?: number | null
+          created_at?: string
+          email?: string | null
+          formation?: string
+          id?: string
+          is_submitted?: boolean
+          locale?: string | null
+          platforms_shared?: string[]
+          radar_count?: number
+          referrer?: string | null
+          roster_count?: number
+          session_id?: string
+          shared_count?: number
+          starting_xi?: Json
+          total_market_value_eur?: number | null
+          updated_at?: string
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_lists_captain_id_fkey"
+            columns: ["captain_id"]
+            isOneToOne: false
+            referencedRelation: "players"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_lists_captain_id_fkey"
+            columns: ["captain_id"]
+            isOneToOne: false
+            referencedRelation: "v_players_tier1"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
