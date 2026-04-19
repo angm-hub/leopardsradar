@@ -62,7 +62,7 @@ export function LeopardsHero() {
               Voir le Roster
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
-            <Button variant="outline" size="lg">
+            <Button variant="ghost-premium" size="lg">
               S'abonner à la newsletter
             </Button>
           </motion.div>
