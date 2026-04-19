@@ -4,7 +4,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import PlayerCard from "@/components/home/PlayerCard";
 import { Button } from "@/components/ui/ButtonPrimitive";
-import { Select } from "@/components/ui/Select";
+import { Select } from "@/components/ui/SelectPrimitive";
 import { MOCK_PLAYERS } from "@/data/mockPlayers";
 import type { League, PositionCode } from "@/types/player";
 
