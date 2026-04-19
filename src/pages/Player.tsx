@@ -1,4 +1,5 @@
 import { Link, useParams } from "react-router-dom";
+import { motion } from "framer-motion";
 import {
   ArrowLeft,
   ExternalLink,
@@ -12,7 +13,15 @@ import { StatBlock } from "@/components/ui/StatBlock";
 import { PlayerCard } from "@/components/home/PlayerCard";
 import { usePlayer } from "@/hooks/usePlayer";
 import { usePlayers } from "@/hooks/usePlayers";
+import { useDominantColor } from "@/hooks/useDominantColor";
 import { cn } from "@/lib/utils";
+
+// SVG noise as a data URI — gives the gradient a filmic grain
+const NOISE_SVG =
+  "data:image/svg+xml;utf8," +
+  encodeURIComponent(
+    `<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.6 0'/></filter><rect width='100%' height='100%' filter='url(#n)'/></svg>`,
+  );
 
 const RECENT_FORM = [
   { result: "W", date: "12 avr.", opp: "OL", score: "2-1", rating: 7.8, mins: 90 },
@@ -83,25 +92,45 @@ export default function PlayerPage() {
   const rootHref = isRadar ? "/radar" : "/roster";
   const rootLabel = isRadar ? "Radar" : "Roster";
 
+  // Extract dominant color from the player photo for ambient hero tinting
+  const dominant = useDominantColor(player.photoUrl);
+  const [r, g, b] = dominant ?? [60, 60, 70]; // muted neutral fallback
+  const heroGradient = `linear-gradient(180deg, rgba(${r}, ${g}, ${b}, 0.42) 0%, rgba(${r}, ${g}, ${b}, 0.18) 45%, #0A0A0B 100%)`;
+  const photoShadow = dominant
+    ? `0 20px 80px rgba(${r}, ${g}, ${b}, 0.35), 0 8px 24px rgba(0,0,0,0.5)`
+    : `0 20px 80px rgba(0,0,0,0.5)`;
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
 
       <main>
         {/* HERO */}
-        <section className="relative overflow-hidden">
-          <div
+        <section className="relative overflow-hidden bg-background">
+          {/* Ambient gradient — fades in once color is extracted */}
+          <motion.div
+            key={dominant ? `${r}-${g}-${b}` : "fallback"}
             aria-hidden
             className="absolute inset-0"
+            style={{ background: heroGradient }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          />
+          {/* Filmic noise overlay */}
+          <div
+            aria-hidden
+            className="absolute inset-0 pointer-events-none mix-blend-overlay"
             style={{
-              backgroundImage: `url(${player.photoUrl})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              filter: "blur(40px) brightness(0.3)",
-              transform: "scale(1.15)",
+              backgroundImage: `url("${NOISE_SVG}")`,
+              opacity: 0.03,
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/70 to-background" />
+          {/* Bottom 80px smooth fade into page background */}
+          <div
+            aria-hidden
+            className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-b from-transparent to-background"
+          />
 
           <div className="container-site relative z-10 pt-28 pb-20">
             <nav className="mb-8 text-sm text-muted">
@@ -148,7 +177,8 @@ export default function PlayerPage() {
                 <img
                   src={player.photoUrl}
                   alt={player.name}
-                  className="aspect-[3/4] w-full rounded-card object-cover shadow-2xl shadow-primary/10"
+                  className="aspect-[3/4] w-full rounded-card object-cover transition-shadow duration-700"
+                  style={{ boxShadow: photoShadow }}
                 />
               </div>
 
