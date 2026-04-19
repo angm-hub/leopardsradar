@@ -10,6 +10,7 @@ interface Filters {
   search?: string;
   limit?: number;
   orderBy?: { column: keyof DBPlayer; ascending?: boolean };
+  excludeEligibilityStatus?: string;
 }
 
 function normalizeJsonbArray(value: unknown): string[] {
@@ -34,7 +35,7 @@ function normalize(row: Record<string, unknown>): DBPlayer {
 }
 
 export function usePlayers(filters: Filters = {}) {
-  const { category, categories, position, tier, search, limit, orderBy } = filters;
+  const { category, categories, position, tier, search, limit, orderBy, excludeEligibilityStatus } = filters;
   const [players, setPlayers] = useState<DBPlayer[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -54,6 +55,7 @@ export function usePlayers(filters: Filters = {}) {
       if (position) query = query.eq("position", position);
       if (tier) query = query.eq("tier", tier);
       if (search) query = query.ilike("name", `%${search}%`);
+      if (excludeEligibilityStatus) query = query.neq("eligibility_status", excludeEligibilityStatus);
       if (orderBy)
         query = query.order(orderBy.column as string, {
           ascending: orderBy.ascending ?? false,
@@ -72,7 +74,7 @@ export function usePlayers(filters: Filters = {}) {
     } finally {
       setLoading(false);
     }
-  }, [category, categoriesKey, position, tier, search, limit, orderBy?.column, orderBy?.ascending]);
+  }, [category, categoriesKey, position, tier, search, limit, orderBy?.column, orderBy?.ascending, excludeEligibilityStatus]);
 
   useEffect(() => {
     fetchPlayers();
