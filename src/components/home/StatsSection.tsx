@@ -4,6 +4,7 @@ import { Pill } from "@/components/ui/Pill";
 import { useHomeStats } from "@/hooks/useHomeStats";
 import { usePlayers } from "@/hooks/usePlayers";
 import { formatMarketValue } from "@/lib/playerHelpers";
+import { ResidualGradient } from "@/components/ui/GradientBackgrounds";
 
 const cardBase =
   "relative overflow-hidden rounded-2xl bg-card border border-border";
@@ -50,8 +51,9 @@ export function StatsSection() {
   const avgAge = stats?.avg_age ? Math.round(stats.avg_age) : 0;
 
   return (
-    <section className="py-24 md:py-32 bg-background">
-      <div className="container-site max-w-7xl">
+    <section className="relative py-24 md:py-32 bg-background overflow-hidden">
+      <ResidualGradient position="top-bottom" />
+      <div className="container-site max-w-7xl relative">
         {/* Header */}
         <div className="flex flex-col gap-4 mb-12 max-w-2xl">
           <span className="text-xs uppercase tracking-[0.2em] text-primary">
