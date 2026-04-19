@@ -9,8 +9,9 @@ interface SectionWithMockupProps {
   description: ReactNode;
   ctaLabel: string;
   ctaHref: string;
-  primaryImageSrc: string;
+  primaryImageSrc?: string;
   secondaryImageSrc: string;
+  primaryNode?: ReactNode;
   reverseLayout?: boolean;
 }
 
@@ -50,6 +51,7 @@ export function SectionWithMockup({
   ctaHref,
   primaryImageSrc,
   secondaryImageSrc,
+  primaryNode,
   reverseLayout = false,
 }: SectionWithMockupProps) {
   return (
@@ -102,10 +104,18 @@ export function SectionWithMockup({
           />
           <motion.div
             variants={primaryImgVariants}
-            className="relative w-full h-[400px] md:h-[600px] rounded-card overflow-hidden border border-border bg-card backdrop-blur-[15px] bg-cover bg-center z-10 mt-12 md:mt-20 ml-6 md:ml-10"
-            style={{ backgroundImage: `url(${primaryImageSrc})` }}
-            aria-hidden
-          />
+            className="relative w-full rounded-card overflow-hidden z-10 mt-12 md:mt-20 ml-6 md:ml-10"
+          >
+            {primaryNode ? (
+              primaryNode
+            ) : (
+              <div
+                className="w-full h-[400px] md:h-[600px] rounded-card overflow-hidden border border-border bg-card backdrop-blur-[15px] bg-cover bg-center"
+                style={{ backgroundImage: `url(${primaryImageSrc})` }}
+                aria-hidden
+              />
+            )}
+          </motion.div>
         </div>
       </motion.div>
 
