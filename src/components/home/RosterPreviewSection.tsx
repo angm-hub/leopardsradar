@@ -1,5 +1,5 @@
 import { motion, type Variants } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Search } from "lucide-react";
 import PlayerCard from "./PlayerCard";
 import PlayerCardSkeleton from "@/components/ui/PlayerCardSkeleton";
 import { usePlayers } from "@/hooks/usePlayers";
