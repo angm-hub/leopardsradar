@@ -179,12 +179,6 @@ export type Database = {
         }
         Relationships: []
       }
-      v_newsletter_count: {
-        Row: {
-          active_count: number | null
-        }
-        Relationships: []
-      }
       v_players_tier1: {
         Row: {
           age: number | null
@@ -301,8 +295,7 @@ export type Database = {
       }
     }
     Functions: {
-      show_limit: { Args: never; Returns: number }
-      show_trgm: { Args: { "": string }; Returns: string[] }
+      get_newsletter_count: { Args: never; Returns: number }
     }
     Enums: {
       [_ in never]: never
