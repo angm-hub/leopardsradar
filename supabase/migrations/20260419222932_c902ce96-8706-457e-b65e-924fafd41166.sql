@@ -1,0 +1,36 @@
+UPDATE public.players p SET
+  transfermarkt_id = s.transfermarkt_id,
+  name = s.name,
+  image_url = s.image_url,
+  date_of_birth = s.date_of_birth,
+  age = s.age,
+  place_of_birth = s.place_of_birth,
+  country_of_birth = s.country_of_birth,
+  height_cm = s.height_cm,
+  position = s.position,
+  foot = s.foot,
+  current_club = s.current_club,
+  current_club_id = s.current_club_id,
+  contract_expires = s.contract_expires,
+  on_loan_from = s.on_loan_from,
+  agent = s.agent,
+  is_binational = s.is_binational,
+  nationalities = s.nationalities,
+  other_nationalities = s.other_nationalities,
+  player_category = s.player_category,
+  tier = s.tier,
+  caps_rdc = s.caps_rdc,
+  eligibility_status = s.eligibility_status,
+  eligibility_note = s.eligibility_note,
+  market_value_eur = s.market_value_eur,
+  season_games = s.season_games,
+  season_goals = s.season_goals,
+  season_assists = s.season_assists,
+  season_minutes = s.season_minutes,
+  season_rating = s.season_rating,
+  verified = s.verified,
+  updated_at = now()
+FROM public.staging_players_import s
+WHERE p.slug = s.slug;
+
+DROP TABLE IF EXISTS public.staging_players_import;
