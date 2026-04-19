@@ -1,6 +1,7 @@
 import SectionWithMockup from "./SectionWithMockup";
 import LineupPitch, { type LineupPlayer } from "@/components/ui/LineupPitch";
 import BrowserFrame from "@/components/ui/BrowserFrame";
+import { ResidualGradient } from "@/components/ui/GradientBackgrounds";
 
 const mockLineup: LineupPlayer[] = [
   {
@@ -95,25 +96,28 @@ const mockLineup: LineupPlayer[] = [
 
 export function BestXIPreviewSection() {
   return (
-    <SectionWithMockup
-      className="bg-card/30"
-      reverseLayout
-      badge="BEST XI DIASPORA"
-      title={<>Notre composition rêvée, chaque semaine.</>}
-      description="Si on alignait le meilleur XI possible des Léopards en 2026, roster actuel + diaspora éligible confondus, ça donnerait quoi ? On fait l'exercice tous les vendredis."
-      ctaLabel="Voir toutes les compositions"
-      ctaHref="/best-xi"
-      secondaryImageSrc="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600&q=80"
-      primaryNode={
-        <BrowserFrame url="leopardsradar.com/best-xi">
-          <LineupPitch
-            formation="4-3-3"
-            players={mockLineup}
-            date="Sem. 16 · 2026"
-          />
-        </BrowserFrame>
-      }
-    />
+    <div className="relative">
+      <ResidualGradient position="top-bottom" />
+      <SectionWithMockup
+        className="bg-card/30"
+        reverseLayout
+        badge="BEST XI DIASPORA"
+        title={<>Notre composition rêvée, chaque semaine.</>}
+        description="Si on alignait le meilleur XI possible des Léopards en 2026, roster actuel + diaspora éligible confondus, ça donnerait quoi ? On fait l'exercice tous les vendredis."
+        ctaLabel="Voir toutes les compositions"
+        ctaHref="/best-xi"
+        secondaryImageSrc="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600&q=80"
+        primaryNode={
+          <BrowserFrame url="leopardsradar.com/best-xi">
+            <LineupPitch
+              formation="4-3-3"
+              players={mockLineup}
+              date="Sem. 16 · 2026"
+            />
+          </BrowserFrame>
+        }
+      />
+    </div>
   );
 }
 

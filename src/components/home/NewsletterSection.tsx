@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useNewsletterCount } from "@/hooks/useNewsletterCount";
 import { toast } from "sonner";
 import { z } from "zod";
+import { StrongGradient } from "@/components/ui/GradientBackgrounds";
 
 const emailSchema = z
   .string()
@@ -63,7 +64,8 @@ export function NewsletterSection() {
   };
 
   return (
-    <section className="relative py-24 md:py-40 bg-card overflow-hidden">
+    <section className="relative py-24 md:py-32 bg-card overflow-hidden">
+      <StrongGradient intensity={0.95} position="flow" />
       <svg
         aria-hidden
         className="absolute inset-0 h-full w-full opacity-[0.03] text-foreground"
