@@ -104,7 +104,8 @@ function RadarCard({ player }: { player: DBPlayer }) {
 export default function Radar() {
   const { players, loading, error } = usePlayers({
     categories: ["radar", "heritage"],
-    orderBy: { column: "name", ascending: true },
+    excludeEligibilityStatus: "ineligible",
+    orderBy: { column: "market_value_eur", ascending: false },
   });
 
   const [position, setPosition] = useState<PositionFilter>("ALL");
