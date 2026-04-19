@@ -27,7 +27,7 @@ function normalizeJsonbArray(value: unknown): string[] {
 
 function normalize(row: Record<string, unknown>): DBPlayer {
   return {
-    ...(row as DBPlayer),
+    ...(row as unknown as DBPlayer),
     nationalities: normalizeJsonbArray(row.nationalities),
     other_nationalities: normalizeJsonbArray(row.other_nationalities),
   };
