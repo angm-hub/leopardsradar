@@ -200,6 +200,108 @@ export type Database = {
         }
         Relationships: []
       }
+      staging_players_import: {
+        Row: {
+          age: number | null
+          agent: string | null
+          caps_rdc: number | null
+          contract_expires: string | null
+          country_of_birth: string | null
+          current_club: string | null
+          current_club_id: string | null
+          date_of_birth: string | null
+          eligibility_note: string | null
+          eligibility_status: string | null
+          foot: string | null
+          height_cm: number | null
+          image_url: string | null
+          is_binational: boolean | null
+          market_value_eur: number | null
+          name: string | null
+          nationalities: Json | null
+          on_loan_from: string | null
+          other_nationalities: Json | null
+          place_of_birth: string | null
+          player_category: string | null
+          position: string | null
+          season_assists: number | null
+          season_games: number | null
+          season_goals: number | null
+          season_minutes: number | null
+          season_rating: number | null
+          slug: string
+          tier: string | null
+          transfermarkt_id: string | null
+          verified: boolean | null
+        }
+        Insert: {
+          age?: number | null
+          agent?: string | null
+          caps_rdc?: number | null
+          contract_expires?: string | null
+          country_of_birth?: string | null
+          current_club?: string | null
+          current_club_id?: string | null
+          date_of_birth?: string | null
+          eligibility_note?: string | null
+          eligibility_status?: string | null
+          foot?: string | null
+          height_cm?: number | null
+          image_url?: string | null
+          is_binational?: boolean | null
+          market_value_eur?: number | null
+          name?: string | null
+          nationalities?: Json | null
+          on_loan_from?: string | null
+          other_nationalities?: Json | null
+          place_of_birth?: string | null
+          player_category?: string | null
+          position?: string | null
+          season_assists?: number | null
+          season_games?: number | null
+          season_goals?: number | null
+          season_minutes?: number | null
+          season_rating?: number | null
+          slug: string
+          tier?: string | null
+          transfermarkt_id?: string | null
+          verified?: boolean | null
+        }
+        Update: {
+          age?: number | null
+          agent?: string | null
+          caps_rdc?: number | null
+          contract_expires?: string | null
+          country_of_birth?: string | null
+          current_club?: string | null
+          current_club_id?: string | null
+          date_of_birth?: string | null
+          eligibility_note?: string | null
+          eligibility_status?: string | null
+          foot?: string | null
+          height_cm?: number | null
+          image_url?: string | null
+          is_binational?: boolean | null
+          market_value_eur?: number | null
+          name?: string | null
+          nationalities?: Json | null
+          on_loan_from?: string | null
+          other_nationalities?: Json | null
+          place_of_birth?: string | null
+          player_category?: string | null
+          position?: string | null
+          season_assists?: number | null
+          season_games?: number | null
+          season_goals?: number | null
+          season_minutes?: number | null
+          season_rating?: number | null
+          slug?: string
+          tier?: string | null
+          transfermarkt_id?: string | null
+          verified?: boolean | null
+        }
+        Relationships: []
+      }
       user_lists: {
         Row: {
           avg_age: number | null
