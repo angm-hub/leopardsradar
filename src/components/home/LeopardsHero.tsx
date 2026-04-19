@@ -2,7 +2,7 @@ import { motion, type Variants } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/ButtonPrimitive";
 import { Pill } from "@/components/ui/Pill";
-import { AuroraShader } from "@/components/ui/AuroraShader";
+import { DiasporaConstellation } from "@/components/ui/DiasporaConstellation";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -19,27 +19,34 @@ const itemVariants: Variants = {
 
 export function LeopardsHero() {
   return (
-    <section className="relative min-h-screen overflow-hidden bg-background">
-      <AuroraShader className="absolute inset-0 h-full w-full" />
+    <section className="relative isolate min-h-screen w-full overflow-hidden bg-background">
+      <DiasporaConstellation className="absolute inset-0 h-full w-full" />
 
-      <div className="absolute inset-0 bg-gradient-to-b from-background/0 via-background/40 to-background pointer-events-none" />
+      {/* Vignette overlay for text readability */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(circle at center, transparent 0%, rgba(10,10,11,0.4) 60%, rgba(10,10,11,0.9) 100%)",
+        }}
+      />
 
       <div className="container-site relative z-10 flex min-h-screen items-center py-24">
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="mx-auto max-w-4xl flex flex-col items-center text-center gap-8"
+          className="mx-auto flex max-w-4xl flex-col items-center gap-8 text-center"
         >
           <motion.div variants={itemVariants}>
-            <Pill dot dotColor="bg-success">
-              Saison 2025/26
+            <Pill dot dotColor="bg-primary">
+              SAISON 2025/26
             </Pill>
           </motion.div>
 
           <motion.h1
             variants={itemVariants}
-            className="font-serif text-5xl md:text-7xl lg:text-8xl font-semibold tracking-tight text-balance text-foreground"
+            className="font-serif text-5xl md:text-7xl lg:text-8xl font-semibold tracking-tight text-balance text-foreground leading-[1.05]"
           >
             Les yeux sur tous{" "}
             <span className="bg-gradient-to-r from-foreground via-primary to-foreground/70 bg-clip-text text-transparent">
@@ -69,13 +76,13 @@ export function LeopardsHero() {
 
           <motion.div
             variants={itemVariants}
-            className="flex items-center gap-3 mt-2"
+            className="mt-2 flex items-center gap-3"
           >
             <div className="flex">
               {[1, 2, 3, 4, 5].map((i) => (
                 <span
                   key={i}
-                  className="h-7 w-7 rounded-full border-2 border-background bg-gradient-to-br from-primary/70 to-pos-att/60 first:ml-0 -ml-2"
+                  className="h-7 w-7 rounded-full border-2 border-background first:ml-0 -ml-2"
                   style={{
                     background: `linear-gradient(135deg, hsl(${(i * 47) % 360} 70% 55%), hsl(${(i * 91) % 360} 60% 40%))`,
                   }}
@@ -87,6 +94,11 @@ export function LeopardsHero() {
             </span>
           </motion.div>
         </motion.div>
+      </div>
+
+      {/* Caption line */}
+      <div className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2 text-xs uppercase tracking-[0.3em] text-foreground/30 font-medium">
+        18 étoiles · 12 pays · 1 constellation
       </div>
     </section>
   );
