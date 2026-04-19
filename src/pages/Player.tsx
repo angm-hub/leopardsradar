@@ -1,4 +1,5 @@
 import { Link, useParams } from "react-router-dom";
+import { motion } from "framer-motion";
 import {
   ArrowLeft,
   ExternalLink,
@@ -12,7 +13,15 @@ import { StatBlock } from "@/components/ui/StatBlock";
 import { PlayerCard } from "@/components/home/PlayerCard";
 import { usePlayer } from "@/hooks/usePlayer";
 import { usePlayers } from "@/hooks/usePlayers";
+import { useDominantColor } from "@/hooks/useDominantColor";
 import { cn } from "@/lib/utils";
+
+// SVG noise as a data URI — gives the gradient a filmic grain
+const NOISE_SVG =
+  "data:image/svg+xml;utf8," +
+  encodeURIComponent(
+    `<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.6 0'/></filter><rect width='100%' height='100%' filter='url(#n)'/></svg>`,
+  );
 
 const RECENT_FORM = [
   { result: "W", date: "12 avr.", opp: "OL", score: "2-1", rating: 7.8, mins: 90 },
