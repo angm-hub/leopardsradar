@@ -1,28 +1,24 @@
-import { Star } from "lucide-react";
+import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import type { Player, PositionCode } from "@/types/player";
-
-export type { Player } from "@/types/player";
-
-const POSITION_DOT: Record<PositionCode, string> = {
-  GK: "bg-pos-gk",
-  DEF: "bg-pos-def",
-  MID: "bg-pos-mid",
-  ATT: "bg-pos-att",
-};
+import type { DBPlayer } from "@/types/dbPlayer";
+import {
+  POSITION_BADGE,
+  POSITION_LABEL,
+  flagFor,
+} from "@/lib/playerHelpers";
+import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
 
 interface PlayerCardProps {
-  player: Player;
+  player: DBPlayer;
   className?: string;
 }
 
 export function PlayerCard({ player, className }: PlayerCardProps) {
-  const { slug, name, photoUrl, club, clubLogoUrl, position, stats, isCaptain } =
-    player;
+  const { slug, name, image_url, current_club, position, age, nationalities } = player;
 
   return (
-    <a
-      href={`/player/${slug}`}
+    <Link
+      to={`/player/${slug}`}
       className={cn(
         "group relative block aspect-[3/4] rounded-card overflow-hidden",
         "bg-card border border-border transition-all duration-300",
@@ -30,50 +26,53 @@ export function PlayerCard({ player, className }: PlayerCardProps) {
         className,
       )}
     >
-      <img
-        src={photoUrl}
-        alt={name}
-        loading="lazy"
-        className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+      <PlayerAvatar
+        name={name}
+        src={image_url}
+        className="absolute inset-0 h-full w-full"
+        initialsClassName="text-6xl"
       />
 
       <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-3/5 bg-gradient-to-t from-background via-background/80 to-transparent" />
 
-      {/* Top-left: position + captain */}
-      <div className="absolute top-3 left-3 flex items-center gap-2">
-        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-background/40 backdrop-blur-md border border-border/40">
-          <span className={cn("h-2 w-2 rounded-full", POSITION_DOT[position])} />
-        </span>
-        {isCaptain ? (
-          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-background/40 backdrop-blur-md border border-border/40">
-            <Star className="h-3 w-3 text-primary" fill="currentColor" />
+      {/* Top-left: position badge */}
+      {position ? (
+        <div className="absolute top-3 left-3">
+          <span
+            className={cn(
+              "inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider backdrop-blur-md",
+              POSITION_BADGE[position],
+            )}
+          >
+            {POSITION_LABEL[position]}
           </span>
-        ) : null}
-      </div>
+        </div>
+      ) : null}
 
-      {/* Top-right: stats pill */}
-      <div className="absolute top-3 right-3">
-        <span className="inline-flex items-center rounded-full backdrop-blur-md bg-background/40 border border-border/40 px-2.5 py-1 font-mono text-[11px] text-foreground/85">
-          {stats.matches}M · {stats.goals}B · {stats.assists}A
-        </span>
-      </div>
+      {/* Top-right: nationality flags (max 3) */}
+      {nationalities.length > 0 ? (
+        <div className="absolute top-3 right-3 flex items-center gap-0.5 rounded-full bg-background/40 backdrop-blur-md border border-border/40 px-2 py-1">
+          {nationalities.slice(0, 3).map((nat) => (
+            <span key={nat} className="text-sm leading-none" title={nat}>
+              {flagFor(nat)}
+            </span>
+          ))}
+        </div>
+      ) : null}
 
       {/* Bottom content */}
       <div className="absolute bottom-0 left-0 right-0 p-5">
-        <div className="flex items-center gap-2">
-          <img
-            src={clubLogoUrl}
-            alt={club}
-            loading="lazy"
-            className="h-5 w-5 rounded-sm object-cover"
-          />
-          <span className="text-sm text-foreground/70">{club}</span>
-        </div>
-        <h3 className="mt-2 font-serif text-xl font-semibold text-foreground tracking-tight">
+        {current_club ? (
+          <p className="text-sm text-foreground/70 truncate">{current_club}</p>
+        ) : null}
+        <h3 className="mt-1 font-serif text-xl font-semibold text-foreground tracking-tight truncate">
           {name}
         </h3>
+        {age ? (
+          <p className="mt-1 font-mono text-xs text-muted">{age} ans</p>
+        ) : null}
       </div>
-    </a>
+    </Link>
   );
 }
 

@@ -1,5 +1,6 @@
 import { motion, type Variants } from "framer-motion";
 import { ArrowRight, Search } from "lucide-react";
+import { Link } from "react-router-dom";
 import PlayerCard from "./PlayerCard";
 import PlayerCardSkeleton from "@/components/ui/PlayerCardSkeleton";
 import { usePlayers } from "@/hooks/usePlayers";
@@ -15,10 +16,11 @@ const itemVariants: Variants = {
 };
 
 export function RosterPreviewSection() {
+  // 6 first roster players, alphabetical
   const { players, loading } = usePlayers({
-    category: "Roster",
-    limit: 8,
-    orderBy: { column: "market_value_eur", ascending: false },
+    category: "roster",
+    limit: 6,
+    orderBy: { column: "name", ascending: true },
   });
 
   return (
@@ -30,21 +32,21 @@ export function RosterPreviewSection() {
               Les Léopards en ce moment
             </span>
             <h2 className="font-serif text-4xl md:text-5xl font-semibold text-foreground tracking-tight text-balance">
-              Leurs performances cette semaine.
+              Le roster international.
             </h2>
           </div>
-          <a
-            href="/roster"
+          <Link
+            to="/roster"
             className="group inline-flex items-center gap-2 text-sm text-foreground/80 hover:text-foreground transition-colors"
           >
             Voir tout le roster
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </a>
+          </Link>
         </div>
 
         {loading ? (
-          <div className="mt-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 lg:gap-6">
-            {Array.from({ length: 8 }).map((_, i) => (
+          <div className="mt-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5 lg:gap-6">
+            {Array.from({ length: 6 }).map((_, i) => (
               <PlayerCardSkeleton key={i} />
             ))}
           </div>
@@ -52,17 +54,9 @@ export function RosterPreviewSection() {
           <div className="mt-12 flex flex-col items-center justify-center text-center py-20 gap-3">
             <Search className="h-12 w-12 text-foreground" style={{ opacity: 0.3 }} />
             <h3 className="font-serif text-2xl text-foreground">
-              Les données arrivent bientôt.
+              Aucun joueur dans le roster pour l'instant.
             </h3>
-            <p className="text-muted">
-              Le roster se met à jour chaque dimanche soir.
-            </p>
-            <a
-              href="/newsletter"
-              className="mt-2 text-sm text-primary hover:underline underline-offset-4"
-            >
-              S'abonner à la newsletter pour être prévenu →
-            </a>
+            <p className="text-muted">Le roster se met à jour chaque dimanche soir.</p>
           </div>
         ) : (
           <>
@@ -91,7 +85,7 @@ export function RosterPreviewSection() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, amount: 0.1 }}
-              className="mt-12 hidden md:grid md:grid-cols-3 lg:grid-cols-4 gap-5 lg:gap-6"
+              className="mt-12 hidden md:grid md:grid-cols-3 lg:grid-cols-6 gap-5 lg:gap-6"
             >
               {players.map((player) => (
                 <motion.div key={player.slug} variants={itemVariants}>
