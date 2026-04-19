@@ -99,16 +99,7 @@ export function Footer() {
 
         <div className="border-t border-border pt-8 mt-12">
           <p className="text-center text-sm text-muted">
-            © 2026 Léopards Radar. Construit avec passion par{" "}
-            <a
-              href="https://kaira.io"
-              target="_blank"
-              rel="noreferrer"
-              className="text-muted-light hover:text-foreground transition-colors"
-            >
-              kAIra
-            </a>
-            .
+            © 2026 Léopards Radar. Construit avec passion depuis Paris.
           </p>
         </div>
       </div>
