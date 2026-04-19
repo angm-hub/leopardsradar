@@ -1,5 +1,6 @@
 import SectionWithMockup from "./SectionWithMockup";
 import LineupPitch, { type LineupPlayer } from "@/components/ui/LineupPitch";
+import BrowserFrame from "@/components/ui/BrowserFrame";
 
 const mockLineup: LineupPlayer[] = [
   {
@@ -103,11 +104,13 @@ export function BestXIPreviewSection() {
       ctaHref="/best-xi"
       secondaryImageSrc="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600&q=80"
       primaryNode={
-        <LineupPitch
-          formation="4-3-3"
-          players={mockLineup}
-          date="Sem. 16 · 2026"
-        />
+        <BrowserFrame url="leopardsradar.com/best-xi">
+          <LineupPitch
+            formation="4-3-3"
+            players={mockLineup}
+            date="Sem. 16 · 2026"
+          />
+        </BrowserFrame>
       }
     />
   );
