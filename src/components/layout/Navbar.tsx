@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
+import { Link, NavLink } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/ButtonPrimitive";
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
-  { label: "Roster", href: "#roster" },
-  { label: "Radar", href: "#radar" },
-  { label: "Best XI", href: "#best-xi" },
-  { label: "Newsletter", href: "#newsletter" },
+  { label: "Roster", href: "/roster" },
+  { label: "Radar", href: "/radar" },
+  { label: "Best XI", href: "/best-xi" },
+  { label: "À propos", href: "/about" },
+  { label: "Newsletter", href: "/newsletter" },
 ];
 
 export function Navbar() {
@@ -38,29 +40,36 @@ export function Navbar() {
       )}
     >
       <div className="container-site flex h-16 items-center justify-between">
-        <a
-          href="/"
+        <Link
+          to="/"
           className="font-serif uppercase text-lg tracking-[0.08em] text-foreground"
         >
           Léopards Radar
-        </a>
+        </Link>
 
         <nav className="hidden md:flex items-center gap-8">
           {NAV_LINKS.map((link) => (
-            <a
+            <NavLink
               key={link.href}
-              href={link.href}
-              className="text-sm text-foreground/80 hover:text-foreground transition-colors"
+              to={link.href}
+              className={({ isActive }) =>
+                cn(
+                  "text-sm transition-colors hover:text-foreground",
+                  isActive ? "text-foreground" : "text-foreground/70",
+                )
+              }
             >
               {link.label}
-            </a>
+            </NavLink>
           ))}
         </nav>
 
         <div className="hidden md:block">
-          <Button variant="primary" size="sm">
-            S'abonner
-          </Button>
+          <Link to="/newsletter">
+            <Button variant="primary" size="sm">
+              S'abonner
+            </Button>
+          </Link>
         </div>
 
         <button
@@ -107,20 +116,22 @@ export function Navbar() {
 
           <nav className="flex flex-col gap-5">
             {NAV_LINKS.map((link) => (
-              <a
+              <Link
                 key={link.href}
-                href={link.href}
+                to={link.href}
                 onClick={() => setOpen(false)}
                 className="text-base text-foreground/85 hover:text-foreground transition-colors"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </nav>
 
-          <Button variant="primary" size="md" className="w-full mt-auto">
-            S'abonner
-          </Button>
+          <Link to="/newsletter" onClick={() => setOpen(false)} className="mt-auto">
+            <Button variant="primary" size="md" className="w-full">
+              S'abonner
+            </Button>
+          </Link>
         </aside>
       </div>
     </header>
