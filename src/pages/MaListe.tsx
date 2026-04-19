@@ -4,6 +4,7 @@ import Footer from "@/components/layout/Footer";
 import { useMaListeStore } from "@/store/maListeStore";
 import { IntroScreen } from "@/components/ma-liste/IntroScreen";
 import { FormationPicker } from "@/components/ma-liste/FormationPicker";
+import { LineupBuilder } from "@/components/ma-liste/LineupBuilder";
 
 const stepFade = {
   initial: { opacity: 0, y: 16 },
@@ -42,9 +43,7 @@ export default function MaListe() {
           <motion.div key={currentStep} {...stepFade}>
             {currentStep === "intro" && <IntroScreen />}
             {currentStep === "formation" && <FormationPicker />}
-            {currentStep === "lineup" && (
-              <Placeholder label="XI titulaire" prompt="Prompt 3/5" />
-            )}
+            {currentStep === "lineup" && <LineupBuilder />}
             {currentStep === "bench" && (
               <Placeholder label="Banc" prompt="Prompt 4/5" />
             )}
