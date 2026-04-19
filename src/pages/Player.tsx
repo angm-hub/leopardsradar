@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
   ArrowLeft,
@@ -11,8 +10,8 @@ import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/ButtonPrimitive";
 import { StatBlock } from "@/components/ui/StatBlock";
 import { PlayerCard } from "@/components/home/PlayerCard";
-import MOCK_PLAYERS from "@/data/mockPlayers";
-import type { Player } from "@/types/player";
+import { usePlayer } from "@/hooks/usePlayer";
+import { usePlayers } from "@/hooks/usePlayers";
 import { cn } from "@/lib/utils";
 
 const RECENT_FORM = [
@@ -45,21 +44,40 @@ function NotFound() {
   );
 }
 
+function PlayerSkeleton() {
+  return (
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <main className="container-site pt-32 pb-20">
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-5">
+          <div
+            className="aspect-[3/4] w-full rounded-card border border-border bg-gradient-to-r from-card via-card-hover to-card animate-shimmer md:col-span-2"
+            style={{ backgroundSize: "200% 100%" }}
+          />
+          <div className="md:col-span-3 flex flex-col gap-4">
+            <div className="h-16 w-3/4 rounded bg-card animate-shimmer" style={{ backgroundSize: "200% 100%" }} />
+            <div className="h-6 w-1/2 rounded bg-card animate-shimmer" style={{ backgroundSize: "200% 100%" }} />
+            <div className="h-6 w-1/3 rounded bg-card animate-shimmer" style={{ backgroundSize: "200% 100%" }} />
+          </div>
+        </div>
+      </main>
+      <Footer />
+    </div>
+  );
+}
+
 export default function PlayerPage() {
   const { slug } = useParams<{ slug: string }>();
-  const player = useMemo(
-    () => MOCK_PLAYERS.find((p) => p.slug === slug),
-    [slug],
-  );
+  const { player, loading } = usePlayer(slug);
+  const { players: similar } = usePlayers({
+    position: player?.position,
+    limit: 6,
+  });
 
-  const similar = useMemo(() => {
-    if (!player) return [] as Player[];
-    return MOCK_PLAYERS.filter(
-      (p) => p.position === player.position && p.slug !== player.slug,
-    ).slice(0, 5);
-  }, [player]);
-
+  if (loading) return <PlayerSkeleton />;
   if (!player) return <NotFound />;
+
+  const similarFiltered = similar.filter((p) => p.slug !== player.slug).slice(0, 5);
 
   const isRadar = player.category === "Radar";
   const rootHref = isRadar ? "/radar" : "/roster";
@@ -299,11 +317,11 @@ export default function PlayerPage() {
         </section>
 
         {/* SIMILAR */}
-        {similar.length ? (
+        {similarFiltered.length ? (
           <section className="container-site py-24">
             <h2 className="font-serif text-4xl text-foreground">Dans la même équipe.</h2>
             <div className="mt-10 flex gap-5 overflow-x-auto pb-4 md:grid md:grid-cols-4 md:overflow-visible lg:grid-cols-5">
-              {similar.map((p) => (
+              {similarFiltered.map((p) => (
                 <div key={p.slug} className="min-w-[220px] md:min-w-0">
                   <PlayerCard player={p} />
                 </div>

@@ -51,6 +51,7 @@ const config: Config = {
         "fade-in": "fadeIn 0.6s ease-out forwards",
         "pulse-subtle": "pulseSubtle 3s ease-in-out infinite",
         marquee: "marquee 40s linear infinite",
+        shimmer: "shimmer 2s linear infinite",
       },
       keyframes: {
         fadeIn: {
@@ -64,6 +65,10 @@ const config: Config = {
         marquee: {
           from: { transform: "translateX(0)" },
           to: { transform: "translateX(-50%)" },
+        },
+        shimmer: {
+          "0%": { backgroundPosition: "-200% 0" },
+          "100%": { backgroundPosition: "200% 0" },
         },
       },
     },
