@@ -2,19 +2,11 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Command } from "cmdk";
 import {
-  Home,
-  Users,
-  Radar,
-  Trophy,
-  Mail,
-  Info,
-  User as UserIcon,
-  Sparkles,
-  Search,
-  Send,
-  Plus,
+  Home, Users, Radar, Trophy, Mail, Info,
+  Sparkles, Search, Send, Plus,
 } from "lucide-react";
-import { MOCK_PLAYERS } from "@/data/mockPlayers";
+import { usePlayers } from "@/hooks/usePlayers";
+import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
 import { cn } from "@/lib/utils";
 
 interface CommandPaletteProps {
@@ -35,17 +27,25 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
 
-  // Lock scroll when open
+  // Top 10 roster + top 5 radar from real Supabase data
+  const { players: rosterTop } = usePlayers({
+    category: "roster",
+    limit: 10,
+    orderBy: { column: "name", ascending: true },
+  });
+  const { players: radarTop } = usePlayers({
+    category: "radar",
+    limit: 5,
+    orderBy: { column: "name", ascending: true },
+  });
+
   useEffect(() => {
     if (!open) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = prev;
-    };
+    return () => { document.body.style.overflow = prev; };
   }, [open]);
 
-  // Close on Escape
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
@@ -61,9 +61,6 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
     navigate(href);
   };
 
-  const topPlayers = MOCK_PLAYERS.slice(0, 10);
-  const radarPlayers = MOCK_PLAYERS.filter((p) => p.category === "Radar").slice(0, 5);
-
   if (!open) return null;
 
   return (
@@ -77,11 +74,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
         className="relative mt-32 w-full max-w-xl rounded-2xl border border-border bg-card shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-150"
         onClick={(e) => e.stopPropagation()}
       >
-        <Command
-          label="Command palette"
-          className="flex flex-col"
-          shouldFilter
-        >
+        <Command label="Command palette" className="flex flex-col" shouldFilter>
           <div className="flex items-center gap-3 px-4 border-b border-border">
             <Search className="h-4 w-4 text-muted-foreground shrink-0" />
             <Command.Input
@@ -116,40 +109,43 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
               ))}
             </Command.Group>
 
-            <Command.Group
-              heading="Joueurs"
-              className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-2"
-            >
-              {topPlayers.map((p) => (
-                <PaletteItem
-                  key={`pl-${p.slug}`}
-                  value={`joueur ${p.name} ${p.club}`}
-                  icon={
-                    <img
-                      src={p.photoUrl}
-                      alt=""
-                      className="h-6 w-6 rounded-full object-cover"
-                    />
-                  }
-                  label={p.name}
-                  hint={p.club}
-                  onSelect={() => go(`/player/${p.slug}`)}
-                />
-              ))}
-            </Command.Group>
+            {rosterTop.length > 0 && (
+              <Command.Group
+                heading="Roster"
+                className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-2"
+              >
+                {rosterTop.map((p) => (
+                  <PaletteItem
+                    key={`r-${p.slug}`}
+                    value={`roster ${p.name} ${p.current_club ?? ""}`}
+                    icon={
+                      <PlayerAvatar
+                        name={p.name}
+                        src={p.image_url}
+                        className="h-6 w-6 rounded-full"
+                        initialsClassName="text-[10px]"
+                      />
+                    }
+                    label={p.name}
+                    hint={p.current_club ?? undefined}
+                    onSelect={() => go(`/player/${p.slug}`)}
+                  />
+                ))}
+              </Command.Group>
+            )}
 
-            {radarPlayers.length > 0 && (
+            {radarTop.length > 0 && (
               <Command.Group
                 heading="Radar"
                 className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-2"
               >
-                {radarPlayers.map((p) => (
+                {radarTop.map((p) => (
                   <PaletteItem
                     key={`rd-${p.slug}`}
                     value={`radar ${p.name}`}
                     icon={<Sparkles className="h-4 w-4 text-primary" />}
                     label={p.name}
-                    hint={p.club}
+                    hint={p.current_club ?? undefined}
                     onSelect={() => go(`/player/${p.slug}`)}
                   />
                 ))}
@@ -203,7 +199,7 @@ function PaletteItem({ value, icon, label, hint, onSelect }: PaletteItemProps) {
       </span>
       <span className="flex-1 truncate normal-case tracking-normal">{label}</span>
       {hint && (
-        <span className="text-xs text-muted-foreground normal-case tracking-normal">
+        <span className="text-xs text-muted-foreground normal-case tracking-normal truncate max-w-[40%]">
           {hint}
         </span>
       )}

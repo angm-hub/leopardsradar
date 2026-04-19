@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Search, X } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -7,102 +7,75 @@ import PlayerCardSkeleton from "@/components/ui/PlayerCardSkeleton";
 import { Button } from "@/components/ui/ButtonPrimitive";
 import { Select } from "@/components/ui/SelectPrimitive";
 import { usePlayers } from "@/hooks/usePlayers";
-import type { League, PositionCode } from "@/types/player";
+import type { DBPosition } from "@/types/dbPlayer";
 
-type PositionFilter = "ALL" | PositionCode;
-type LeagueFilter = "ALL" | League;
-type AgeFilter = "ALL" | "U23" | "23_30" | "30_PLUS";
-type SortKey = "VALUE_DESC" | "NAME_ASC" | "CAPS_DESC";
+type PositionFilter = "ALL" | DBPosition;
+type SortKey = "NAME_ASC" | "AGE_ASC" | "AGE_DESC";
 
 const POSITION_OPTIONS: { value: PositionFilter; label: string }[] = [
-  { value: "ALL", label: "Tous" },
-  { value: "GK", label: "Gardien" },
-  { value: "DEF", label: "Défenseur" },
-  { value: "MID", label: "Milieu" },
-  { value: "ATT", label: "Attaquant" },
-];
-
-const LEAGUE_OPTIONS: { value: LeagueFilter; label: string }[] = [
-  { value: "ALL", label: "Toutes" },
-  { value: "Premier League", label: "Premier League" },
-  { value: "Ligue 1", label: "Ligue 1" },
-  { value: "La Liga", label: "La Liga" },
-  { value: "Serie A", label: "Serie A" },
-  { value: "Bundesliga", label: "Bundesliga" },
-  { value: "Other Europe", label: "Autre Europe" },
-  { value: "Africa", label: "Afrique" },
-  { value: "Middle East", label: "Moyen-Orient" },
-  { value: "Other", label: "Autre" },
-];
-
-const AGE_OPTIONS: { value: AgeFilter; label: string }[] = [
-  { value: "ALL", label: "Tous" },
-  { value: "U23", label: "U23" },
-  { value: "23_30", label: "23-30" },
-  { value: "30_PLUS", label: "30+" },
+  { value: "ALL", label: "Tous postes" },
+  { value: "Goalkeeper", label: "Gardien" },
+  { value: "Defender", label: "Défenseur" },
+  { value: "Midfield", label: "Milieu" },
+  { value: "Attack", label: "Attaquant" },
 ];
 
 const SORT_OPTIONS: { value: SortKey; label: string }[] = [
-  { value: "VALUE_DESC", label: "Valeur ↓" },
   { value: "NAME_ASC", label: "Nom A-Z" },
-  { value: "CAPS_DESC", label: "Sélections ↓" },
+  { value: "AGE_ASC", label: "Âge ↑" },
+  { value: "AGE_DESC", label: "Âge ↓" },
 ];
 
 const Roster = () => {
-  const { players, loading, error } = usePlayers({ category: "Roster" });
+  const { players, loading, error } = usePlayers({
+    category: "roster",
+    orderBy: { column: "name", ascending: true },
+  });
+
   const [position, setPosition] = useState<PositionFilter>("ALL");
-  const [league, setLeague] = useState<LeagueFilter>("ALL");
-  const [age, setAge] = useState<AgeFilter>("ALL");
-  const [sort, setSort] = useState<SortKey>("VALUE_DESC");
+  const [sort, setSort] = useState<SortKey>("NAME_ASC");
   const [query, setQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
+
+  // 300ms debounce on the search input
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedQuery(query.trim().toLowerCase()), 300);
+    return () => clearTimeout(t);
+  }, [query]);
 
   const filtersActive =
-    position !== "ALL" ||
-    league !== "ALL" ||
-    age !== "ALL" ||
-    sort !== "VALUE_DESC" ||
-    query.trim() !== "";
+    position !== "ALL" || sort !== "NAME_ASC" || debouncedQuery !== "";
 
   const reset = () => {
     setPosition("ALL");
-    setLeague("ALL");
-    setAge("ALL");
-    setSort("VALUE_DESC");
+    setSort("NAME_ASC");
     setQuery("");
   };
 
   const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
     let list = players.filter((p) => {
       if (position !== "ALL" && p.position !== position) return false;
-      if (league !== "ALL" && p.league !== league) return false;
-      if (age === "U23" && p.age >= 23) return false;
-      if (age === "23_30" && (p.age < 23 || p.age > 30)) return false;
-      if (age === "30_PLUS" && p.age <= 30) return false;
-      if (q && !p.name.toLowerCase().includes(q)) return false;
+      if (debouncedQuery && !p.name.toLowerCase().includes(debouncedQuery)) return false;
       return true;
     });
 
     list = [...list].sort((a, b) => {
       if (sort === "NAME_ASC") return a.name.localeCompare(b.name);
-      if (sort === "CAPS_DESC") return b.capsRdc - a.capsRdc;
-      return b.marketValueEur - a.marketValueEur;
+      if (sort === "AGE_ASC") return (a.age ?? 0) - (b.age ?? 0);
+      return (b.age ?? 0) - (a.age ?? 0);
     });
 
     return list;
-  }, [players, position, league, age, sort, query]);
+  }, [players, position, sort, debouncedQuery]);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
 
       <main className="flex-1">
-        {/* Page header */}
         <header className="container-site pt-32 pb-12">
           <nav aria-label="breadcrumb" className="text-sm text-muted">
-            <a href="/" className="hover:text-foreground transition-colors">
-              Home
-            </a>
+            <a href="/" className="hover:text-foreground transition-colors">Home</a>
             <span className="mx-2 text-muted/60">/</span>
             <span className="text-foreground/80">Roster</span>
           </nav>
@@ -110,11 +83,10 @@ const Roster = () => {
             Roster Léopards
           </h1>
           <p className="mt-3 text-lg text-muted-light">
-            {loading ? "Chargement…" : `${players.length} joueurs appelés ou éligibles`} — Saison 2025/26
+            {loading ? "Chargement…" : `${players.length} internationaux RDC`} — Saison 2025/26
           </p>
         </header>
 
-        {/* Sticky filter bar */}
         <div className="sticky top-16 z-20 bg-background/85 backdrop-blur-lg border-y border-border">
           <div className="container-site py-4 flex flex-wrap gap-3 items-center">
             <Select
@@ -122,18 +94,6 @@ const Roster = () => {
               options={POSITION_OPTIONS}
               value={position}
               onChange={(e) => setPosition(e.target.value as PositionFilter)}
-            />
-            <Select
-              label="Ligue"
-              options={LEAGUE_OPTIONS}
-              value={league}
-              onChange={(e) => setLeague(e.target.value as LeagueFilter)}
-            />
-            <Select
-              label="Âge"
-              options={AGE_OPTIONS}
-              value={age}
-              onChange={(e) => setAge(e.target.value as AgeFilter)}
             />
             <Select
               label="Tri"
@@ -166,7 +126,6 @@ const Roster = () => {
           </div>
         </div>
 
-        {/* Grid */}
         <section className="container-site py-12">
           {loading ? (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
@@ -176,7 +135,7 @@ const Roster = () => {
             </div>
           ) : error ? (
             <div className="flex flex-col items-center justify-center py-20 gap-3 text-center">
-              <p className="text-muted-light">Données en cours de chargement…</p>
+              <p className="text-muted-light">Une erreur est survenue.</p>
               <p className="text-xs text-muted">{error}</p>
             </div>
           ) : filtered.length === 0 ? (

@@ -43,7 +43,7 @@ export function usePlayer(slug: string | undefined) {
         } else {
           const row = data as Record<string, unknown>;
           setPlayer({
-            ...(row as DBPlayer),
+            ...(row as unknown as DBPlayer),
             nationalities: normalizeJsonbArray(row.nationalities),
             other_nationalities: normalizeJsonbArray(row.other_nationalities),
           });
