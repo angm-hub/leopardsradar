@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import ColorThief from "colorthief";
+// colorthief ships only a CommonJS export — import as namespace and read default.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+import * as ColorThiefModule from "colorthief";
+const ColorThief: new () => { getColor: (img: HTMLImageElement) => [number, number, number] } =
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (ColorThiefModule as any).default ?? (ColorThiefModule as any);
 
 export type RGB = [number, number, number];
 

@@ -92,25 +92,45 @@ export default function PlayerPage() {
   const rootHref = isRadar ? "/radar" : "/roster";
   const rootLabel = isRadar ? "Radar" : "Roster";
 
+  // Extract dominant color from the player photo for ambient hero tinting
+  const dominant = useDominantColor(player.photoUrl);
+  const [r, g, b] = dominant ?? [60, 60, 70]; // muted neutral fallback
+  const heroGradient = `linear-gradient(180deg, rgba(${r}, ${g}, ${b}, 0.42) 0%, rgba(${r}, ${g}, ${b}, 0.18) 45%, #0A0A0B 100%)`;
+  const photoShadow = dominant
+    ? `0 20px 80px rgba(${r}, ${g}, ${b}, 0.35), 0 8px 24px rgba(0,0,0,0.5)`
+    : `0 20px 80px rgba(0,0,0,0.5)`;
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
 
       <main>
         {/* HERO */}
-        <section className="relative overflow-hidden">
-          <div
+        <section className="relative overflow-hidden bg-background">
+          {/* Ambient gradient — fades in once color is extracted */}
+          <motion.div
+            key={dominant ? `${r}-${g}-${b}` : "fallback"}
             aria-hidden
             className="absolute inset-0"
+            style={{ background: heroGradient }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          />
+          {/* Filmic noise overlay */}
+          <div
+            aria-hidden
+            className="absolute inset-0 pointer-events-none mix-blend-overlay"
             style={{
-              backgroundImage: `url(${player.photoUrl})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              filter: "blur(40px) brightness(0.3)",
-              transform: "scale(1.15)",
+              backgroundImage: `url("${NOISE_SVG}")`,
+              opacity: 0.03,
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/70 to-background" />
+          {/* Bottom 80px smooth fade into page background */}
+          <div
+            aria-hidden
+            className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-b from-transparent to-background"
+          />
 
           <div className="container-site relative z-10 pt-28 pb-20">
             <nav className="mb-8 text-sm text-muted">
@@ -157,7 +177,8 @@ export default function PlayerPage() {
                 <img
                   src={player.photoUrl}
                   alt={player.name}
-                  className="aspect-[3/4] w-full rounded-card object-cover shadow-2xl shadow-primary/10"
+                  className="aspect-[3/4] w-full rounded-card object-cover transition-shadow duration-700"
+                  style={{ boxShadow: photoShadow }}
                 />
               </div>
 
