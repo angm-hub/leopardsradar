@@ -367,13 +367,15 @@ export type Database = {
       v_home_stats: {
         Row: {
           avg_age: number | null
+          heritage_count: number | null
+          ineligible_count: number | null
+          radar_count: number | null
+          roster_count: number | null
+          tier1_count: number | null
           total_clubs: number | null
           total_countries: number | null
-          total_heritage: number | null
           total_market_value: number | null
           total_players: number | null
-          total_radar: number | null
-          total_roster: number | null
         }
         Relationships: []
       }
