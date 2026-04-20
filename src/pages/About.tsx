@@ -35,36 +35,34 @@ export default function About() {
             </p>
           </div>
 
-          {/* Team */}
+          {/* Approche */}
           <section className="mt-20">
-            <h2 className="mb-8 font-serif text-3xl text-foreground">L'équipe.</h2>
-            <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
-              <div className="flex h-24 w-24 flex-none items-center justify-center rounded-full bg-primary/20 ring-1 ring-primary/30">
-                <span className="font-serif text-2xl font-bold text-primary">AS</span>
-              </div>
-              <div className="flex flex-col gap-2">
-                <h3 className="font-serif text-2xl font-semibold text-foreground">
-                  Alex Sango
-                </h3>
-                <p className="text-muted">Stratège IA, fondateur de kAIra</p>
-                <p className="max-w-prose text-foreground/80 leading-relaxed">
-                  15 ans en advertising entre France et Afrique. Je conseille les
-                  marques qui veulent parler à la diaspora et au continent. Léopards
-                  Radar est un projet personnel, construit avec les outils et les
-                  convictions que je défends.
-                </p>
-                <div className="mt-2 flex gap-4 text-sm">
-                  <a href="#" className="text-primary hover:text-primary-hover">
-                    LinkedIn
-                  </a>
-                  <a href="#" className="text-primary hover:text-primary-hover">
-                    kAIra
-                  </a>
-                  <a href="#" className="text-primary hover:text-primary-hover">
-                    Twitter
-                  </a>
+            <h2 className="mb-8 font-serif text-3xl text-foreground">L'approche.</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              {[
+                {
+                  k: "Vérifié",
+                  v: "Chaque profil croisé avec au moins 2 sources publiques.",
+                },
+                {
+                  k: "Sourcé",
+                  v: "Transfermarkt, fédérations, presse spécialisée. Jamais d'à-peu-près.",
+                },
+                {
+                  k: "Éditorial",
+                  v: "Pas de bio générée à la chaîne. Un regard, des choix, un parti-pris.",
+                },
+              ].map((item) => (
+                <div
+                  key={item.k}
+                  className="rounded-card border border-border bg-card p-6"
+                >
+                  <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
+                    {item.k}
+                  </p>
+                  <p className="mt-3 text-foreground/85 leading-relaxed">{item.v}</p>
                 </div>
-              </div>
+              ))}
             </div>
           </section>
 

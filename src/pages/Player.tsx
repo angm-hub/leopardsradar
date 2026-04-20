@@ -205,7 +205,7 @@ export default function PlayerPage() {
 
                 <p className="text-sm text-muted-light">
                   <span className="text-muted">Valeur marchande · </span>
-                  <span className="text-foreground">
+                  <span className={player.market_value_eur ? "text-foreground font-semibold" : "text-muted italic"}>
                     {formatMarketValue(player.market_value_eur)}
                   </span>
                 </p>

@@ -115,7 +115,12 @@ export default function Newsletter() {
             </form>
 
             <p className="mt-4 text-sm text-muted">
-              {count !== null ? `${count} abonnés` : "Rejoins les fans"} · 0 spam · Se désabonner en 1 clic
+              {count === null
+                ? "Rejoins les fans"
+                : count === 0
+                  ? "Sois le premier abonné"
+                  : `${count} abonné${count > 1 ? "s" : ""}`}{" "}
+              · 0 spam · Se désabonner en 1 clic
             </p>
           </div>
         </section>

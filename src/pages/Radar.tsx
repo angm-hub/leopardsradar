@@ -12,6 +12,7 @@ import {
   POSITION_BADGE,
   POSITION_LABEL,
   flagFor,
+  formatMarketValue,
 } from "@/lib/playerHelpers";
 import { cn } from "@/lib/utils";
 import type { DBPlayer, DBPosition, DBTier } from "@/types/dbPlayer";
@@ -93,8 +94,20 @@ function RadarCard({ player }: { player: DBPlayer }) {
         <h3 className="mt-1 font-serif text-xl font-semibold text-foreground tracking-tight truncate">
           {player.name}
         </h3>
-        {player.age ? (
-          <p className="mt-1 font-mono text-xs text-muted">{player.age} ans</p>
+        <div className="mt-1 flex items-center justify-between gap-2 text-xs">
+          <span className="font-mono text-muted">
+            {player.age ? `${player.age} ans` : ""}
+          </span>
+          {player.market_value_eur && player.market_value_eur > 0 ? (
+            <span className="font-mono text-primary/90 font-semibold">
+              {formatMarketValue(player.market_value_eur)}
+            </span>
+          ) : null}
+        </div>
+        {player.eligibility_note ? (
+          <p className="mt-2 text-[11px] text-muted-light/80 line-clamp-2 leading-snug">
+            {player.eligibility_note}
+          </p>
         ) : null}
       </div>
     </Link>
