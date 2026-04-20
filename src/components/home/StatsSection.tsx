@@ -1,11 +1,12 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Globe, Trophy, MapPin, Calendar, Radar as RadarIcon, ArrowUpRight } from "lucide-react";
+import { Globe, Trophy, MapPin, Radar as RadarIcon, ArrowUpRight } from "lucide-react";
 import { Pill } from "@/components/ui/Pill";
 import { useHomeStats } from "@/hooks/useHomeStats";
 import { usePlayers } from "@/hooks/usePlayers";
-import { formatMarketValue } from "@/lib/playerHelpers";
+import { formatMarketValueCompact } from "@/lib/playerHelpers";
 import { ResidualGradient } from "@/components/ui/GradientBackgrounds";
+import { NextMatchCard } from "@/components/home/NextMatchCard";
 
 const cardBase =
   "relative overflow-hidden rounded-2xl bg-card border border-border";
@@ -19,18 +20,7 @@ function fadeUp(delay: number) {
   };
 }
 
-// Static countdown to June 17, 2026
-function getCountdown() {
-  const target = new Date("2026-06-17T18:00:00Z").getTime();
-  const now = Date.now();
-  const diff = Math.max(0, target - now);
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  return { days, hours };
-}
-
 export function StatsSection() {
-  const { days, hours } = getCountdown();
   const { stats, loading: statsLoading } = useHomeStats();
   const { players: rosterPlayers } = usePlayers({ category: "roster" });
   const { players: radarPlayers } = usePlayers({ categories: ["radar", "heritage"] });
@@ -46,7 +36,7 @@ export function StatsSection() {
   const totalValueLabel = statsLoading
     ? "—"
     : hasMarketValue
-      ? formatMarketValue(stats!.total_market_value)
+      ? formatMarketValueCompact(stats!.total_market_value)
       : "À venir";
   const totalPlayers = stats?.total_roster ?? 0;
   const totalCountries = stats?.total_countries ?? 0;
@@ -209,64 +199,12 @@ export function StatsSection() {
             </Link>
           </motion.div>
 
-          {/* CARD G — Prochain match */}
+          {/* CARD G — Prochain match (data-driven) */}
           <motion.div
             {...fadeUp(0.6)}
-            className={`${cardBase} md:col-span-2 md:row-span-1 p-6 flex flex-col justify-between`}
+            className={`${cardBase} md:col-span-2 md:row-span-1`}
           >
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] uppercase tracking-[0.2em] text-muted">
-                Prochain match
-              </span>
-              <span className="text-[10px] uppercase tracking-[0.2em] text-primary">
-                Coupe du monde 2026
-              </span>
-            </div>
-
-            <div className="flex items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl">🇨🇩</span>
-                  <span className="font-serif text-lg text-foreground">RDC</span>
-                </div>
-                <span className="font-mono text-xs text-muted">vs</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl">🇵🇹</span>
-                  <span className="font-serif text-lg text-foreground">POR</span>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 font-mono">
-                <div className="flex flex-col items-center">
-                  <span className="text-2xl font-bold text-foreground leading-none">
-                    {days}
-                  </span>
-                  <span className="text-[9px] uppercase tracking-wider text-muted mt-1">
-                    jours
-                  </span>
-                </div>
-                <span className="text-muted">:</span>
-                <div className="flex flex-col items-center">
-                  <span className="text-2xl font-bold text-foreground leading-none">
-                    {hours}
-                  </span>
-                  <span className="text-[9px] uppercase tracking-wider text-muted mt-1">
-                    heures
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between text-xs text-muted">
-              <div className="flex items-center gap-1.5">
-                <Calendar className="h-3 w-3" />
-                <span>17 juin 2026</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <MapPin className="h-3 w-3" />
-                <span>Stade de New York</span>
-              </div>
-            </div>
+            <NextMatchCard />
           </motion.div>
         </div>
       </div>
