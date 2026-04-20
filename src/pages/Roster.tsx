@@ -7,10 +7,11 @@ import PlayerCardSkeleton from "@/components/ui/PlayerCardSkeleton";
 import { Button } from "@/components/ui/ButtonPrimitive";
 import { Select } from "@/components/ui/SelectPrimitive";
 import { usePlayers } from "@/hooks/usePlayers";
+import { useHomeStats } from "@/hooks/useHomeStats";
 import type { DBPosition } from "@/types/dbPlayer";
 
 type PositionFilter = "ALL" | DBPosition;
-type SortKey = "NAME_ASC" | "AGE_ASC" | "AGE_DESC";
+type SortKey = "VALUE_DESC" | "CAPS_DESC" | "NAME_ASC" | "AGE_ASC" | "AGE_DESC";
 
 const POSITION_OPTIONS: { value: PositionFilter; label: string }[] = [
   { value: "ALL", label: "Tous postes" },
@@ -21,19 +22,25 @@ const POSITION_OPTIONS: { value: PositionFilter; label: string }[] = [
 ];
 
 const SORT_OPTIONS: { value: SortKey; label: string }[] = [
+  { value: "VALUE_DESC", label: "Valeur marchande" },
+  { value: "CAPS_DESC", label: "Caps RDC" },
   { value: "NAME_ASC", label: "Nom A-Z" },
   { value: "AGE_ASC", label: "Âge ↑" },
   { value: "AGE_DESC", label: "Âge ↓" },
 ];
 
 const Roster = () => {
+  // Default sort = market value DESC NULLS LAST (handled by usePlayers)
   const { players, loading, error } = usePlayers({
     category: "roster",
-    orderBy: { column: "name", ascending: true },
+    excludeEligibilityStatus: "ineligible",
+    orderBy: { column: "market_value_eur", ascending: false },
   });
+  const { stats } = useHomeStats();
+  const rosterCount = stats?.total_roster ?? players.length;
 
   const [position, setPosition] = useState<PositionFilter>("ALL");
-  const [sort, setSort] = useState<SortKey>("NAME_ASC");
+  const [sort, setSort] = useState<SortKey>("VALUE_DESC");
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
 
