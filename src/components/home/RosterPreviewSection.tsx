@@ -16,11 +16,12 @@ const itemVariants: Variants = {
 };
 
 export function RosterPreviewSection() {
-  // 6 first roster players, alphabetical
+  // 6 first roster players, sorted by market value (matches /roster default)
   const { players, loading } = usePlayers({
     category: "roster",
+    excludeEligibilityStatus: "ineligible",
     limit: 6,
-    orderBy: { column: "name", ascending: true },
+    orderBy: { column: "market_value_eur", ascending: false },
   });
 
   return (

@@ -7,6 +7,7 @@ import PlayerCardSkeleton from "@/components/ui/PlayerCardSkeleton";
 import { Button } from "@/components/ui/ButtonPrimitive";
 import { Select } from "@/components/ui/SelectPrimitive";
 import { usePlayers } from "@/hooks/usePlayers";
+import { useHomeStats } from "@/hooks/useHomeStats";
 import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
 import {
   POSITION_BADGE,
@@ -120,6 +121,9 @@ export default function Radar() {
     excludeEligibilityStatus: "ineligible",
     orderBy: { column: "market_value_eur", ascending: false },
   });
+  const { stats } = useHomeStats();
+  // Live count from v_home_stats — radar + heritage, excluding ineligible
+  const radarTotal = (stats?.total_radar ?? 0) + (stats?.total_heritage ?? 0) || players.length;
 
   const [position, setPosition] = useState<PositionFilter>("ALL");
   const [tier, setTier] = useState<TierFilter>("ALL");
@@ -189,9 +193,7 @@ export default function Radar() {
             Le Radar.
           </h1>
           <p className="mt-3 max-w-2xl text-lg text-muted-light">
-            {loading
-              ? "Chargement…"
-              : `${players.length} joueurs éligibles ou à ascendance RDC dans le monde.`}
+            {`${radarTotal} joueurs éligibles ou à ascendance RDC dans le monde.`}
           </p>
         </header>
 

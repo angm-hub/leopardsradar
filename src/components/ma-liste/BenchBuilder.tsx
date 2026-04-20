@@ -38,6 +38,7 @@ export function BenchBuilder() {
 
   const { players: allPlayers, loading } = usePlayers({
     categories: ["roster", "radar"],
+    excludeEligibilityStatus: "ineligible",
     limit: 1000,
   });
 

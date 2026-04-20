@@ -41,7 +41,7 @@ export function PlayerAvatar({
           ? undefined
           : {
               background:
-                "linear-gradient(135deg, #00A651 0%, #007a3d 50%, #004d25 100%)",
+                "linear-gradient(135deg, #0a3f22 0%, #08361c 50%, #052e16 100%)",
             }
       }
       aria-label={name}
@@ -60,7 +60,7 @@ export function PlayerAvatar({
       ) : (
         <span
           className={cn(
-            "font-serif font-semibold text-white tracking-tight select-none",
+            "font-serif font-semibold tracking-tight select-none text-white/90",
             initialsClassName ?? "text-2xl",
           )}
         >

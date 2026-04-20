@@ -45,6 +45,7 @@ export function LineupBuilder() {
   // Pull a generous list of eligible players (roster + radar)
   const { players: allPlayers, loading } = usePlayers({
     categories: ["roster", "radar"],
+    excludeEligibilityStatus: "ineligible",
     limit: 1000,
   });
 
