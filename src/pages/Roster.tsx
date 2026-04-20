@@ -37,7 +37,7 @@ const Roster = () => {
     orderBy: { column: "market_value_eur", ascending: false },
   });
   const { stats } = useHomeStats();
-  const rosterCount = stats?.total_roster ?? players.length;
+  const rosterCount = stats?.roster_count;
 
   const [position, setPosition] = useState<PositionFilter>("ALL");
   const [sort, setSort] = useState<SortKey>("VALUE_DESC");

@@ -122,8 +122,10 @@ export default function Radar() {
     orderBy: { column: "market_value_eur", ascending: false },
   });
   const { stats } = useHomeStats();
-  // Live count from v_home_stats — radar + heritage, excluding ineligible
-  const radarTotal = (stats?.total_radar ?? 0) + (stats?.total_heritage ?? 0) || players.length;
+  const radarTotal =
+    stats && (stats.radar_count !== null || stats.heritage_count !== null)
+      ? (stats.radar_count ?? 0) + (stats.heritage_count ?? 0)
+      : null;
 
   const [position, setPosition] = useState<PositionFilter>("ALL");
   const [tier, setTier] = useState<TierFilter>("ALL");

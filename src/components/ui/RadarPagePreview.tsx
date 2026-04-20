@@ -53,11 +53,16 @@ export function RadarPagePreview() {
           .from("players")
           .select("id", { count: "exact", head: true })
           .in("player_category", ["radar", "heritage"])
-          .eq("tier", "tier1")
           .neq("eligibility_status", "ineligible"),
       ]);
 
       if (cancelled) return;
+      if (topRes.error) {
+        console.error("[RadarPagePreview] top profiles", topRes.error.message);
+      }
+      if (countRes.error) {
+        console.error("[RadarPagePreview] eligible count", countRes.error.message);
+      }
       if (topRes.data) {
         setPlayers(
           topRes.data.map((p) => ({
@@ -112,8 +117,8 @@ export function RadarPagePreview() {
                     {p.name}
                   </span>
                   <span className="flex items-center gap-0.5 text-[10px] leading-none">
-                    {flags.map((f) => (
-                      <span key={f} title={f}>{flagFor(f)}</span>
+                    {flags.map((f, index) => (
+                      <span key={`${f}-${index}`} title={f}>{flagFor(f)}</span>
                     ))}
                   </span>
                 </div>

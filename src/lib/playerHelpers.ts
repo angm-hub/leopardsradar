@@ -138,14 +138,14 @@ export function formatMarketValue(eur: number | null | undefined): string {
 
 /**
  * Compact version used inside the StatsSection bento hero card.
- * Uses a non-breaking space so "M" and "€" never get separated by a flex gap.
+ * Intentionally removes the gap before the euro symbol to avoid visual breakage.
  */
 export function formatMarketValueCompact(eur: number | null | undefined): string {
   if (!eur) return "—";
-  if (eur >= 1_000_000_000) return `${(eur / 1_000_000_000).toFixed(1)}Md\u00A0€`;
-  if (eur >= 1_000_000) return `${Math.round(eur / 1_000_000)}M\u00A0€`;
-  if (eur >= 1_000) return `${Math.round(eur / 1_000)}K\u00A0€`;
-  return `${eur}\u00A0€`;
+  if (eur >= 1_000_000_000) return `${(eur / 1_000_000_000).toFixed(1)}Md€`;
+  if (eur >= 1_000_000) return `${Math.round(eur / 1_000_000)}M€`;
+  if (eur >= 1_000) return `${Math.round(eur / 1_000)}K€`;
+  return `${eur}€`;
 }
 
 export const ELIGIBILITY_BADGE: Record<string, string> = {

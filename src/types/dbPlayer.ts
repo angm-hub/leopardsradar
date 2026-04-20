@@ -46,12 +46,14 @@ export interface DBPlayer {
 }
 
 export interface HomeStats {
-  total_players: number;
-  total_roster: number;
-  total_radar: number;
-  total_heritage: number;
-  total_clubs: number;
-  total_countries: number;
+  total_players: number | null;
+  total_countries: number | null;
+  total_clubs: number | null;
   avg_age: number | null;
   total_market_value: number | null;
+  tier1_count: number | null;
+  roster_count: number | null;
+  radar_count: number | null;
+  heritage_count: number | null;
+  ineligible_count: number | null;
 }
