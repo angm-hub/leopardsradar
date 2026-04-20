@@ -50,6 +50,66 @@ export type Database = {
         }
         Relationships: []
       }
+      matches: {
+        Row: {
+          city: string | null
+          competition: string
+          country: string | null
+          created_at: string
+          home_or_away: string
+          id: string
+          is_published: boolean
+          kickoff_at: string
+          notes: string | null
+          opponent_code: string | null
+          opponent_flag: string | null
+          opponent_name: string
+          score_opponent: number | null
+          score_rdc: number | null
+          status: string
+          updated_at: string
+          venue: string | null
+        }
+        Insert: {
+          city?: string | null
+          competition: string
+          country?: string | null
+          created_at?: string
+          home_or_away?: string
+          id?: string
+          is_published?: boolean
+          kickoff_at: string
+          notes?: string | null
+          opponent_code?: string | null
+          opponent_flag?: string | null
+          opponent_name: string
+          score_opponent?: number | null
+          score_rdc?: number | null
+          status?: string
+          updated_at?: string
+          venue?: string | null
+        }
+        Update: {
+          city?: string | null
+          competition?: string
+          country?: string | null
+          created_at?: string
+          home_or_away?: string
+          id?: string
+          is_published?: boolean
+          kickoff_at?: string
+          notes?: string | null
+          opponent_code?: string | null
+          opponent_flag?: string | null
+          opponent_name?: string
+          score_opponent?: number | null
+          score_rdc?: number | null
+          status?: string
+          updated_at?: string
+          venue?: string | null
+        }
+        Relationships: []
+      }
       newsletter_subscribers: {
         Row: {
           confirmation_token: string
