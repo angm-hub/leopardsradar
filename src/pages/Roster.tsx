@@ -36,8 +36,8 @@ const Roster = () => {
     excludeEligibilityStatus: "ineligible",
     orderBy: { column: "market_value_eur", ascending: false },
   });
-  const { stats } = useHomeStats();
-  const rosterCount = stats?.total_roster ?? players.length;
+  const { stats, loading: statsLoading } = useHomeStats();
+  const rosterCount = stats?.roster_count;
 
   const [position, setPosition] = useState<PositionFilter>("ALL");
   const [sort, setSort] = useState<SortKey>("VALUE_DESC");
@@ -99,7 +99,7 @@ const Roster = () => {
             Roster Léopards
           </h1>
           <p className="mt-3 text-lg text-muted-light">
-            {`${rosterCount} internationaux RDC — Saison 2025/26`}
+            {`${statsLoading ? "—" : (rosterCount ?? "—")} internationaux RDC — Saison 2025/26`}
           </p>
         </header>
 
@@ -130,7 +130,7 @@ const Roster = () => {
             </div>
 
             <span className="text-sm text-muted whitespace-nowrap">
-              {filtered.length} joueur{filtered.length > 1 ? "s" : ""}
+              {(filtersActive ? filtered.length : (rosterCount ?? "—"))} joueur{(filtersActive ? filtered.length : (rosterCount ?? 0)) > 1 ? "s" : ""}
             </span>
 
             {filtersActive ? (

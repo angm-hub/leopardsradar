@@ -61,7 +61,8 @@ export function useBestXI() {
         const { data: players, error: playersErr } = await supabase
           .from("players")
           .select("id, name, slug, image_url, current_club, position")
-          .in("id", playerIds);
+          .in("id", playerIds)
+          .neq("eligibility_status", "ineligible");
 
         if (playersErr) throw playersErr;
 

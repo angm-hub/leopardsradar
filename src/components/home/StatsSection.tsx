@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { Globe, Trophy, MapPin, Radar as RadarIcon, ArrowUpRight } from "lucide-react";
 import { Pill } from "@/components/ui/Pill";
 import { useHomeStats } from "@/hooks/useHomeStats";
-import { usePlayers } from "@/hooks/usePlayers";
 import { formatMarketValueCompact } from "@/lib/playerHelpers";
 import { ResidualGradient } from "@/components/ui/GradientBackgrounds";
 import { NextMatchCard } from "@/components/home/NextMatchCard";
@@ -21,20 +20,7 @@ function fadeUp(delay: number) {
 }
 
 export function StatsSection() {
-  const { stats, loading: statsLoading } = useHomeStats();
-  // Used only to compute the tier1 ratio. The view doesn't expose tier1_count,
-  // so we derive it client-side from the eligibility-filtered radar+roster set.
-  const { players: rosterPlayers } = usePlayers({ category: "roster" });
-  const { players: radarPlayers } = usePlayers({
-    categories: ["radar", "heritage"],
-    excludeEligibilityStatus: "ineligible",
-  });
-
-  const allPlayers = [...rosterPlayers, ...radarPlayers];
-  const tier1Count = allPlayers.filter((p) => p.tier === "tier1").length;
-  const tier1Ratio = allPlayers.length
-    ? Math.round((tier1Count / allPlayers.length) * 100)
-    : 0;
+  const { stats, loading: statsLoading, error: statsError } = useHomeStats();
 
   const hasMarketValue = !!stats?.total_market_value && stats.total_market_value > 0;
   const totalValueLabel = statsLoading
@@ -42,11 +28,19 @@ export function StatsSection() {
     : hasMarketValue
       ? formatMarketValueCompact(stats!.total_market_value)
       : "À venir";
-  // All counters below come straight from v_home_stats — no hardcoded numbers.
-  const totalPlayers = stats?.total_roster ?? 0;
-  const totalCountries = stats?.total_countries ?? 0;
-  const avgAge = stats?.avg_age ? Math.round(stats.avg_age) : 0;
-  const totalRadar = (stats?.total_radar ?? 0) + (stats?.total_heritage ?? 0);
+
+  const rosterCount = stats?.roster_count ?? null;
+  const totalCountries = stats?.total_countries ?? null;
+  const avgAge = stats?.avg_age ? Math.round(stats.avg_age) : null;
+  const totalRadar = stats
+    ? (stats.radar_count ?? 0) + (stats.heritage_count ?? 0)
+    : null;
+  const tier1Ratio =
+    stats && stats.total_players
+      ? Math.round(((stats.tier1_count ?? 0) / stats.total_players) * 100)
+      : null;
+  const statFallback = statsLoading ? "—" : statsError ? "Erreur" : "—";
+
 
   return (
     <section className="relative py-24 md:py-32 bg-background overflow-hidden">
@@ -92,12 +86,14 @@ export function StatsSection() {
             <div className="relative mt-8">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted">Joueurs en top 5 européen</span>
-                <span className="text-foreground font-medium">{tier1Ratio}%</span>
+                <span className="text-foreground font-medium">
+                  {tier1Ratio !== null ? `${tier1Ratio}%` : statFallback}
+                </span>
               </div>
               <div className="mt-2 h-2 w-full rounded-full bg-border overflow-hidden">
                 <motion.div
                   initial={{ width: 0 }}
-                  whileInView={{ width: `${tier1Ratio}%` }}
+                  whileInView={{ width: `${tier1Ratio ?? 0}%` }}
                   viewport={{ once: true }}
                   transition={{ duration: 1.2, ease: "easeOut", delay: 0.3 }}
                   className="h-full rounded-full bg-gradient-to-r from-primary to-success"
@@ -122,7 +118,7 @@ export function StatsSection() {
             </span>
             <div>
               <div className="font-mono text-5xl font-bold text-foreground leading-none">
-                {totalPlayers}
+                {rosterCount ?? statFallback}
               </div>
               <p className="mt-2 text-xs text-muted">dans le roster actif</p>
             </div>
@@ -138,7 +134,7 @@ export function StatsSection() {
             </span>
             <div>
               <div className="font-mono text-5xl font-bold text-foreground leading-none">
-                {totalCountries}
+                {totalCountries ?? statFallback}
               </div>
               <p className="mt-2 text-xs text-muted">où les Léopards évoluent</p>
             </div>
@@ -174,7 +170,7 @@ export function StatsSection() {
             </span>
             <div>
               <div className="font-mono text-5xl font-bold text-foreground leading-none">
-                {avgAge}
+                {avgAge ?? statFallback}
               </div>
               <p className="mt-2 text-xs text-muted">ans · génération pic</p>
             </div>
@@ -194,7 +190,7 @@ export function StatsSection() {
                   Radar
                 </span>
                 <p className="mt-1 font-mono text-2xl font-bold text-foreground leading-none">
-                  {totalRadar}
+                  {totalRadar ?? statFallback}
                 </p>
                 <p className="mt-1 text-xs text-muted truncate">
                   talents éligibles trackés
