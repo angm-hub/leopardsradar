@@ -121,6 +121,9 @@ export default function Radar() {
     excludeEligibilityStatus: "ineligible",
     orderBy: { column: "market_value_eur", ascending: false },
   });
+  const { stats } = useHomeStats();
+  // Live count from v_home_stats — radar + heritage, excluding ineligible
+  const radarTotal = (stats?.total_radar ?? 0) + (stats?.total_heritage ?? 0) || players.length;
 
   const [position, setPosition] = useState<PositionFilter>("ALL");
   const [tier, setTier] = useState<TierFilter>("ALL");
