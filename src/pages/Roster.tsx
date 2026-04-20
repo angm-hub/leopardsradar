@@ -99,7 +99,7 @@ const Roster = () => {
             Roster Léopards
           </h1>
           <p className="mt-3 text-lg text-muted-light">
-            {loading ? 'Chargement…' : `${players.length} internationaux RDC — Saison 2025/26`}
+            {`${rosterCount} internationaux RDC — Saison 2025/26`}
           </p>
         </header>
 
