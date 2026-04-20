@@ -31,6 +31,7 @@ const App = () => (
           <Route path="/player/:slug" element={<Player />} />
           <Route path="/radar" element={<Radar />} />
           <Route path="/best-xi" element={<BestXI />} />
+          <Route path="/a-propos" element={<About />} />
           <Route path="/about" element={<About />} />
           <Route path="/newsletter" element={<Newsletter />} />
           <Route path="/newsletter/confirm" element={<NewsletterConfirm />} />
