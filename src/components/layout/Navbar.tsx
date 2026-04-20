@@ -10,7 +10,7 @@ const NAV_LINKS: Array<{ label: string; href: string; badge?: string }> = [
   { label: "Radar", href: "/radar" },
   { label: "Best XI", href: "/best-xi" },
   { label: "Ma Liste", href: "/ma-liste", badge: "NOUVEAU" },
-  { label: "À propos", href: "/about" },
+  { label: "À propos", href: "/a-propos" },
   { label: "Newsletter", href: "/newsletter" },
 ];
 

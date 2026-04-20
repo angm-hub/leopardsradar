@@ -20,7 +20,7 @@ const PAGES = [
   { label: "Radar", href: "/radar", icon: Radar },
   { label: "Best XI", href: "/best-xi", icon: Trophy },
   { label: "Newsletter", href: "/newsletter", icon: Mail },
-  { label: "À propos", href: "/about", icon: Info },
+  { label: "À propos", href: "/a-propos", icon: Info },
 ];
 
 export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {

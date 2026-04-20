@@ -3,82 +3,99 @@ import { Footer } from "@/components/layout/Footer";
 
 export default function About() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
-      <main className="container-site pt-32 pb-24">
+      <main className="flex-1 container-site pt-32 pb-24">
         <div className="mx-auto max-w-3xl">
-          <h1 className="mb-12 font-serif text-6xl font-semibold text-foreground">
-            Pourquoi Léopards Radar ?
+          <nav aria-label="breadcrumb" className="text-sm text-muted">
+            <a href="/" className="hover:text-foreground transition-colors">Home</a>
+            <span className="mx-2 text-muted/60">/</span>
+            <span className="text-foreground/80">À propos</span>
+          </nav>
+
+          <h1 className="mt-4 font-serif text-5xl md:text-6xl font-semibold text-foreground tracking-tight">
+            À propos de Léopards Radar.
           </h1>
+          <p className="mt-6 font-serif text-xl leading-[1.6] text-foreground/80 max-w-2xl">
+            Un site indépendant pour suivre les Léopards de la République Démocratique du Congo —
+            roster, radar, diaspora — avec rigueur, données et amour du jeu.
+          </p>
 
-          <div className="space-y-8 font-serif text-xl leading-[1.7] text-foreground/90">
-            <p>
-              Les infos sur nos Léopards sont éparpillées. Entre Transfermarkt,
-              Wikipedia, trois podcasts et cinq threads X, il faut être archéologue
-              pour se faire une idée. Léopards Radar, c'est un endroit unique. Fait
-              main. Pour les fans.
-            </p>
-            <p>
-              Ici, pas d'algorithme qui régurgite. Pas de stats pour les stats.
-              Chaque joueur du Radar est vérifié avec 2 sources minimum. Chaque bio
-              est écrite — pas générée. On préfère 20 fiches solides à 200
-              approximatives.
-            </p>
-            <p>
-              Notre pari : que la diaspora congolaise mérite un produit à la hauteur
-              de sa passion. Premium. Soigné. Rigoureux. Le foot africain arrête de
-              s'excuser.
-            </p>
-            <p>
-              Aujourd'hui, les Léopards. Demain, peut-être d'autres nations
-              africaines. Un jour à la fois. Un joueur à la fois.
-            </p>
-          </div>
-
-          {/* Approche */}
+          {/* La mission */}
           <section className="mt-20">
-            <h2 className="mb-8 font-serif text-3xl text-foreground">L'approche.</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-              {[
-                {
-                  k: "Vérifié",
-                  v: "Chaque profil croisé avec au moins 2 sources publiques.",
-                },
-                {
-                  k: "Sourcé",
-                  v: "Transfermarkt, fédérations, presse spécialisée. Jamais d'à-peu-près.",
-                },
-                {
-                  k: "Éditorial",
-                  v: "Pas de bio générée à la chaîne. Un regard, des choix, un parti-pris.",
-                },
-              ].map((item) => (
-                <div
-                  key={item.k}
-                  className="rounded-card border border-border bg-card p-6"
-                >
-                  <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
-                    {item.k}
-                  </p>
-                  <p className="mt-3 text-foreground/85 leading-relaxed">{item.v}</p>
-                </div>
-              ))}
+            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-primary mb-4">
+              01 — La mission
+            </p>
+            <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-6">
+              Tracer la route vers le Mondial 2026.
+            </h2>
+            <div className="space-y-5 text-lg leading-[1.75] text-foreground/85">
+              <p>
+                Léopards Radar traque les <strong className="text-foreground">26 joueurs</strong> qui
+                porteront le maillot de la RDC au Mondial 2026. On suit le roster actif convoqué par
+                le sélectionneur, on cartographie la diaspora binationale éligible selon
+                l'<strong className="text-foreground">article 9 FIFA</strong>, et on documente chaque
+                trajectoire — du Tout-Puissant Mazembe à Manchester, de Kinshasa à Bruxelles.
+              </p>
+              <p>
+                On parle data, scouting, diaspora et projection. Pas de hype, pas de remplissage.
+                L'idée : qu'un fan congolais à Paris, Montréal ou Lubumbashi sache exactement qui
+                joue où, qui peut être convoqué, et qui mérite un appel.
+              </p>
             </div>
           </section>
 
-          {/* Contact */}
-          <section className="mt-20 rounded-card border border-border bg-card p-8">
-            <h3 className="font-serif text-2xl text-foreground">Nous contacter.</h3>
-            <p className="mt-3 text-foreground/80 leading-relaxed">
-              Tu es journaliste, scout, créateur de contenu, supporter ? Écris-nous à{" "}
-              <a
-                href="mailto:contact@leopardsradar.com"
-                className="text-primary hover:text-primary-hover"
-              >
-                contact@leopardsradar.com
-              </a>
-              .
+          {/* La méthode */}
+          <section className="mt-20">
+            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-primary mb-4">
+              02 — La méthode
             </p>
+            <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-6">
+              Sources vérifiées, règles FIFA appliquées.
+            </h2>
+            <div className="space-y-5 text-lg leading-[1.75] text-foreground/85">
+              <p>
+                Les données viennent de <strong className="text-foreground">Transfermarkt</strong>,
+                enrichies à la main : valeur marchande, club, contrat, sélections. Chaque profil est
+                croisé avec au moins une source secondaire (presse spécialisée, fédérations,
+                feuilles de match) avant publication.
+              </p>
+              <p>
+                On applique strictement l'<strong className="text-foreground">article 9 du règlement
+                FIFA (révision 2020)</strong> sur le changement d'association. Un joueur qui a
+                disputé un match A senior officiel d'une autre nation est marqué{" "}
+                <em className="text-foreground">cap-tied</em> et exclu du Radar. On distingue trois
+                statuts : <strong className="text-foreground">roster</strong> (déjà international
+                RDC), <strong className="text-foreground">radar</strong> (éligible, pas encore
+                convoqué), <strong className="text-foreground">heritage</strong> (ascendance RDC à
+                explorer). Mise à jour <strong className="text-foreground">hebdomadaire</strong>.
+              </p>
+            </div>
+          </section>
+
+          {/* L'équipe */}
+          <section className="mt-20">
+            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-primary mb-4">
+              03 — L'équipe
+            </p>
+            <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-6">
+              Par des fans, pour des fans.
+            </h2>
+            <div className="space-y-5 text-lg leading-[1.75] text-foreground/85">
+              <p>
+                Léopards Radar est un projet <strong className="text-foreground">indépendant</strong>,
+                fait par des fans congolais pour des fans congolais. Aucune affiliation avec la
+                FECOFA, aucun lien commercial avec un club, un agent ou un joueur. Journalistes,
+                scouts, passionnés ou supporters : pour toute demande, écrire à{" "}
+                <a
+                  href="mailto:contact@leopardsradar.com"
+                  className="text-primary hover:text-primary-hover underline underline-offset-4"
+                >
+                  contact@leopardsradar.com
+                </a>
+                .
+              </p>
+            </div>
           </section>
         </div>
       </main>
