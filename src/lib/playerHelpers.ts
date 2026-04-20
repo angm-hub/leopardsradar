@@ -130,22 +130,22 @@ export function formatMarketValue(eur: number | null | undefined): string {
   if (eur === null || eur === undefined || eur === 0) return "Non renseignée";
   if (eur >= 1_000_000) {
     const m = eur / 1_000_000;
-    return `${m % 1 === 0 ? m.toFixed(0) : m.toFixed(1)}M €`;
+    return `${m % 1 === 0 ? m.toFixed(0) : m.toFixed(1)}M\u00A0€`;
   }
-  if (eur >= 1_000) return `${Math.round(eur / 1_000)}K €`;
-  return `${eur} €`;
+  if (eur >= 1_000) return `${Math.round(eur / 1_000)}K\u00A0€`;
+  return `${eur}\u00A0€`;
 }
 
 /**
  * Compact version used inside the StatsSection bento hero card.
- * Strips the space and rounds aggressively for big numbers.
+ * Uses a non-breaking space so "M" and "€" never get separated by a flex gap.
  */
 export function formatMarketValueCompact(eur: number | null | undefined): string {
   if (!eur) return "—";
-  if (eur >= 1_000_000_000) return `${(eur / 1_000_000_000).toFixed(1)}Md €`;
-  if (eur >= 1_000_000) return `${Math.round(eur / 1_000_000)}M €`;
-  if (eur >= 1_000) return `${Math.round(eur / 1_000)}K €`;
-  return `${eur} €`;
+  if (eur >= 1_000_000_000) return `${(eur / 1_000_000_000).toFixed(1)}Md\u00A0€`;
+  if (eur >= 1_000_000) return `${Math.round(eur / 1_000_000)}M\u00A0€`;
+  if (eur >= 1_000) return `${Math.round(eur / 1_000)}K\u00A0€`;
+  return `${eur}\u00A0€`;
 }
 
 export const ELIGIBILITY_BADGE: Record<string, string> = {
