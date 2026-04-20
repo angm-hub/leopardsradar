@@ -126,8 +126,8 @@ export function ageFromDob(dob: string | null): number | null {
   return Math.floor(diff / (365.25 * 24 * 60 * 60 * 1000));
 }
 
-export function formatMarketValue(eur: number | null): string {
-  if (eur === null || eur === undefined || eur === 0) return "À venir";
+export function formatMarketValue(eur: number | null | undefined): string {
+  if (eur === null || eur === undefined || eur === 0) return "Non renseignée";
   if (eur >= 1_000_000) {
     const m = eur / 1_000_000;
     return `${m % 1 === 0 ? m.toFixed(0) : m.toFixed(1)}M €`;
@@ -136,10 +136,23 @@ export function formatMarketValue(eur: number | null): string {
   return `${eur} €`;
 }
 
+/**
+ * Compact version used inside the StatsSection bento hero card.
+ * Strips the space and rounds aggressively for big numbers.
+ */
+export function formatMarketValueCompact(eur: number | null | undefined): string {
+  if (!eur) return "—";
+  if (eur >= 1_000_000_000) return `${(eur / 1_000_000_000).toFixed(1)}Md €`;
+  if (eur >= 1_000_000) return `${Math.round(eur / 1_000_000)}M €`;
+  if (eur >= 1_000) return `${Math.round(eur / 1_000)}K €`;
+  return `${eur} €`;
+}
+
 export const ELIGIBILITY_BADGE: Record<string, string> = {
   selected: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
   eligible: "bg-sky-500/15 text-sky-400 border-sky-500/30",
   potentially_eligible: "bg-orange-500/15 text-orange-400 border-orange-500/30",
+  ineligible: "bg-rose-500/15 text-rose-400 border-rose-500/30",
   unknown: "bg-muted/15 text-muted-light border-border",
 };
 
@@ -149,6 +162,7 @@ export function eligibilityLabel(status: string | null): string {
     selected: "Sélectionné",
     eligible: "Éligible",
     potentially_eligible: "Potentiellement éligible",
+    ineligible: "Inéligible",
     unknown: "Inconnu",
   };
   return map[status] ?? status;
