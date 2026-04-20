@@ -7,6 +7,7 @@ import PlayerCardSkeleton from "@/components/ui/PlayerCardSkeleton";
 import { Button } from "@/components/ui/ButtonPrimitive";
 import { Select } from "@/components/ui/SelectPrimitive";
 import { usePlayers } from "@/hooks/usePlayers";
+import { useHomeStats } from "@/hooks/useHomeStats";
 import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
 import {
   POSITION_BADGE,
