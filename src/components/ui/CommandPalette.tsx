@@ -30,11 +30,13 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
   // Top 10 roster + top 5 radar from real Supabase data
   const { players: rosterTop } = usePlayers({
     category: "roster",
+    excludeEligibilityStatus: "ineligible",
     limit: 10,
     orderBy: { column: "name", ascending: true },
   });
   const { players: radarTop } = usePlayers({
     category: "radar",
+    excludeEligibilityStatus: "ineligible",
     limit: 5,
     orderBy: { column: "name", ascending: true },
   });
