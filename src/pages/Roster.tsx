@@ -51,11 +51,11 @@ const Roster = () => {
   }, [query]);
 
   const filtersActive =
-    position !== "ALL" || sort !== "NAME_ASC" || debouncedQuery !== "";
+    position !== "ALL" || sort !== "VALUE_DESC" || debouncedQuery !== "";
 
   const reset = () => {
     setPosition("ALL");
-    setSort("NAME_ASC");
+    setSort("VALUE_DESC");
     setQuery("");
   };
 
@@ -68,8 +68,17 @@ const Roster = () => {
 
     list = [...list].sort((a, b) => {
       if (sort === "NAME_ASC") return a.name.localeCompare(b.name);
-      if (sort === "AGE_ASC") return (a.age ?? 0) - (b.age ?? 0);
-      return (b.age ?? 0) - (a.age ?? 0);
+      if (sort === "AGE_ASC") return (a.age ?? 999) - (b.age ?? 999);
+      if (sort === "AGE_DESC") return (b.age ?? 0) - (a.age ?? 0);
+      if (sort === "CAPS_DESC") {
+        const diff = (b.caps_rdc ?? 0) - (a.caps_rdc ?? 0);
+        return diff !== 0 ? diff : a.name.localeCompare(b.name);
+      }
+      // VALUE_DESC default — NULLS LAST then alphabetical fallback
+      const av = a.market_value_eur ?? -1;
+      const bv = b.market_value_eur ?? -1;
+      if (bv !== av) return bv - av;
+      return a.name.localeCompare(b.name);
     });
 
     return list;
