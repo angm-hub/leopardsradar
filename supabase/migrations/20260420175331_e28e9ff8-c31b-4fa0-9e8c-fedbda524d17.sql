@@ -1,0 +1,1 @@
+UPDATE public.players SET eligibility_status = 'ineligible', eligibility_note = COALESCE(eligibility_note, 'Cap-tied — sélectionné en équipe A senior par une autre nation, ne peut plus jouer pour la RDC.') WHERE name IN ('Ezri Konsa', 'Jean-Philippe Mateta', 'Axel Disasi', 'Chancel Mbemba') AND name = 'Ezri Konsa';
