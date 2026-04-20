@@ -22,13 +22,14 @@ function fadeUp(delay: number) {
 
 export function StatsSection() {
   const { stats, loading: statsLoading } = useHomeStats();
+  // Used only to compute the tier1 ratio. The view doesn't expose tier1_count,
+  // so we derive it client-side from the eligibility-filtered radar+roster set.
   const { players: rosterPlayers } = usePlayers({ category: "roster" });
   const { players: radarPlayers } = usePlayers({
     categories: ["radar", "heritage"],
     excludeEligibilityStatus: "ineligible",
   });
 
-  // Tier 1 ratio — calculated across roster + radar (real "top 5 European" exposure)
   const allPlayers = [...rosterPlayers, ...radarPlayers];
   const tier1Count = allPlayers.filter((p) => p.tier === "tier1").length;
   const tier1Ratio = allPlayers.length
@@ -41,11 +42,11 @@ export function StatsSection() {
     : hasMarketValue
       ? formatMarketValueCompact(stats!.total_market_value)
       : "À venir";
+  // All counters below come straight from v_home_stats — no hardcoded numbers.
   const totalPlayers = stats?.total_roster ?? 0;
   const totalCountries = stats?.total_countries ?? 0;
   const avgAge = stats?.avg_age ? Math.round(stats.avg_age) : 0;
-  // Use the live, eligibility-filtered radar count (matches /radar page)
-  const totalRadar = radarPlayers.length;
+  const totalRadar = (stats?.total_radar ?? 0) + (stats?.total_heritage ?? 0);
 
   return (
     <section className="relative py-24 md:py-32 bg-background overflow-hidden">
