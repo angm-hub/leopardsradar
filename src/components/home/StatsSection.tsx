@@ -23,7 +23,10 @@ function fadeUp(delay: number) {
 export function StatsSection() {
   const { stats, loading: statsLoading } = useHomeStats();
   const { players: rosterPlayers } = usePlayers({ category: "roster" });
-  const { players: radarPlayers } = usePlayers({ categories: ["radar", "heritage"] });
+  const { players: radarPlayers } = usePlayers({
+    categories: ["radar", "heritage"],
+    excludeEligibilityStatus: "ineligible",
+  });
 
   // Tier 1 ratio — calculated across roster + radar (real "top 5 European" exposure)
   const allPlayers = [...rosterPlayers, ...radarPlayers];
@@ -41,7 +44,8 @@ export function StatsSection() {
   const totalPlayers = stats?.total_roster ?? 0;
   const totalCountries = stats?.total_countries ?? 0;
   const avgAge = stats?.avg_age ? Math.round(stats.avg_age) : 0;
-  const totalRadar = stats?.total_radar ?? radarPlayers.length;
+  // Use the live, eligibility-filtered radar count (matches /radar page)
+  const totalRadar = radarPlayers.length;
 
   return (
     <section className="relative py-24 md:py-32 bg-background overflow-hidden">
