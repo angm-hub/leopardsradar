@@ -272,6 +272,7 @@ export type Database = {
           bench: Json
           captain_id: number | null
           created_at: string
+          edit_token: string
           formation: string
           id: string
           is_submitted: boolean
@@ -295,6 +296,7 @@ export type Database = {
           bench: Json
           captain_id?: number | null
           created_at?: string
+          edit_token?: string
           formation: string
           id?: string
           is_submitted?: boolean
@@ -318,6 +320,7 @@ export type Database = {
           bench?: Json
           captain_id?: number | null
           created_at?: string
+          edit_token?: string
           formation?: string
           id?: string
           is_submitted?: boolean
