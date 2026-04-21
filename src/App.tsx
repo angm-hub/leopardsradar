@@ -16,6 +16,7 @@ import Auth from "./pages/Auth.tsx";
 import AdminPhotos from "./pages/AdminPhotos.tsx";
 import MaListe from "./pages/MaListe.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import { PromoBanner } from "./components/layout/PromoBanner";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <PromoBanner />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/roster" element={<Roster />} />
