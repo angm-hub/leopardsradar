@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -9,6 +9,7 @@ const DISMISS_DURATION_MS = 24 * 60 * 60 * 1000; // 24h
 export function PromoBanner() {
   const location = useLocation();
   const [visible, setVisible] = useState(false);
+  const ref = useRef<HTMLDivElement | null>(null);
 
   // Hide on /ma-liste
   const onMaListe = location.pathname.startsWith("/ma-liste");
@@ -33,6 +34,31 @@ export function PromoBanner() {
     }
   }, [onMaListe]);
 
+  // Expose banner height as a CSS var so the Navbar can offset itself.
+  useLayoutEffect(() => {
+    const root = document.documentElement;
+    const setVar = () => {
+      const h = visible && ref.current ? ref.current.offsetHeight : 0;
+      root.style.setProperty("--promo-banner-h", `${h}px`);
+    };
+    setVar();
+    if (!visible) return;
+    const ro = new ResizeObserver(setVar);
+    if (ref.current) ro.observe(ref.current);
+    window.addEventListener("resize", setVar);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", setVar);
+    };
+  }, [visible]);
+
+  // Reset var on unmount
+  useEffect(() => {
+    return () => {
+      document.documentElement.style.setProperty("--promo-banner-h", "0px");
+    };
+  }, []);
+
   const handleClose = () => {
     try {
       localStorage.setItem(STORAGE_KEY, String(Date.now()));
@@ -43,17 +69,23 @@ export function PromoBanner() {
   };
 
   return (
-    <AnimatePresence initial={false}>
+    <AnimatePresence
+      initial={false}
+      onExitComplete={() => {
+        document.documentElement.style.setProperty("--promo-banner-h", "0px");
+      }}
+    >
       {visible && (
         <motion.div
           key="promo-banner"
+          ref={ref}
           initial={{ height: 0, opacity: 0 }}
           animate={{ height: "auto", opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
           transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
           role="banner"
           aria-label="Promotion Mondial 2026"
-          className="relative z-[60] overflow-hidden"
+          className="fixed top-0 inset-x-0 z-[70] overflow-hidden"
           style={{
             background:
               "linear-gradient(90deg, #00A651 0%, #007a37 55%, #004d25 100%)",
@@ -80,7 +112,6 @@ export function PromoBanner() {
               <Link
                 to="/ma-liste"
                 onClick={() => {
-                  // Optional dismiss-on-click so it does not reappear after returning
                   try {
                     localStorage.setItem(STORAGE_KEY, String(Date.now()));
                   } catch {

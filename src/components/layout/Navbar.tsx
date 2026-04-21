@@ -47,11 +47,12 @@ export function Navbar() {
 
   return (
     <header
+      style={{ top: "var(--promo-banner-h, 0px)" }}
       className={cn(
-        "fixed top-0 inset-x-0 z-50 transition-all duration-300",
+        "fixed inset-x-0 z-50 transition-all duration-300",
         scrolled
           ? "bg-background/85 backdrop-blur-lg border-b border-border"
-          : "bg-transparent border-b border-transparent",
+          : "bg-background/60 backdrop-blur-md border-b border-transparent",
       )}
     >
       <div className="container-site flex h-16 items-center justify-between">
