@@ -48,12 +48,12 @@ export function LeopardsHero() {
             </span>
           </motion.h1>
 
-          <motion.p
-            variants={itemVariants}
-            className="text-lg md:text-xl text-foreground/70 max-w-2xl text-balance"
-          >
-            Roster actuel. Talents éligibles. Un seul endroit.
-          </motion.p>
+        <motion.p
+          variants={itemVariants}
+          className="text-lg md:text-xl text-foreground/70 max-w-2xl text-balance"
+        >
+          Tous les Léopards de la planète. Une seule base.
+        </motion.p>
 
           <motion.div
             variants={itemVariants}

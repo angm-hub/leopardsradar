@@ -63,14 +63,16 @@ export function IntroScreen({ totalListsCreated = 247 }: IntroScreenProps) {
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Button>
 
-          {/* Social proof */}
-          <div className="flex items-center gap-2 text-sm text-foreground/50">
-            <Users className="h-4 w-4" />
-            <span>
-              {totalListsCreated.toLocaleString("fr-FR")} listes déjà composées
-              par les fans
-            </span>
-          </div>
+          {/* Social proof - hidden until real lists exist */}
+          {totalListsCreated > 0 && (
+            <div className="flex items-center gap-2 text-sm text-foreground/50">
+              <Users className="h-4 w-4" />
+              <span>
+                {totalListsCreated.toLocaleString("fr-FR")} listes déjà composées
+                par les fans
+              </span>
+            </div>
+          )}
 
           {/* Steps preview */}
           <div className="mt-10 flex flex-wrap justify-center gap-3 md:gap-5">
