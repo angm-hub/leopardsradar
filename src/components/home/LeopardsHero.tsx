@@ -1,5 +1,6 @@
 import { motion, type Variants } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/ButtonPrimitive";
 import { Pill } from "@/components/ui/Pill";
 import { AuroraShader } from "@/components/ui/AuroraShader";
@@ -59,10 +60,12 @@ export function LeopardsHero() {
             variants={itemVariants}
             className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto"
           >
-            <Button variant="primary" size="lg" className="group">
-              Voir le Roster
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Button>
+            <Link to="/roster">
+              <Button variant="primary" size="lg" className="group w-full sm:w-auto">
+                Voir le Roster
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Button>
+            </Link>
             <Button variant="ghost-premium" size="lg" disabled title="Newsletter bientôt disponible">
               Newsletter · Bientôt
             </Button>
