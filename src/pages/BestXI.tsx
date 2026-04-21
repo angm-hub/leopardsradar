@@ -315,6 +315,7 @@ export default function BestXI() {
             <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-5 py-2.5 text-sm font-mono uppercase tracking-[0.18em] text-primary">
               <Clock className="h-3.5 w-3.5" />
               Newsletter · Bientôt
+            </div>
           </div>
         </section>
       </main>
