@@ -8,7 +8,6 @@ interface SubmitListParams {
   startingXI: Record<string, DBPlayer | null>;
   bench: DBPlayer[];
   captain: DBPlayer;
-  email?: string | null;
   pseudo?: string | null;
 }
 
@@ -74,7 +73,6 @@ export async function submitUserList(params: SubmitListParams) {
       .from("user_lists")
       .insert({
         session_id: params.sessionId,
-        email: params.email ?? null,
         pseudo: params.pseudo ?? null,
         slug,
         formation: params.formation,
