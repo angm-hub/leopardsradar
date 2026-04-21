@@ -6,42 +6,18 @@ import {
   Check,
   Twitter,
   Copy,
+  Link as LinkIcon,
+  Smartphone,
+  Image as ImageIcon,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { toPng } from "html-to-image";
 import { useMaListeStore } from "@/store/maListeStore";
 import { Button } from "@/components/ui/ButtonPrimitive";
-import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
 import { submitUserList } from "@/lib/maListeApi";
-import { FORMATION_SLOTS } from "@/types/maListe";
-import type { Formation, SlotPosition } from "@/types/maListe";
+import { ShareCard, type ShareFormat } from "@/components/ma-liste/ShareCard";
 import { formatMarketValue } from "@/lib/playerHelpers";
 import { cn } from "@/lib/utils";
-
-const PITCH_POSITIONS: Record<
-  Formation,
-  Partial<Record<SlotPosition, { x: number; y: number }>>
-> = {
-  "4-3-3": {
-    GK: { x: 50, y: 90 },
-    LB: { x: 12, y: 70 }, LCB: { x: 35, y: 73 }, RCB: { x: 65, y: 73 }, RB: { x: 88, y: 70 },
-    LCM: { x: 28, y: 47 }, CM: { x: 50, y: 50 }, RCM: { x: 72, y: 47 },
-    LW: { x: 15, y: 22 }, ST: { x: 50, y: 14 }, RW: { x: 85, y: 22 },
-  },
-  "4-2-3-1": {
-    GK: { x: 50, y: 90 },
-    LB: { x: 12, y: 70 }, LCB: { x: 35, y: 73 }, RCB: { x: 65, y: 73 }, RB: { x: 88, y: 70 },
-    LCM: { x: 35, y: 54 }, RCM: { x: 65, y: 54 },
-    LW: { x: 18, y: 30 }, CAM: { x: 50, y: 33 }, RW: { x: 82, y: 30 },
-    ST: { x: 50, y: 12 },
-  },
-  "3-5-2": {
-    GK: { x: 50, y: 90 },
-    LCB: { x: 25, y: 72 }, CB: { x: 50, y: 75 }, RCB: { x: 75, y: 72 },
-    LWB: { x: 8, y: 50 }, LCM: { x: 30, y: 50 }, CM: { x: 50, y: 53 }, RCM: { x: 70, y: 50 }, RWB: { x: 92, y: 50 },
-    LST: { x: 35, y: 17 }, RST: { x: 65, y: 17 },
-  },
-};
 
 export function ListRecap() {
   const formation = useMaListeStore((s) => s.formation);
@@ -54,8 +30,13 @@ export function ListRecap() {
   const sessionId = useMaListeStore((s) => s.sessionId);
   const reset = useMaListeStore((s) => s.reset);
 
-  const pitchRef = useRef<HTMLDivElement>(null);
-  const [downloadLoading, setDownloadLoading] = useState(false);
+  const storyRef = useRef<HTMLDivElement>(null);
+  const ogRef = useRef<HTMLDivElement>(null);
+
+  const [pseudo, setPseudo] = useState<string>("");
+  const [downloadingFormat, setDownloadingFormat] =
+    useState<ShareFormat | null>(null);
+  const [submittedSlug, setSubmittedSlug] = useState<string | null>(null);
   const [emailSubmitted, setEmailSubmitted] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -82,23 +63,26 @@ export function ListRecap() {
     };
   }, [startingXI, bench]);
 
-  const handleDownload = async () => {
-    if (!pitchRef.current) return;
-    setDownloadLoading(true);
+  const handleDownload = async (format: ShareFormat) => {
+    const node = format === "story" ? storyRef.current : ogRef.current;
+    if (!node) return;
+    setDownloadingFormat(format);
     try {
-      const dataUrl = await toPng(pitchRef.current, {
+      const dataUrl = await toPng(node, {
         cacheBust: true,
         pixelRatio: 2,
-        backgroundColor: "#0A0A0B",
+        backgroundColor: "#0A0A0A",
+        width: format === "story" ? 1200 : 1200,
+        height: format === "story" ? 1500 : 630,
       });
       const link = document.createElement("a");
-      link.download = `ma-liste-leopards-${Date.now()}.png`;
+      link.download = `ma-liste-leopards-${format}-${Date.now()}.png`;
       link.href = dataUrl;
       link.click();
     } catch (err) {
       console.error("PNG export failed:", err);
     } finally {
-      setDownloadLoading(false);
+      setDownloadingFormat(null);
     }
   };
 
@@ -107,15 +91,17 @@ export function ListRecap() {
     setSubmitLoading(true);
     setSubmitError(null);
     try {
-      await submitUserList({
+      const result = await submitUserList({
         sessionId,
         formation,
         startingXI,
         bench,
         captain,
         email: includeEmail ? email || undefined : undefined,
+        pseudo: pseudo.trim() || undefined,
       });
       setEmailSubmitted(true);
+      setSubmittedSlug(result.slug);
     } catch (err) {
       console.error("Submit failed:", err);
       setSubmitError(
@@ -126,21 +112,24 @@ export function ListRecap() {
     }
   };
 
-  const handleShare = (platform: "twitter" | "whatsapp" | "copy") => {
-    const text = `Voici ma liste des 26 pour les Léopards au Mondial 2026 🐆\n\nVia @leopardsradar`;
-    const url = `${window.location.origin}/ma-liste`;
+  const permalink = submittedSlug
+    ? `${window.location.origin}/ma-liste/${submittedSlug}`
+    : `${window.location.origin}/ma-liste`;
+
+  const handleShare = (platform: "twitter" | "whatsapp" | "copy" | "permalink") => {
+    const text = `Voici ma liste des 26 pour les Léopards au Mondial 2026 🐆`;
     if (platform === "twitter") {
       window.open(
-        `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
+        `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(permalink)}`,
         "_blank",
       );
     } else if (platform === "whatsapp") {
       window.open(
-        `https://wa.me/?text=${encodeURIComponent(text + " " + url)}`,
+        `https://wa.me/?text=${encodeURIComponent(text + " " + permalink)}`,
         "_blank",
       );
-    } else if (platform === "copy") {
-      navigator.clipboard.writeText(url);
+    } else if (platform === "copy" || platform === "permalink") {
+      navigator.clipboard.writeText(permalink);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
@@ -162,11 +151,43 @@ export function ListRecap() {
     );
   }
 
-  const slots = FORMATION_SLOTS[formation];
-  const positions = PITCH_POSITIONS[formation];
-
   return (
-    <section className="container-site max-w-5xl py-12 md:py-16">
+    <section className="container-site max-w-3xl py-12 md:py-16">
+      {/* Offscreen ShareCards for export */}
+      <div
+        style={{
+          position: "fixed",
+          left: -99999,
+          top: 0,
+          pointerEvents: "none",
+          opacity: 0,
+        }}
+        aria-hidden
+      >
+        <div ref={storyRef}>
+          <ShareCard
+            format="story"
+            formation={formation}
+            startingXI={startingXI}
+            bench={bench}
+            captain={captain}
+            pseudo={pseudo}
+            slug={submittedSlug}
+          />
+        </div>
+        <div ref={ogRef}>
+          <ShareCard
+            format="og"
+            formation={formation}
+            startingXI={startingXI}
+            bench={bench}
+            captain={captain}
+            pseudo={pseudo}
+            slug={submittedSlug}
+          />
+        </div>
+      </div>
+
       <div className="space-y-10">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -185,180 +206,71 @@ export function ListRecap() {
         {/* Title */}
         <div className="text-center">
           <h1 className="font-serif text-4xl md:text-5xl text-foreground">
-            Ta liste est prête.
+            Ta liste des 26 est prête.
           </h1>
           <p className="mt-3 text-muted-light">
-            Télécharge-la. Partage-la. Compare-la.
+            Télécharge-la, partage-la, compare-la quand Desabre annoncera la sienne.
           </p>
         </div>
 
-        {/* Exportable visual */}
+        {/* Live preview (visible) */}
         <div className="flex justify-center">
           <div
-            ref={pitchRef}
-            className="w-full max-w-[640px] rounded-card overflow-hidden border border-border"
-            style={{ backgroundColor: "#0A0A0B" }}
+            className="rounded-card overflow-hidden border border-border shadow-2xl"
+            style={{
+              width: "100%",
+              maxWidth: 480,
+              aspectRatio: "4/5",
+              transform: "scale(1)",
+              transformOrigin: "top center",
+            }}
           >
-            {/* Header */}
-            <div className="flex items-center justify-between p-5 border-b border-white/10">
-              <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-primary">
-                  LÉOPARDS RADAR
-                </p>
-                <p className="font-serif text-xl text-white mt-1">
-                  Ma Liste des 26
-                </p>
-              </div>
-              <span className="font-mono text-xs uppercase tracking-[0.2em] text-white/60">
-                {formation}
-              </span>
-            </div>
-
-            {/* Pitch — 11 starters */}
-            <div className="px-5 pt-3 pb-1 flex items-center justify-between">
-              <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-primary">
-                XI Titulaire · 11
-              </p>
-              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">
-                Formation {formation}
-              </p>
-            </div>
             <div
-              className="relative w-full"
               style={{
-                aspectRatio: "3/4",
-                background:
-                  "linear-gradient(180deg, #0d3d20 0%, #0a2e18 50%, #0d3d20 100%)",
+                transform: "scale(0.4)",
+                transformOrigin: "top left",
+                width: 1200,
+                height: 1500,
               }}
             >
-              {/* lines */}
-              <div className="absolute inset-3 border-2 border-white/15 rounded-sm" />
-              <div className="absolute left-3 right-3 top-1/2 h-px bg-white/15" />
-              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 border-2 border-white/15 rounded-full" />
-
-              {slots.map((slot) => {
-                const pos = positions?.[slot];
-                const player = startingXI[slot];
-                if (!pos || !player) return null;
-                const isCaptain = captain.slug === player.slug;
-                return (
-                  <div
-                    key={slot}
-                    className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1"
-                    style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
-                  >
-                    <div className="relative">
-                      <PlayerAvatar
-                        name={player.name}
-                        src={player.image_url}
-                        className={cn(
-                          "h-10 w-10 sm:h-12 sm:w-12 rounded-full border-2 shadow-lg",
-                          isCaptain ? "border-primary" : "border-white/40",
-                        )}
-                        initialsClassName="text-xs"
-                      />
-                      {isCaptain && (
-                        <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-primary text-[10px] font-bold text-primary-foreground flex items-center justify-center shadow">
-                          C
-                        </span>
-                      )}
-                    </div>
-                    <span className="text-[10px] text-white/90 font-medium px-1.5 py-0.5 rounded bg-black/50 backdrop-blur-sm whitespace-nowrap max-w-[80px] truncate">
-                      {player.name.split(" ").slice(-1)[0]}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Bench — the missing 15 players */}
-            <div className="border-t border-white/10 px-5 py-4">
-              <div className="flex items-center justify-between mb-3">
-                <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-primary">
-                  Banc · {bench.length}
-                </p>
-                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">
-                  Les 15 réservistes
-                </p>
-              </div>
-              <div className="grid grid-cols-5 gap-x-2 gap-y-3">
-                {bench.map((player) => {
-                  const isCaptain = captain.slug === player.slug;
-                  return (
-                    <div
-                      key={player.slug}
-                      className="flex flex-col items-center gap-1"
-                    >
-                      <div className="relative">
-                        <PlayerAvatar
-                          name={player.name}
-                          src={player.image_url}
-                          className={cn(
-                            "h-10 w-10 rounded-full border",
-                            isCaptain
-                              ? "border-primary"
-                              : "border-white/20",
-                          )}
-                          initialsClassName="text-[10px]"
-                        />
-                        {isCaptain && (
-                          <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[8px] font-bold text-primary-foreground flex items-center justify-center shadow">
-                            C
-                          </span>
-                        )}
-                      </div>
-                      <span className="text-[9px] text-white/80 font-medium leading-tight text-center max-w-[64px] truncate">
-                        {player.name.split(" ").slice(-1)[0]}
-                      </span>
-                    </div>
-                  );
-                })}
-                {/* Empty placeholders if bench < 15 */}
-                {Array.from({ length: Math.max(0, 15 - bench.length) }).map(
-                  (_, i) => (
-                    <div
-                      key={`empty-${i}`}
-                      className="flex flex-col items-center gap-1 opacity-30"
-                    >
-                      <div className="h-10 w-10 rounded-full border border-dashed border-white/20" />
-                      <span className="text-[9px] text-white/40">—</span>
-                    </div>
-                  ),
-                )}
-              </div>
-            </div>
-
-            {/* Footer */}
-            <div className="flex items-center justify-between p-3 border-t border-white/10 text-[10px] uppercase tracking-[0.2em] text-white/50">
-              <span>leopardsradar.com/ma-liste</span>
-              <span>{new Date().toLocaleDateString("fr-FR")}</span>
+              <ShareCard
+                format="story"
+                formation={formation}
+                startingXI={startingXI}
+                bench={bench}
+                captain={captain}
+                pseudo={pseudo}
+                slug={submittedSlug}
+              />
             </div>
           </div>
+        </div>
+
+        {/* Pseudo input */}
+        <div className="max-w-md mx-auto">
+          <label className="block text-xs uppercase tracking-[0.2em] text-muted mb-2">
+            TON PSEUDO (optionnel, apparaîtra sur la carte)
+          </label>
+          <input
+            type="text"
+            value={pseudo}
+            onChange={(e) => setPseudo(e.target.value.slice(0, 24))}
+            placeholder="ex. Alex, Kinshasa Boy…"
+            className="w-full px-4 py-2.5 bg-background border border-border rounded-button text-sm text-foreground placeholder:text-muted focus:border-primary outline-none transition-colors"
+          />
         </div>
 
         {/* Insights */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {[
+            { label: "RADAR", value: insights.radarCount, sub: "joueurs" },
+            { label: "ÂGE MOYEN", value: insights.avgAge, sub: "ans" },
             {
-              label: "RADAR",
-              value: insights.radarCount,
-              sub: "joueurs éligibles",
-            },
-            {
-              label: "ÂGE MOYEN",
-              value: insights.avgAge,
-              sub: "ans",
-            },
-            {
-              label: "VALEUR TOTALE",
+              label: "VALEUR",
               value: formatMarketValue(insights.totalValue),
               sub: "marché",
             },
-            {
-              label: "FORMATION",
-              value: formation,
-              sub: "ta tactique",
-            },
+            { label: "FORMATION", value: formation, sub: "tactique" },
           ].map((s) => (
             <div
               key={s.label}
@@ -375,18 +287,53 @@ export function ListRecap() {
           ))}
         </div>
 
-        {/* Actions */}
-        <div className="space-y-4 max-w-2xl mx-auto">
+        {/* Download — 2 formats */}
+        <div className="space-y-3 max-w-2xl mx-auto">
+          <h3 className="font-serif text-lg text-foreground text-center">
+            Télécharger ton visuel
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <Button
+              size="lg"
+              onClick={() => handleDownload("story")}
+              disabled={downloadingFormat !== null}
+              className="gap-2"
+            >
+              <Smartphone className="h-4 w-4" />
+              {downloadingFormat === "story"
+                ? "Génération…"
+                : "Pour Instagram (1200×1500)"}
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              onClick={() => handleDownload("og")}
+              disabled={downloadingFormat !== null}
+              className="gap-2"
+            >
+              <ImageIcon className="h-4 w-4" />
+              {downloadingFormat === "og"
+                ? "Génération…"
+                : "Pour X / WhatsApp (1200×630)"}
+            </Button>
+          </div>
+        </div>
+
+        {/* Share actions */}
+        <div className="space-y-3 max-w-2xl mx-auto">
           <Button
             size="lg"
-            onClick={handleDownload}
-            disabled={downloadLoading}
+            variant="outline"
+            onClick={() => handleShare("permalink")}
             className="w-full gap-2"
           >
-            <Download className="h-4 w-4" />
-            {downloadLoading ? "Génération…" : "Télécharger mon visuel"}
+            {copied ? <Check className="h-4 w-4" /> : <LinkIcon className="h-4 w-4" />}
+            {copied
+              ? "Lien copié"
+              : submittedSlug
+                ? `Copier le lien : /ma-liste/${submittedSlug}`
+                : "Copier le lien (après enregistrement)"}
           </Button>
-
           <div className="grid grid-cols-3 gap-2">
             <Button
               variant="outline"
@@ -406,18 +353,14 @@ export function ListRecap() {
               onClick={() => handleShare("copy")}
               className="gap-2"
             >
-              {copied ? (
-                <Check className="h-4 w-4" />
-              ) : (
-                <Copy className="h-4 w-4" />
-              )}
+              {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
               {copied ? "Copié" : "Copier"}
             </Button>
           </div>
 
-          {/* Email capture */}
+          {/* Email capture / submit */}
           {!emailSubmitted ? (
-            <div className="rounded-card border border-border bg-card p-5 mt-2">
+            <div className="rounded-card border border-border bg-card p-5 mt-4">
               <div className="flex items-center gap-2">
                 <Mail className="h-4 w-4 text-primary" />
                 <h3 className="font-serif text-lg text-foreground">
@@ -448,7 +391,7 @@ export function ListRecap() {
                 disabled={submitLoading}
                 className="mt-3 text-xs text-muted hover:text-foreground underline disabled:opacity-50"
               >
-                Continuer sans email
+                Enregistrer ma liste sans email
               </button>
               {submitError && (
                 <p className="mt-3 text-xs text-alert">{submitError}</p>
@@ -458,17 +401,25 @@ export function ListRecap() {
             <motion.div
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              className="rounded-card border border-primary/40 bg-primary/5 p-5 flex items-center gap-3"
+              className={cn(
+                "rounded-card border border-primary/40 bg-primary/5 p-5 flex items-start gap-3 mt-4",
+              )}
             >
               <span className="h-8 w-8 rounded-full bg-primary text-primary-foreground inline-flex items-center justify-center shrink-0">
                 <Check className="h-4 w-4" />
               </span>
-              <div>
+              <div className="flex-1 min-w-0">
                 <p className="font-serif text-lg text-foreground">
                   Ta liste est enregistrée.
                 </p>
                 <p className="text-sm text-muted mt-0.5">
-                  On te préviendra le jour des convocations officielles.
+                  Permalien :{" "}
+                  <a
+                    href={permalink}
+                    className="text-primary hover:underline break-all"
+                  >
+                    {permalink}
+                  </a>
                 </p>
               </div>
             </motion.div>
