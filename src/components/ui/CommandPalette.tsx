@@ -159,9 +159,9 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
               className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-2"
             >
               <PaletteItem
-                value="action newsletter abonner"
+                value="action newsletter bientot"
                 icon={<Send className="h-4 w-4" />}
-                label="S'abonner à la newsletter"
+                label="Newsletter · Bientôt disponible"
                 onSelect={() => go("/newsletter")}
               />
               <PaletteItem
