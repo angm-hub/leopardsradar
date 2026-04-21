@@ -1,6 +1,5 @@
-import { useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
-import { Link2, MessageCircle, Twitter, Instagram } from "lucide-react";
+import { Link2, MessageCircle, Twitter, Instagram, Clock } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/ButtonPrimitive";
@@ -178,13 +177,6 @@ function PitchPlayer({
 
 export default function BestXI() {
   const { data, loading, error } = useBestXI();
-  const [email, setEmail] = useState("");
-
-  const onNotify = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setEmail("");
-    alert("Merci ! On te prévient dès le lancement.");
-  };
 
   const positionedSlots = data ? getSlotCoords(data.formation, data.slots) : [];
 
@@ -320,22 +312,9 @@ export default function BestXI() {
             <p className="mt-3 text-muted">
               Drag-and-drop, partage sur les réseaux, vote communautaire. On finalise.
             </p>
-            <form
-              onSubmit={onNotify}
-              className="mx-auto mt-6 flex max-w-md flex-col gap-2 sm:flex-row"
-            >
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="ton@email.com"
-                className="flex-1 rounded-button border border-border bg-background px-5 py-3 text-foreground outline-none transition-colors focus:border-primary"
-              />
-              <Button type="submit" variant="primary" size="md">
-                Me notifier
-              </Button>
-            </form>
+            <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-5 py-2.5 text-sm font-mono uppercase tracking-[0.18em] text-primary">
+              <Clock className="h-3.5 w-3.5" />
+              Newsletter · Bientôt
           </div>
         </section>
       </main>
