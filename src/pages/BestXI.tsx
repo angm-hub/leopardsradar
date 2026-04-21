@@ -14,16 +14,13 @@ const FORMATION_COORDS: Record<string, Record<string, { x: number; y: number }[]
   "4-3-3": {
     GK: [{ x: 50, y: 88 }],
     RB: [{ x: 85, y: 70 }],
-    CB: [
-      { x: 62, y: 72 },
-      { x: 38, y: 72 },
-    ],
+    RCB: [{ x: 62, y: 72 }],
+    LCB: [{ x: 38, y: 72 }],
+    CB: [{ x: 50, y: 72 }],
     LB: [{ x: 15, y: 70 }],
-    CM: [
-      { x: 72, y: 48 },
-      { x: 50, y: 50 },
-      { x: 28, y: 48 },
-    ],
+    RCM: [{ x: 72, y: 48 }],
+    CM: [{ x: 50, y: 50 }],
+    LCM: [{ x: 28, y: 48 }],
     RW: [{ x: 80, y: 22 }],
     ST: [{ x: 50, y: 16 }],
     LW: [{ x: 20, y: 22 }],
@@ -31,19 +28,14 @@ const FORMATION_COORDS: Record<string, Record<string, { x: number; y: number }[]
   "4-2-3-1": {
     GK: [{ x: 50, y: 88 }],
     RB: [{ x: 85, y: 70 }],
-    CB: [
-      { x: 62, y: 72 },
-      { x: 38, y: 72 },
-    ],
+    RCB: [{ x: 62, y: 72 }],
+    LCB: [{ x: 38, y: 72 }],
+    CB: [{ x: 50, y: 72 }],
     LB: [{ x: 15, y: 70 }],
-    CDM: [
-      { x: 62, y: 54 },
-      { x: 38, y: 54 },
-    ],
-    CM: [
-      { x: 62, y: 54 },
-      { x: 38, y: 54 },
-    ],
+    RCM: [{ x: 62, y: 54 }],
+    LCM: [{ x: 38, y: 54 }],
+    CDM: [{ x: 50, y: 56 }],
+    CM: [{ x: 50, y: 54 }],
     RW: [{ x: 78, y: 30 }],
     CAM: [{ x: 50, y: 32 }],
     LW: [{ x: 22, y: 30 }],
@@ -51,22 +43,17 @@ const FORMATION_COORDS: Record<string, Record<string, { x: number; y: number }[]
   },
   "3-5-2": {
     GK: [{ x: 50, y: 88 }],
-    CB: [
-      { x: 72, y: 72 },
-      { x: 50, y: 74 },
-      { x: 28, y: 72 },
-    ],
+    RCB: [{ x: 72, y: 72 }],
+    CB: [{ x: 50, y: 74 }],
+    LCB: [{ x: 28, y: 72 }],
     RWB: [{ x: 88, y: 50 }],
     LWB: [{ x: 12, y: 50 }],
-    CM: [
-      { x: 65, y: 52 },
-      { x: 50, y: 54 },
-      { x: 35, y: 52 },
-    ],
-    ST: [
-      { x: 60, y: 18 },
-      { x: 40, y: 18 },
-    ],
+    RCM: [{ x: 65, y: 52 }],
+    CM: [{ x: 50, y: 54 }],
+    LCM: [{ x: 35, y: 52 }],
+    RST: [{ x: 60, y: 18 }],
+    LST: [{ x: 40, y: 18 }],
+    ST: [{ x: 50, y: 18 }],
   },
 };
 
