@@ -56,6 +56,7 @@ export type Database = {
           competition: string
           country: string | null
           created_at: string
+          external_id: string | null
           home_or_away: string
           id: string
           is_published: boolean
@@ -66,6 +67,7 @@ export type Database = {
           opponent_name: string
           score_opponent: number | null
           score_rdc: number | null
+          source: string | null
           status: string
           updated_at: string
           venue: string | null
@@ -75,6 +77,7 @@ export type Database = {
           competition: string
           country?: string | null
           created_at?: string
+          external_id?: string | null
           home_or_away?: string
           id?: string
           is_published?: boolean
@@ -85,6 +88,7 @@ export type Database = {
           opponent_name: string
           score_opponent?: number | null
           score_rdc?: number | null
+          source?: string | null
           status?: string
           updated_at?: string
           venue?: string | null
@@ -94,6 +98,7 @@ export type Database = {
           competition?: string
           country?: string | null
           created_at?: string
+          external_id?: string | null
           home_or_away?: string
           id?: string
           is_published?: boolean
@@ -104,6 +109,7 @@ export type Database = {
           opponent_name?: string
           score_opponent?: number | null
           score_rdc?: number | null
+          source?: string | null
           status?: string
           updated_at?: string
           venue?: string | null
