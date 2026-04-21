@@ -23,8 +23,7 @@ export function ListRecap() {
   const startingXI = useMaListeStore((s) => s.startingXI);
   const bench = useMaListeStore((s) => s.bench);
   const captain = useMaListeStore((s) => s.captain);
-  const email = useMaListeStore((s) => s.email);
-  const setEmail = useMaListeStore((s) => s.setEmail);
+  // newsletter coming soon — email capture removed
   const previousStep = useMaListeStore((s) => s.previousStep);
   const sessionId = useMaListeStore((s) => s.sessionId);
   const reset = useMaListeStore((s) => s.reset);
@@ -96,7 +95,7 @@ export function ListRecap() {
         startingXI,
         bench,
         captain,
-        email: includeEmail ? email || undefined : undefined,
+        email: undefined,
         pseudo: pseudo.trim() || undefined,
       });
       setEmailSubmitted(true);
