@@ -7,7 +7,8 @@ const corsHeaders = {
 };
 
 const RDC_TEAM_ID = "136475"; // DR Congo (TheSportsDB)
-const RDC_NAMES = ["DR Congo", "Congo DR", "Congo-Kinshasa", "Zaire"];
+// Strict match only — "Congo" alone refers to Congo-Brazzaville and gives wrong data.
+const RDC_NAMES = ["DR Congo", "Congo DR"];
 
 interface TsdbEvent {
   idEvent: string;
@@ -30,8 +31,9 @@ interface TsdbEvent {
 
 function isRdc(name: string | undefined): boolean {
   if (!name) return false;
-  const n = name.toLowerCase();
-  return RDC_NAMES.some((x) => n.includes(x.toLowerCase()));
+  const n = name.trim().toLowerCase();
+  // Exact-ish match: must literally contain "dr congo" or "congo dr".
+  return RDC_NAMES.some((x) => n === x.toLowerCase() || n.includes(x.toLowerCase()));
 }
 
 function mapStatus(s: string | null | undefined): string {
@@ -153,13 +155,29 @@ Deno.serve(async (req: Request) => {
       });
     }
 
+    // Never overwrite manually curated matches (Wikipedia-sourced, etc.)
     let upserted = 0;
+    let skipped = 0;
     if (rows.length) {
-      const { error, count } = await supabase
+      const externalIds = rows.map((r) => r.external_id);
+      const { data: existing } = await supabase
         .from("matches")
-        .upsert(rows, { onConflict: "external_id", count: "exact" });
-      if (error) throw error;
-      upserted = count ?? rows.length;
+        .select("external_id, source")
+        .in("external_id", externalIds);
+      const protectedIds = new Set(
+        (existing ?? [])
+          .filter((r: any) => typeof r.source === "string" && r.source.startsWith("manual"))
+          .map((r: any) => r.external_id),
+      );
+      const safeRows = rows.filter((r) => !protectedIds.has(r.external_id));
+      skipped = rows.length - safeRows.length;
+      if (safeRows.length) {
+        const { error, count } = await supabase
+          .from("matches")
+          .upsert(safeRows, { onConflict: "external_id", count: "exact" });
+        if (error) throw error;
+        upserted = count ?? safeRows.length;
+      }
     }
 
     return new Response(
