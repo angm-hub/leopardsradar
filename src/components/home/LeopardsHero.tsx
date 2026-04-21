@@ -60,12 +60,12 @@ export function LeopardsHero() {
             variants={itemVariants}
             className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto"
           >
-            <Button asChild variant="primary" size="lg" className="group">
-              <Link to="/roster">
+            <Link to="/roster">
+              <Button variant="primary" size="lg" className="group w-full sm:w-auto">
                 Voir le Roster
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-            </Button>
+              </Button>
+            </Link>
             <Button variant="ghost-premium" size="lg" disabled title="Newsletter bientôt disponible">
               Newsletter · Bientôt
             </Button>
