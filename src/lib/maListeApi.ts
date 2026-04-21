@@ -9,7 +9,24 @@ interface SubmitListParams {
   bench: DBPlayer[];
   captain: DBPlayer;
   email?: string | null;
+  pseudo?: string | null;
 }
+
+const slugify = (s: string) =>
+  s
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 32);
+
+const randomSuffix = () => Math.random().toString(36).slice(2, 6);
+
+const buildSlug = (pseudo?: string | null) => {
+  const base = pseudo ? slugify(pseudo) : "liste";
+  return `${base || "liste"}-${randomSuffix()}`;
+};
 
 export async function submitUserList(params: SubmitListParams) {
   const xiPlayers = Object.values(params.startingXI).filter(
@@ -49,35 +66,55 @@ export async function submitUserList(params: SubmitListParams) {
     position: p.position,
   }));
 
+  let slug = buildSlug(params.pseudo);
+  let lastError: unknown = null;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data, error } = await (supabase as any)
+      .from("user_lists")
+      .insert({
+        session_id: params.sessionId,
+        email: params.email ?? null,
+        pseudo: params.pseudo ?? null,
+        slug,
+        formation: params.formation,
+        starting_xi: startingXIPayload,
+        bench: benchPayload,
+        captain_id: params.captain.id,
+        radar_count: radarCount,
+        roster_count: rosterCount,
+        avg_age: Number(avgAge.toFixed(1)),
+        total_market_value_eur: totalMarketValue,
+        user_agent:
+          typeof navigator !== "undefined" ? navigator.userAgent : null,
+        locale: typeof navigator !== "undefined" ? navigator.language : "fr",
+        referrer: typeof document !== "undefined" ? document.referrer : null,
+        is_submitted: true,
+      })
+      .select()
+      .single();
+
+    if (!error) return { ...data, slug } as { id: string; slug: string };
+    lastError = error;
+    if ((error as { code?: string }).code === "23505") {
+      slug = buildSlug(params.pseudo);
+      continue;
+    }
+    break;
+  }
+  console.error("[submitUserList]", lastError);
+  throw lastError;
+}
+
+export async function fetchListBySlug(slug: string) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data, error } = await (supabase as any)
     .from("user_lists")
-    .insert({
-      session_id: params.sessionId,
-      email: params.email ?? null,
-      formation: params.formation,
-      starting_xi: startingXIPayload,
-      bench: benchPayload,
-      captain_id: params.captain.id,
-      radar_count: radarCount,
-      roster_count: rosterCount,
-      avg_age: Number(avgAge.toFixed(1)),
-      total_market_value_eur: totalMarketValue,
-      user_agent:
-        typeof navigator !== "undefined" ? navigator.userAgent : null,
-      locale:
-        typeof navigator !== "undefined" ? navigator.language : "fr",
-      referrer:
-        typeof document !== "undefined" ? document.referrer : null,
-      is_submitted: true,
-    })
-    .select()
-    .single();
-
-  if (error) {
-    console.error("[submitUserList]", error);
-    throw error;
-  }
+    .select("*")
+    .eq("slug", slug)
+    .eq("is_submitted", true)
+    .maybeSingle();
+  if (error) throw error;
   return data;
 }
 
@@ -114,7 +151,6 @@ export async function getListInsights() {
   };
 }
 
-// Stub for prompt 4
 export async function getTopPickedPlayers() {
   return [];
 }

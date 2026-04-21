@@ -278,11 +278,14 @@ export type Database = {
           is_submitted: boolean
           locale: string | null
           platforms_shared: string[]
+          pseudo: string | null
           radar_count: number
           referrer: string | null
           roster_count: number
           session_id: string
+          share_image_url: string | null
           shared_count: number
+          slug: string | null
           starting_xi: Json
           total_market_value_eur: number | null
           updated_at: string
@@ -299,11 +302,14 @@ export type Database = {
           is_submitted?: boolean
           locale?: string | null
           platforms_shared?: string[]
+          pseudo?: string | null
           radar_count?: number
           referrer?: string | null
           roster_count?: number
           session_id: string
+          share_image_url?: string | null
           shared_count?: number
+          slug?: string | null
           starting_xi: Json
           total_market_value_eur?: number | null
           updated_at?: string
@@ -320,11 +326,14 @@ export type Database = {
           is_submitted?: boolean
           locale?: string | null
           platforms_shared?: string[]
+          pseudo?: string | null
           radar_count?: number
           referrer?: string | null
           roster_count?: number
           session_id?: string
+          share_image_url?: string | null
           shared_count?: number
+          slug?: string | null
           starting_xi?: Json
           total_market_value_eur?: number | null
           updated_at?: string

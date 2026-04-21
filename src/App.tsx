@@ -15,6 +15,7 @@ import NewsletterUnsubscribe from "./pages/NewsletterUnsubscribe.tsx";
 import Auth from "./pages/Auth.tsx";
 import AdminPhotos from "./pages/AdminPhotos.tsx";
 import MaListe from "./pages/MaListe.tsx";
+import MaListePublic from "./pages/MaListePublic.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { PromoBanner } from "./components/layout/PromoBanner";
 
@@ -41,6 +42,7 @@ const App = () => (
           <Route path="/auth" element={<Auth />} />
           <Route path="/admin/photos" element={<AdminPhotos />} />
           <Route path="/ma-liste" element={<MaListe />} />
+          <Route path="/ma-liste/:slug" element={<MaListePublic />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
