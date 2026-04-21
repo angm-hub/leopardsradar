@@ -214,7 +214,15 @@ export function ListRecap() {
               </span>
             </div>
 
-            {/* Pitch */}
+            {/* Pitch — 11 starters */}
+            <div className="px-5 pt-3 pb-1 flex items-center justify-between">
+              <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-primary">
+                XI Titulaire · 11
+              </p>
+              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">
+                Formation {formation}
+              </p>
+            </div>
             <div
               className="relative w-full"
               style={{
