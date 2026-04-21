@@ -10,8 +10,8 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
-const BATCH_SIZE = 10;
-const PAUSE_MS = 2000;
+const BATCH_SIZE = 25;
+const PAUSE_MS = 500;
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
