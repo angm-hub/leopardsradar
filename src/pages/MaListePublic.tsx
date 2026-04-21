@@ -115,20 +115,47 @@ export default function MaListePublic() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  // Set document meta tags imperatively (no react-helmet dependency)
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    document.title = title;
+    const setMeta = (
+      key: "name" | "property",
+      value: string,
+      content: string,
+    ) => {
+      let el = document.querySelector(
+        `meta[${key}="${value}"]`,
+      ) as HTMLMetaElement | null;
+      if (!el) {
+        el = document.createElement("meta");
+        el.setAttribute(key, value);
+        document.head.appendChild(el);
+      }
+      el.setAttribute("content", content);
+    };
+    setMeta("name", "description", description);
+    setMeta("property", "og:title", title);
+    setMeta("property", "og:description", description);
+    setMeta("property", "og:type", "article");
+    setMeta("name", "twitter:card", "summary_large_image");
+    if (slug && ogImageUrl) {
+      setMeta("property", "og:image", ogImageUrl);
+      setMeta("name", "twitter:image", ogImageUrl);
+    }
+    let link = document.querySelector(
+      'link[rel="canonical"]',
+    ) as HTMLLinkElement | null;
+    if (!link) {
+      link = document.createElement("link");
+      link.rel = "canonical";
+      document.head.appendChild(link);
+    }
+    link.href = permalink;
+  }, [title, description, ogImageUrl, permalink, slug]);
+
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
-      <Helmet>
-        <title>{title}</title>
-        <meta name="description" content={description} />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={description} />
-        {slug && <meta property="og:image" content={ogImageUrl} />}
-        <meta property="og:type" content="article" />
-        <meta name="twitter:card" content="summary_large_image" />
-        {slug && <meta name="twitter:image" content={ogImageUrl} />}
-        <link rel="canonical" href={permalink} />
-      </Helmet>
-
       <Navbar />
 
       <main className="flex-1 pt-16">
