@@ -8,6 +8,8 @@ import { LineupBuilder } from "@/components/ma-liste/LineupBuilder";
 import { BenchBuilder } from "@/components/ma-liste/BenchBuilder";
 import { CaptainSelector } from "@/components/ma-liste/CaptainSelector";
 import { ListRecap } from "@/components/ma-liste/ListRecap";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 const stepFade = {
   initial: { opacity: 0, y: 16 },
