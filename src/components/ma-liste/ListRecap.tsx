@@ -95,7 +95,7 @@ export function ListRecap() {
         startingXI,
         bench,
         captain,
-        email: undefined,
+        
         pseudo: pseudo.trim() || undefined,
       });
       setEmailSubmitted(true);
