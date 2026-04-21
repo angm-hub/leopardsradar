@@ -263,6 +263,63 @@ export function ListRecap() {
               })}
             </div>
 
+            {/* Bench — the missing 15 players */}
+            <div className="border-t border-white/10 px-5 py-4">
+              <div className="flex items-center justify-between mb-3">
+                <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-primary">
+                  Banc · {bench.length}
+                </p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">
+                  Les 15 réservistes
+                </p>
+              </div>
+              <div className="grid grid-cols-5 gap-x-2 gap-y-3">
+                {bench.map((player) => {
+                  const isCaptain = captain.slug === player.slug;
+                  return (
+                    <div
+                      key={player.slug}
+                      className="flex flex-col items-center gap-1"
+                    >
+                      <div className="relative">
+                        <PlayerAvatar
+                          name={player.name}
+                          src={player.image_url}
+                          className={cn(
+                            "h-10 w-10 rounded-full border",
+                            isCaptain
+                              ? "border-primary"
+                              : "border-white/20",
+                          )}
+                          initialsClassName="text-[10px]"
+                        />
+                        {isCaptain && (
+                          <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[8px] font-bold text-primary-foreground flex items-center justify-center shadow">
+                            C
+                          </span>
+                        )}
+                      </div>
+                      <span className="text-[9px] text-white/80 font-medium leading-tight text-center max-w-[64px] truncate">
+                        {player.name.split(" ").slice(-1)[0]}
+                      </span>
+                    </div>
+                  );
+                })}
+                {/* Empty placeholders if bench < 15 */}
+                {Array.from({ length: Math.max(0, 15 - bench.length) }).map(
+                  (_, i) => (
+                    <div
+                      key={`empty-${i}`}
+                      className="flex flex-col items-center gap-1 opacity-30"
+                    >
+                      <div className="h-10 w-10 rounded-full border border-dashed border-white/20" />
+                      <span className="text-[9px] text-white/40">—</span>
+                    </div>
+                  ),
+                )}
+              </div>
+            </div>
+
             {/* Footer */}
             <div className="flex items-center justify-between p-3 border-t border-white/10 text-[10px] uppercase tracking-[0.2em] text-white/50">
               <span>leopardsradar.com/ma-liste</span>
