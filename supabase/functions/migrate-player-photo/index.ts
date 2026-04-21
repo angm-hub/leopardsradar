@@ -252,10 +252,9 @@ Deno.serve(async (req) => {
       },
     );
   } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err);
-    console.error("migrate-player-photo error:", msg);
+    console.error("migrate-player-photo error:", err);
     return new Response(
-      JSON.stringify({ success: false, reason: msg }),
+      JSON.stringify({ success: false, reason: "Internal server error" }),
       {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
