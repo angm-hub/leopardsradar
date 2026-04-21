@@ -34,9 +34,9 @@ const Home = () => {
         <div className="mx-auto w-24 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
         <EditorialSeparator
           variant="quote"
-          content="« Quand je porte le maillot des Léopards, c'est l'histoire de ma famille qui joue. »"
-          author="Un joueur de la diaspora"
-          context="Propos recueillis, 2024"
+          content="« Le peuple congolais mérite ce bonheur. On a tout donné pour eux. »"
+          author="Cédric Bakambu"
+          context="Après la qualification pour les demi-finales de la CAN 2023, février 2024"
         />
         <ClubsMarqueeSection />
         <NewsletterSection />
