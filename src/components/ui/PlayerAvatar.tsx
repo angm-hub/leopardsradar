@@ -10,6 +10,8 @@ interface PlayerAvatarProps {
   cover?: boolean;
   /** Optional text size override for the initials fallback */
   initialsClassName?: string;
+  /** Optional inline style (e.g. fixed width/height for export). */
+  style?: React.CSSProperties;
 }
 
 /**
@@ -25,6 +27,7 @@ export function PlayerAvatar({
   className,
   cover = true,
   initialsClassName,
+  style,
 }: PlayerAvatarProps) {
   const [errored, setErrored] = useState(false);
   const showImage = !!src && !errored;
@@ -36,14 +39,15 @@ export function PlayerAvatar({
         "relative overflow-hidden flex items-center justify-center",
         className,
       )}
-      style={
-        showImage
-          ? undefined
+      style={{
+        ...(showImage
+          ? {}
           : {
               background:
                 "linear-gradient(135deg, #0a3f22 0%, #08361c 50%, #052e16 100%)",
-            }
-      }
+            }),
+        ...style,
+      }}
       aria-label={name}
     >
       {showImage ? (

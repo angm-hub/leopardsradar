@@ -43,7 +43,6 @@ const PITCH_POSITIONS: Record<
   },
 };
 
-const POS_ORDER: DBPosition[] = ["Goalkeeper", "Defender", "Midfield", "Attack"];
 const POS_SHORT: Record<DBPosition, string> = {
   Goalkeeper: "GK",
   Defender: "DEF",
@@ -79,19 +78,6 @@ export function ShareCard({
     return { avgAge, total, radarCount };
   }, [startingXI, bench]);
 
-  const benchByPos = useMemo(() => {
-    const groups: Record<DBPosition, DBPlayer[]> = {
-      Goalkeeper: [],
-      Defender: [],
-      Midfield: [],
-      Attack: [],
-    };
-    for (const p of bench) {
-      const pos = (p.position as DBPosition) ?? "Midfield";
-      groups[pos].push(p);
-    }
-    return groups;
-  }, [bench]);
 
   // ============== STORY 1200x1500 ==============
   if (format === "story") {
