@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/ButtonPrimitive";
 import { Pill } from "@/components/ui/Pill";
 import { AuroraShader } from "@/components/ui/AuroraShader";
-import { useNewsletterCount } from "@/hooks/useNewsletterCount";
+
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
