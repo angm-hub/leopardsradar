@@ -1,7 +1,6 @@
 import { useRef, useMemo, useState } from "react";
 import {
   ArrowLeft,
-  Download,
   Mail,
   Check,
   Twitter,

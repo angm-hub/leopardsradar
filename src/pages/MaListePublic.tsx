@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Helmet } from "react-helmet-async";
 import { useParams, Link } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
