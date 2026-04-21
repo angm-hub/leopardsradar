@@ -7,7 +7,7 @@ import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
 import { usePlayers } from "@/hooks/usePlayers";
 import { formatMarketValue } from "@/lib/playerHelpers";
 import { cn } from "@/lib/utils";
-import type { DBPlayer, DBPosition } from "@/types/dbPlayer";
+import type { DBPlayer } from "@/types/dbPlayer";
 
 type PosKey = "Goalkeeper" | "Defender" | "Midfield" | "Attack";
 
