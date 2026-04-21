@@ -118,9 +118,10 @@ Deno.serve(async (req) => {
     let sourceTried = "none";
     let usedFallback = false;
 
-    // Try to scrape Transfermarkt
+    // Try to scrape Transfermarkt — canonical URL is /spieler-slug/profil/spieler/{id}
+    // but TM accepts /a/profil/spieler/{id} as a redirect. Use that as a stable form.
     if (player.transfermarkt_id) {
-      const tmUrl = `https://www.transfermarkt.com/spieler/${player.transfermarkt_id}`;
+      const tmUrl = `https://www.transfermarkt.com/a/profil/spieler/${player.transfermarkt_id}`;
       sourceTried = tmUrl;
       try {
         const htmlRes = await fetch(tmUrl, {
@@ -130,6 +131,7 @@ Deno.serve(async (req) => {
             Accept:
               "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
           },
+          redirect: "follow",
         });
         if (htmlRes.ok) {
           const html = await htmlRes.text();
