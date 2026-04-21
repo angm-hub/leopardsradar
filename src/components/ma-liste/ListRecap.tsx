@@ -1,13 +1,13 @@
 import { useRef, useMemo, useState } from "react";
 import {
   ArrowLeft,
-  Mail,
   Check,
   Twitter,
   Copy,
   Link as LinkIcon,
   Smartphone,
   Image as ImageIcon,
+  Clock,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { toPng } from "html-to-image";
@@ -357,41 +357,28 @@ export function ListRecap() {
             </Button>
           </div>
 
-          {/* Email capture / submit */}
+          {/* Save list (no email — newsletter coming soon) */}
           {!emailSubmitted ? (
             <div className="rounded-card border border-border bg-card p-5 mt-4">
               <div className="flex items-center gap-2">
-                <Mail className="h-4 w-4 text-primary" />
+                <Clock className="h-4 w-4 text-primary" />
                 <h3 className="font-serif text-lg text-foreground">
-                  Reçois la vraie liste de Desabre
+                  Enregistre ta liste
                 </h3>
               </div>
               <p className="text-sm text-muted mt-2">
-                Quand les convocations officielles tomberont, on te prévient
-                pour comparer avec ta liste.
+                Liste enregistrée localement et partageable via un permalien.
+                Newsletter bientôt disponible pour recevoir la vraie liste de
+                Desabre.
               </p>
-              <div className="flex gap-2 mt-4">
-                <input
-                  type="email"
-                  placeholder="ton@email.com"
-                  value={email ?? ""}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="flex-1 px-4 py-2.5 bg-background border border-border rounded-button text-sm text-foreground placeholder:text-muted focus:border-primary outline-none transition-colors"
-                />
-                <Button
-                  onClick={() => handleSubmit(true)}
-                  disabled={!email || submitLoading}
-                >
-                  {submitLoading ? "…" : "M'abonner"}
-                </Button>
-              </div>
-              <button
+              <Button
+                size="lg"
                 onClick={() => handleSubmit(false)}
                 disabled={submitLoading}
-                className="mt-3 text-xs text-muted hover:text-foreground underline disabled:opacity-50"
+                className="w-full mt-4"
               >
-                Enregistrer ma liste sans email
-              </button>
+                {submitLoading ? "Enregistrement…" : "Enregistrer ma liste"}
+              </Button>
               {submitError && (
                 <p className="mt-3 text-xs text-alert">{submitError}</p>
               )}

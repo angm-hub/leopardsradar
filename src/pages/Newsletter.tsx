@@ -1,12 +1,6 @@
-import { useState, type FormEvent } from "react";
-import { Activity, Sparkles, Feather, Loader2 } from "lucide-react";
+import { Activity, Sparkles, Feather, Clock } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { Button } from "@/components/ui/ButtonPrimitive";
-import { supabase } from "@/integrations/supabase/client";
-import { useNewsletterCount } from "@/hooks/useNewsletterCount";
-import { toast } from "sonner";
-import { z } from "zod";
 
 const PREVIEWS = [
   {
@@ -26,101 +20,29 @@ const PREVIEWS = [
   },
 ];
 
-const emailSchema = z
-  .string()
-  .trim()
-  .email({ message: "Adresse email invalide" })
-  .max(255);
-
 export default function Newsletter() {
-  const [email, setEmail] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const { count } = useNewsletterCount();
-
-  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const parsed = emailSchema.safeParse(email);
-    if (!parsed.success) {
-      toast.error(parsed.error.errors[0]?.message ?? "Email invalide");
-      return;
-    }
-    setSubmitting(true);
-    try {
-      const { error } = await supabase
-        .from("newsletter_subscribers")
-        .insert({ email: parsed.data, source: "newsletter_page" });
-      if (error) {
-        if (error.code === "23505") {
-          toast.success(
-            "Tu es déjà dans la liste. Vérifie ta boîte mail.",
-          );
-        } else {
-          throw error;
-        }
-      } else {
-        try {
-          await supabase.functions.invoke("send-newsletter-confirmation", {
-            body: { email: parsed.data },
-          });
-        } catch (err) {
-          console.warn("[newsletter] confirmation email not sent yet", err);
-        }
-        toast.success("Vérifie ta boîte mail pour confirmer.");
-        setEmail("");
-      }
-    } catch (err) {
-      console.error("[newsletter]", err);
-      toast.error("Une erreur est survenue. Réessaie dans un instant.");
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
       <main>
         <section className="container-site pt-32 pb-16">
           <div className="mx-auto max-w-3xl text-center">
-            <h1 className="font-serif text-6xl font-semibold text-foreground">
+            <span
+              className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-5 py-2.5 text-sm font-mono uppercase tracking-[0.18em] text-primary"
+              style={{ boxShadow: "0 0 0 1px hsl(var(--primary) / 0.15)" }}
+            >
+              <Clock className="h-3.5 w-3.5" />
+              Newsletter · Bientôt disponible
+            </span>
+            <h1 className="mt-8 font-serif text-5xl md:text-6xl font-semibold text-foreground">
               Le Radar Léopards.
             </h1>
             <p className="mt-6 text-xl text-muted">
               Une édition. Tous les vendredis.
             </p>
-
-            <form
-              onSubmit={onSubmit}
-              className="mx-auto mt-12 flex max-w-lg flex-col gap-2 sm:flex-row"
-            >
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="ton@email.com"
-                disabled={submitting}
-                className="flex-1 rounded-button border border-border bg-card px-5 py-4 text-foreground outline-none transition-colors focus:border-primary disabled:opacity-60"
-              />
-              <Button type="submit" variant="primary" size="lg" disabled={submitting}>
-                {submitting ? (
-                  <span className="inline-flex items-center gap-2">
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    Envoi…
-                  </span>
-                ) : (
-                  "S'abonner"
-                )}
-              </Button>
-            </form>
-
-            <p className="mt-4 text-sm text-muted">
-              {count === null
-                ? "Rejoins les fans"
-                : count === 0
-                  ? "Sois le premier abonné"
-                  : `${count} abonné${count > 1 ? "s" : ""}`}{" "}
-              · 0 spam · Se désabonner en 1 clic
+            <p className="mt-8 text-base text-muted-light max-w-xl mx-auto leading-relaxed">
+              On prépare une édition hebdo premium. Reviens à la date du premier
+              match (17 juin) pour t'abonner.
             </p>
           </div>
         </section>
