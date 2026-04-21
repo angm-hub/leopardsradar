@@ -19,11 +19,6 @@ const itemVariants: Variants = {
 };
 
 export function LeopardsHero() {
-  const { count } = useNewsletterCount();
-  const subscriberLabel =
-    count && count > 0
-      ? `Rejoint par ${count} fan${count > 1 ? "s" : ""} passionné${count > 1 ? "s" : ""}`
-      : "Rejoins les premiers abonnés";
   return (
     <section className="relative min-h-screen overflow-hidden bg-background">
       <AuroraShader className="absolute inset-0 h-full w-full" />
@@ -77,19 +72,8 @@ export function LeopardsHero() {
             variants={itemVariants}
             className="flex items-center gap-3 mt-2"
           >
-            <div className="flex">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <span
-                  key={i}
-                  className="h-7 w-7 rounded-full border-2 border-background bg-gradient-to-br from-primary/70 to-pos-att/60 first:ml-0 -ml-2"
-                  style={{
-                    background: `linear-gradient(135deg, hsl(${(i * 47) % 360} 70% 55%), hsl(${(i * 91) % 360} 60% 40%))`,
-                  }}
-                />
-              ))}
-            </div>
             <span className="text-sm text-foreground/50">
-              {subscriberLabel}
+              471 joueurs suivis · 19 pays · Mis à jour chaque semaine
             </span>
           </motion.div>
         </motion.div>
