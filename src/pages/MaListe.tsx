@@ -39,6 +39,23 @@ function Placeholder({ label, prompt }: { label: string; prompt: string }) {
 
 export default function MaListe() {
   const currentStep = useMaListeStore((s) => s.currentStep);
+  const [listCount, setListCount] = useState(0);
+
+  useEffect(() => {
+    // Fetch real count from database
+    const fetchCount = async () => {
+      const { data, error } = await supabase
+        .from("user_lists")
+        .select("id", { count: "exact", head: true })
+        .eq("is_submitted", true);
+      
+      if (!error && data !== null) {
+        const count = Array.isArray(data) ? data.length : 0;
+        setListCount(count);
+      }
+    };
+    fetchCount();
+  }, []);
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
@@ -46,7 +63,7 @@ export default function MaListe() {
       <main className="flex-1 pt-16">
         <AnimatePresence mode="wait">
           <motion.div key={currentStep} {...stepFade}>
-            {currentStep === "intro" && <IntroScreen />}
+            {currentStep === "intro" && <IntroScreen totalListsCreated={listCount} />}
             {currentStep === "formation" && <FormationPicker />}
             {currentStep === "lineup" && <LineupBuilder />}
             {currentStep === "bench" && <BenchBuilder />}
