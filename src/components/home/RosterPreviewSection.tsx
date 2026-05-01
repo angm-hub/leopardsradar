@@ -1,21 +1,13 @@
-import { motion, type Variants } from "framer-motion";
+import { motion } from "framer-motion";
 import { ArrowRight, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import PlayerCard from "./PlayerCard";
 import PlayerCardSkeleton from "@/components/ui/PlayerCardSkeleton";
 import { usePlayers } from "@/hooks/usePlayers";
-
-const gridVariants: Variants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.08 } },
-};
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
-};
+import { useFadeUpVariants } from "@/lib/motion";
 
 export function RosterPreviewSection() {
+  const motionConfig = useFadeUpVariants(0.08);
   // 6 first roster players, sorted by market value (matches /roster default)
   const { players, loading } = usePlayers({
     category: "roster",
@@ -63,16 +55,16 @@ export function RosterPreviewSection() {
           <>
             {/* Mobile: horizontal scroll */}
             <motion.div
-              variants={gridVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.1 }}
+              variants={motionConfig.container}
+              initial={motionConfig.initial}
+              whileInView={motionConfig.whileInView}
+              viewport={motionConfig.viewport}
               className="mt-12 flex md:hidden overflow-x-auto snap-x snap-mandatory gap-4 -mx-5 px-5 pb-2"
             >
               {players.map((player) => (
                 <motion.div
                   key={player.slug}
-                  variants={itemVariants}
+                  variants={motionConfig.item}
                   className="snap-start shrink-0 w-[70vw]"
                 >
                   <PlayerCard player={player} />
@@ -82,14 +74,14 @@ export function RosterPreviewSection() {
 
             {/* Tablet/Desktop grid */}
             <motion.div
-              variants={gridVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.1 }}
+              variants={motionConfig.container}
+              initial={motionConfig.initial}
+              whileInView={motionConfig.whileInView}
+              viewport={motionConfig.viewport}
               className="mt-12 hidden md:grid md:grid-cols-3 lg:grid-cols-6 gap-5 lg:gap-6"
             >
               {players.map((player) => (
-                <motion.div key={player.slug} variants={itemVariants}>
+                <motion.div key={player.slug} variants={motionConfig.item}>
                   <PlayerCard player={player} />
                 </motion.div>
               ))}

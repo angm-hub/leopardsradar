@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ReactNode } from "react";
 import { StrongGradient } from "@/components/ui/GradientBackgrounds";
 
@@ -9,14 +9,17 @@ interface EditorialSeparatorProps {
   context?: string;
 }
 
-const fadeUp = {
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: "-80px" },
-  transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
-};
-
 const EditorialSeparator = ({ variant, content, author, context }: EditorialSeparatorProps) => {
+  const reduced = useReducedMotion();
+  const fadeUp = reduced
+    ? { initial: false as const, animate: { opacity: 1, y: 0 } }
+    : {
+        initial: { opacity: 0, y: 24 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true, amount: 0 },
+        transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
+      };
+
   if (variant === "quote") {
     return (
       <section className="relative py-24 md:py-32 bg-background overflow-hidden">
