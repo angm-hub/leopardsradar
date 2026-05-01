@@ -1,4 +1,4 @@
-import { motion, type Variants } from "framer-motion";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
@@ -16,34 +16,6 @@ interface SectionWithMockupProps {
   className?: string;
 }
 
-const containerVariants: Variants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.2 } },
-};
-
-const textVariants: Variants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
-};
-
-const primaryImgVariants: Variants = {
-  hidden: { opacity: 0, y: 0 },
-  visible: {
-    opacity: 1,
-    y: 30,
-    transition: { duration: 1.2, ease: "easeOut", delay: 0.1 },
-  },
-};
-
-const secondaryImgVariants: Variants = {
-  hidden: { opacity: 0, y: 0 },
-  visible: {
-    opacity: 0.7,
-    y: -20,
-    transition: { duration: 1.2, ease: "easeOut" },
-  },
-};
-
 export function SectionWithMockup({
   badge,
   title,
@@ -56,13 +28,52 @@ export function SectionWithMockup({
   reverseLayout = false,
   className,
 }: SectionWithMockupProps) {
+  const reduced = useReducedMotion();
+
+  const containerVariants: Variants = reduced
+    ? { hidden: {}, visible: {} }
+    : { hidden: {}, visible: { transition: { staggerChildren: 0.2 } } };
+
+  const textVariants: Variants = reduced
+    ? { hidden: { opacity: 1, y: 0 }, visible: { opacity: 1, y: 0 } }
+    : {
+        hidden: { opacity: 0, y: 24 },
+        visible: {
+          opacity: 1,
+          y: 0,
+          transition: { duration: 0.6, ease: "easeOut" },
+        },
+      };
+
+  const primaryImgVariants: Variants = reduced
+    ? { hidden: { opacity: 1, y: 0 }, visible: { opacity: 1, y: 0 } }
+    : {
+        hidden: { opacity: 0, y: 0 },
+        visible: {
+          opacity: 1,
+          y: 30,
+          transition: { duration: 1.2, ease: "easeOut", delay: 0.1 },
+        },
+      };
+
+  const secondaryImgVariants: Variants = reduced
+    ? { hidden: { opacity: 0.7, y: 0 }, visible: { opacity: 0.7, y: 0 } }
+    : {
+        hidden: { opacity: 0, y: 0 },
+        visible: {
+          opacity: 0.7,
+          y: -20,
+          transition: { duration: 1.2, ease: "easeOut" },
+        },
+      };
+
   return (
     <section className={cn("relative py-24 md:py-32 overflow-hidden bg-background", className)}>
       <motion.div
         variants={containerVariants}
-        initial="hidden"
+        initial={reduced ? "visible" : "hidden"}
         whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
+        viewport={{ once: true, amount: 0 }}
         className="container-site grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center"
       >
         {/* Text */}

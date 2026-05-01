@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Globe, Trophy, MapPin, Radar as RadarIcon, ArrowUpRight } from "lucide-react";
 import { Pill } from "@/components/ui/Pill";
@@ -6,21 +6,15 @@ import { useHomeStats } from "@/hooks/useHomeStats";
 import { formatMarketValueCompact } from "@/lib/playerHelpers";
 import { ResidualGradient } from "@/components/ui/GradientBackgrounds";
 import { NextMatchCard } from "@/components/home/NextMatchCard";
+import { useFadeUp } from "@/lib/motion";
 
 const cardBase =
   "relative overflow-hidden rounded-2xl bg-card border border-border";
 
-function fadeUp(delay: number) {
-  return {
-    initial: { opacity: 0, y: 24 },
-    whileInView: { opacity: 1, y: 0 },
-    viewport: { once: true, amount: 0.2 },
-    transition: { duration: 0.6, ease: "easeOut" as const, delay },
-  };
-}
-
 export function StatsSection() {
   const { stats, loading: statsLoading, error: statsError } = useHomeStats();
+  const fadeUp = useFadeUp();
+  const reduced = useReducedMotion();
 
   const hasMarketValue = !!stats?.total_market_value && stats.total_market_value > 0;
   const totalValueLabel = statsLoading
@@ -92,10 +86,11 @@ export function StatsSection() {
               </div>
               <div className="mt-2 h-2 w-full rounded-full bg-border overflow-hidden">
                 <motion.div
-                  initial={{ width: 0 }}
-                  whileInView={{ width: `${tier1Ratio ?? 0}%` }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 1.2, ease: "easeOut", delay: 0.3 }}
+                  initial={reduced ? false : { width: 0 }}
+                  animate={reduced ? { width: `${tier1Ratio ?? 0}%` } : undefined}
+                  whileInView={reduced ? undefined : { width: `${tier1Ratio ?? 0}%` }}
+                  viewport={reduced ? undefined : { once: true }}
+                  transition={{ duration: reduced ? 0 : 1.2, ease: "easeOut", delay: reduced ? 0 : 0.3 }}
                   className="h-full rounded-full bg-gradient-to-r from-primary to-success"
                 />
               </div>
