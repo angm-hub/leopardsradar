@@ -1,12 +1,13 @@
-import { Activity, Sparkles, Feather, Clock } from "lucide-react";
+import { Activity, Sparkles, Feather } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import { NewsletterForm } from "@/components/newsletter/NewsletterForm";
 
 const PREVIEWS = [
   {
     icon: Activity,
     title: "Performances internationaux",
-    desc: "Comment vos Léopards ont joué ce week-end. Buts, assists, minutes, analyses.",
+    desc: "Comment tes Léopards ont joué ce week-end. Buts, assists, minutes, analyses.",
   },
   {
     icon: Sparkles,
@@ -27,23 +28,26 @@ export default function Newsletter() {
       <main>
         <section className="container-site pt-32 pb-16">
           <div className="mx-auto max-w-3xl text-center">
-            <span
-              className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-5 py-2.5 text-sm font-mono uppercase tracking-[0.18em] text-primary"
-              style={{ boxShadow: "0 0 0 1px hsl(var(--primary) / 0.15)" }}
-            >
-              <Clock className="h-3.5 w-3.5" />
-              Newsletter · Bientôt disponible
+            <span className="text-xs uppercase tracking-[0.2em] text-primary">
+              Le Radar Léopards
             </span>
-            <h1 className="mt-8 font-serif text-5xl md:text-6xl font-semibold text-foreground">
-              Le Radar Léopards.
-            </h1>
-            <p className="mt-6 text-xl text-muted">
+            <h1 className="mt-6 font-serif text-5xl md:text-6xl font-semibold text-foreground tracking-tight">
               Une édition. Tous les vendredis.
+            </h1>
+            <p className="mt-6 text-xl text-muted-light max-w-xl mx-auto">
+              Les performances de tes Léopards, un talent à surveiller, et
+              l'analyse de la semaine. Soigné. Court. Gratuit.
             </p>
-            <p className="mt-8 text-base text-muted-light max-w-xl mx-auto leading-relaxed">
-              On prépare une édition hebdo premium. Reviens à la date du premier
-              match (17 juin) pour t'abonner.
-            </p>
+
+            <div className="mt-10 flex flex-col items-center">
+              <NewsletterForm
+                source="page"
+                variant="full"
+                buttonLabel="Recevoir l'édition du vendredi"
+                placeholder="Ton email"
+                helper="Une édition par semaine. Zéro spam. Désinscription en un clic."
+              />
+            </div>
           </div>
         </section>
 
