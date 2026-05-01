@@ -6,9 +6,19 @@ import PlayerCard from "@/components/home/PlayerCard";
 import PlayerCardSkeleton from "@/components/ui/PlayerCardSkeleton";
 import { Button } from "@/components/ui/ButtonPrimitive";
 import { Select } from "@/components/ui/SelectPrimitive";
+import { RosterHero } from "@/components/roster/RosterHero";
+import { PositionSection } from "@/components/roster/PositionSection";
+import { RosterModeToggle, type RosterMode } from "@/components/roster/RosterModeToggle";
 import { usePlayers } from "@/hooks/usePlayers";
 import { useHomeStats } from "@/hooks/useHomeStats";
 import type { DBPosition } from "@/types/dbPlayer";
+
+const POSITION_ORDER: DBPosition[] = [
+  "Goalkeeper",
+  "Defender",
+  "Midfield",
+  "Attack",
+];
 
 type PositionFilter = "ALL" | DBPosition;
 type SortKey = "VALUE_DESC" | "CAPS_DESC" | "NAME_ASC" | "AGE_ASC" | "AGE_DESC";
@@ -43,6 +53,7 @@ const Roster = () => {
   const [sort, setSort] = useState<SortKey>("VALUE_DESC");
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
+  const [mode, setMode] = useState<RosterMode>("editorial");
 
   // 300ms debounce on the search input
   useEffect(() => {
@@ -84,6 +95,26 @@ const Roster = () => {
     return list;
   }, [players, position, sort, debouncedQuery]);
 
+  // Le mode éditorial est désactivé dès qu'un filtre est actif :
+  // - filtre Poste : on ne veut pas montrer 4 sections vides
+  // - filtre Tri non-VALUE_DESC : le hero est défini par la valeur
+  // - search : on veut voir les résultats à plat
+  const forcedListe = filtersActive;
+  const effectiveMode: RosterMode = forcedListe ? "liste" : mode;
+
+  // Group by position pour le mode éditorial — utilise `players` (non filtré)
+  // car en éditorial il n'y a pas de filtre poste/search
+  const grouped = useMemo(() => {
+    const map = new Map<DBPosition, typeof players>();
+    POSITION_ORDER.forEach((pos) => map.set(pos, []));
+    players.forEach((p) => {
+      if (p.position && map.has(p.position)) {
+        map.get(p.position)!.push(p);
+      }
+    });
+    return map;
+  }, [players]);
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
@@ -101,10 +132,20 @@ const Roster = () => {
           <p className="mt-3 text-lg text-muted-light">
             {`${statsLoading ? "—" : (rosterCount ?? "—")} internationaux RDC — Saison 2025/26`}
           </p>
+          <p className="mt-2 max-w-xl text-sm text-muted">
+            Composition publique du staff RDC, mise à jour à chaque trêve internationale.
+          </p>
         </header>
 
         <div className="sticky top-16 z-20 bg-background/85 backdrop-blur-lg border-y border-border">
           <div className="container-site py-4 flex flex-wrap gap-3 items-center">
+            <RosterModeToggle
+              current={effectiveMode}
+              onChange={setMode}
+              forcedListe={forcedListe}
+            />
+            <span className="hidden md:inline-block h-6 w-px bg-border mx-1" />
+
             <Select
               label="Poste"
               options={POSITION_OPTIONS}
@@ -165,6 +206,17 @@ const Roster = () => {
                   Réinitialiser les filtres
                 </Button>
               ) : null}
+            </div>
+          ) : effectiveMode === "editorial" ? (
+            <div className="space-y-16">
+              <RosterHero players={players.slice(0, 3)} />
+              {POSITION_ORDER.map((pos) => (
+                <PositionSection
+                  key={pos}
+                  position={pos}
+                  players={grouped.get(pos) ?? []}
+                />
+              ))}
             </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">

@@ -9,6 +9,7 @@ const NAV_LINKS: Array<{ label: string; href: string; badge?: string }> = [
   { label: "Roster", href: "/roster" },
   { label: "Radar", href: "/radar" },
   { label: "Best XI", href: "/best-xi" },
+  { label: "Histoires", href: "/histoires" },
   { label: "Ma Liste", href: "/ma-liste", badge: "NOUVEAU" },
   { label: "À propos", href: "/a-propos" },
   { label: "Newsletter", href: "/newsletter" },

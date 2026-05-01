@@ -1,11 +1,24 @@
+import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, ExternalLink, Share2 } from "lucide-react";
+import {
+  ArrowLeft,
+  ExternalLink,
+  Twitter,
+  MessageCircle,
+  Link2,
+  Check,
+  ListPlus,
+} from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { Button } from "@/components/ui/ButtonPrimitive";
 import { StatBlock } from "@/components/ui/StatBlock";
 import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
+import { PlayerWhySection } from "@/components/player/PlayerWhySection";
+import { PlayerIdentityCards } from "@/components/player/PlayerIdentityCards";
+import { PlayerCareerCard } from "@/components/player/PlayerCareerCard";
+import { RelatedPlayers } from "@/components/player/RelatedPlayers";
 import { usePlayer } from "@/hooks/usePlayer";
 import { useDominantColor } from "@/hooks/useDominantColor";
 import { cn } from "@/lib/utils";
@@ -61,16 +74,10 @@ function PlayerSkeleton() {
   );
 }
 
-function formatDate(d: string | null) {
-  if (!d) return "—";
-  const date = new Date(d);
-  if (Number.isNaN(date.getTime())) return "—";
-  return date.toLocaleDateString("fr-FR", { day: "2-digit", month: "long", year: "numeric" });
-}
-
 export default function PlayerPage() {
   const { slug } = useParams<{ slug: string }>();
   const { player, loading } = usePlayer(slug);
+  const [copied, setCopied] = useState(false);
 
   const dominant = useDominantColor(player?.image_url ?? undefined);
   const [r, g, b] = dominant ?? [60, 60, 70];
@@ -86,12 +93,41 @@ export default function PlayerPage() {
   const rootHref = isRoster ? "/roster" : "/radar";
   const rootLabel = isRoster ? "Roster" : "Radar";
 
+  const categoryKicker =
+    player.player_category === "roster"
+      ? "Roster · Sélection"
+      : player.player_category === "heritage"
+        ? "Héritage RDC"
+        : `Radar · ${player.tier === "tier1" ? "Tier 1" : player.tier === "tier2" ? "Tier 2" : "Tier libre"}`;
+
   const seasonEmpty =
     !player.season_games &&
     !player.season_goals &&
     !player.season_assists &&
     !player.season_minutes &&
     !player.season_rating;
+
+  const handleShare = (channel: "twitter" | "whatsapp" | "copy") => {
+    const url = typeof window !== "undefined" ? window.location.href : "";
+    const text = `${player.name} — ${player.current_club ?? "profil RDC"} sur Léopards Radar`;
+    if (channel === "twitter") {
+      window.open(
+        `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
+        "_blank",
+        "noopener,noreferrer",
+      );
+    } else if (channel === "whatsapp") {
+      window.open(
+        `https://wa.me/?text=${encodeURIComponent(`${text} ${url}`)}`,
+        "_blank",
+        "noopener,noreferrer",
+      );
+    } else if (channel === "copy") {
+      navigator.clipboard?.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -146,7 +182,10 @@ export default function PlayerPage() {
 
               {/* RIGHT */}
               <div className="flex flex-col gap-6 md:col-span-3">
-                <h1 className="font-serif text-5xl md:text-7xl font-semibold leading-[1.05] text-balance text-foreground">
+                <p className="text-[10px] uppercase tracking-[0.3em] text-primary/85 font-mono">
+                  {categoryKicker}
+                </p>
+                <h1 className="-mt-3 font-serif text-5xl md:text-7xl font-semibold leading-[1.05] text-balance text-foreground">
                   {player.name}
                 </h1>
 
@@ -210,7 +249,12 @@ export default function PlayerPage() {
                   </span>
                 </p>
 
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-2 pt-1">
+                  <Link to="/ma-liste">
+                    <Button size="sm">
+                      <ListPlus className="h-4 w-4" /> Ajouter à ma liste
+                    </Button>
+                  </Link>
                   {player.transfermarkt_id ? (
                     <a
                       href={`https://www.transfermarkt.com/profil/spieler/${player.transfermarkt_id}`}
@@ -222,8 +266,34 @@ export default function PlayerPage() {
                       </Button>
                     </a>
                   ) : null}
-                  <Button variant="outline" size="sm">
-                    <Share2 className="h-4 w-4" /> Partager
+                  <span className="mx-1 hidden sm:inline-block self-center h-5 w-px bg-border" />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleShare("twitter")}
+                    aria-label="Partager sur Twitter"
+                  >
+                    <Twitter className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleShare("whatsapp")}
+                    aria-label="Partager sur WhatsApp"
+                  >
+                    <MessageCircle className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleShare("copy")}
+                    aria-label="Copier le lien"
+                  >
+                    {copied ? (
+                      <Check className="h-4 w-4" />
+                    ) : (
+                      <Link2 className="h-4 w-4" />
+                    )}
                   </Button>
                 </div>
               </div>
@@ -231,47 +301,46 @@ export default function PlayerPage() {
           </div>
         </section>
 
-        {/* INFOS */}
-        <section className="container-site py-16">
-          <h2 className="font-serif text-3xl text-foreground">Infos.</h2>
-          <dl className="mt-8 grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-6">
-            {[
-              ["Date de naissance", formatDate(player.date_of_birth)],
-              ["Lieu de naissance", player.place_of_birth ?? "—"],
-              ["Pays de naissance", player.country_of_birth ?? "—"],
-              ["Taille", player.height_cm ? `${player.height_cm} cm` : "—"],
-              [
-                "Pied fort",
-                player.foot
-                  ? player.foot === "left"
-                    ? "Gauche"
-                    : player.foot === "right"
-                      ? "Droit"
-                      : "Ambidextre"
-                  : "—",
-              ],
-              ["Agent", player.agent ?? "—"],
-              ["Fin de contrat", formatDate(player.contract_expires)],
-              ["Prêté par", player.on_loan_from ?? "—"],
-            ].map(([label, value]) => (
-              <div key={label as string}>
-                <dt className="text-xs uppercase tracking-[0.2em] text-muted">{label}</dt>
-                <dd className="mt-1 text-foreground">{value}</dd>
-              </div>
-            ))}
-          </dl>
+        {/* B — POURQUOI : éditorial juste sous le hero */}
+        <PlayerWhySection
+          eligibilityNote={player.eligibility_note}
+          eligibilityStatus={player.eligibility_status}
+          category={player.player_category}
+          capsRdc={player.caps_rdc}
+        />
+
+        {/* C — IDENTITÉ + CARRIÈRE : refonte de l'ancienne section "Infos" plate */}
+        <section className="container-site py-12 border-t border-border">
+          <h2 className="font-serif text-3xl text-foreground mb-6">Identité.</h2>
+          <PlayerIdentityCards
+            dateOfBirth={player.date_of_birth}
+            placeOfBirth={player.place_of_birth}
+            countryOfBirth={player.country_of_birth}
+            foot={player.foot}
+            heightCm={player.height_cm}
+          />
+          <div className="mt-6">
+            <PlayerCareerCard
+              currentClub={player.current_club}
+              contractExpires={player.contract_expires}
+              agent={player.agent}
+              onLoanFrom={player.on_loan_from}
+            />
+          </div>
         </section>
 
-        {/* SÉLECTION */}
-        <section className="container-site py-16 border-t border-border">
+        {/* SÉLECTION RDC (note retirée — remontée dans PlayerWhySection) */}
+        <section className="container-site py-12 border-t border-border">
           <h2 className="font-serif text-3xl text-foreground">En sélection RDC.</h2>
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="rounded-card border border-border bg-card p-8">
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+            <div className="rounded-card border border-border bg-card p-6 md:p-8">
               <StatBlock label="Sélections (caps)" value={player.caps_rdc} />
             </div>
-            <div className="rounded-card border border-border bg-card p-8 md:col-span-2">
-              <span className="text-xs uppercase tracking-[0.2em] text-muted">Statut d'éligibilité</span>
-              <div className="mt-2">
+            <div className="rounded-card border border-border bg-card p-6 md:p-8 md:col-span-2">
+              <span className="text-[10px] uppercase tracking-[0.25em] text-muted font-mono">
+                Statut d'éligibilité
+              </span>
+              <div className="mt-2.5">
                 <span
                   className={cn(
                     "inline-flex items-center rounded-full border px-3 py-1 text-xs uppercase tracking-wider",
@@ -282,36 +351,50 @@ export default function PlayerPage() {
                   {eligibilityLabel(player.eligibility_status)}
                 </span>
               </div>
-              {player.eligibility_note ? (
-                <p className="mt-4 text-foreground/80 leading-relaxed">{player.eligibility_note}</p>
-              ) : null}
             </div>
           </div>
         </section>
 
         {/* STATS SAISON */}
-        <section className="container-site py-16 border-t border-border">
-          <h2 className="font-serif text-3xl text-foreground">Saison 2025/26 — Club.</h2>
+        <section className="container-site py-12 border-t border-border">
+          <h2 className="font-serif text-3xl text-foreground">
+            Saison 2025/26 — Club.
+          </h2>
           {seasonEmpty ? (
-            <p className="mt-6 text-muted italic">Pas encore disponible.</p>
+            <div className="mt-6 rounded-card border border-dashed border-border bg-card/30 p-8 text-center">
+              <p className="text-muted-light text-sm">
+                Statistiques de saison non encore disponibles pour ce profil.
+              </p>
+            </div>
           ) : (
-            <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+            <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
               {[
                 { label: "Matchs", value: player.season_games },
                 { label: "Buts", value: player.season_goals },
                 { label: "Passes décisives", value: player.season_assists },
                 {
                   label: "Note moyenne",
-                  value: player.season_rating ? player.season_rating.toFixed(2) : "—",
+                  value: player.season_rating
+                    ? player.season_rating.toFixed(2)
+                    : "—",
                 },
               ].map((s) => (
-                <div key={s.label} className="rounded-card border border-border bg-card p-8">
+                <div
+                  key={s.label}
+                  className="rounded-card border border-border bg-card p-6 md:p-8"
+                >
                   <StatBlock label={s.label} value={s.value} />
                 </div>
               ))}
             </div>
           )}
         </section>
+
+        {/* E — PLUS DE LÉOPARDS : 4 joueurs du même poste */}
+        <RelatedPlayers
+          position={player.position}
+          excludeSlug={player.slug}
+        />
 
         <div className="container-site py-12">
           <Link

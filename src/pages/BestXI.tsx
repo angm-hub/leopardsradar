@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
-import { Link2, MessageCircle, Twitter, Instagram, Clock } from "lucide-react";
+import { Link2, MessageCircle, Twitter, Instagram, ArrowRight } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/ButtonPrimitive";
 import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
 import { useBestXI, type BestXIPlayer, type BestXISlot } from "@/hooks/useBestXI";
-import { POSITION_LABEL } from "@/lib/playerHelpers";
-import type { DBPosition } from "@/types/dbPlayer";
+import { XIStatsPanel } from "@/components/best-xi/XIStatsPanel";
+import { XIRosterCard } from "@/components/best-xi/XIRosterCard";
 
 // Pitch slot coordinates per formation (% of pitch box, y=0 = attack)
 const FORMATION_COORDS: Record<string, Record<string, { x: number; y: number }[]>> = {
@@ -179,119 +179,178 @@ export default function BestXI() {
   const { data, loading, error } = useBestXI();
 
   const positionedSlots = data ? getSlotCoords(data.formation, data.slots) : [];
+  const playersInOrder = positionedSlots
+    .map((slot) => data?.playersById[slot.player_id])
+    .filter((p): p is BestXIPlayer => !!p);
+
+  const handleShare = (channel: "twitter" | "whatsapp" | "copy") => {
+    if (!data) return;
+    const url = typeof window !== "undefined" ? window.location.href : "";
+    const text = `${data.title} — Le Best XI Diaspora cette semaine sur Léopards Radar`;
+    if (channel === "twitter") {
+      window.open(
+        `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
+        "_blank",
+        "noopener,noreferrer",
+      );
+    } else if (channel === "whatsapp") {
+      window.open(
+        `https://wa.me/?text=${encodeURIComponent(`${text} ${url}`)}`,
+        "_blank",
+        "noopener,noreferrer",
+      );
+    } else if (channel === "copy") {
+      navigator.clipboard?.writeText(url);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
       <main>
-        <header className="container-site pt-32 pb-12">
-          <h1 className="font-serif text-6xl text-foreground">
+        <header className="container-site pt-32 pb-10">
+          <nav aria-label="breadcrumb" className="text-sm text-muted">
+            <a href="/" className="hover:text-foreground transition-colors">
+              Home
+            </a>
+            <span className="mx-2 text-muted/60">/</span>
+            <span className="text-foreground/80">Best XI</span>
+          </nav>
+          <h1 className="mt-4 font-serif text-5xl md:text-6xl text-foreground tracking-tight">
             Le Best XI Diaspora.
           </h1>
-          <p className="mt-6 max-w-2xl text-xl text-muted">
+          <p className="mt-3 max-w-2xl text-lg text-muted-light">
             Chaque semaine, notre composition rêvée des Léopards.
           </p>
         </header>
 
-        {/* Current composition */}
         <section className="container-site pb-20">
           {loading ? (
-            <div className="mx-auto h-[600px] w-full max-w-lg animate-pulse rounded-card bg-card" />
+            <div className="grid lg:grid-cols-5 gap-8">
+              <div className="lg:col-span-2 space-y-4">
+                <div className="h-8 w-40 animate-pulse rounded bg-card" />
+                <div className="h-12 w-full animate-pulse rounded bg-card" />
+                <div className="h-32 w-full animate-pulse rounded-card bg-card" />
+              </div>
+              <div className="lg:col-span-3">
+                <div className="aspect-[4/5] w-full animate-pulse rounded-card bg-card" />
+              </div>
+            </div>
           ) : error || !data ? (
             <p className="text-center text-muted py-20">
               Aucune composition publiée pour le moment.
             </p>
           ) : (
             <>
-              <div className="flex items-baseline justify-between flex-wrap gap-2">
-                <p className="text-sm uppercase tracking-[0.2em] text-muted">
-                  {formatDate(data.published_at)}
-                </p>
-                <span className="font-mono text-xs text-primary">
-                  Formation {data.formation}
-                </span>
-              </div>
-              <h2 className="mt-2 font-serif text-2xl md:text-3xl text-foreground">
-                {data.title}
-              </h2>
+              {/* Split éditorial / pitch — façon SeatGeek 2-col */}
+              <div className="grid lg:grid-cols-5 gap-8 lg:gap-10 items-start">
+                {/* Colonne éditoriale (40%) */}
+                <div className="lg:col-span-2 space-y-6">
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <span className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-[10px] font-mono uppercase tracking-[0.2em] text-primary">
+                      Cette semaine
+                    </span>
+                    <span className="text-xs uppercase tracking-[0.2em] text-muted">
+                      {formatDate(data.published_at)}
+                    </span>
+                  </div>
 
-              <div className="mx-auto mt-6 aspect-[4/5] w-full max-w-lg overflow-hidden rounded-card border border-border bg-[#0A0A0B] shadow-2xl relative">
-                <PitchSVG />
-                {positionedSlots.map((slot, i) => (
-                  <PitchPlayer
-                    key={`${slot.position}-${i}`}
-                    slot={slot}
-                    player={data.playersById[slot.player_id]}
-                  />
-                ))}
-                <div className="absolute bottom-3 left-0 right-0 z-20 text-center font-mono text-[9px] uppercase tracking-[0.25em] text-white/30">
-                  leopardsradar.com
+                  <div>
+                    <h2 className="font-serif text-3xl md:text-4xl text-foreground tracking-tight leading-tight">
+                      {data.title}
+                    </h2>
+                    <p className="mt-2 font-mono text-sm text-muted">
+                      Formation · {data.formation}
+                    </p>
+                  </div>
+
+                  <XIStatsPanel players={playersInOrder} />
+
+                  {data.editorial_note ? (
+                    <div className="border-l-2 border-primary/50 pl-4">
+                      <p className="font-serif text-base italic leading-relaxed text-foreground/85">
+                        {data.editorial_note}
+                      </p>
+                    </div>
+                  ) : null}
+
+                  {/* Partage — câblé */}
+                  <div className="pt-2">
+                    <p className="text-[10px] uppercase tracking-[0.25em] text-muted font-mono mb-2.5">
+                      Partager ce XI
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleShare("twitter")}
+                      >
+                        <Twitter className="h-4 w-4" /> Twitter
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleShare("whatsapp")}
+                      >
+                        <MessageCircle className="h-4 w-4" /> WhatsApp
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleShare("copy")}
+                      >
+                        <Link2 className="h-4 w-4" /> Copier le lien
+                      </Button>
+                      <Button variant="outline" size="sm" disabled title="Bientôt">
+                        <Instagram className="h-4 w-4" /> Instagram
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Colonne pitch (60%) */}
+                <div className="lg:col-span-3">
+                  <div className="aspect-[4/5] w-full overflow-hidden rounded-card border border-border bg-[#0A0A0B] shadow-2xl relative">
+                    <PitchSVG />
+                    {/* Watermark formation, en haut à gauche du pitch */}
+                    <div className="absolute top-3 left-3 z-20 font-mono text-[10px] uppercase tracking-[0.25em] text-white/40">
+                      {data.formation}
+                    </div>
+                    {positionedSlots.map((slot, i) => (
+                      <PitchPlayer
+                        key={`${slot.position}-${i}`}
+                        slot={slot}
+                        player={data.playersById[slot.player_id]}
+                      />
+                    ))}
+                    <div className="absolute bottom-3 left-0 right-0 z-20 text-center font-mono text-[9px] uppercase tracking-[0.25em] text-white/30">
+                      leopardsradar.com
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              {/* Share */}
-              <div className="mt-8 flex flex-wrap justify-center gap-3">
-                <Button variant="outline" size="sm">
-                  <Twitter className="h-4 w-4" /> Partager
-                </Button>
-                <Button variant="outline" size="sm">
-                  <Instagram className="h-4 w-4" /> Instagram
-                </Button>
-                <Button variant="outline" size="sm">
-                  <MessageCircle className="h-4 w-4" /> WhatsApp
-                </Button>
-                <Button variant="outline" size="sm">
-                  <Link2 className="h-4 w-4" /> Copier
-                </Button>
-              </div>
-
-              {data.editorial_note ? (
-                <p className="mx-auto mt-10 max-w-prose text-center font-serif text-lg italic leading-relaxed text-foreground/80">
-                  {data.editorial_note}
-                </p>
-              ) : null}
-
-              {/* Player roster grid */}
+              {/* Roster détaillé — sous le split, full width */}
               <div className="mt-16">
-                <h3 className="font-serif text-2xl text-foreground mb-6">
-                  Le onze.
-                </h3>
+                <div className="flex items-baseline justify-between flex-wrap gap-2 mb-6">
+                  <h3 className="font-serif text-2xl text-foreground">
+                    Le onze, joueur par joueur.
+                  </h3>
+                  <span className="text-xs text-muted-light font-mono">
+                    Cliquez pour la fiche complète →
+                  </span>
+                </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {positionedSlots.map((slot, i) => {
                     const player = data.playersById[slot.player_id];
                     if (!player) return null;
                     return (
-                      <Link
+                      <XIRosterCard
                         key={`${slot.position}-${i}`}
-                        to={`/player/${player.slug}`}
-                        className="group flex items-center gap-4 rounded-card border border-border bg-card p-4 transition-colors hover:border-border-hover hover:bg-card-hover"
-                      >
-                        <PlayerAvatar
-                          name={player.name}
-                          src={player.image_url}
-                          className="h-14 w-14 rounded-full shrink-0 ring-1 ring-border"
-                          initialsClassName="text-base"
-                        />
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center gap-2">
-                            <span className="font-mono text-[10px] text-primary uppercase tracking-wider">
-                              {slot.position}
-                            </span>
-                            <span className="text-[10px] text-muted">
-                              #{slot.label}
-                            </span>
-                          </div>
-                          <p className="font-serif text-base text-foreground truncate group-hover:text-primary transition-colors">
-                            {player.name}
-                          </p>
-                          <p className="text-xs text-muted truncate">
-                            {player.current_club ?? "—"}
-                            {player.position
-                              ? ` · ${POSITION_LABEL[player.position as DBPosition] ?? player.position}`
-                              : ""}
-                          </p>
-                        </div>
-                      </Link>
+                        player={player}
+                        number={slot.label}
+                        tacticalPosition={slot.position}
+                      />
                     );
                   })}
                 </div>
@@ -300,22 +359,24 @@ export default function BestXI() {
           )}
         </section>
 
-        {/* V2 tease */}
-        <section className="container-site py-16">
-          <div className="mx-auto max-w-2xl rounded-card border border-primary/30 bg-gradient-to-br from-card to-background p-8 text-center">
-            <span className="inline-block rounded-full bg-primary/15 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-primary">
-              Bientôt
+        {/* CTA Ma Liste — remplace l'ancienne V2 tease */}
+        <section className="container-site pb-24">
+          <div className="mx-auto max-w-2xl rounded-card border border-primary/30 bg-gradient-to-br from-primary/10 via-card to-background p-8 text-center">
+            <span className="inline-block rounded-full bg-primary/15 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-primary">
+              À ton tour
             </span>
-            <h3 className="mt-4 font-serif text-2xl text-foreground">
-              Compose TON Best XI Léopards.
+            <h3 className="mt-4 font-serif text-2xl md:text-3xl text-foreground">
+              Compose ta sélection des 26.
             </h3>
-            <p className="mt-3 text-muted">
-              Drag-and-drop, partage sur les réseaux, vote communautaire. On finalise.
+            <p className="mt-3 text-muted-light max-w-md mx-auto">
+              Notre Best XI t'inspire ? Bâtis le tien — ton onze, ton banc, ton
+              capitaine — et partage ta liste avec un lien.
             </p>
-            <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-5 py-2.5 text-sm font-mono uppercase tracking-[0.18em] text-primary">
-              <Clock className="h-3.5 w-3.5" />
-              Newsletter · Bientôt
-            </div>
+            <Link to="/ma-liste" className="inline-block mt-6">
+              <Button>
+                Composer ma liste <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
           </div>
         </section>
       </main>
