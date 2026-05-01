@@ -1,28 +1,48 @@
+import { lazy, Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Home from "./pages/Home.tsx";
-import Roster from "./pages/Roster.tsx";
-import Player from "./pages/Player.tsx";
-import Radar from "./pages/Radar.tsx";
-import BestXI from "./pages/BestXI.tsx";
-import About from "./pages/About.tsx";
-import Newsletter from "./pages/Newsletter.tsx";
-import NewsletterConfirm from "./pages/NewsletterConfirm.tsx";
-import NewsletterUnsubscribe from "./pages/NewsletterUnsubscribe.tsx";
-import Auth from "./pages/Auth.tsx";
-import AdminPhotos from "./pages/AdminPhotos.tsx";
-import MaListe from "./pages/MaListe.tsx";
-import MaListePublic from "./pages/MaListePublic.tsx";
-import MentionsLegales from "./pages/MentionsLegales.tsx";
-import Confidentialite from "./pages/Confidentialite.tsx";
-import Cgu from "./pages/Cgu.tsx";
-import NotFound from "./pages/NotFound.tsx";
 import { PromoBanner } from "./components/layout/PromoBanner";
 
+/**
+ * Route-level code splitting.
+ *
+ * Home is loaded eagerly so the landing page paints without a network
+ * round-trip. Every other route is lazy-loaded — Vite emits a separate
+ * chunk per page, which gives us proper bundle splitting without
+ * breaking React's module load order (the trap that killed P2's
+ * manualChunks approach).
+ */
+const Roster = lazy(() => import("./pages/Roster.tsx"));
+const Player = lazy(() => import("./pages/Player.tsx"));
+const Radar = lazy(() => import("./pages/Radar.tsx"));
+const BestXI = lazy(() => import("./pages/BestXI.tsx"));
+const About = lazy(() => import("./pages/About.tsx"));
+const Newsletter = lazy(() => import("./pages/Newsletter.tsx"));
+const NewsletterConfirm = lazy(() => import("./pages/NewsletterConfirm.tsx"));
+const NewsletterUnsubscribe = lazy(
+  () => import("./pages/NewsletterUnsubscribe.tsx"),
+);
+const Auth = lazy(() => import("./pages/Auth.tsx"));
+const AdminPhotos = lazy(() => import("./pages/AdminPhotos.tsx"));
+const MaListe = lazy(() => import("./pages/MaListe.tsx"));
+const MaListePublic = lazy(() => import("./pages/MaListePublic.tsx"));
+const MentionsLegales = lazy(() => import("./pages/MentionsLegales.tsx"));
+const Confidentialite = lazy(() => import("./pages/Confidentialite.tsx"));
+const Cgu = lazy(() => import("./pages/Cgu.tsx"));
+const NotFound = lazy(() => import("./pages/NotFound.tsx"));
+
 const queryClient = new QueryClient();
+
+/** Minimal fallback while a route chunk loads — keeps the dark background
+ * visible to avoid a white flash. No spinner: chunks are usually already
+ * in HTTP cache and the swap is sub-50ms. */
+function RouteFallback() {
+  return <div className="min-h-screen bg-background" aria-hidden />;
+}
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -31,27 +51,32 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <PromoBanner />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/roster" element={<Roster />} />
-          <Route path="/player/:slug" element={<Player />} />
-          <Route path="/radar" element={<Radar />} />
-          <Route path="/best-xi" element={<BestXI />} />
-          <Route path="/a-propos" element={<About />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/newsletter" element={<Newsletter />} />
-          <Route path="/newsletter/confirm" element={<NewsletterConfirm />} />
-          <Route path="/newsletter/unsubscribe" element={<NewsletterUnsubscribe />} />
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/admin/photos" element={<AdminPhotos />} />
-          <Route path="/ma-liste" element={<MaListe />} />
-          <Route path="/ma-liste/:slug" element={<MaListePublic />} />
-          <Route path="/mentions-legales" element={<MentionsLegales />} />
-          <Route path="/confidentialite" element={<Confidentialite />} />
-          <Route path="/cgu" element={<Cgu />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <Suspense fallback={<RouteFallback />}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/roster" element={<Roster />} />
+            <Route path="/player/:slug" element={<Player />} />
+            <Route path="/radar" element={<Radar />} />
+            <Route path="/best-xi" element={<BestXI />} />
+            <Route path="/a-propos" element={<About />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/newsletter" element={<Newsletter />} />
+            <Route path="/newsletter/confirm" element={<NewsletterConfirm />} />
+            <Route
+              path="/newsletter/unsubscribe"
+              element={<NewsletterUnsubscribe />}
+            />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/admin/photos" element={<AdminPhotos />} />
+            <Route path="/ma-liste" element={<MaListe />} />
+            <Route path="/ma-liste/:slug" element={<MaListePublic />} />
+            <Route path="/mentions-legales" element={<MentionsLegales />} />
+            <Route path="/confidentialite" element={<Confidentialite />} />
+            <Route path="/cgu" element={<Cgu />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
