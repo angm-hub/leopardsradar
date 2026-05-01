@@ -14,6 +14,11 @@ export interface BestXIPlayer {
   image_url: string | null;
   current_club: string | null;
   position: string | null;
+  age: number | null;
+  market_value_eur: number | null;
+  nationalities: string[];
+  other_nationalities: string[];
+  caps_rdc: number | null;
 }
 
 export interface BestXIComposition {
@@ -60,7 +65,9 @@ export function useBestXI() {
         // 2. Fetch player details
         const { data: players, error: playersErr } = await supabase
           .from("players")
-          .select("id, name, slug, image_url, current_club, position")
+          .select(
+            "id, name, slug, image_url, current_club, position, age, market_value_eur, nationalities, other_nationalities, caps_rdc",
+          )
           .in("id", playerIds)
           .neq("eligibility_status", "ineligible");
 

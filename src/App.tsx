@@ -33,6 +33,8 @@ const MaListePublic = lazy(() => import("./pages/MaListePublic.tsx"));
 const MentionsLegales = lazy(() => import("./pages/MentionsLegales.tsx"));
 const Confidentialite = lazy(() => import("./pages/Confidentialite.tsx"));
 const Cgu = lazy(() => import("./pages/Cgu.tsx"));
+const Histoires = lazy(() => import("./pages/Histoires.tsx"));
+const Histoire = lazy(() => import("./pages/Histoire.tsx"));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 
 const queryClient = new QueryClient();
@@ -73,6 +75,8 @@ const App = () => (
             <Route path="/mentions-legales" element={<MentionsLegales />} />
             <Route path="/confidentialite" element={<Confidentialite />} />
             <Route path="/cgu" element={<Cgu />} />
+            <Route path="/histoires" element={<Histoires />} />
+            <Route path="/histoires/:slug" element={<Histoire />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

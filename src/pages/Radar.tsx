@@ -9,6 +9,8 @@ import { Select } from "@/components/ui/SelectPrimitive";
 import { usePlayers } from "@/hooks/usePlayers";
 import { useHomeStats } from "@/hooks/useHomeStats";
 import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
+import { ViewTabs, type RadarView } from "@/components/radar/ViewTabs";
+import { RadarCanvas } from "@/components/radar/RadarCanvas";
 import {
   POSITION_BADGE,
   POSITION_LABEL,
@@ -132,6 +134,7 @@ export default function Radar() {
   const [nation, setNation] = useState<string>("ALL");
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
+  const [view, setView] = useState<RadarView>("carte");
 
   useEffect(() => {
     const t = setTimeout(() => setDebouncedQuery(query.trim().toLowerCase()), 300);
@@ -201,6 +204,10 @@ export default function Radar() {
 
         <div className="sticky top-16 z-20 bg-background/85 backdrop-blur-lg border-y border-border">
           <div className="container-site py-4 flex flex-wrap gap-3 items-center">
+            <ViewTabs current={view} onChange={setView} />
+
+            <span className="hidden md:inline-block h-6 w-px bg-border mx-1" />
+
             <Select
               label="Poste"
               options={POSITION_OPTIONS}
@@ -245,14 +252,18 @@ export default function Radar() {
 
         <section className="container-site py-12">
           {loading ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-              {Array.from({ length: 8 }).map((_, i) => (
-                <PlayerCardSkeleton key={i} />
-              ))}
-            </div>
+            view === "carte" ? (
+              <div className="aspect-square md:aspect-[4/3] w-full rounded-card border border-border/60 bg-card animate-pulse" />
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <PlayerCardSkeleton key={i} />
+                ))}
+              </div>
+            )
           ) : error ? (
             <p className="py-16 text-center text-muted-light">{error}</p>
-          ) : filtered.length === 0 ? (
+          ) : filtered.length === 0 && view !== "carte" ? (
             <div className="flex flex-col items-center justify-center py-20 gap-5">
               <Search className="h-10 w-10 text-foreground/30" />
               <p className="text-muted-light">
@@ -266,6 +277,8 @@ export default function Radar() {
                 </Button>
               ) : null}
             </div>
+          ) : view === "carte" ? (
+            <RadarCanvas players={filtered} totalRoster={players.length} />
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
               {filtered.map((p) => (
