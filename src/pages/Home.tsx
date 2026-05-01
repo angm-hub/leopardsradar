@@ -16,6 +16,19 @@ const Divider = () => (
 );
 
 const Home = () => {
+  const { hash } = useLocation();
+  useEffect(() => {
+    if (hash) {
+      const el = document.getElementById(hash.slice(1));
+      if (el) {
+        // Defer until layout is ready
+        requestAnimationFrame(() =>
+          el.scrollIntoView({ behavior: "smooth", block: "start" }),
+        );
+      }
+    }
+  }, [hash]);
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
