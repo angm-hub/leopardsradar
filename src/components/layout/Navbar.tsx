@@ -98,9 +98,8 @@ export function Navbar() {
           <Link
             to="/newsletter"
             className="inline-flex items-center gap-1.5 rounded-button border border-primary/30 bg-primary/5 px-3 py-1.5 text-xs font-mono uppercase tracking-[0.15em] text-primary hover:bg-primary/10 transition-colors"
-            title="Newsletter bientôt disponible — reste en veille"
           >
-            Newsletter · Bientôt
+            S'abonner
           </Link>
         </div>
 
@@ -169,7 +168,7 @@ export function Navbar() {
             onClick={() => setOpen(false)}
             className="mt-auto inline-flex items-center justify-center gap-1.5 rounded-button border border-primary/30 bg-primary/5 px-4 py-3 text-sm font-mono uppercase tracking-[0.15em] text-primary"
           >
-            Newsletter · Bientôt
+            S'abonner
           </Link>
         </aside>
       </div>

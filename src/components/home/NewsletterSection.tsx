@@ -1,9 +1,13 @@
-import { Activity, Feather, Sparkles, Clock } from "lucide-react";
+import { Activity, Feather, Sparkles } from "lucide-react";
 import { StrongGradient } from "@/components/ui/GradientBackgrounds";
+import { NewsletterForm } from "@/components/newsletter/NewsletterForm";
 
 export function NewsletterSection() {
   return (
-    <section className="relative py-24 md:py-32 bg-card overflow-hidden">
+    <section
+      id="newsletter"
+      className="relative py-24 md:py-32 bg-card overflow-hidden scroll-mt-24"
+    >
       <StrongGradient intensity={0.95} position="flow" />
       <svg
         aria-hidden
@@ -27,7 +31,7 @@ export function NewsletterSection() {
             Une édition. Tous les vendredis.
           </h2>
           <p className="mt-5 text-muted-light text-lg max-w-xl mx-auto leading-relaxed">
-            Les performances de vos Léopards, un talent à surveiller, et
+            Les performances de tes Léopards, un talent à surveiller, et
             l'analyse de la semaine. Soigné. Court. Gratuit.
           </p>
 
@@ -47,17 +51,14 @@ export function NewsletterSection() {
             ))}
           </div>
 
-          <div className="mt-12 flex flex-col items-center gap-3">
-            <span
-              className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-5 py-2.5 text-sm font-mono uppercase tracking-[0.18em] text-primary"
-              style={{ boxShadow: "0 0 0 1px hsl(var(--primary) / 0.15)" }}
-            >
-              <Clock className="h-3.5 w-3.5" />
-              Newsletter · Bientôt disponible
-            </span>
-            <p className="text-xs text-muted">
-              Une édition par semaine. Dès le lancement officiel.
-            </p>
+          <div className="mt-12 flex flex-col items-center">
+            <NewsletterForm
+              source="section"
+              variant="full"
+              buttonLabel="Recevoir l'édition du vendredi"
+              placeholder="Ton email"
+              helper="Une édition par semaine. Zéro spam. Désinscription en un clic."
+            />
           </div>
         </div>
       </div>
