@@ -4,9 +4,7 @@ import Footer from "@/components/layout/Footer";
 import { useMaListeStore } from "@/store/maListeStore";
 import { IntroScreen } from "@/components/ma-liste/IntroScreen";
 import { FormationPicker } from "@/components/ma-liste/FormationPicker";
-import { LineupBuilder } from "@/components/ma-liste/LineupBuilder";
-import { BenchBuilder } from "@/components/ma-liste/BenchBuilder";
-import { CaptainSelector } from "@/components/ma-liste/CaptainSelector";
+import { BuilderUnified } from "@/components/ma-liste/builder/BuilderUnified";
 import { ListRecap } from "@/components/ma-liste/ListRecap";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -65,9 +63,10 @@ export default function MaListe() {
           <motion.div key={currentStep} {...stepFade}>
             {currentStep === "intro" && <IntroScreen totalListsCreated={listCount} />}
             {currentStep === "formation" && <FormationPicker />}
-            {currentStep === "lineup" && <LineupBuilder />}
-            {currentStep === "bench" && <BenchBuilder />}
-            {currentStep === "captain" && <CaptainSelector />}
+            {/* Builder unifié : remplace les 3 anciennes étapes (lineup / bench / captain) */}
+            {(currentStep === "lineup" ||
+              currentStep === "bench" ||
+              currentStep === "captain") && <BuilderUnified />}
             {currentStep === "recap" && <ListRecap />}
             {currentStep === "share" && <ListRecap />}
           </motion.div>
