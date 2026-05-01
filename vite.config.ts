@@ -33,46 +33,50 @@ export default defineConfig(({ mode }) => ({
         manualChunks: (id) => {
           if (!id.includes("node_modules")) return undefined;
 
-          // React core
+          // React + everything that depends directly on React's runtime
+          // (forwardRef, hooks, etc.) MUST live in the same chunk to avoid
+          // "Cannot read properties of undefined (reading 'forwardRef')"
+          // when chunks are loaded out-of-order.
           if (
             id.includes("/react/") ||
             id.includes("/react-dom/") ||
-            id.includes("/react-router")
+            id.includes("/react-router") ||
+            id.includes("@radix-ui/") ||
+            id.includes("react-hook-form") ||
+            id.includes("/scheduler/") ||
+            id.includes("use-sync-external-store") ||
+            id.includes("/use-callback-ref/")
           ) {
             return "react-vendor";
           }
 
-          // Supabase
+          // Supabase — independent runtime
           if (id.includes("@supabase/")) {
             return "supabase-vendor";
           }
 
-          // Framer Motion (heavy animation library)
+          // Framer Motion — depends on React but tolerates split-loading;
+          // keep it isolated to leverage caching across feature work.
           if (id.includes("framer-motion")) {
             return "motion-vendor";
           }
 
-          // Radix UI primitives — split because there are many
-          if (id.includes("@radix-ui/")) {
-            return "radix-vendor";
-          }
-
-          // React Query
+          // React Query — also React-dependent but designed for split-loading
           if (id.includes("@tanstack/")) {
             return "query-vendor";
           }
 
-          // Lucide icons (large icon set)
+          // Lucide icons (large icon set, no React internals)
           if (id.includes("lucide-react")) {
             return "icons-vendor";
           }
 
-          // date-fns
+          // date-fns — pure utility
           if (id.includes("date-fns")) {
             return "date-vendor";
           }
 
-          // colorthief and color helpers
+          // colorthief and color helpers — pure utility
           if (id.includes("colorthief")) {
             return "color-vendor";
           }
