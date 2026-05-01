@@ -208,18 +208,17 @@ export default function MaListePublic() {
                 <div
                   className="rounded-card overflow-hidden border border-border shadow-2xl"
                   style={{
-                    width: "100%",
-                    maxWidth: 480,
-                    aspectRatio: "4/5",
+                    width: "min(440px, 100%)",
+                    aspectRatio: "1080 / 1350",
                     overflow: "hidden",
                   }}
                 >
                   <div
                     style={{
-                      transform: "scale(0.4)",
+                      transform: "scale(0.407)",
                       transformOrigin: "top left",
-                      width: 1200,
-                      height: 1500,
+                      width: 1080,
+                      height: 1350,
                     }}
                   >
                     {(() => {

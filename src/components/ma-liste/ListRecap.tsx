@@ -69,9 +69,9 @@ export function ListRecap() {
       const dataUrl = await toPng(node, {
         cacheBust: true,
         pixelRatio: 2,
-        backgroundColor: "#0A0A0A",
-        width: format === "story" ? 1200 : 1200,
-        height: format === "story" ? 1500 : 630,
+        backgroundColor: "#0A0A0B",
+        width: format === "story" ? 1080 : 1200,
+        height: format === "story" ? 1350 : 630,
       });
       const link = document.createElement("a");
       link.download = `ma-liste-leopards-${format}-${Date.now()}.png`;
@@ -211,24 +211,21 @@ export function ListRecap() {
           </p>
         </div>
 
-        {/* Live preview (visible) */}
+        {/* Live preview (visible) — scaled down to fit the page */}
         <div className="flex justify-center">
           <div
             className="rounded-card overflow-hidden border border-border shadow-2xl"
             style={{
-              width: "100%",
-              maxWidth: 480,
-              aspectRatio: "4/5",
-              transform: "scale(1)",
-              transformOrigin: "top center",
+              width: "min(440px, 100%)",
+              aspectRatio: "1080 / 1350",
             }}
           >
             <div
               style={{
-                transform: "scale(0.4)",
+                transform: "scale(0.407)",
                 transformOrigin: "top left",
-                width: 1200,
-                height: 1500,
+                width: 1080,
+                height: 1350,
               }}
             >
               <ShareCard
@@ -300,7 +297,7 @@ export function ListRecap() {
               <Smartphone className="h-4 w-4" />
               {downloadingFormat === "story"
                 ? "Génération…"
-                : "Pour Instagram (1200×1500)"}
+                : "Pour Instagram · LinkedIn (1080×1350)"}
             </Button>
             <Button
               size="lg"
@@ -312,7 +309,7 @@ export function ListRecap() {
               <ImageIcon className="h-4 w-4" />
               {downloadingFormat === "og"
                 ? "Génération…"
-                : "Pour X / WhatsApp (1200×630)"}
+                : "Pour X · WhatsApp (1200×630)"}
             </Button>
           </div>
         </div>
