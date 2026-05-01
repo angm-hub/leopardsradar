@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/ButtonPrimitive";
 import { Select } from "@/components/ui/SelectPrimitive";
 import { RosterHero } from "@/components/roster/RosterHero";
 import { PositionSection } from "@/components/roster/PositionSection";
+import { PlayerTable } from "@/components/roster/PlayerTable";
 import { RosterModeToggle, type RosterMode } from "@/components/roster/RosterModeToggle";
 import { usePlayers } from "@/hooks/usePlayers";
 import { useHomeStats } from "@/hooks/useHomeStats";
@@ -219,9 +220,15 @@ const Roster = () => {
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-              {filtered.map((player) => (
-                <PlayerCard key={player.slug} player={player} />
+            // Mode Liste : tables denses Transfermarkt-style par poste,
+            // construites depuis `filtered` (respecte search + sort + filtres).
+            <div className="space-y-12">
+              {POSITION_ORDER.map((pos) => (
+                <PlayerTable
+                  key={pos}
+                  position={pos}
+                  players={filtered.filter((p) => p.position === pos)}
+                />
               ))}
             </div>
           )}
