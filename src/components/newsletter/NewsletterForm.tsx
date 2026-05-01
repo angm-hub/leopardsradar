@@ -56,7 +56,6 @@ export function NewsletterForm({
       return;
     }
     setState("error");
-    if (res.ok) return;
     if (res.reason === "duplicate") {
       setErrorMsg("Tu es déjà sur la liste. À vendredi.");
     } else if (res.reason === "invalid") {
