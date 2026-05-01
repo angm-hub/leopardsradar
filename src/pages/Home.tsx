@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import LeopardsHero from "@/components/home/LeopardsHero";
@@ -16,19 +14,6 @@ const Divider = () => (
 );
 
 const Home = () => {
-  const { hash } = useLocation();
-  useEffect(() => {
-    if (hash) {
-      const el = document.getElementById(hash.slice(1));
-      if (el) {
-        // Defer until layout is ready
-        requestAnimationFrame(() =>
-          el.scrollIntoView({ behavior: "smooth", block: "start" }),
-        );
-      }
-    }
-  }, [hash]);
-
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />

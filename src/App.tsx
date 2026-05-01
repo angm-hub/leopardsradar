@@ -16,9 +16,6 @@ import Auth from "./pages/Auth.tsx";
 import AdminPhotos from "./pages/AdminPhotos.tsx";
 import MaListe from "./pages/MaListe.tsx";
 import MaListePublic from "./pages/MaListePublic.tsx";
-import MentionsLegales from "./pages/MentionsLegales.tsx";
-import Confidentialite from "./pages/Confidentialite.tsx";
-import CGU from "./pages/CGU.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { PromoBanner } from "./components/layout/PromoBanner";
 
@@ -46,9 +43,6 @@ const App = () => (
           <Route path="/admin/photos" element={<AdminPhotos />} />
           <Route path="/ma-liste" element={<MaListe />} />
           <Route path="/ma-liste/:slug" element={<MaListePublic />} />
-          <Route path="/mentions-legales" element={<MentionsLegales />} />
-          <Route path="/confidentialite" element={<Confidentialite />} />
-          <Route path="/cgu" element={<CGU />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

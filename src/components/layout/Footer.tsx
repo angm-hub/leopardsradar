@@ -1,16 +1,22 @@
-import { Link } from "react-router-dom";
+import { Twitter, Instagram, Music2 } from "lucide-react";
 
 const NAV_LINKS = [
-  { label: "Roster", href: "/roster" },
-  { label: "Radar", href: "/radar" },
-  { label: "Best XI", href: "/best-xi" },
-  { label: "Newsletter", href: "/#newsletter" },
+  { label: "Roster", href: "#roster" },
+  { label: "Radar", href: "#radar" },
+  { label: "Best XI", href: "#best-xi" },
+  { label: "Newsletter", href: "#newsletter" },
 ];
 
 const LEGAL_LINKS = [
-  { label: "Mentions légales", href: "/mentions-legales" },
-  { label: "Confidentialité", href: "/confidentialite" },
-  { label: "CGU", href: "/cgu" },
+  { label: "Mentions légales", href: "#mentions" },
+  { label: "RGPD", href: "#rgpd" },
+  { label: "CGU", href: "#cgu" },
+];
+
+const SOCIALS = [
+  { label: "X (Twitter)", href: "https://x.com", Icon: Twitter },
+  { label: "Instagram", href: "https://instagram.com", Icon: Instagram },
+  { label: "TikTok", href: "https://tiktok.com", Icon: Music2 },
 ];
 
 export function Footer() {
@@ -26,6 +32,20 @@ export function Footer() {
             <p className="text-sm text-muted-light max-w-xs leading-relaxed">
               Les yeux sur tous les Léopards.
             </p>
+            <div className="flex items-center gap-3 mt-2">
+              {SOCIALS.map(({ label, href, Icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={label}
+                  className="h-9 w-9 inline-flex items-center justify-center rounded-full border border-border text-muted-light hover:text-foreground hover:border-border-hover transition-colors"
+                >
+                  <Icon className="h-4 w-4" />
+                </a>
+              ))}
+            </div>
           </div>
 
           {/* Col 2 — Navigation */}
@@ -34,12 +54,12 @@ export function Footer() {
             <ul className="flex flex-col gap-3">
               {NAV_LINKS.map((link) => (
                 <li key={link.href}>
-                  <Link
-                    to={link.href}
+                  <a
+                    href={link.href}
                     className="text-sm text-muted-light hover:text-foreground transition-colors"
                   >
                     {link.label}
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>
@@ -51,12 +71,12 @@ export function Footer() {
             <ul className="flex flex-col gap-3">
               {LEGAL_LINKS.map((link) => (
                 <li key={link.href}>
-                  <Link
-                    to={link.href}
+                  <a
+                    href={link.href}
                     className="text-sm text-muted-light hover:text-foreground transition-colors"
                   >
                     {link.label}
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>
