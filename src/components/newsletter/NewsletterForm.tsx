@@ -50,15 +50,16 @@ export function NewsletterForm({
 
     setState("loading");
     const res = await subscribeEmail(trimmed, source);
-    if (res.ok) {
+    if (res.ok === true) {
       setState("success");
       setEmail("");
       return;
     }
+    const reason = res.reason;
     setState("error");
-    if (res.reason === "duplicate") {
+    if (reason === "duplicate") {
       setErrorMsg("Tu es déjà sur la liste. À vendredi.");
-    } else if (res.reason === "invalid") {
+    } else if (reason === "invalid") {
       setErrorMsg("Email invalide.");
     } else {
       setErrorMsg("Une erreur, réessaie dans quelques secondes.");
