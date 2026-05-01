@@ -27,64 +27,14 @@ export default defineConfig(({ mode }) => ({
     ],
   },
   build: {
-    chunkSizeWarningLimit: 600,
-    rollupOptions: {
-      output: {
-        manualChunks: (id) => {
-          if (!id.includes("node_modules")) return undefined;
-
-          // React + everything that depends directly on React's runtime
-          // (forwardRef, hooks, etc.) MUST live in the same chunk to avoid
-          // "Cannot read properties of undefined (reading 'forwardRef')"
-          // when chunks are loaded out-of-order.
-          if (
-            id.includes("/react/") ||
-            id.includes("/react-dom/") ||
-            id.includes("/react-router") ||
-            id.includes("@radix-ui/") ||
-            id.includes("react-hook-form") ||
-            id.includes("/scheduler/") ||
-            id.includes("use-sync-external-store") ||
-            id.includes("/use-callback-ref/")
-          ) {
-            return "react-vendor";
-          }
-
-          // Supabase — independent runtime
-          if (id.includes("@supabase/")) {
-            return "supabase-vendor";
-          }
-
-          // Framer Motion — depends on React but tolerates split-loading;
-          // keep it isolated to leverage caching across feature work.
-          if (id.includes("framer-motion")) {
-            return "motion-vendor";
-          }
-
-          // React Query — also React-dependent but designed for split-loading
-          if (id.includes("@tanstack/")) {
-            return "query-vendor";
-          }
-
-          // Lucide icons (large icon set, no React internals)
-          if (id.includes("lucide-react")) {
-            return "icons-vendor";
-          }
-
-          // date-fns — pure utility
-          if (id.includes("date-fns")) {
-            return "date-vendor";
-          }
-
-          // colorthief and color helpers — pure utility
-          if (id.includes("colorthief")) {
-            return "color-vendor";
-          }
-
-          // Everything else from node_modules
-          return "vendor";
-        },
-      },
-    },
+    chunkSizeWarningLimit: 1100,
+    // Manual chunk splitting was attempted in P2 to improve caching, but it
+    // caused runtime crashes ("Cannot read properties of undefined reading
+    // forwardRef / createContext") because many transitive dependencies
+    // touch React's module namespace at load time. Splitting React across
+    // multiple chunks does not guarantee load order in ESM, so libs that
+    // import React top-level (Radix, cmdk, cva, vaul, sonner, every Radix
+    // wrapper) crash before React resolves. Reverting to Vite's default
+    // single-chunk vendor strategy is slower to cache but reliably boots.
   },
 }));
