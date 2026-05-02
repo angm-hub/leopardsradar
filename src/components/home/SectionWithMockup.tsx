@@ -68,7 +68,7 @@ export function SectionWithMockup({
       };
 
   return (
-    <section className={cn("relative py-24 md:py-32 overflow-hidden bg-background", className)}>
+    <section className={cn("relative py-16 md:py-20 overflow-hidden bg-background", className)}>
       <motion.div
         variants={containerVariants}
         initial={reduced ? "visible" : "hidden"}

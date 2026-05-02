@@ -6,6 +6,7 @@ import {
   POSITION_DOT,
   POSITION_LABEL,
   flagFor,
+  formatMarketValue,
 } from "@/lib/playerHelpers";
 import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
 
@@ -15,7 +16,28 @@ interface PlayerCardProps {
 }
 
 export function PlayerCard({ player, className }: PlayerCardProps) {
-  const { slug, name, image_url, current_club, position, age, nationalities } = player;
+  const {
+    slug,
+    name,
+    image_url,
+    current_club,
+    position,
+    age,
+    nationalities,
+    caps_rdc: capsRdc,
+    market_value_eur: marketValue,
+  } = player;
+
+  // Build the bottom stats line. Filter empties so we never render dangling
+  // separators when the dataset is partial (radar profiles often have no caps).
+  const statBits: string[] = [];
+  if (age) statBits.push(`${age} ans`);
+  if (typeof capsRdc === "number" && capsRdc > 0) {
+    statBits.push(`${capsRdc} cap${capsRdc > 1 ? "s" : ""}`);
+  }
+  if (marketValue && marketValue > 0) {
+    statBits.push(formatMarketValue(marketValue));
+  }
 
   return (
     <Link
@@ -75,8 +97,10 @@ export function PlayerCard({ player, className }: PlayerCardProps) {
         <h3 className="mt-1 font-serif text-xl font-semibold text-foreground tracking-tight truncate">
           {name}
         </h3>
-        {age ? (
-          <p className="mt-1 font-mono text-xs text-muted">{age} ans</p>
+        {statBits.length > 0 ? (
+          <p className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.08em] text-muted-light truncate">
+            {statBits.join(" · ")}
+          </p>
         ) : null}
       </div>
     </Link>

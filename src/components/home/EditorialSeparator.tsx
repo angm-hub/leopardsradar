@@ -22,7 +22,7 @@ const EditorialSeparator = ({ variant, content, author, context }: EditorialSepa
 
   if (variant === "quote") {
     return (
-      <section className="relative py-24 md:py-32 bg-background overflow-hidden">
+      <section className="relative py-16 md:py-20 bg-background overflow-hidden">
         <StrongGradient intensity={0.9} position="center" />
         <motion.div {...fadeUp} className="max-w-4xl mx-auto px-6 text-center relative">
           <span
@@ -55,7 +55,7 @@ const EditorialSeparator = ({ variant, content, author, context }: EditorialSepa
 
   if (variant === "bignumber") {
     return (
-      <section className="relative py-24 md:py-32 bg-background overflow-hidden">
+      <section className="relative py-16 md:py-20 bg-background overflow-hidden">
         <StrongGradient intensity={1} position="center" />
         <motion.div {...fadeUp} className="max-w-5xl mx-auto px-6 text-center relative">
           <div className="font-mono text-[8rem] md:text-[16rem] leading-none font-bold text-primary tracking-tighter">

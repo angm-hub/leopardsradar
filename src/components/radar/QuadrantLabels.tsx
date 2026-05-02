@@ -21,7 +21,7 @@ export function QuadrantLabels() {
 function Quadrant({ position, label }: { position: string; label: string }) {
   return (
     <p
-      className={`pointer-events-none absolute ${position} z-[1] font-mono text-[10px] uppercase tracking-[0.3em] text-foreground/35`}
+      className={`pointer-events-none absolute ${position} z-[2] rounded-full bg-background/45 backdrop-blur-sm px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.28em] text-foreground/60`}
       aria-hidden
     >
       {label}

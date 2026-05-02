@@ -15,7 +15,10 @@ import Footer from "@/components/layout/Footer";
 import { Button } from "@/components/ui/ButtonPrimitive";
 import { StatBlock } from "@/components/ui/StatBlock";
 import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
-import { PlayerWhySection } from "@/components/player/PlayerWhySection";
+import {
+  PlayerEligibilityQuote,
+  buildPlayerEligibilityLine,
+} from "@/components/player/PlayerWhySection";
 import { PlayerIdentityCards } from "@/components/player/PlayerIdentityCards";
 import { PlayerCareerCard } from "@/components/player/PlayerCareerCard";
 import { RelatedPlayers } from "@/components/player/RelatedPlayers";
@@ -247,12 +250,35 @@ export default function PlayerPage() {
                   </div>
                 ) : null}
 
-                <p className="text-sm text-muted-light">
-                  <span className="text-muted">Valeur marchande · </span>
-                  <span className={player.market_value_eur ? "text-foreground font-semibold" : "text-muted italic"}>
-                    {formatMarketValue(player.market_value_eur)}
-                  </span>
-                </p>
+                {/* Hero stats — 3 hard numbers in the fold so the visitor
+                    sees the substance before scrolling. */}
+                <div className="grid grid-cols-3 gap-px overflow-hidden rounded-card border border-border bg-border">
+                  <FoldStat
+                    label="Caps RDC"
+                    value={player.caps_rdc ?? 0}
+                  />
+                  <FoldStat
+                    label="Valeur marché"
+                    value={formatMarketValue(player.market_value_eur)}
+                    muted={!player.market_value_eur}
+                  />
+                  <FoldStat
+                    label="Buts saison"
+                    value={player.season_goals ?? "—"}
+                    muted={!player.season_goals}
+                  />
+                </div>
+
+                {/* Editorial pull quote — moved up from below the hero so
+                    the "why this player" answer is visible in the fold. */}
+                <PlayerEligibilityQuote
+                  text={buildPlayerEligibilityLine({
+                    eligibilityNote: player.eligibility_note,
+                    eligibilityStatus: player.eligibility_status,
+                    category: player.player_category,
+                    capsRdc: player.caps_rdc,
+                  })}
+                />
 
                 <div className="flex flex-wrap gap-2 pt-1">
                   <Link to="/ma-liste">
@@ -306,15 +332,7 @@ export default function PlayerPage() {
           </div>
         </section>
 
-        {/* B — POURQUOI : éditorial juste sous le hero */}
-        <PlayerWhySection
-          eligibilityNote={player.eligibility_note}
-          eligibilityStatus={player.eligibility_status}
-          category={player.player_category}
-          capsRdc={player.caps_rdc}
-        />
-
-        {/* C — IDENTITÉ + CARRIÈRE : refonte de l'ancienne section "Infos" plate */}
+        {/* IDENTITÉ + CARRIÈRE — pull quote retirée, remontée dans le fold */}
         <section className="container-site py-12 border-t border-border">
           <h2 className="font-serif text-3xl text-foreground mb-6">Identité.</h2>
           <PlayerIdentityCards
@@ -415,3 +433,35 @@ export default function PlayerPage() {
     </div>
   );
 }
+
+/**
+ * Inline mini-stat used in the player fold. 3 hard numbers side-by-side
+ * give the visitor immediate substance. Uses a 1px-gap grid trick to draw
+ * dividers without extra borders.
+ */
+function FoldStat({
+  label,
+  value,
+  muted = false,
+}: {
+  label: string;
+  value: string | number;
+  muted?: boolean;
+}) {
+  return (
+    <div className="bg-card px-3 py-3 sm:px-4">
+      <div
+        className={cn(
+          "font-serif text-2xl md:text-3xl leading-none",
+          muted ? "text-muted-light italic" : "text-foreground",
+        )}
+      >
+        {value}
+      </div>
+      <div className="mt-1 text-[10px] font-mono uppercase tracking-[0.18em] text-muted">
+        {label}
+      </div>
+    </div>
+  );
+}
+
