@@ -18,6 +18,9 @@ interface BuilderLibraryProps {
   /** quand on click un joueur, soit on remplit le slot actif soit on ajoute au banc */
   onPickForSlot: (player: DBPlayer) => void;
   onPickForBench: (player: DBPlayer) => void;
+  /** notifie le parent qu'un drag commence (pour highlight des drop zones) */
+  onDragStart?: (player: DBPlayer) => void;
+  onDragEnd?: () => void;
 }
 
 type FilterType = "all" | "roster" | "radar";
@@ -45,6 +48,8 @@ export function BuilderLibrary({
   activeSlot,
   onPickForSlot,
   onPickForBench,
+  onDragStart,
+  onDragEnd,
 }: BuilderLibraryProps) {
   const [search, setSearch] = useState("");
   const [filterCat, setFilterCat] = useState<FilterType>("all");
@@ -204,15 +209,24 @@ export function BuilderLibrary({
             {filtered.map((player) => {
               const benchFull = !activeSlot && bench.length >= 15;
               return (
-                <li key={player.slug}>
+                <li
+                  key={player.slug}
+                  draggable={!benchFull || !!activeSlot}
+                  onDragStart={(e) => {
+                    e.dataTransfer.effectAllowed = "move";
+                    e.dataTransfer.setData("text/plain", player.slug);
+                    onDragStart?.(player);
+                  }}
+                  onDragEnd={() => onDragEnd?.()}
+                >
                   <button
                     type="button"
-                    disabled={benchFull}
+                    disabled={benchFull && !activeSlot}
                     onClick={() => handlePick(player)}
                     className={cn(
-                      "group flex w-full items-center gap-2.5 px-3 py-2 text-left transition-colors",
+                      "group flex w-full items-center gap-2.5 px-3 py-2 text-left transition-colors cursor-grab active:cursor-grabbing",
                       "hover:bg-card-hover",
-                      benchFull && "opacity-40 cursor-not-allowed",
+                      benchFull && !activeSlot && "opacity-40 cursor-not-allowed",
                     )}
                   >
                     <div className="relative shrink-0">
