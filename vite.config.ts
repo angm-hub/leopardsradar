@@ -5,6 +5,12 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
+  // GitHub Pages serves the site under /leopardsradar/. Without an explicit
+  // base, asset URLs are emitted as relative paths and resolve incorrectly
+  // on deep routes (e.g. /leopardsradar/player/<slug> → 404 on assets).
+  // The BrowserRouter in App.tsx already reads import.meta.env.BASE_URL,
+  // so setting base here also fixes router resolution on GH Pages.
+  base: mode === "production" ? "/leopardsradar/" : "/",
   server: {
     host: "::",
     port: 8080,
