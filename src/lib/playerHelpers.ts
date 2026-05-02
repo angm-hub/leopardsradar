@@ -7,12 +7,25 @@ export const POSITION_LABEL: Record<DBPosition, string> = {
   Attack: "Attaquant",
 };
 
-// Tailwind classes for the colored position pill
-export const POSITION_BADGE: Record<DBPosition, string> = {
-  Goalkeeper: "bg-yellow-500/15 text-yellow-400 border-yellow-500/30",
-  Defender: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
-  Midfield: "bg-sky-500/15 text-sky-400 border-sky-500/30",
-  Attack: "bg-rose-500/15 text-rose-400 border-rose-500/30",
+// Sober pill — neutral background, muted text, faint border.
+// The position is signalled by a small colored dot (POSITION_DOT) the consumer
+// renders inside the pill, not by tinting the whole pill.
+// This keeps the editorial palette (dark + green + accent yellow) clean.
+export const POSITION_BADGE: Record<DBPosition, string> =
+  Object.freeze({
+    Goalkeeper: "bg-card/40 text-muted-light border-border/60",
+    Defender: "bg-card/40 text-muted-light border-border/60",
+    Midfield: "bg-card/40 text-muted-light border-border/60",
+    Attack: "bg-card/40 text-muted-light border-border/60",
+  }) as Record<DBPosition, string>;
+
+// Dot color per position (background utility class).
+// Render as: <span className={cn("inline-block h-1.5 w-1.5 rounded-full", POSITION_DOT[pos])} />
+export const POSITION_DOT: Record<DBPosition, string> = {
+  Goalkeeper: "bg-yellow-400",
+  Defender: "bg-emerald-400",
+  Midfield: "bg-sky-400",
+  Attack: "bg-rose-400",
 };
 
 export function initialsFromName(name: string): string {

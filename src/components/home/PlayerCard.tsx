@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import type { DBPlayer } from "@/types/dbPlayer";
 import {
   POSITION_BADGE,
+  POSITION_DOT,
   POSITION_LABEL,
   flagFor,
 } from "@/lib/playerHelpers";
@@ -42,10 +43,14 @@ export function PlayerCard({ player, className }: PlayerCardProps) {
         <div className="absolute top-3 left-3">
           <span
             className={cn(
-              "inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider backdrop-blur-md",
+              "inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider backdrop-blur-md",
               POSITION_BADGE[position],
             )}
           >
+            <span
+              aria-hidden
+              className={cn("inline-block h-1.5 w-1.5 rounded-full", POSITION_DOT[position])}
+            />
             {POSITION_LABEL[position]}
           </span>
         </div>

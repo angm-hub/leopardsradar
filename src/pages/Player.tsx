@@ -25,6 +25,7 @@ import { cn } from "@/lib/utils";
 import {
   POSITION_LABEL,
   POSITION_BADGE,
+  POSITION_DOT,
   flagFor,
   formatMarketValue,
   ELIGIBILITY_BADGE,
@@ -193,10 +194,14 @@ export default function PlayerPage() {
                   {player.position ? (
                     <span
                       className={cn(
-                        "inline-flex items-center rounded-full border px-3 py-1 text-xs uppercase tracking-wider",
+                        "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs uppercase tracking-wider",
                         POSITION_BADGE[player.position],
                       )}
                     >
+                      <span
+                        aria-hidden
+                        className={cn("inline-block h-1.5 w-1.5 rounded-full", POSITION_DOT[player.position])}
+                      />
                       {POSITION_LABEL[player.position]}
                     </span>
                   ) : null}

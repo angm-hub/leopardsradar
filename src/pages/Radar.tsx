@@ -13,6 +13,7 @@ import { ViewTabs, type RadarView } from "@/components/radar/ViewTabs";
 import { RadarCanvas } from "@/components/radar/RadarCanvas";
 import {
   POSITION_BADGE,
+  POSITION_DOT,
   POSITION_LABEL,
   flagFor,
   formatMarketValue,
@@ -71,10 +72,14 @@ function RadarCard({ player }: { player: DBPlayer }) {
         {player.position ? (
           <span
             className={cn(
-              "inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider backdrop-blur-md",
+              "inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider backdrop-blur-md",
               POSITION_BADGE[player.position],
             )}
           >
+            <span
+              aria-hidden
+              className={cn("inline-block h-1.5 w-1.5 rounded-full", POSITION_DOT[player.position])}
+            />
             {POSITION_LABEL[player.position]}
           </span>
         ) : null}
