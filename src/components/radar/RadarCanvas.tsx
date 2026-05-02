@@ -85,6 +85,49 @@ export function RadarCanvas({ players, totalRoster }: RadarCanvasProps) {
     });
   }, [players]);
 
+  // 2-pass repulsion to break the worst overlaps. Cheap O(n²) on n ≤ 80
+  // pills. We approximate each pill as a 7×4 rect in % coordinates and
+  // nudge overlapping neighbours apart by a fraction of the overlap.
+  const decongested = useMemo(() => {
+    if (positioned.length === 0) return positioned;
+    const PAD_X = 7; // % horizontal min separation
+    const PAD_Y = 4; // % vertical min separation
+    const PASSES = 2;
+    const next = positioned.map((p) => ({ ...p }));
+    for (let pass = 0; pass < PASSES; pass++) {
+      for (let i = 0; i < next.length; i++) {
+        for (let j = i + 1; j < next.length; j++) {
+          const a = next[i];
+          const b = next[j];
+          const dx = b.x - a.x;
+          const dy = b.y - a.y;
+          const ax = Math.abs(dx);
+          const ay = Math.abs(dy);
+          if (ax < PAD_X && ay < PAD_Y) {
+            const overlapX = (PAD_X - ax) * 0.5;
+            const overlapY = (PAD_Y - ay) * 0.5;
+            const sx = dx === 0 ? (i % 2 === 0 ? 1 : -1) : Math.sign(dx);
+            const sy = dy === 0 ? (j % 2 === 0 ? 1 : -1) : Math.sign(dy);
+            // Bias the nudge along the smaller-overlap axis so we don't
+            // spread the cloud unnecessarily.
+            if (overlapX < overlapY) {
+              a.x -= sx * overlapX;
+              b.x += sx * overlapX;
+            } else {
+              a.y -= sy * overlapY;
+              b.y += sy * overlapY;
+            }
+            a.x = Math.max(SAFE_MARGIN, Math.min(100 - SAFE_MARGIN, a.x));
+            a.y = Math.max(SAFE_MARGIN, Math.min(100 - SAFE_MARGIN, a.y));
+            b.x = Math.max(SAFE_MARGIN, Math.min(100 - SAFE_MARGIN, b.x));
+            b.y = Math.max(SAFE_MARGIN, Math.min(100 - SAFE_MARGIN, b.y));
+          }
+        }
+      }
+    }
+    return next;
+  }, [positioned]);
+
   const positionsCount = useMemo(() => {
     const counts = { gk: 0, def: 0, mid: 0, att: 0 };
     players.forEach((p) => {
@@ -129,7 +172,7 @@ export function RadarCanvas({ players, totalRoster }: RadarCanvasProps) {
           avgAge={avgAge}
         />
 
-        {positioned.map(({ player, x, y }, i) => (
+        {decongested.map(({ player, x, y }, i) => (
           <PlayerPill
             key={player.id}
             player={player}

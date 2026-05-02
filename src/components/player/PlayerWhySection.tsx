@@ -1,35 +1,54 @@
 import { eligibilityLabel } from "@/lib/playerHelpers";
 
-interface PlayerWhySectionProps {
+/**
+ * Build the editorial line that explains why the player is on the radar.
+ * Used both inline in the player fold (as a compact pull quote) and
+ * potentially in any teaser surface that needs a one-liner.
+ *
+ * Returns the raw eligibility_note when present, falls back to a
+ * synthetic line built from status + category + caps so we never show
+ * an empty quote.
+ */
+export function buildPlayerEligibilityLine(args: {
   eligibilityNote: string | null;
   eligibilityStatus: string | null;
   category: "roster" | "radar" | "heritage";
   capsRdc: number;
+}): string {
+  const note = args.eligibilityNote?.trim();
+  if (note) return note;
+  if (args.category === "roster") {
+    return args.capsRdc > 0
+      ? `Membre du roster Léopards. ${args.capsRdc} sélection${args.capsRdc > 1 ? "s" : ""} déjà avec la RDC.`
+      : "Joueur du roster Léopards en route vers ses premières sélections.";
+  }
+  if (args.category === "heritage") {
+    return "Profil héritage RDC : ascendance ou attaches familiales fortes avec le pays, à suivre dans la durée.";
+  }
+  return `Profil suivi par notre radar — statut : ${eligibilityLabel(args.eligibilityStatus).toLowerCase()}.`;
+}
+
+interface PlayerEligibilityQuoteProps {
+  text: string;
+  className?: string;
+  /** "compact" → inline-fold version (smaller, no kicker). "full" → standalone section version with kicker. */
+  variant?: "compact" | "full";
 }
 
 /**
- * PlayerWhySection — pourquoi ce joueur est dans le radar / roster.
- *
- * Sort la `eligibility_note` du fond de page et la met en valeur juste
- * sous le hero. C'est LA raison pour laquelle un visiteur arrive sur ce
- * profil — donc l'angle éditorial qui doit s'afficher en premier.
- *
- * Si la note est absente, on construit une phrase synthétique à partir
- * du statut + caps pour ne jamais laisser un vide.
+ * Editorial pull quote that surfaces the reason this player is being
+ * tracked. Designed to live inside the player hero fold so the visitor
+ * gets the answer to "why am I reading this?" before any scroll.
  */
-export function PlayerWhySection({
-  eligibilityNote,
-  eligibilityStatus,
-  category,
-  capsRdc,
-}: PlayerWhySectionProps) {
-  const fallback = buildFallback(category, eligibilityStatus, capsRdc);
-  const text = eligibilityNote?.trim() || fallback;
+export function PlayerEligibilityQuote({
+  text,
+  className,
+  variant = "compact",
+}: PlayerEligibilityQuoteProps) {
   if (!text) return null;
-
-  return (
-    <section className="container-site py-12 md:py-16">
-      <div className="max-w-3xl">
+  if (variant === "full") {
+    return (
+      <div className={className}>
         <p className="text-[10px] uppercase tracking-[0.3em] text-primary/85 font-mono mb-4">
           Pourquoi il est sur notre radar
         </p>
@@ -39,23 +58,14 @@ export function PlayerWhySection({
           </p>
         </blockquote>
       </div>
-    </section>
+    );
+  }
+  return (
+    <blockquote className={`border-l-2 border-primary/60 pl-4 ${className ?? ""}`}>
+      <p className="font-serif text-base md:text-lg italic leading-snug text-foreground/85">
+        {text}
+      </p>
+    </blockquote>
   );
 }
 
-function buildFallback(
-  category: "roster" | "radar" | "heritage",
-  status: string | null,
-  caps: number,
-): string {
-  if (category === "roster") {
-    return caps > 0
-      ? `Membre du roster Léopards. ${caps} sélection${caps > 1 ? "s" : ""} déjà avec la RDC.`
-      : "Joueur du roster Léopards en route vers ses premières sélections.";
-  }
-  if (category === "heritage") {
-    return "Profil héritage RDC : ascendance ou attaches familiales fortes avec le pays, à suivre dans la durée.";
-  }
-  // radar
-  return `Profil suivi par notre radar — statut : ${eligibilityLabel(status).toLowerCase()}.`;
-}

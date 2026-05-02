@@ -37,7 +37,7 @@ export function StatsSection() {
 
 
   return (
-    <section className="relative py-24 md:py-32 bg-background overflow-hidden">
+    <section className="relative py-16 md:py-20 bg-background overflow-hidden">
       <ResidualGradient position="top-bottom" />
       <div className="container-site max-w-7xl relative">
         {/* Header */}

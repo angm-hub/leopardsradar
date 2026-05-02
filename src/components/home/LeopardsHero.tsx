@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/ButtonPrimitive";
 import { Pill } from "@/components/ui/Pill";
 import { AuroraShader } from "@/components/ui/AuroraShader";
 import { useLatestBestXIMeta } from "@/hooks/useLatestBestXIMeta";
+import { useHomeStats } from "@/hooks/useHomeStats";
 
 
 const containerVariants: Variants = {
@@ -22,6 +23,11 @@ const itemVariants: Variants = {
 
 export function LeopardsHero() {
   const { edition, formattedDate } = useLatestBestXIMeta();
+  const { stats } = useHomeStats();
+  const totalPlayers = stats?.total_players ?? null;
+  const radarCount = stats?.radar_count ?? null;
+  const rosterCount = stats?.roster_count ?? null;
+  const countries = stats?.total_countries ?? null;
 
   return (
     <section className="relative min-h-[100dvh] overflow-hidden bg-background">
@@ -78,20 +84,24 @@ export function LeopardsHero() {
             </Link>
           </motion.div>
 
+          {/* Hero footer mini-grid — 4 numbers structured, no more raw text line.
+              Falls back to "—" while loading so the layout never collapses. */}
           <motion.div
             variants={itemVariants}
-            className="flex flex-col items-center gap-1.5 mt-4"
+            className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-px overflow-hidden rounded-xl border border-border/40 bg-border/40 max-w-2xl w-full"
           >
-            <span className="text-sm text-foreground/50 text-balance">
-              <span className="hidden sm:inline">
-                471 joueurs suivis · 65 dans le roster · 406 sur le radar · 19 pays · Mis à jour chaque dimanche
-              </span>
-              <span className="sm:hidden">
-                471 joueurs · 19 pays · Mis à jour chaque dimanche
-              </span>
+            <HeroStat label="Suivis" value={totalPlayers} />
+            <HeroStat label="Roster" value={rosterCount} />
+            <HeroStat label="Radar" value={radarCount} />
+            <HeroStat label="Pays" value={countries} />
+          </motion.div>
+
+          <motion.div variants={itemVariants} className="-mt-2 flex flex-col items-center gap-1.5">
+            <span className="text-[11px] uppercase tracking-[0.2em] text-foreground/40 font-mono">
+              Mis à jour chaque dimanche
             </span>
             {edition && formattedDate ? (
-              <span className="text-xs text-foreground/35">
+              <span className="text-xs text-foreground/40">
                 Édition #{edition} du Best XI publiée {formattedDate}
               </span>
             ) : null}
@@ -99,6 +109,23 @@ export function LeopardsHero() {
         </motion.div>
       </div>
     </section>
+  );
+}
+
+/**
+ * Hero footer mini-stat. 4 of these sit side-by-side, separated by a 1px
+ * gap on a darker background to draw the dividers without extra borders.
+ */
+function HeroStat({ label, value }: { label: string; value: number | null }) {
+  return (
+    <div className="bg-background/60 backdrop-blur-sm px-3 py-2.5 sm:py-3 text-center">
+      <div className="font-serif text-xl sm:text-2xl text-foreground leading-none">
+        {value ?? "—"}
+      </div>
+      <div className="mt-1 text-[10px] font-mono uppercase tracking-[0.18em] text-muted">
+        {label}
+      </div>
+    </div>
   );
 }
 

@@ -6,7 +6,7 @@ export function NewsletterSection() {
   return (
     <section
       id="newsletter"
-      className="relative py-24 md:py-32 bg-card overflow-hidden scroll-mt-24"
+      className="relative py-16 md:py-20 bg-card overflow-hidden scroll-mt-24"
     >
       <StrongGradient intensity={0.95} position="flow" />
       <svg

@@ -31,13 +31,7 @@ const Home = () => {
         <Divider />
         <RadarPreviewSection />
         <BestXIPreviewSection />
-        <div className="mx-auto w-24 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
-        <EditorialSeparator
-          variant="quote"
-          content="« Le peuple congolais mérite ce bonheur. On a tout donné pour eux. »"
-          author="Cédric Bakambu"
-          context="Après la qualification pour les demi-finales de la CAN 2023, février 2024"
-        />
+        <Divider />
         <ClubsMarqueeSection />
         <NewsletterSection />
       </main>

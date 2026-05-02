@@ -17,7 +17,7 @@ export function RosterPreviewSection() {
   });
 
   return (
-    <section className="py-24 md:py-32 bg-background">
+    <section className="py-16 md:py-20 bg-background">
       <div className="container-site">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="flex flex-col gap-3 max-w-2xl">

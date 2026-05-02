@@ -4,7 +4,7 @@ import { StrongGradient } from "@/components/ui/GradientBackgrounds";
 
 export function MaListeCTA() {
   return (
-    <section className="relative overflow-hidden py-24 md:py-32">
+    <section className="relative overflow-hidden py-16 md:py-20">
       <StrongGradient position="center" intensity={1} />
       <div className="container-site max-w-3xl text-center relative z-10">
         <span className="inline-block font-mono text-[11px] uppercase tracking-[0.25em] text-primary border border-primary/30 rounded-full px-3 py-1 bg-primary/5">
