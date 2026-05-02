@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
 import {
   POSITION_BADGE,
+  POSITION_DOT,
   POSITION_LABEL,
   flagFor,
   formatMarketValue,
@@ -79,10 +80,14 @@ function HeroCard({ player, rank }: { player: DBPlayer; rank: number }) {
         <div className="absolute top-3 left-3">
           <span
             className={cn(
-              "inline-flex items-center rounded-full border px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider backdrop-blur-md",
+              "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider backdrop-blur-md",
               POSITION_BADGE[player.position],
             )}
           >
+            <span
+              aria-hidden
+              className={cn("inline-block h-1.5 w-1.5 rounded-full", POSITION_DOT[player.position])}
+            />
             {POSITION_LABEL[player.position]}
           </span>
         </div>

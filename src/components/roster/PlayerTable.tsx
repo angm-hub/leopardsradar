@@ -6,6 +6,7 @@ import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
 import {
   POSITION_LABEL,
   POSITION_BADGE,
+  POSITION_DOT,
   flagFor,
   formatMarketValue,
 } from "@/lib/playerHelpers";
@@ -272,10 +273,14 @@ function PlayerTableRow({ player, rank, isTop, animDelay }: RowProps) {
           {player.position ? (
             <span
               className={cn(
-                "inline-flex items-center rounded-full border px-1.5 py-0.5 text-[9px] uppercase tracking-wider",
+                "inline-flex items-center gap-1 rounded-full border px-1.5 py-0.5 text-[9px] uppercase tracking-wider",
                 POSITION_BADGE[player.position],
               )}
             >
+              <span
+                aria-hidden
+                className={cn("inline-block h-1 w-1 rounded-full", POSITION_DOT[player.position])}
+              />
               {POSITION_LABEL[player.position].slice(0, 3)}
             </span>
           ) : (

@@ -3,15 +3,22 @@ import { Link, useLocation } from "react-router-dom";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const STORAGE_KEY = "promo_banner_liste26_dismissed_2026_04_21";
+const STORAGE_KEY = "promo_banner_liste26_dismissed_2026_05_02";
 const DISMISS_DURATION_MS = 24 * 60 * 60 * 1000; // 24h
 
+/**
+ * Slim announcement bar (Vercel/Linear pattern).
+ *
+ * One line, ~40px tall. Whole row is clickable to /ma-liste.
+ * Dismissible. Hidden on /ma-liste (where the same CTA is the page itself).
+ *
+ * No duplicate CTA button : the hero and the navbar already carry the action.
+ */
 export function PromoBanner() {
   const location = useLocation();
   const [visible, setVisible] = useState(false);
   const ref = useRef<HTMLDivElement | null>(null);
 
-  // Hide on /ma-liste
   const onMaListe = location.pathname.startsWith("/ma-liste");
 
   useEffect(() => {
@@ -52,20 +59,29 @@ export function PromoBanner() {
     };
   }, [visible]);
 
-  // Reset var on unmount
   useEffect(() => {
     return () => {
       document.documentElement.style.setProperty("--promo-banner-h", "0px");
     };
   }, []);
 
-  const handleClose = () => {
+  const handleClose = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     try {
       localStorage.setItem(STORAGE_KEY, String(Date.now()));
     } catch {
       /* ignore */
     }
     setVisible(false);
+  };
+
+  const handleClickThrough = () => {
+    try {
+      localStorage.setItem(STORAGE_KEY, String(Date.now()));
+    } catch {
+      /* ignore */
+    }
   };
 
   return (
@@ -82,70 +98,46 @@ export function PromoBanner() {
           initial={{ height: 0, opacity: 0 }}
           animate={{ height: "auto", opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
-          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
           role="banner"
           aria-label="Promotion Mondial 2026"
-          className="fixed top-0 inset-x-0 z-[70] overflow-hidden"
+          className="fixed top-0 inset-x-0 z-[70] overflow-hidden border-b border-emerald-500/20"
           style={{
             background:
-              "linear-gradient(90deg, #00A651 0%, #007a37 55%, #004d25 100%)",
+              "linear-gradient(90deg, #00A651 0%, #007a37 60%, #004d25 100%)",
           }}
         >
-          <div className="mx-auto flex w-full max-w-7xl items-center gap-4 px-4 py-4 md:py-3 lg:px-8">
-            {/* Left: Pill + title + sub */}
-            <div className="flex flex-1 flex-col gap-1.5 pr-10 md:flex-row md:items-center md:gap-5 md:pr-0">
-              <div className="flex flex-col gap-1.5 md:flex-1">
-                <span
-                  className="inline-flex w-fit items-center rounded-full bg-[#FFC107] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.16em] text-black md:text-[11px]"
-                >
-                  Mondial 2026
+          <Link
+            to="/ma-liste"
+            onClick={handleClickThrough}
+            className="group relative block"
+          >
+            <div className="mx-auto flex w-full max-w-7xl items-center justify-center gap-3 px-4 py-2 text-center lg:px-8">
+              <span className="inline-flex shrink-0 items-center rounded-full bg-[#FFC107] px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.18em] text-black">
+                Mondial 2026
+              </span>
+              <p className="truncate text-[12px] leading-snug text-white md:text-[13px]">
+                <span className="font-medium">Compose ta liste des 26 Léopards.</span>
+                <span className="ml-2 hidden text-white/70 sm:inline">
+                  2 minutes. Compare aux autres fans.
                 </span>
-                <p className="font-serif text-base leading-tight text-white md:text-lg lg:text-xl">
-                  Compose ta liste des 26 Léopards.
-                </p>
-                <p className="hidden text-[12px] leading-snug text-white/80 md:block lg:text-[13px]">
-                  2 min. Partage aux copains. Compare aux autres fans.
-                </p>
-              </div>
-
-              {/* CTA */}
-              <Link
-                to="/ma-liste"
-                onClick={() => {
-                  try {
-                    localStorage.setItem(STORAGE_KEY, String(Date.now()));
-                  } catch {
-                    /* ignore */
-                  }
-                }}
-                className="group inline-flex w-full items-center justify-center md:w-auto"
-              >
-                <motion.span
-                  animate={{ scale: [1, 1.03, 1] }}
-                  transition={{
-                    duration: 0.6,
-                    repeat: Infinity,
-                    repeatDelay: 2.4,
-                    ease: "easeInOut",
-                  }}
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#FFC107] px-5 py-2.5 text-sm font-bold text-black shadow-md transition-colors hover:bg-[#FFD54F] md:w-auto md:px-6"
+                <span
+                  aria-hidden
+                  className="ml-2 inline-block translate-x-0 text-white/80 transition-transform group-hover:translate-x-0.5"
                 >
-                  Composer ma liste
-                  <span aria-hidden className="transition-transform group-hover:translate-x-0.5">→</span>
-                </motion.span>
-              </Link>
+                  →
+                </span>
+              </p>
             </div>
-
-            {/* Close */}
             <button
               type="button"
               onClick={handleClose}
               aria-label="Fermer la bannière"
-              className="absolute right-2 top-2 inline-flex h-11 w-11 items-center justify-center rounded-full text-white/80 transition-colors hover:bg-white/10 hover:text-white md:relative md:right-0 md:top-0 md:h-9 md:w-9"
+              className="absolute right-1.5 top-1/2 -translate-y-1/2 inline-flex h-7 w-7 items-center justify-center rounded-full text-white/70 transition-colors hover:bg-white/10 hover:text-white"
             >
-              <X className="h-4 w-4 md:h-4 md:w-4" />
+              <X className="h-3.5 w-3.5" />
             </button>
-          </div>
+          </Link>
         </motion.div>
       )}
     </AnimatePresence>

@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/ButtonPrimitive";
 import { Pill } from "@/components/ui/Pill";
 import { AuroraShader } from "@/components/ui/AuroraShader";
-import { NewsletterForm } from "@/components/newsletter/NewsletterForm";
 import { useLatestBestXIMeta } from "@/hooks/useLatestBestXIMeta";
 
 
@@ -55,45 +54,33 @@ export function LeopardsHero() {
 
           <motion.p
             variants={itemVariants}
-            className="text-lg md:text-xl text-foreground/70 max-w-2xl text-balance"
+            className="text-lg md:text-xl text-foreground/75 max-w-2xl text-balance"
           >
-            Tous les Léopards de la planète. Une seule base.
+            471 talents traqués chaque dimanche. Compose ton 26 avant le tirage du Mondial.
           </motion.p>
 
           <motion.div
             variants={itemVariants}
-            className="flex flex-col items-center gap-3 w-full sm:w-auto"
+            className="flex flex-col items-center gap-4 w-full sm:w-auto"
           >
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
-              <Link to="/ma-liste" className="w-full sm:w-auto">
-                <Button variant="primary" size="lg" className="group w-full sm:w-auto">
-                  Compose ta liste des 26
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </Button>
-              </Link>
-              <Link to="/roster" className="w-full sm:w-auto">
-                <Button variant="ghost-premium" size="lg" className="w-full sm:w-auto">
-                  Voir le Roster
-                </Button>
-              </Link>
-            </div>
-            <span className="text-xs text-foreground/45">
-              2 minutes. Compare aux autres fans. Partage.
-            </span>
-          </motion.div>
-
-          <motion.div variants={itemVariants} className="w-full max-w-md">
-            <NewsletterForm
-              source="hero"
-              variant="compact"
-              placeholder="Ton email"
-              helper="Une édition par semaine. Zéro spam. Désinscription en un clic."
-            />
+            <Link to="/ma-liste" className="w-full sm:w-auto">
+              <Button variant="primary" size="lg" className="group w-full sm:w-auto">
+                Compose ta liste des 26
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Button>
+            </Link>
+            <Link
+              to="/roster"
+              className="group inline-flex items-center gap-1.5 text-sm font-medium text-foreground/65 transition-colors hover:text-foreground"
+            >
+              Voir le Roster
+              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+            </Link>
           </motion.div>
 
           <motion.div
             variants={itemVariants}
-            className="flex flex-col items-center gap-1.5 mt-2"
+            className="flex flex-col items-center gap-1.5 mt-4"
           >
             <span className="text-sm text-foreground/50 text-balance">
               <span className="hidden sm:inline">

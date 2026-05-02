@@ -153,8 +153,8 @@ export function BuilderUnified() {
             </h2>
             <p className="mt-2 text-sm text-muted-light">
               {activeSlot
-                ? `Choisis un joueur pour ${activeSlot} dans la library →`
-                : `Click un slot vide pour le remplir, ou pioche dans la library pour ton banc.`}
+                ? `Choisis un joueur pour ${activeSlot} dans la liste →`
+                : `Clique un slot vide pour le remplir, ou pioche dans la liste pour ton banc.`}
             </p>
           </div>
 
@@ -320,7 +320,7 @@ function MobileTabs({
           active={current === "library"}
           onClick={() => onChange("library")}
           icon={<Users className="h-4 w-4" />}
-          label="Library"
+          label="Joueurs"
         />
       </div>
     </div>
