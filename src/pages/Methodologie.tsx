@@ -144,6 +144,21 @@ export default function Methodologie() {
                 statistique n'est modifiée à la volée — la stabilité des
                 données prime sur la fraîcheur.
               </p>
+              <h3>Pipeline automatique</h3>
+              <p>
+                Une fonction serveur (Supabase Edge Function{" "}
+                <code>update-player-stats</code>) interroge l'API publique{" "}
+                <code>football-data.org</code> chaque dimanche pour récupérer
+                les statistiques des meilleurs buteurs des dix compétitions
+                couvertes (Premier League, LaLiga, Bundesliga, Serie A,
+                Ligue 1, Eredivisie, Primeira Liga, Championship, Brasileirão
+                Série A, UEFA Champions League). Les profils Léopards qui
+                apparaissent dans ces classements voient leurs champs
+                <code> goals </code>, <code> assists </code> et
+                <code> matchs joués </code> mis à jour automatiquement. Le
+                reste — minutes exactes, statistiques défensives, gardiens —
+                reste manuel ou à venir avec une intégration ultérieure.
+              </p>
             </Prose>
           </section>
 
