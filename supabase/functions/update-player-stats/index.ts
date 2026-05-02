@@ -20,6 +20,17 @@
  *
  * Schedule : weekly, Sundays around 23:05 UTC, via Supabase pg_cron →
  * net.http_post(...). See README.md for the SQL.
+ *
+ * --- Club consistency check ---
+ *
+ * Match by name only would silently update the wrong row when two players
+ * share a name (we hit this with Arnaud Kalimuendo : LR's plays at
+ * Nottingham Forest, football-data.org returns a Bundesliga homonym at
+ * Eintracht Frankfurt). We require the LR `current_club` and the API
+ * `team.name` to share at least one significant 4+ char token. Loose
+ * enough to handle "Real Betis" vs "Real Betis Balompié", strict enough
+ * to reject the Kalimuendo case. Rejects are surfaced in the response
+ * `rejected_detail` for manual review.
  */
 
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
@@ -43,6 +54,34 @@ const COMPS: { code: string; label: string }[] = [
 ];
 
 const RATE_LIMIT_DELAY_MS = 7000;
+
+// Tokens too generic to use as match keys ("FC", "United"...).
+const CLUB_STOPWORDS = new Set([
+  "fc", "cf", "ac", "sc", "sk", "as", "ss", "ssc", "us", "vfb", "vfl",
+  "sv", "sg", "de", "of", "the", "la", "le", "el", "al", "club", "calcio",
+  "city", "united", "olympique", "royal", "royale", "sporting", "stade",
+  "1893", "1899", "1909", "1900", "1903", "1904", "1905", "1906", "1907", "1908",
+]);
+
+function tokenize(s: string): Set<string> {
+  return new Set(
+    s
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[̀-ͯ]/g, "")
+      .replace(/[^a-z0-9\s]/g, " ")
+      .split(/\s+/)
+      .filter((t) => t.length >= 4 && !CLUB_STOPWORDS.has(t)),
+  );
+}
+
+function clubsMatch(lrClub: string | null, apiTeam: string | null): boolean {
+  if (!lrClub || !apiTeam) return false;
+  const lrTokens = tokenize(lrClub);
+  const apiTokens = tokenize(apiTeam);
+  for (const t of lrTokens) if (apiTokens.has(t)) return true;
+  return false;
+}
 
 /** Strip accents, normalise hyphens & apostrophes, lowercase. */
 function normalize(name: string): string {
@@ -76,28 +115,48 @@ Deno.serve(async (req: Request) => {
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
   );
 
-  // ---- Load all eligible LR players we want to enrich ----
+  // Pull id, name AND current_club for the consistency check.
   const { data: players, error: loadErr } = await supa
     .from("players")
-    .select("id, name")
+    .select("id, name, current_club")
     .neq("eligibility_status", "ineligible");
 
   if (loadErr) {
     return jsonResp({ ok: false, error: loadErr.message }, 500);
   }
 
-  // Build the normalised name → id lookup once.
-  const lookup = new Map<string, number>();
+  // name → array of {id, club} (handle homonyms in our own DB too)
+  const lookup = new Map<string, Array<{ id: number; club: string | null }>>();
   for (const p of players || []) {
-    lookup.set(normalize(p.name as string), p.id as number);
+    const k = normalize(p.name as string);
+    const arr = lookup.get(k) ?? [];
+    arr.push({ id: p.id as number, club: (p.current_club as string) ?? null });
+    lookup.set(k, arr);
   }
 
   const result = {
     ok: true,
     competitions: COMPS.length,
     players_in_db: players?.length ?? 0,
-    matched: 0,
+    matched_name: 0,
+    matched_with_club: 0,
+    rejected_club_mismatch: 0,
     updated: 0,
+    matches_detail: [] as Array<{
+      comp: string;
+      lr_name: string;
+      api_team: string;
+      lr_club: string | null;
+      goals: number;
+      assists: number;
+      matches: number;
+    }>,
+    rejected_detail: [] as Array<{
+      lr_name: string;
+      lr_club: string | null;
+      api_team: string;
+      comp: string;
+    }>,
     errors: [] as string[],
   };
 
@@ -112,9 +171,24 @@ Deno.serve(async (req: Request) => {
       } else {
         const data = await r.json();
         for (const sc of data.scorers || []) {
-          const lrId = lookup.get(normalize(sc.player?.name || ""));
-          if (!lrId) continue;
-          result.matched++;
+          const candidates = lookup.get(normalize(sc.player?.name || ""));
+          if (!candidates || candidates.length === 0) continue;
+          result.matched_name++;
+
+          const apiTeam = sc.team?.name ?? null;
+          const winner = candidates.find((c) => clubsMatch(c.club, apiTeam));
+          if (!winner) {
+            result.rejected_club_mismatch++;
+            result.rejected_detail.push({
+              lr_name: sc.player.name,
+              lr_club: candidates[0].club,
+              api_team: apiTeam || "?",
+              comp: comp.code,
+            });
+            continue;
+          }
+          result.matched_with_club++;
+
           const update = {
             season_goals: sc.goals ?? 0,
             season_assists: sc.assists ?? 0,
@@ -124,15 +198,26 @@ Deno.serve(async (req: Request) => {
           const { error: ue } = await supa
             .from("players")
             .update(update)
-            .eq("id", lrId);
-          if (ue) result.errors.push(`update ${lrId}: ${ue.message}`);
-          else result.updated++;
+            .eq("id", winner.id);
+          if (ue) {
+            result.errors.push(`update ${winner.id}: ${ue.message}`);
+          } else {
+            result.updated++;
+            result.matches_detail.push({
+              comp: comp.code,
+              lr_name: sc.player.name,
+              api_team: apiTeam || "?",
+              lr_club: winner.club,
+              goals: update.season_goals,
+              assists: update.season_assists,
+              matches: update.season_games,
+            });
+          }
         }
       }
     } catch (e) {
       result.errors.push(`${comp.code}: ${(e as Error).message}`);
     }
-    // pace requests to stay under 10 req/min
     await new Promise((res) => setTimeout(res, RATE_LIMIT_DELAY_MS));
   }
 
