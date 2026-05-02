@@ -21,6 +21,7 @@ import {
 } from "@/components/player/PlayerWhySection";
 import { PlayerIdentityCards } from "@/components/player/PlayerIdentityCards";
 import { PlayerCareerCard } from "@/components/player/PlayerCareerCard";
+import { PlayerStatProfile } from "@/components/player/PlayerStatProfile";
 import { RelatedPlayers } from "@/components/player/RelatedPlayers";
 import { usePlayer } from "@/hooks/usePlayer";
 import { useDominantColor } from "@/hooks/useDominantColor";
@@ -331,6 +332,9 @@ export default function PlayerPage() {
             </div>
           </div>
         </section>
+
+        {/* PROFIL STATISTIQUE — hexagon 6 axes (4 universels + 2 par poste) */}
+        <PlayerStatProfile player={player} />
 
         {/* IDENTITÉ + CARRIÈRE — pull quote retirée, remontée dans le fold */}
         <section className="container-site py-12 border-t border-border">

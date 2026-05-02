@@ -9,6 +9,7 @@ const NAV_LINKS = [
 ];
 
 const METHOD_LINKS = [
+  { label: "Méthodologie", href: "/methodologie" },
   { label: "À propos", href: "/a-propos" },
   { label: "Newsletter", href: "/newsletter" },
 ];
