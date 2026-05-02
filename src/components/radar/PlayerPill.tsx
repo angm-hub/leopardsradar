@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { flagFor, formatMarketValue } from "@/lib/playerHelpers";
 import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
@@ -37,10 +37,31 @@ export function PlayerPill({
   index,
   featured = false,
 }: PlayerPillProps) {
+  const reduced = useReducedMotion();
   const positionClass = player.position
     ? POSITION_DOT[player.position]
     : "bg-muted";
   const lastName = player.name.split(/\s+/).slice(-1)[0] || player.name;
+
+  // Per-pill deterministic drift parameters. Same player.id always yields
+  // the same drift so the cloud feels alive without ever shifting state
+  // between renders.
+  const seed = (player.id * 9301 + 49297) % 233280;
+  const driftDur = 8 + (seed % 6); // 8s..14s
+  const driftX = 1.2 + ((seed >> 3) % 18) / 10; // 1.2..3.0px
+  const driftY = 1.0 + ((seed >> 5) % 15) / 10; // 1.0..2.5px
+  const driftDelay = (seed % 30) / 10; // 0..3s phase offset
+
+  // Continuous drift only kicks in for users who haven't requested
+  // reduced motion. Featured pills get the same drift — the halo plays
+  // the differentiation role on its own.
+  const driftAnim =
+    reduced
+      ? undefined
+      : {
+          x: [0, driftX, -driftX * 0.6, 0],
+          y: [0, -driftY, driftY * 0.7, 0],
+        };
 
   return (
     <motion.div
@@ -54,18 +75,43 @@ export function PlayerPill({
         ease: [0.22, 0.8, 0.2, 1],
       }}
     >
-      <Link to={`/player/${player.slug}`} className="group relative block">
-        {featured ? (
-          <FeaturedPill
-            player={player}
-            lastName={lastName}
-            positionClass={positionClass}
+      <motion.div
+        animate={driftAnim}
+        transition={
+          reduced
+            ? undefined
+            : {
+                duration: driftDur,
+                delay: driftDelay,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }
+        }
+      >
+        <Link to={`/player/${player.slug}`} className="group relative block">
+          {/* Hover halo — soft radial glow that intensifies on hover.
+              Opacity 0 by default so it never adds visual noise to the
+              resting state. */}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute -inset-3 rounded-full opacity-0 blur-md transition-opacity duration-300 group-hover:opacity-80"
+            style={{
+              background:
+                "radial-gradient(circle, rgba(252,209,22,0.45) 0%, rgba(252,209,22,0) 70%)",
+            }}
           />
-        ) : (
-          <DefaultPill lastName={lastName} positionClass={positionClass} />
-        )}
-        <PillTooltip player={player} />
-      </Link>
+          {featured ? (
+            <FeaturedPill
+              player={player}
+              lastName={lastName}
+              positionClass={positionClass}
+            />
+          ) : (
+            <DefaultPill lastName={lastName} positionClass={positionClass} />
+          )}
+          <PillTooltip player={player} />
+        </Link>
+      </motion.div>
     </motion.div>
   );
 }

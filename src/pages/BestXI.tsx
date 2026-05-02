@@ -142,7 +142,7 @@ function PitchPlayer({
       style={{ left: `${slot.x}%`, top: `${slot.y}%` }}
       aria-label={`${player.name} — ${player.current_club ?? ""}`}
     >
-      <div className="flex flex-col items-center gap-1.5">
+      <div className="flex flex-col items-center gap-1">
         <div className="relative">
           <div
             aria-hidden
@@ -154,8 +154,17 @@ function PitchPlayer({
             className="relative h-10 w-10 sm:h-14 sm:w-14 rounded-full border-[3px] border-primary shadow-lg shadow-primary/30 transition-transform group-hover:scale-110"
             initialsClassName="text-xs sm:text-sm"
           />
+          {/* Tactical position chip — small badge anchored to the bottom of the
+              avatar so the viewer can read GK/LB/CB even without scanning the
+              roster card list below. */}
+          <span
+            aria-hidden
+            className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 z-10 inline-flex items-center justify-center rounded-full border border-primary/70 bg-background/95 px-1.5 py-px font-mono text-[8px] sm:text-[9px] font-bold uppercase tracking-wider text-primary leading-none shadow-md"
+          >
+            {slot.position}
+          </span>
         </div>
-        <span className="font-serif text-[10px] sm:text-xs font-semibold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.95)] whitespace-nowrap max-w-[110px] truncate">
+        <span className="mt-1.5 font-serif text-[10px] sm:text-xs font-semibold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.95)] whitespace-nowrap max-w-[110px] truncate">
           {player.name.split(" ").slice(-1)[0]}
         </span>
 
