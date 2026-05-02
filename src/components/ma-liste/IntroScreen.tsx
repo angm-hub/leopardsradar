@@ -10,10 +10,8 @@ interface IntroScreenProps {
 
 const STEPS = [
   { step: "1", label: "Formation" },
-  { step: "2", label: "XI titulaire" },
-  { step: "3", label: "Banc" },
-  { step: "4", label: "Capitaine" },
-  { step: "5", label: "Partage" },
+  { step: "2", label: "Compose ton 26" },
+  { step: "3", label: "Partage" },
 ];
 
 export function IntroScreen({ totalListsCreated = 247 }: IntroScreenProps) {

@@ -1,12 +1,16 @@
 import { useState, useMemo } from "react";
-import { ArrowLeft, ArrowRight, Plus, X, Star, Crown } from "lucide-react";
+import { ArrowLeft, ArrowRight, Plus, X, Star, Crown, Layers, Users } from "lucide-react";
 import { motion } from "framer-motion";
 import { useMaListeStore } from "@/store/maListeStore";
 import { Button } from "@/components/ui/ButtonPrimitive";
 import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
 import { BuilderLibrary } from "./BuilderLibrary";
 import { usePlayers } from "@/hooks/usePlayers";
-import { FORMATION_SLOTS, BENCH_MIN_REQUIREMENTS } from "@/types/maListe";
+import {
+  FORMATION_SLOTS,
+  BENCH_MIN_REQUIREMENTS,
+  SLOT_COMPATIBILITY,
+} from "@/types/maListe";
 import type { Formation, SlotPosition } from "@/types/maListe";
 import { cn } from "@/lib/utils";
 import {
@@ -14,6 +18,8 @@ import {
   POSITION_LABEL,
 } from "@/lib/playerHelpers";
 import type { DBPlayer, DBPosition } from "@/types/dbPlayer";
+
+type MobileTab = "pitch" | "library";
 
 const PITCH_POSITIONS: Record<Formation, Partial<Record<SlotPosition, { x: number; y: number }>>> = {
   "4-3-3": {
@@ -70,6 +76,8 @@ export function BuilderUnified() {
   });
 
   const [activeSlot, setActiveSlot] = useState<SlotPosition | null>(null);
+  const [dragPlayer, setDragPlayer] = useState<DBPlayer | null>(null);
+  const [mobileTab, setMobileTab] = useState<MobileTab>("pitch");
 
   if (!formation) {
     // Garde-fou : si formation pas encore choisie, redirige vers FormationPicker
@@ -92,6 +100,31 @@ export function BuilderUnified() {
 
   const handlePickForBench = (player: DBPlayer) => {
     addToBench(player);
+  };
+
+  /** drop d'un joueur sur un slot du pitch — vérifie la compat poste */
+  const handleDropOnSlot = (slot: SlotPosition) => {
+    if (!dragPlayer) return;
+    const compat = SLOT_COMPATIBILITY[slot];
+    if (!dragPlayer.position || !compat.includes(dragPlayer.position)) {
+      // joueur incompatible — on ignore silencieusement
+      setDragPlayer(null);
+      return;
+    }
+    placePlayerInSlot(slot, dragPlayer);
+    setDragPlayer(null);
+    setActiveSlot(null);
+  };
+
+  const handleDropOnBench = () => {
+    if (!dragPlayer) return;
+    addToBench(dragPlayer);
+    setDragPlayer(null);
+  };
+
+  const slotIsCompat = (slot: SlotPosition): boolean => {
+    if (!dragPlayer || !dragPlayer.position) return false;
+    return SLOT_COMPATIBILITY[slot].includes(dragPlayer.position);
   };
 
   const handleSwitchFormation = (f: Formation) => {
@@ -129,9 +162,14 @@ export function BuilderUnified() {
         </div>
 
         {/* MAIN GRID — pitch + bench center, library right */}
-        <div className="grid lg:grid-cols-12 gap-5 lg:gap-6">
+        <div className="grid lg:grid-cols-12 gap-5 lg:gap-6 pb-20 lg:pb-0">
           {/* Center : pitch + bench */}
-          <div className="lg:col-span-8 space-y-5">
+          <div
+            className={cn(
+              "lg:col-span-8 space-y-5",
+              mobileTab === "pitch" ? "block" : "hidden lg:block",
+            )}
+          >
             {/* Pitch */}
             <div
               className={cn(
@@ -149,12 +187,26 @@ export function BuilderUnified() {
                 if (!pos) return null;
                 const player = startingXI[slot];
                 const isActive = activeSlot === slot;
+                const isDragHover = dragPlayer && slotIsCompat(slot);
+                const isDragIncompat = dragPlayer && !slotIsCompat(slot);
 
                 return (
                   <div
                     key={slot}
                     className="absolute -translate-x-1/2 -translate-y-1/2"
                     style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
+                    onDragOver={(e) => {
+                      if (isDragHover) {
+                        e.preventDefault();
+                        e.dataTransfer.dropEffect = "move";
+                      }
+                    }}
+                    onDrop={(e) => {
+                      if (isDragHover) {
+                        e.preventDefault();
+                        handleDropOnSlot(slot);
+                      }
+                    }}
                   >
                     {player ? (
                       <PlacedPlayer
@@ -167,11 +219,14 @@ export function BuilderUnified() {
                           if (captain?.slug === player.slug) setCaptain(null as never);
                         }}
                         onSetCaptain={() => setCaptain(player)}
+                        dragHighlight={!!isDragHover}
                       />
                     ) : (
                       <EmptySlot
                         slot={slot}
                         active={isActive}
+                        dragHighlight={!!isDragHover}
+                        dragIncompat={!!isDragIncompat}
                         onClick={() =>
                           setActiveSlot((prev) => (prev === slot ? null : slot))
                         }
@@ -188,6 +243,8 @@ export function BuilderUnified() {
               captain={captain}
               onRemove={removeFromBench}
               onSetCaptain={(p) => setCaptain(p)}
+              dragActive={!!dragPlayer && bench.length < 15}
+              onDrop={handleDropOnBench}
             />
 
             {/* CTA bottom */}
@@ -207,19 +264,99 @@ export function BuilderUnified() {
           </div>
 
           {/* Right : library */}
-          <div className="lg:col-span-4">
-            <div className="lg:sticky lg:top-20 h-[600px] lg:h-[calc(100vh-7rem)]">
+          <div
+            className={cn(
+              "lg:col-span-4",
+              mobileTab === "library" ? "block" : "hidden lg:block",
+            )}
+          >
+            <div className="lg:sticky lg:top-20 h-[calc(100vh-10rem)] lg:h-[calc(100vh-7rem)]">
               <BuilderLibrary
                 allPlayers={allPlayers ?? []}
                 activeSlot={activeSlot}
                 onPickForSlot={handlePickForSlot}
                 onPickForBench={handlePickForBench}
+                onDragStart={setDragPlayer}
+                onDragEnd={() => setDragPlayer(null)}
               />
             </div>
           </div>
         </div>
       </div>
+
+      {/* Mobile bottom tabs */}
+      <MobileTabs
+        current={mobileTab}
+        onChange={setMobileTab}
+        xiCount={xiCount}
+        benchCount={bench.length}
+      />
     </section>
+  );
+}
+
+function MobileTabs({
+  current,
+  onChange,
+  xiCount,
+  benchCount,
+}: {
+  current: MobileTab;
+  onChange: (t: MobileTab) => void;
+  xiCount: number;
+  benchCount: number;
+}) {
+  return (
+    <div className="lg:hidden fixed bottom-0 inset-x-0 z-30 border-t border-border bg-background/95 backdrop-blur-lg">
+      <div className="container-site flex items-center justify-around py-2">
+        <TabButton
+          active={current === "pitch"}
+          onClick={() => onChange("pitch")}
+          icon={<Layers className="h-4 w-4" />}
+          label="Pitch & Banc"
+          counter={`${xiCount + benchCount}/26`}
+        />
+        <TabButton
+          active={current === "library"}
+          onClick={() => onChange("library")}
+          icon={<Users className="h-4 w-4" />}
+          label="Library"
+        />
+      </div>
+    </div>
+  );
+}
+
+function TabButton({
+  active,
+  onClick,
+  icon,
+  label,
+  counter,
+}: {
+  active: boolean;
+  onClick: () => void;
+  icon: React.ReactNode;
+  label: string;
+  counter?: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "flex-1 flex flex-col items-center gap-0.5 rounded-button px-3 py-2 transition-colors",
+        active ? "text-primary" : "text-muted hover:text-foreground",
+      )}
+    >
+      {icon}
+      <span className="text-[10px] uppercase tracking-wider font-mono">
+        {label}
+      </span>
+      {counter ? (
+        <span className="text-[9px] font-mono opacity-70">{counter}</span>
+      ) : null}
+    </button>
   );
 }
 
@@ -327,14 +464,18 @@ function Gauge({ label, value, max }: { label: string; value: number; max: numbe
   );
 }
 
-/** Slot vide cliquable. */
+/** Slot vide cliquable + drop target. */
 function EmptySlot({
   slot,
   active,
+  dragHighlight,
+  dragIncompat,
   onClick,
 }: {
   slot: SlotPosition;
   active: boolean;
+  dragHighlight?: boolean;
+  dragIncompat?: boolean;
   onClick: () => void;
 }) {
   return (
@@ -346,17 +487,21 @@ function EmptySlot({
     >
       <span
         className={cn(
-          "flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full border-2 border-dashed text-white/70 transition-all",
-          active
-            ? "border-primary bg-primary/15 text-primary scale-110 ring-4 ring-primary/20"
-            : "border-white/40 bg-white/5 group-hover:border-primary group-hover:bg-primary/10 group-hover:text-primary",
+          "flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full border-2 text-white/70 transition-all",
+          dragHighlight
+            ? "border-solid border-primary bg-primary/25 text-primary scale-110 ring-4 ring-primary/30 animate-pulse"
+            : dragIncompat
+              ? "border-dashed border-white/15 bg-white/5 text-white/30 opacity-50"
+              : active
+                ? "border-dashed border-primary bg-primary/15 text-primary scale-110 ring-4 ring-primary/20"
+                : "border-dashed border-white/40 bg-white/5 group-hover:border-primary group-hover:bg-primary/10 group-hover:text-primary",
         )}
       >
         <Plus className="h-5 w-5" strokeWidth={2.5} />
       </span>
       <span className={cn(
         "pointer-events-none absolute left-1/2 top-full mt-1 -translate-x-1/2 whitespace-nowrap font-mono text-[9px] uppercase tracking-wider",
-        active ? "text-primary" : "text-white/70",
+        active || dragHighlight ? "text-primary" : "text-white/70",
       )}>
         {slot}
       </span>
@@ -364,11 +509,12 @@ function EmptySlot({
   );
 }
 
-/** Joueur placé sur le pitch — avec étoile capitaine + remove. */
+/** Joueur placé sur le pitch — avec étoile capitaine + remove + drop swap. */
 function PlacedPlayer({
   player,
   slot,
   isCaptain,
+  dragHighlight,
   onReplace,
   onRemove,
   onSetCaptain,
@@ -376,6 +522,7 @@ function PlacedPlayer({
   player: DBPlayer;
   slot: SlotPosition;
   isCaptain: boolean;
+  dragHighlight?: boolean;
   onReplace: () => void;
   onRemove: () => void;
   onSetCaptain: () => void;
@@ -386,7 +533,10 @@ function PlacedPlayer({
       <button
         type="button"
         onClick={onReplace}
-        className="relative block transition-transform duration-200 hover:scale-110 focus:outline-none focus:scale-110"
+        className={cn(
+          "relative block transition-transform duration-200 hover:scale-110 focus:outline-none focus:scale-110",
+          dragHighlight && "scale-110 ring-4 ring-primary/40 rounded-full",
+        )}
         aria-label={`Remplacer ${player.name}`}
       >
         <PlayerAvatar
@@ -444,17 +594,21 @@ function PlacedPlayer({
   );
 }
 
-/** Strip horizontal du banc (15 slots) */
+/** Strip horizontal du banc (15 slots) — drop target. */
 function BenchStrip({
   bench,
   captain,
   onRemove,
   onSetCaptain,
+  dragActive,
+  onDrop,
 }: {
   bench: DBPlayer[];
   captain: DBPlayer | null;
   onRemove: (slug: string) => void;
   onSetCaptain: (p: DBPlayer) => void;
+  dragActive: boolean;
+  onDrop: () => void;
 }) {
   const reqs = useMemo(() => {
     const counts: Record<DBPosition, number> = {
@@ -470,7 +624,26 @@ function BenchStrip({
   }, [bench]);
 
   return (
-    <div className="rounded-card border border-border bg-card overflow-hidden">
+    <div
+      className={cn(
+        "rounded-card border bg-card overflow-hidden transition-all",
+        dragActive
+          ? "border-primary ring-2 ring-primary/40 bg-primary/5"
+          : "border-border",
+      )}
+      onDragOver={(e) => {
+        if (dragActive) {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = "move";
+        }
+      }}
+      onDrop={(e) => {
+        if (dragActive) {
+          e.preventDefault();
+          onDrop();
+        }
+      }}
+    >
       <div className="flex items-center justify-between gap-3 px-4 py-2.5 border-b border-border bg-card/60">
         <p className="text-[10px] uppercase tracking-[0.25em] text-muted font-mono">
           Banc · {bench.length} / 15
