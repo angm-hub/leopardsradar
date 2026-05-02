@@ -34,9 +34,12 @@ const config: Config = {
         },
       },
       fontFamily: {
+        // Editorial stack — Fraunces for display + DM Sans for body + Space Mono
+        // for tabular/UI labels. Replaces the prior Inter / JetBrains Mono pair
+        // which read too "default LLM-app" against the editorial direction.
         serif: ['"Fraunces"', "Georgia", "serif"],
-        sans: ['"Inter"', "system-ui", "sans-serif"],
-        mono: ['"JetBrains Mono"', "Menlo", "monospace"],
+        sans: ['"DM Sans"', "system-ui", "sans-serif"],
+        mono: ['"Space Mono"', "Menlo", "monospace"],
       },
       fontSize: {
         "display-2xl": ["5rem", { lineHeight: "1.05", fontWeight: "600" }],
