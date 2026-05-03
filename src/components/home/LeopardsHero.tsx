@@ -1,12 +1,34 @@
-import { motion, type Variants } from "framer-motion";
+import { lazy, Suspense } from "react";
+import { motion, type Variants, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/ButtonPrimitive";
 import { Pill } from "@/components/ui/Pill";
-import { AuroraShader } from "@/components/ui/AuroraShader";
 import { useLatestBestXIMeta } from "@/hooks/useLatestBestXIMeta";
 import { useHomeStats } from "@/hooks/useHomeStats";
 import { useMondialCountdown } from "@/hooks/useMondialCountdown";
+
+// AuroraShader pèse ~30 kB gzip de WebGL (ogl). On le lazy-load pour le sortir
+// du bundle main et garder un LCP rapide. Le fallback est un gradient CSS qui
+// occupe l'espace pendant le chargement (≈ 200 ms en cache miss) — visuellement
+// proche, sans flash de couleur. Si l'utilisateur préfère le mouvement réduit,
+// on n'invoque jamais le shader et on reste sur le fallback statique.
+const AuroraShader = lazy(() =>
+  import("@/components/ui/AuroraShader").then((m) => ({ default: m.AuroraShader })),
+);
+
+function AuroraFallback() {
+  return (
+    <div
+      aria-hidden
+      className="absolute inset-0 h-full w-full"
+      style={{
+        background:
+          "radial-gradient(60% 80% at 50% 30%, rgba(0,166,81,0.55) 0%, rgba(10,10,11,0.85) 70%, rgba(10,10,11,1) 100%)",
+      }}
+    />
+  );
+}
 
 
 const containerVariants: Variants = {
@@ -26,6 +48,7 @@ export function LeopardsHero() {
   const { edition, formattedDate } = useLatestBestXIMeta();
   const { stats } = useHomeStats();
   const { daysUntilKickoff, kickoffDateLabel, phase } = useMondialCountdown();
+  const reducedMotion = useReducedMotion();
   const totalPlayers = stats?.total_players ?? null;
   const radarCount = stats?.radar_count ?? null;
   const rosterCount = stats?.roster_count ?? null;
@@ -33,7 +56,13 @@ export function LeopardsHero() {
 
   return (
     <section className="relative min-h-[100dvh] overflow-hidden bg-background">
-      <AuroraShader className="absolute inset-0 h-full w-full" />
+      {reducedMotion ? (
+        <AuroraFallback />
+      ) : (
+        <Suspense fallback={<AuroraFallback />}>
+          <AuroraShader className="absolute inset-0 h-full w-full" />
+        </Suspense>
+      )}
 
       <div className="absolute inset-0 bg-gradient-to-b from-background/0 via-background/40 to-background pointer-events-none" />
 
