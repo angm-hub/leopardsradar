@@ -165,6 +165,21 @@ Deno.serve(async (req: Request) => {
     errors: [] as string[],
   };
 
+  // Aggregate per player across all comps before writing. Without this,
+  // a player who scores in PL + CL gets two consecutive UPDATEs and the
+  // last-seen comp overwrites the others (Wissa lost his PL stats to
+  // his CL stats in v5).
+  type Agg = {
+    name: string;
+    club: string | null;
+    goals: number;
+    assists: number;
+    games: number;
+    comps: string[];
+  };
+  const aggregates = new Map<number, Agg>();
+
+  // ---- Pass 1 : collect aggregates ----
   for (const comp of COMPS) {
     try {
       const r = await fetch(
@@ -173,57 +188,73 @@ Deno.serve(async (req: Request) => {
       );
       if (!r.ok) {
         result.errors.push(`${comp.code}: HTTP ${r.status}`);
-      } else {
-        const data = await r.json();
-        for (const sc of data.scorers || []) {
-          const candidates = lookup.get(normalize(sc.player?.name || ""));
-          if (!candidates || candidates.length === 0) continue;
-          result.matched_name++;
+        await new Promise((res) => setTimeout(res, RATE_LIMIT_DELAY_MS));
+        continue;
+      }
+      const data = await r.json();
+      for (const sc of data.scorers || []) {
+        const candidates = lookup.get(normalize(sc.player?.name || ""));
+        if (!candidates || candidates.length === 0) continue;
+        result.matched_name++;
 
-          const apiTeam = sc.team?.name ?? null;
-          const winner = candidates.find((c) => clubsMatch(c.club, apiTeam));
-          if (!winner) {
-            result.rejected_club_mismatch++;
-            result.rejected_detail.push({
-              lr_name: sc.player.name,
-              lr_club: candidates[0].club,
-              api_team: apiTeam || "?",
-              comp: comp.code,
-            });
-            continue;
-          }
-          result.matched_with_club++;
-
-          const update = {
-            season_goals: sc.goals ?? 0,
-            season_assists: sc.assists ?? 0,
-            season_games: sc.playedMatches ?? 0,
-            stats_updated_at: new Date().toISOString(),
-          };
-          const { error: ue } = await supa
-            .from("players")
-            .update(update)
-            .eq("id", winner.id);
-          if (ue) {
-            result.errors.push(`update ${winner.id}: ${ue.message}`);
-          } else {
-            result.updated++;
-            result.matches_detail.push({
-              comp: comp.code,
-              lr_name: sc.player.name,
-              api_team: apiTeam || "?",
-              lr_club: winner.club,
-              goals: update.season_goals,
-              assists: update.season_assists,
-              matches: update.season_games,
-            });
-          }
+        const apiTeam = sc.team?.name ?? null;
+        const winner = candidates.find((c) => clubsMatch(c.club, apiTeam));
+        if (!winner) {
+          result.rejected_club_mismatch++;
+          result.rejected_detail.push({
+            lr_name: sc.player.name,
+            lr_club: candidates[0].club,
+            api_team: apiTeam || "?",
+            comp: comp.code,
+          });
+          continue;
         }
+        result.matched_with_club++;
+
+        const prev = aggregates.get(winner.id) ?? {
+          name: sc.player.name as string,
+          club: winner.club,
+          goals: 0,
+          assists: 0,
+          games: 0,
+          comps: [] as string[],
+        };
+        prev.goals += sc.goals ?? 0;
+        prev.assists += sc.assists ?? 0;
+        prev.games += sc.playedMatches ?? 0;
+        prev.comps.push(comp.code);
+        aggregates.set(winner.id, prev);
       }
     } catch (e) {
       result.errors.push(`${comp.code}: ${(e as Error).message}`);
     }
     await new Promise((res) => setTimeout(res, RATE_LIMIT_DELAY_MS));
+  }
+
+  // ---- Pass 2 : write aggregated values, one UPDATE per player ----
+  const now = new Date().toISOString();
+  for (const [lrId, agg] of aggregates) {
+    const update = {
+      season_goals: agg.goals,
+      season_assists: agg.assists,
+      season_games: agg.games,
+      stats_updated_at: now,
+    };
+    const { error: ue } = await supa.from("players").update(update).eq("id", lrId);
+    if (ue) {
+      result.errors.push(`update ${lrId}: ${ue.message}`);
+    } else {
+      result.updated++;
+      result.matches_detail.push({
+        comp: agg.comps.join("+"),
+        lr_name: agg.name,
+        api_team: "(aggregated)",
+        lr_club: agg.club,
+        goals: agg.goals,
+        assists: agg.assists,
+        matches: agg.games,
+      });
+    }
   }
 
   return jsonResp(result);
