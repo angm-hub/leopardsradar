@@ -54,7 +54,25 @@ const Roster = () => {
   const [sort, setSort] = useState<SortKey>("VALUE_DESC");
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
-  const [mode, setMode] = useState<RosterMode>("editorial");
+  // Persist user's mode preference (editorial vs liste) — power users coming
+  // back default to "liste" because that's the dense view they want, casuals
+  // stay on "editorial". Defaults to "editorial" when storage is empty.
+  const [mode, setMode] = useState<RosterMode>(() => {
+    if (typeof window === "undefined") return "editorial";
+    try {
+      const saved = window.localStorage.getItem("lr_roster_mode");
+      return saved === "liste" || saved === "editorial" ? saved : "editorial";
+    } catch {
+      return "editorial";
+    }
+  });
+  useEffect(() => {
+    try {
+      window.localStorage.setItem("lr_roster_mode", mode);
+    } catch {
+      /* localStorage blocked — silent */
+    }
+  }, [mode]);
 
   // 300ms debounce on the search input
   useEffect(() => {
