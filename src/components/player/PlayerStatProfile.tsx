@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Info } from "lucide-react";
+import { Info, AlertCircle } from "lucide-react";
 import type { DBPlayer } from "@/types/dbPlayer";
 import { computePlayerScores } from "@/lib/playerScores";
 import { PlayerHexagon } from "./PlayerHexagon";
@@ -8,20 +8,30 @@ interface PlayerStatProfileProps {
   player: DBPlayer;
 }
 
+// Threshold below which we hide the hexagon and switch to a 1-col axis
+// breakdown : a polygon with only 1 or 2 vertices reads as broken, not
+// honest. With 3+ axes the silhouette becomes informative.
+const HEX_MIN_VALID_AXES = 3;
+
 /**
  * PlayerStatProfile — section "Profil statistique" sur la fiche Player.
  *
- * 2-col layout : hexagon SVG à gauche, détail des 6 axes à droite.
- * Sur mobile, hexagon en haut, détail en dessous.
+ * Three rendering modes :
+ *   - Empty  : zero data → section hidden entirely
+ *   - Sparse : 1-2 axes filled → axis breakdown alone (no hexagon),
+ *              with an editorial note about partial data
+ *   - Full   : 3+ axes filled → 2-col layout with hexagon left + breakdown right
  *
- * Quand toutes les valeurs sont à null (joueur sans aucune donnée
- * saison ni caps), on cache la section au lieu d'afficher un hexagon
- * vide — pas d'espace mort dans la page.
+ * The "sparse" mode prevents the dégénéré-polygon look on the long tail
+ * of fiches where the free football-data.org tier doesn't reach (gardiens,
+ * défenseurs non-scoreurs, championnats hors top 10).
  */
 export function PlayerStatProfile({ player }: PlayerStatProfileProps) {
   const scores = computePlayerScores(player);
-  const hasAnyData = scores.order.some((k) => scores.axes[k].value !== null);
-  if (!hasAnyData) return null;
+  const validAxes = scores.order.filter((k) => scores.axes[k].value !== null).length;
+  if (validAxes === 0) return null;
+
+  const isSparse = validAxes < HEX_MIN_VALID_AXES;
 
   return (
     <section className="container-site py-12 border-t border-border">
@@ -37,28 +47,27 @@ export function PlayerStatProfile({ player }: PlayerStatProfileProps) {
           Méthodologie
         </Link>
       </div>
-      <p className="mb-8 max-w-xl text-sm text-muted-light">
-        Six axes notés sur 100. Quatre universels, deux propres au poste{" "}
-        {scores.positionLabel ? (
-          <>
-            <span className="text-foreground/85">{scores.positionLabel.toLowerCase()}</span>
-            .
-          </>
-        ) : (
-          "."
-        )}{" "}
-        Les axes marqués <span className="font-mono text-foreground/70">—</span> attendent une
-        donnée que nous n'avons pas encore.
-      </p>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
-        {/* Hexagon */}
-        <div className="flex justify-center lg:justify-start">
-          <PlayerHexagon scores={scores} size={340} />
-        </div>
+      {isSparse ? (
+        <SparseIntro positionLabel={scores.positionLabel} validCount={validAxes} />
+      ) : (
+        <FullIntro positionLabel={scores.positionLabel} />
+      )}
 
-        {/* Axis breakdown */}
-        <div className="space-y-2">
+      <div
+        className={
+          isSparse
+            ? "grid grid-cols-1"
+            : "grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start"
+        }
+      >
+        {!isSparse ? (
+          <div className="flex justify-center lg:justify-start">
+            <PlayerHexagon scores={scores} size={340} />
+          </div>
+        ) : null}
+
+        <div className={isSparse ? "max-w-2xl space-y-2" : "space-y-2"}>
           {scores.order.map((key) => {
             const a = scores.axes[key];
             return (
@@ -92,6 +101,55 @@ export function PlayerStatProfile({ player }: PlayerStatProfileProps) {
         </div>
       </div>
     </section>
+  );
+}
+
+function FullIntro({ positionLabel }: { positionLabel: string | null }) {
+  return (
+    <p className="mb-8 max-w-xl text-sm text-muted-light">
+      Six axes notés sur 100. Quatre universels, deux propres au poste{" "}
+      {positionLabel ? (
+        <>
+          <span className="text-foreground/85">{positionLabel.toLowerCase()}</span>
+          .
+        </>
+      ) : (
+        "."
+      )}{" "}
+      Les axes marqués <span className="font-mono text-foreground/70">—</span> attendent une
+      donnée que nous n'avons pas encore.
+    </p>
+  );
+}
+
+function SparseIntro({
+  positionLabel,
+  validCount,
+}: {
+  positionLabel: string | null;
+  validCount: number;
+}) {
+  return (
+    <div className="mb-8 flex max-w-2xl items-start gap-3 rounded-card border border-border/60 bg-card/40 p-4">
+      <AlertCircle className="h-4 w-4 mt-0.5 shrink-0 text-muted" aria-hidden />
+      <div>
+        <p className="text-sm text-foreground/85">
+          Données partielles pour ce profil{" "}
+          {positionLabel ? (
+            <span className="text-muted-light">({positionLabel.toLowerCase()})</span>
+          ) : null}{" "}
+          — {validCount} axe{validCount > 1 ? "s" : ""} renseigné{validCount > 1 ? "s" : ""} sur 6.
+          Les statistiques saison ne sont actuellement disponibles que pour les
+          joueurs des 10 compétitions majeures couvertes par notre pipeline auto.{" "}
+          <Link
+            to="/methodologie#frequence"
+            className="text-primary hover:text-primary-hover transition-colors"
+          >
+            En savoir plus →
+          </Link>
+        </p>
+      </div>
+    </div>
   );
 }
 

@@ -91,21 +91,41 @@ const T1_CLUBS = new Set([
 const T2_CLUBS = new Set([
   // Championship
   "Burnley", "Leeds United", "Sunderland AFC", "Sheffield United",
+  "Stoke City", "Hull City", "Watford", "Sheffield Wednesday",
+  "West Bromwich Albion", "Plymouth Argyle", "Rotherham United",
+  "Cambridge United", "Cardiff City", "Ipswich Town",
   // Eredivisie
   "Ajax", "PSV Eindhoven", "Feyenoord", "AZ Alkmaar", "FC Twente",
+  "Sparta Rotterdam", "FC Volendam", "Fortuna Sittard", "NEC Nijmegen",
   // Primeira Liga
   "FC Porto", "SL Benfica", "Sporting CP", "Braga", "Vitória SC",
-  // Belgian Pro League
-  "Royal Antwerp", "Club Brugge", "RSC Anderlecht", "KAA Gent", "Standard Liège",
-  "Royal Léopold FC", "Royale Union Saint-Gilloise",
+  "Rio Ave",
+  // Belgian Pro League (D1A)
+  "Royal Antwerp", "Club Brugge", "RSC Anderlecht", "KAA Gent",
+  "Standard Liège", "Royal Léopold", "Royale Union Saint-Gilloise",
+  "KRC Genk", "KV Mechelen", "Cercle Brugge", "Beerschot",
+  "Westerlo", "Kortrijk", "OH Leuven",
   // Süper Lig
   "Galatasaray", "Fenerbahçe", "Beşiktaş", "Trabzonspor",
+  "Sivasspor", "Samsunspor", "Bandirmaspor", "Alanyaspor",
+  // Swiss Super League
+  "BSC Young Boys", "FC Basel", "Servette", "FC Zürich", "FC Lugano",
+  "FC Luzern", "Lausanne-Sport", "Grasshopper",
+  // Polish Ekstraklasa
+  "Legia Warszawa", "Lech Poznań", "Jagiellonia Bialystok", "Raków Częstochowa",
+  // Scottish Premiership
+  "Celtic FC", "Rangers FC", "Hearts of Midlothian", "Hibernian",
+  "Aberdeen FC",
+  // Greek Super League / Cyprus
+  "Olympiacos", "Panathinaikos", "AEK Athens", "PAOK", "APOEL",
+  "Aris Limassol",
   // Bundesliga 2 / Serie B / La Liga 2 / Ligue 2
   "Hannover 96", "Hertha BSC", "Hamburger SV", "FC St. Pauli",
   "Cremonese", "Frosinone", "Empoli", "Cagliari",
-  "Real Valladolid", "Granada", "Las Palmas",
+  "Real Valladolid", "Granada", "Las Palmas", "Castellón",
   "SM Caen", "Saint-Étienne",
   "Red Star FC", "Pau FC", "EA Guingamp", "Bastia",
+  "Quevilly Rouen", "USL Dunkerque",
   // MLS
   "Inter Miami", "LAFC", "LA Galaxy", "Toronto FC", "Atlanta United",
   // Forge FC (Canadian Premier League — kept low T2 for diaspora visibility)
