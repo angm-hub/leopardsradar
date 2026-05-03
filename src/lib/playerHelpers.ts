@@ -39,9 +39,19 @@ export function initialsFromName(name: string): string {
 // Map a country / nationality string to its emoji flag.
 // Covers the nations that appear in the dataset; everything else falls back
 // to a neutral globe emoji.
+//
+// Important : in this dataset "Congo" is consistently used as an alias for
+// "DR Congo" (Kinshasa). It is NOT Republic of the Congo (Brazzaville).
+// Mapping "Congo" → 🇨🇩 is intentional belt-and-braces — the data layer
+// also de-duplicates "Congo" out of nationalities/other_nationalities when
+// "DR Congo" is present, but if any row slips through the code stays correct.
+// If a real Brazzaville player ever enters the dataset, use the explicit
+// label "Congo-Brazzaville" or "Republic of Congo".
 const FLAG: Record<string, string> = {
   "DR Congo": "🇨🇩",
-  "Congo": "🇨🇬",
+  "Congo": "🇨🇩",
+  "Congo-Brazzaville": "🇨🇬",
+  "Republic of Congo": "🇨🇬",
   "France": "🇫🇷",
   "Belgium": "🇧🇪",
   "Belgique": "🇧🇪",

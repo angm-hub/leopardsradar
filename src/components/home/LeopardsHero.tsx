@@ -62,7 +62,8 @@ export function LeopardsHero() {
             variants={itemVariants}
             className="text-lg md:text-xl text-foreground/75 max-w-2xl text-balance"
           >
-            471 talents traqués chaque dimanche. Compose ton 26 avant le tirage du Mondial.
+            {totalPlayers ?? "—"} internationaux et diaspora éligible, suivis chaque
+            dimanche. Compose ton 26 avant le tirage du Mondial.
           </motion.p>
 
           <motion.div
