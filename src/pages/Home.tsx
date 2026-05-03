@@ -1,5 +1,6 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import { RoutePrefetch } from "@/components/util/RoutePrefetch";
 import LeopardsHero from "@/components/home/LeopardsHero";
 import FeaturedThisWeek from "@/components/home/FeaturedThisWeek";
 import RadarPreviewSection from "@/components/home/RadarPreviewSection";
@@ -37,6 +38,7 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
+      <RoutePrefetch />
       <main className="flex-1">
         <LeopardsHero />
         <FeaturedThisWeek />

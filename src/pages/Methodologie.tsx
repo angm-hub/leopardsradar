@@ -52,6 +52,28 @@ export default function Methodologie() {
           </p>
         </header>
 
+        {/* Manifeste — éditorial avant le technique. Signe la page,
+            transforme une fiche méthodo en parti pris assumé. */}
+        <section className="container-site max-w-3xl pb-10">
+          <blockquote className="border-l-2 border-primary/60 pl-6 py-2 max-w-2xl">
+            <p className="font-serif italic text-xl md:text-2xl leading-relaxed text-foreground/90">
+              "On préfère afficher un tiret qu'un zéro qui ment. Et publier
+              une seule fois par semaine plutôt qu'aboyer en continu."
+            </p>
+            <footer className="mt-4 text-[11px] font-mono uppercase tracking-[0.22em] text-muted">
+              Alexandre Ngomo · auteur, Léopards Radar
+            </footer>
+          </blockquote>
+          <p className="mt-8 max-w-2xl text-base leading-relaxed text-foreground/75">
+            Cette page documente <strong className="text-foreground">tout</strong>{" "}
+            ce que tu vois ailleurs sur le site : d'où viennent les chiffres,
+            comment on les pondère, ce qu'on attend encore d'avoir, et comment
+            nous signaler une erreur. C'est volontairement plus long qu'un
+            disclaimer — c'est ce qui sépare une référence d'un agrégat
+            anonyme.
+          </p>
+        </section>
+
         {/* TOC discrète */}
         <div className="border-y border-border bg-background/85 backdrop-blur-sm">
           <div className="container-site flex flex-wrap gap-x-6 gap-y-2 py-3 text-[11px] font-mono uppercase tracking-[0.18em] text-muted">
@@ -323,6 +345,34 @@ export default function Methodologie() {
                   Transfermarkt
                 </a>
               </div>
+            </Prose>
+          </section>
+
+          {/* Signature éditoriale — referme la page sur l'humain qui l'écrit.
+              Aligne avec la section "Qui écrit ce truc" de /a-propos. */}
+          <section className="border-t border-border pt-12">
+            <Kicker icon={<Mail className="h-3 w-3" />}>Une dernière chose</Kicker>
+            <h2 className="mt-3 font-serif text-3xl text-foreground">
+              Cette page n'est jamais finie.
+            </h2>
+            <Prose>
+              <p>
+                Chaque correction reçue est intégrée à l'édition suivante,
+                chaque source manquante est documentée ici, chaque axe en
+                attente de donnée est listé. Ce qui n'est pas écrit n'est pas
+                vrai pour nous — si tu trouves une affirmation non sourcée
+                ailleurs sur le site, c'est un bug, pas un parti pris.
+              </p>
+              <p>
+                <strong className="text-foreground">— Alexandre Ngomo</strong>{" "}
+                · Diaspora RDC, Paris ·{" "}
+                <a
+                  href="/leopardsradar/a-propos"
+                  className="text-primary hover:text-primary-hover underline underline-offset-4"
+                >
+                  qui suis-je
+                </a>
+              </p>
             </Prose>
           </section>
         </div>

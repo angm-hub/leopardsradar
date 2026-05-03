@@ -16,9 +16,17 @@
     <meta name="twitter:site" content="@Lovable" />
     <meta name="twitter:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/42157bc7-34e9-4ce6-a50a-ce78b24c7cd2/id-preview-a7f18732--931eff80-c0b7-487f-870d-57d940a58dea.lovable.app-1776761789343.png">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Self-hosted fonts (latin + latin-ext only).
+         Preload the 2 critical weights used in the fold (Fraunces 600 + DM Sans 400)
+         so the browser fetches them in parallel with the CSS, instead of
+         waiting for fonts.css to be parsed before discovering them.
+         Saves ~200-400 ms LCP on cold cache.
+
+         Relative paths so it works the same in dev (/) and prod (/leopardsradar/) —
+         the browser resolves them from the page URL. -->
+    <link rel="preload" href="./fonts/fraunces-600-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="./fonts/dm-sans-400-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="./fonts.css">
     <meta property="og:title" content="Léopards Radar">
   <meta name="twitter:title" content="Léopards Radar">
   <meta property="og:description" content="Léopards Radar — radar éditorial premium des joueurs de la RDC et talents éligibles de la diaspora.">
