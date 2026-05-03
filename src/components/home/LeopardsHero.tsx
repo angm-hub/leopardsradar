@@ -6,6 +6,7 @@ import { Pill } from "@/components/ui/Pill";
 import { AuroraShader } from "@/components/ui/AuroraShader";
 import { useLatestBestXIMeta } from "@/hooks/useLatestBestXIMeta";
 import { useHomeStats } from "@/hooks/useHomeStats";
+import { useMondialCountdown } from "@/hooks/useMondialCountdown";
 
 
 const containerVariants: Variants = {
@@ -24,6 +25,7 @@ const itemVariants: Variants = {
 export function LeopardsHero() {
   const { edition, formattedDate } = useLatestBestXIMeta();
   const { stats } = useHomeStats();
+  const { daysUntilKickoff, kickoffDateLabel, phase } = useMondialCountdown();
   const totalPlayers = stats?.total_players ?? null;
   const radarCount = stats?.radar_count ?? null;
   const rosterCount = stats?.roster_count ?? null;
@@ -63,8 +65,22 @@ export function LeopardsHero() {
             className="text-lg md:text-xl text-foreground/75 max-w-2xl text-balance"
           >
             {totalPlayers ?? "—"} internationaux et diaspora éligible, suivis chaque
-            dimanche. Compose ton 26 avant le tirage du Mondial.
+            dimanche.{" "}
+            {phase === "before"
+              ? `Compose ton 26 avant le coup d'envoi du Mondial — J-${daysUntilKickoff}.`
+              : phase === "during"
+                ? "Suis les Léopards en direct du Mondial 2026."
+                : "Bilan et héritage du Mondial 2026."}
           </motion.p>
+
+          {phase === "before" ? (
+            <motion.p
+              variants={itemVariants}
+              className="-mt-4 text-xs text-foreground/50 font-mono uppercase tracking-[0.2em]"
+            >
+              Coup d'envoi · {kickoffDateLabel}
+            </motion.p>
+          ) : null}
 
           <motion.div
             variants={itemVariants}

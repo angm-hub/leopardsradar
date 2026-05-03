@@ -171,19 +171,26 @@ export default function PlayerPage() {
             </nav>
 
             <div className="grid grid-cols-1 gap-12 md:grid-cols-5">
-              {/* LEFT — photo */}
+              {/* LEFT — photo
+                  Mobile : ratio 4/5 (un peu plus haut que carré) capé à 55vh
+                  pour que le nom + position restent dans la fold sur iPhone.
+                  Desktop : ratio 3/4 inchangé. */}
               <div className="md:col-span-2">
-                <PlayerAvatar
-                  name={player.name}
-                  src={player.image_url}
-                  className="aspect-[3/4] w-full rounded-card transition-shadow duration-700"
-                  initialsClassName="text-9xl"
-                />
-                <div
-                  aria-hidden
-                  className="pointer-events-none -mt-[100%] aspect-[3/4] w-full rounded-card"
-                  style={{ boxShadow: photoShadow }}
-                />
+                <div className="relative w-full overflow-hidden rounded-card">
+                  <div className="aspect-[4/5] md:aspect-[3/4] max-h-[55vh] md:max-h-none w-full">
+                    <PlayerAvatar
+                      name={player.name}
+                      src={player.image_url}
+                      className="h-full w-full transition-shadow duration-700"
+                      initialsClassName="text-9xl"
+                    />
+                  </div>
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0 rounded-card"
+                    style={{ boxShadow: photoShadow }}
+                  />
+                </div>
               </div>
 
               {/* RIGHT */}

@@ -2,8 +2,11 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useMondialCountdown } from "@/hooks/useMondialCountdown";
 
-const STORAGE_KEY = "promo_banner_liste26_dismissed_2026_05_02";
+// Bumped after audit day 1 — copy changed (J-N + 11 juin) so previous
+// dismissals shouldn't suppress the new banner.
+const STORAGE_KEY = "promo_banner_mondial_dismissed_2026_05_03";
 const DISMISS_DURATION_MS = 24 * 60 * 60 * 1000; // 24h
 
 /**
@@ -18,6 +21,7 @@ export function PromoBanner() {
   const location = useLocation();
   const [visible, setVisible] = useState(false);
   const ref = useRef<HTMLDivElement | null>(null);
+  const { daysUntilKickoff, kickoffDateLabel, phase } = useMondialCountdown();
 
   const onMaListe = location.pathname.startsWith("/ma-liste");
 
@@ -114,13 +118,27 @@ export function PromoBanner() {
           >
             <div className="mx-auto flex w-full max-w-7xl items-center justify-center gap-3 px-4 py-2 text-center lg:px-8">
               <span className="inline-flex shrink-0 items-center rounded-full bg-[#FFC107] px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.18em] text-black">
-                Mondial 2026
+                {phase === "before" ? `J-${daysUntilKickoff}` : phase === "during" ? "EN COURS" : "MONDIAL"}
               </span>
               <p className="truncate text-[12px] leading-snug text-white md:text-[13px]">
-                <span className="font-medium">Compose ta liste des 26 Léopards.</span>
-                <span className="ml-2 hidden text-white/70 sm:inline">
-                  2 minutes. Compare aux autres fans.
-                </span>
+                {phase === "before" ? (
+                  <>
+                    <span className="font-medium">
+                      Mondial 2026 — coup d'envoi le {kickoffDateLabel}.
+                    </span>
+                    <span className="ml-2 hidden text-white/80 sm:inline">
+                      Compose ta liste des 26.
+                    </span>
+                  </>
+                ) : phase === "during" ? (
+                  <span className="font-medium">
+                    Léopards au Mondial 2026 — suis-les en direct.
+                  </span>
+                ) : (
+                  <span className="font-medium">
+                    Mondial 2026 terminé — bilan et héritage.
+                  </span>
+                )}
                 <span
                   aria-hidden
                   className="ml-2 inline-block translate-x-0 text-white/80 transition-transform group-hover:translate-x-0.5"
