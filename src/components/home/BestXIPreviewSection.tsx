@@ -101,6 +101,7 @@ export function BestXIPreviewSection() {
                         <PlayerAvatar
                           name={p.name}
                           src={p.image_url}
+                          srcAlt={p.image_url_alt}
                           className="h-9 w-9 shrink-0 rounded-full border border-border"
                           initialsClassName="text-xs"
                         />

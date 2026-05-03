@@ -196,6 +196,7 @@ export default function PlayerPage() {
                     <PlayerAvatar
                       name={player.name}
                       src={player.image_url}
+                      srcAlt={player.image_url_alt}
                       className="h-full w-full transition-shadow duration-700"
                       initialsClassName="text-9xl"
                     />

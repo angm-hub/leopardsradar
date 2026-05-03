@@ -59,6 +59,7 @@ function HeroCard({ player, rank }: { player: DBPlayer; rank: number }) {
       <PlayerAvatar
         name={player.name}
         src={player.image_url}
+        srcAlt={player.image_url_alt}
         className="absolute inset-0 h-full w-full"
         initialsClassName="text-7xl"
       />

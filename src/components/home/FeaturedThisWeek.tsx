@@ -94,6 +94,7 @@ function MoverCard({ mover, index }: { mover: WeeklyMover | null; index: number 
         <PlayerAvatar
           name={mover.name}
           src={mover.image_url}
+          srcAlt={mover.image_url_alt}
           className="absolute inset-0 h-full w-full"
           initialsClassName="text-5xl"
         />

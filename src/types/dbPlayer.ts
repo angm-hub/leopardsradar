@@ -13,6 +13,9 @@ export interface DBPlayer {
   name: string;
   slug: string;
   image_url: string | null;
+  /** Fallback URL when image_url 404/403 — populated by the multi-source
+   * backfill (Wikipedia EN/FR pageimages, Wikidata P18). */
+  image_url_alt?: string | null;
   date_of_birth: string | null;
   age: number | null;
   place_of_birth: string | null;

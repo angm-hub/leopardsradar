@@ -182,6 +182,7 @@ function FeaturedPill({
           <PlayerAvatar
             name={player.name}
             src={player.image_url}
+            srcAlt={player.image_url_alt}
             className="h-full w-full"
             initialsClassName="text-[10px]"
           />

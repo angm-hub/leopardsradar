@@ -173,6 +173,7 @@ export function PlayerTable({ position, players }: PlayerTableProps) {
               <PlayerAvatar
                 name={p.name}
                 src={p.image_url}
+                srcAlt={p.image_url_alt}
                 className="h-10 w-10 rounded-full shrink-0 ring-1 ring-border"
                 initialsClassName="text-xs"
               />
@@ -257,6 +258,7 @@ function PlayerTableRow({ player, rank, isTop, animDelay }: RowProps) {
           <PlayerAvatar
             name={player.name}
             src={player.image_url}
+            srcAlt={player.image_url_alt}
             className="h-8 w-8 rounded-full shrink-0 ring-1 ring-border group-hover:ring-primary/40 transition-all"
             initialsClassName="text-[10px]"
           />

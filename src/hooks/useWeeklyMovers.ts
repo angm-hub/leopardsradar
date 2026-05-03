@@ -18,6 +18,7 @@ export interface WeeklyMover {
   slug: string;
   player_position: string | null;
   image_url: string | null;
+  image_url_alt: string | null;
   current_club: string | null;
   season_goals: number;
   season_assists: number;
