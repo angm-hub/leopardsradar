@@ -38,6 +38,11 @@ import { createClient } from "jsr:@supabase/supabase-js@2";
 
 const FD_API = "https://api.football-data.org/v4";
 
+// limit=500 covers the entire scorers list of every comp on the free tier
+// (the actual ceiling tops at ~266 in PL). Ensures we never silently drop
+// a Léopards player who happens to score outside the top 100.
+const SCORERS_LIMIT = 500;
+
 // 10 competitions chosen to cover ~95 % of LR's diaspora-EU players. Add
 // more (MLS, Süper Lig, etc.) if/when LR's footprint widens.
 const COMPS: { code: string; label: string }[] = [
@@ -163,7 +168,7 @@ Deno.serve(async (req: Request) => {
   for (const comp of COMPS) {
     try {
       const r = await fetch(
-        `${FD_API}/competitions/${comp.code}/scorers?limit=100`,
+        `${FD_API}/competitions/${comp.code}/scorers?limit=${SCORERS_LIMIT}`,
         { headers: { "X-Auth-Token": fdKey } },
       );
       if (!r.ok) {

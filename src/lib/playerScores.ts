@@ -80,9 +80,12 @@ const T1_CLUBS = new Set([
   // Serie A
   "Inter", "AC Milan", "Juventus FC", "SSC Napoli", "AS Roma", "Lazio",
   "Atalanta", "ACF Fiorentina", "Bologna FC",
-  // Ligue 1
+  // Ligue 1 (saison 2025-26)
   "Paris Saint-Germain", "Olympique Marseille", "AS Monaco", "OGC Nice",
-  "Olympique Lyonnais", "RC Lens", "LOSC Lille", "Stade Rennais", "Stade Brestois 29",
+  "Olympique Lyonnais", "RC Lens", "LOSC Lille", "Stade Rennais",
+  "Stade Brestois 29", "FC Metz", "FC Nantes", "FC Lorient",
+  "Le Havre AC", "Angers SCO", "AJ Auxerre", "Toulouse FC",
+  "Stade de Reims", "Montpellier HSC", "FC Toulouse",
 ]);
 
 const T2_CLUBS = new Set([
@@ -101,7 +104,8 @@ const T2_CLUBS = new Set([
   "Hannover 96", "Hertha BSC", "Hamburger SV", "FC St. Pauli",
   "Cremonese", "Frosinone", "Empoli", "Cagliari",
   "Real Valladolid", "Granada", "Las Palmas",
-  "SM Caen", "FC Metz", "Le Havre AC", "AJ Auxerre", "Saint-Étienne",
+  "SM Caen", "Saint-Étienne",
+  "Red Star FC", "Pau FC", "EA Guingamp", "Bastia",
   // MLS
   "Inter Miami", "LAFC", "LA Galaxy", "Toronto FC", "Atlanta United",
   // Forge FC (Canadian Premier League — kept low T2 for diaspora visibility)
