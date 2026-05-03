@@ -128,11 +128,10 @@ function DefaultPill({
       className={cn(
         "flex items-center gap-1.5 rounded-full pl-1.5 pr-2.5 py-1",
         "bg-card/95 backdrop-blur-sm",
-        "border border-border",
-        "shadow-md shadow-black/40",
-        "transition-all duration-200",
-        "hover:scale-110 hover:bg-card hover:border-primary/70",
-        "hover:shadow-xl hover:shadow-primary/20",
+        "[box-shadow:0_0_0_0.5px_rgba(255,255,255,0.06),0_2px_6px_rgba(0,0,0,0.45)]",
+        "transition-[box-shadow,filter,background-color] duration-200",
+        "hover:[filter:brightness(1.1)]",
+        "hover:[box-shadow:0_0_0_0.5px_rgba(252,209,22,0.5),0_4px_14px_rgba(252,209,22,0.18)]",
         "group-hover:z-10",
       )}
     >
@@ -171,10 +170,11 @@ function FeaturedPill({
       <div
         className={cn(
           "relative flex items-center gap-2 rounded-full pl-1 pr-3 py-1",
-          "bg-card border border-primary/60",
-          "shadow-lg shadow-primary/25",
-          "transition-all duration-200",
-          "hover:scale-110 hover:border-primary",
+          "bg-card",
+          "[box-shadow:0_0_0_0.5px_rgba(252,209,22,0.55),0_4px_14px_rgba(252,209,22,0.22)]",
+          "transition-[box-shadow,filter] duration-200",
+          "hover:[filter:brightness(1.08)]",
+          "hover:[box-shadow:0_0_0_0.5px_rgba(252,209,22,0.85),0_6px_18px_rgba(252,209,22,0.32)]",
           "group-hover:z-20",
         )}
       >

@@ -52,14 +52,14 @@ function HeroCard({ player, rank }: { player: DBPlayer; rank: number }) {
       to={`/player/${player.slug}`}
       className={cn(
         "group relative block aspect-[4/5] rounded-card overflow-hidden",
-        "bg-card border border-border transition-all duration-300",
-        "hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/15",
+        "surface-1 transition-[box-shadow,filter] duration-300",
+        "hover:[filter:brightness(1.05)] hover:[box-shadow:0_0_0_0.5px_rgba(252,209,22,0.4),0_1px_2px_rgba(0,0,0,0.4),0_18px_44px_rgba(252,209,22,0.14)]",
       )}
     >
       <PlayerAvatar
         name={player.name}
         src={player.image_url}
-        className="absolute inset-0 h-full w-full transition-transform duration-700 group-hover:scale-105"
+        className="absolute inset-0 h-full w-full"
         initialsClassName="text-7xl"
       />
 

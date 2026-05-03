@@ -5,18 +5,106 @@
 @layer base {
   :root {
     color-scheme: dark;
+    /* Hairline retina : 0.5px sur écrans haute densité, 1px sinon.
+       C'est la première micro-attention qui sépare un site IA-tooled
+       d'un site OS-grade. Tailwind ne le fait pas seul. */
+    --hairline-color: rgba(255, 255, 255, 0.07);
+    --hairline-strong: rgba(255, 255, 255, 0.12);
+    /* Surface system : material doux verticalement gradué. */
+    --surface-1: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0) 60%), #131316;
+    --surface-2: linear-gradient(180deg, rgba(255,255,255,0.04),  rgba(255,255,255,0) 60%), #16161A;
+    /* Stack de shadows façon Apple : focal contact + ambient soft. */
+    --shadow-card: 0 1px 0 rgba(255,255,255,0.04) inset,
+                   0 1px 2px rgba(0,0,0,0.4),
+                   0 8px 24px rgba(0,0,0,0.3);
+    --shadow-cta:  0 1px 0 rgba(255,255,255,0.18) inset,
+                   0 1px 2px rgba(0,0,0,0.3),
+                   0 4px 12px rgba(252, 209, 22, 0.25);
   }
   html {
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Touch flash iOS — par défaut Safari met un rectangle gris. */
+    -webkit-tap-highlight-color: transparent;
   }
   body {
     @apply bg-background text-foreground font-sans;
+    /* ss01 + cv11 : alternates Fraunces déjà actifs. On ajoute opsz
+       pour que les fonts variables font Optical Sizing automatiquement. */
     font-feature-settings: "ss01", "cv11";
+    font-optical-sizing: auto;
+    text-rendering: optimizeLegibility;
   }
+
+  /* Selection — couleur signature au lieu du bleu OS. */
   ::selection {
-    @apply bg-primary/30 text-foreground;
+    background: rgba(252, 209, 22, 0.35);
+    color: #0a0a0b;
+  }
+
+  /* Scrollbar custom — discret mais soigné. macOS l'affiche déjà bien,
+     Windows/Linux ont un défaut hideux qu'on remplace. */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.14);
+    background-clip: padding-box;
+  }
+
+  /* Focus visible — anneau custom au lieu du bleu OS chromé. */
+  *:focus-visible {
+    outline: 2px solid rgba(252, 209, 22, 0.7);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+@layer components {
+  /* ===================================================================
+     Surface system — alternative à `border border-border bg-card`.
+     Pourquoi : un border 1px solid uniforme partout est un tell IA. Ces
+     classes appliquent un material gradué + hairline retina + shadow
+     stack façon iOS/macOS. Drop-in sur les cards principales.
+     =================================================================== */
+  .surface-1 {
+    background: var(--surface-1);
+    box-shadow: 0 0 0 0.5px var(--hairline-color),
+                var(--shadow-card);
+    border-radius: 14px;
+  }
+  .surface-2 {
+    background: var(--surface-2);
+    box-shadow: 0 0 0 0.5px var(--hairline-strong),
+                var(--shadow-card);
+    border-radius: 14px;
+  }
+  /* Un material plus chaud pour les modules "phare" (CTA, hero card). */
+  .surface-glow {
+    background: var(--surface-2);
+    box-shadow: 0 0 0 0.5px rgba(252, 209, 22, 0.18),
+                0 1px 0 rgba(255, 255, 255, 0.06) inset,
+                0 1px 2px rgba(0, 0, 0, 0.4),
+                0 16px 40px rgba(252, 209, 22, 0.08);
+    border-radius: 16px;
+  }
+
+  /* Hairline horizontal — séparateur 0.5px retina, fade out aux bords.
+     Remplace les `border-t border-border` qui font opaques. */
+  .hairline-x {
+    height: 0.5px;
+    background: linear-gradient(90deg, transparent, var(--hairline-color) 12%, var(--hairline-color) 88%, transparent);
   }
 }
 

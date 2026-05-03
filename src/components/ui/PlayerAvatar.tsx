@@ -60,13 +60,21 @@ export function PlayerAvatar({
             "h-full w-full",
             cover ? "object-cover" : "object-contain",
           )}
-          // Cadrage : on tire le focus vers le haut de la photo où se trouve
-          // le visage dans la quasi-totalité des photos sportives (Wikimedia,
-          // photos officielles club). object-position 'center' tombait
-          // souvent sur le buste pour les photos plein corps. 28% est un bon
-          // compromis : le visage reste visible sur les portraits cadrés
-          // serré et apparaît correctement sur les photos plein corps.
-          style={cover ? { objectPosition: "center 28%" } : undefined}
+          // Cadrage : object-position 28% pour que le visage reste dans la
+          // partie supérieure (les photos sportives ont presque toujours
+          // le visage en haut, jamais au centre).
+          // Filter : touche colorimétrique pour homogénéiser des sources
+          // hétérogènes (Wikimedia, photos clubs officielles, smartphones).
+          // Saturation +6% donne du punch sans devenir Instagram, contrast
+          // +3% creuse les ombres sur les photos plates des jours nuageux.
+          style={
+            cover
+              ? {
+                  objectPosition: "center 28%",
+                  filter: "saturate(1.06) contrast(1.03)",
+                }
+              : undefined
+          }
         />
       ) : (
         <span

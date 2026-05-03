@@ -56,15 +56,32 @@ export function LeopardsHero() {
 
   return (
     <section className="relative min-h-[100dvh] overflow-hidden bg-background">
-      {reducedMotion ? (
-        <AuroraFallback />
-      ) : (
-        <Suspense fallback={<AuroraFallback />}>
-          <AuroraShader className="absolute inset-0 h-full w-full" />
-        </Suspense>
-      )}
+      {/* Aurora shader rendu à 55% d'opacité — avant : 100% donnait un effet
+          "Lovable default" trop saturé. À 55% on garde la couleur signature
+          RDC sans que ça crie. Le voile noir bg-gradient-to-b est densifié
+          pour un fade out plus marqué vers le contenu. */}
+      <div className="absolute inset-0 opacity-55">
+        {reducedMotion ? (
+          <AuroraFallback />
+        ) : (
+          <Suspense fallback={<AuroraFallback />}>
+            <AuroraShader className="absolute inset-0 h-full w-full" />
+          </Suspense>
+        )}
+      </div>
 
-      <div className="absolute inset-0 bg-gradient-to-b from-background/0 via-background/40 to-background pointer-events-none" />
+      {/* Grain subtle sur tout le hero — texture qui casse le côté plat
+          des gradients shader / Tailwind. SVG noise inline, pas de poids. */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none mix-blend-overlay opacity-[0.04]"
+        style={{
+          backgroundImage:
+            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")",
+        }}
+      />
+
+      <div className="absolute inset-0 bg-gradient-to-b from-background/10 via-background/55 to-background pointer-events-none" />
 
       <div className="container-site relative z-10 flex min-h-[100dvh] items-center py-24">
         <motion.div

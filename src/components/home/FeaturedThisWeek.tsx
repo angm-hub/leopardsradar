@@ -89,12 +89,12 @@ function MoverCard({ mover, index }: { mover: WeeklyMover | null; index: number 
     >
       <Link
         to={`/player/${mover.slug}`}
-        className="group relative block aspect-[3/4] rounded-card overflow-hidden bg-card border border-border transition-all duration-300 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/10"
+        className="group relative block aspect-[3/4] rounded-[14px] overflow-hidden surface-1 transition-[box-shadow,filter] duration-300 hover:[filter:brightness(1.06)] hover:[box-shadow:0_0_0_0.5px_rgba(252,209,22,0.35),0_1px_2px_rgba(0,0,0,0.4),0_12px_32px_rgba(252,209,22,0.12)]"
       >
         <PlayerAvatar
           name={mover.name}
           src={mover.image_url}
-          className="absolute inset-0 h-full w-full transition-transform duration-700 group-hover:scale-105"
+          className="absolute inset-0 h-full w-full"
           initialsClassName="text-5xl"
         />
         <div

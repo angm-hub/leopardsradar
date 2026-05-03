@@ -16,31 +16,51 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
 }
 
-// Premium primary: yellow w/ inner highlight + outer yellow glow, lifts on hover
+// Apple-grade primary :
+//   - Gradient vertical subtle (top 6% plus clair → bottom plus dense)
+//   - Inner highlight 1px blanc opacity 20 (effet "verre" sur le bord supérieur)
+//   - Stack de shadows : focal contact 1px + ambient soft 4px + glow accent 12px
+//   - Pas de hover:scale (anti-pattern AI). On joue sur la luminosité du gradient.
+//   - active:translate-y-px → micro press feedback iOS-like
 const PREMIUM_BASE =
-  "bg-primary text-primary-foreground transition-all duration-300 " +
-  "[box-shadow:inset_0_1px_0_rgba(255,255,255,0.12),0_0_20px_rgba(252,209,22,0.15)] " +
-  "hover:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.18),0_0_30px_rgba(252,209,22,0.3)] " +
-  "hover:scale-[1.02] active:scale-[0.98]";
+  "text-primary-foreground transition-[transform,filter,box-shadow] duration-200 ease-out " +
+  "bg-[linear-gradient(180deg,#FFD736_0%,#FCD116_55%,#E5BC10_100%)] " +
+  "[box-shadow:inset_0_1px_0_rgba(255,255,255,0.35),inset_0_-1px_0_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.35),0_8px_24px_rgba(252,209,22,0.18)] " +
+  "hover:[filter:brightness(1.04)] " +
+  "hover:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.4),inset_0_-1px_0_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.4),0_10px_28px_rgba(252,209,22,0.28)] " +
+  "active:translate-y-px active:[filter:brightness(0.97)]";
 
 const variantClasses: Record<Variant, string> = {
   primary: PREMIUM_BASE,
-  // Shimmer = primary + animated highlight sweep on hover
   shimmer:
     PREMIUM_BASE +
     " relative overflow-hidden isolate" +
     " before:content-[''] before:absolute before:inset-0 before:-translate-x-full" +
-    " before:bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.35),transparent)]" +
-    " hover:before:translate-x-[200%] before:transition-transform before:duration-[1000ms] before:ease-out",
+    " before:bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent)]" +
+    " hover:before:translate-x-[200%] before:transition-transform before:duration-[1100ms] before:ease-out",
   secondary:
-    "bg-card border border-border text-foreground hover:border-border-hover hover:bg-card-hover",
-  ghost: "bg-transparent text-foreground hover:bg-card",
+    "bg-[linear-gradient(180deg,#1A1A1F_0%,#131316_100%)] text-foreground " +
+    "[box-shadow:0_0_0_0.5px_rgba(255,255,255,0.08),0_1px_2px_rgba(0,0,0,0.3)] " +
+    "transition-[filter,box-shadow] duration-200 " +
+    "hover:[filter:brightness(1.15)] " +
+    "hover:[box-shadow:0_0_0_0.5px_rgba(255,255,255,0.14),0_2px_6px_rgba(0,0,0,0.35)] " +
+    "active:translate-y-px",
+  ghost:
+    "bg-transparent text-foreground transition-[background-color,filter] duration-200 " +
+    "hover:bg-[rgba(255,255,255,0.04)]",
   outline:
-    "bg-transparent border border-border text-foreground hover:bg-card/60",
+    "bg-[rgba(255,255,255,0.02)] text-foreground " +
+    "[box-shadow:0_0_0_0.5px_rgba(255,255,255,0.1)] " +
+    "transition-[background-color,box-shadow] duration-200 " +
+    "hover:bg-[rgba(255,255,255,0.05)] " +
+    "hover:[box-shadow:0_0_0_0.5px_rgba(255,255,255,0.18)] " +
+    "active:translate-y-px",
   "ghost-premium":
-    "bg-transparent text-foreground border border-[rgba(252,209,22,0.3)] " +
-    "transition-all duration-300 " +
-    "hover:border-primary hover:bg-[rgba(252,209,22,0.05)] hover:text-primary",
+    "bg-transparent text-foreground " +
+    "[box-shadow:0_0_0_0.5px_rgba(252,209,22,0.3)] " +
+    "transition-[background-color,box-shadow,color] duration-200 " +
+    "hover:[box-shadow:0_0_0_0.5px_rgba(252,209,22,0.6)] " +
+    "hover:bg-[rgba(252,209,22,0.06)] hover:text-primary",
 };
 
 const sizeClasses: Record<Size, string> = {
