@@ -8,8 +8,8 @@ export default function MentionsLegales() {
           Éditeur du site
         </h2>
         <p>
-          Le site <strong>Léopards Radar</strong> (ci-après « le Site ») est édité
-          par Alexandre Ngomo, opérant sous le studio kAIra.
+          Le site <strong>Léopards Radar</strong> (ci-après « le Site ») est
+          édité sous l'enseigne <strong>kAIra</strong>.
         </p>
         <p>
           <span className="text-muted-light">
@@ -35,7 +35,11 @@ export default function MentionsLegales() {
         <h2 className="font-serif text-2xl text-foreground mt-0 mb-4">
           Directeur de la publication
         </h2>
-        <p>Alexandre Ngomo.</p>
+        <p>
+          <span className="text-muted-light">
+            [identité à compléter — obligation LCEN]
+          </span>
+        </p>
       </section>
 
       <section className="space-y-3 mb-10">

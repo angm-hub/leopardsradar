@@ -16,14 +16,14 @@ export default function Confidentialite() {
           Responsable du traitement
         </h2>
         <p>
-          Alexandre Ngomo (kAIra), éditeur du site Léopards Radar. Voir les{" "}
+          L'éditeur du site Léopards Radar (cf.{" "}
           <a
             href="/mentions-legales"
             className="text-primary hover:underline"
           >
             mentions légales
-          </a>{" "}
-          pour les coordonnées.
+          </a>
+          ) pour les coordonnées et l'identité du responsable de traitement.
         </p>
       </section>
 

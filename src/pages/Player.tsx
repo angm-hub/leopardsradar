@@ -23,6 +23,7 @@ import {
 import { PlayerIdentityCards } from "@/components/player/PlayerIdentityCards";
 import { PlayerCareerCard } from "@/components/player/PlayerCareerCard";
 import { PlayerStatProfile } from "@/components/player/PlayerStatProfile";
+import { PlayerWeeklyProgress } from "@/components/player/PlayerWeeklyProgress";
 import { RelatedPlayers } from "@/components/player/RelatedPlayers";
 import { usePlayer } from "@/hooks/usePlayer";
 import { useDominantColor } from "@/hooks/useDominantColor";
@@ -359,6 +360,10 @@ export default function PlayerPage() {
             </div>
           </div>
         </section>
+
+        {/* CETTE SEMAINE — delta vs snapshot dimanche précédent. Matérialise
+            la cadence éditoriale promise (mise à jour chaque dimanche). */}
+        <PlayerWeeklyProgress slug={player.slug} />
 
         {/* PROFIL STATISTIQUE — hexagon 6 axes (4 universels + 2 par poste) */}
         <PlayerStatProfile player={player} />

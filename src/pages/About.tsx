@@ -73,62 +73,40 @@ export default function About() {
             </div>
           </section>
 
-          {/* Qui écrit ce truc — page signée pour casser l'anonymat éditorial.
-              Avant : "par des fans, pour des fans" (générique, zéro confiance).
-              Après : nom, visage, contexte, pacte de cadence, contact direct. */}
+          {/* Indépendance — pose le pacte sans personnaliser l'auteur.
+              Voix factuelle anonyme : le projet parle de lui-même, pas
+              d'une personne. */}
           <section className="mt-20">
             <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-primary mb-4">
-              03 — Qui écrit ce truc
+              03 — Indépendance
             </p>
-            <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-8">
-              Un projet signé. Un seul auteur.
+            <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-6">
+              Pas affilié. Pas commandité. Pas négociable.
             </h2>
-
-            <div className="flex items-start gap-5 mb-8">
-              <div
-                aria-hidden
-                className="h-20 w-20 shrink-0 rounded-full bg-gradient-to-br from-primary to-primary/60 text-primary-foreground font-serif text-3xl flex items-center justify-center font-semibold shadow-lg shadow-primary/20"
-              >
-                AN
-              </div>
-              <div>
-                <div className="font-serif text-2xl text-foreground">
-                  Alexandre Ngomo
-                </div>
-                <div className="mt-1 text-sm text-muted-light">
-                  Diaspora RDC · Paris · Auteur, éditeur, dev
-                </div>
-              </div>
-            </div>
-
             <div className="space-y-5 text-lg leading-[1.75] text-foreground/85">
               <p>
-                Je suis fan des Léopards depuis toujours. Diaspora congolaise à
-                Paris, je suis passé par le marketing tech, la production data
-                et le studio. Léopards Radar est né d'un constat simple : aucun
-                outil n'existait pour suivre <strong className="text-foreground">tous</strong> les
-                Léopards et leur diaspora éligible avec rigueur. J'en avais besoin
-                comme fan. Je l'ai construit.
+                Léopards Radar est un projet <strong className="text-foreground">indépendant</strong>{" "}
+                et non affilié. Aucun lien avec la FECOFA. Aucun arrangement
+                commercial avec un club, un agent ou un joueur. Aucune publicité.
+                Le seul lien avec le monde du foot RDC, c'est la passion qui
+                anime le projet.
               </p>
               <p>
                 <strong className="text-foreground">Le pacte :</strong> mise à jour
                 chaque dimanche soir, sources ouvertes (Transfermarkt, presse
-                spécialisée, football-data.org), méthodologie publiée, et
-                indépendance totale. Aucune affiliation FECOFA, aucun lien
-                commercial avec un club, un agent ou un joueur. Si tu repères une
-                erreur, un joueur manquant ou une donnée à corriger, écris-moi —
-                je réponds.
+                spécialisée, football-data.org), méthodologie publiée. Si une
+                donnée vous semble erronée, un joueur manquant, une statistique
+                à corriger : signalez-le, c'est traité à l'édition suivante.
               </p>
               <p>
-                <strong className="text-foreground">Contact direct :</strong>{" "}
+                <strong className="text-foreground">Contact :</strong>{" "}
                 <a
                   href="mailto:contact@leopardsradar.com"
                   className="text-primary hover:text-primary-hover underline underline-offset-4"
                 >
                   contact@leopardsradar.com
                 </a>
-                . Pour les journalistes, scouts, recruteurs, fédérations — même
-                adresse, je remonte la file.
+                .
               </p>
             </div>
           </section>

@@ -52,23 +52,23 @@ export default function Methodologie() {
           </p>
         </header>
 
-        {/* Manifeste — éditorial avant le technique. Signe la page,
-            transforme une fiche méthodo en parti pris assumé. */}
+        {/* Pacte — éditorial avant le technique. Voix anonyme, factuelle,
+            proche du manifeste de marque sans signature personnelle. */}
         <section className="container-site max-w-3xl pb-10">
           <blockquote className="border-l-2 border-primary/60 pl-6 py-2 max-w-2xl">
             <p className="font-serif italic text-xl md:text-2xl leading-relaxed text-foreground/90">
-              "On préfère afficher un tiret qu'un zéro qui ment. Et publier
-              une seule fois par semaine plutôt qu'aboyer en continu."
+              "Préférer un tiret à un zéro qui ment. Publier une seule fois
+              par semaine plutôt qu'aboyer en continu."
             </p>
             <footer className="mt-4 text-[11px] font-mono uppercase tracking-[0.22em] text-muted">
-              Alexandre Ngomo · auteur, Léopards Radar
+              Pacte éditorial · Léopards Radar
             </footer>
           </blockquote>
           <p className="mt-8 max-w-2xl text-base leading-relaxed text-foreground/75">
             Cette page documente <strong className="text-foreground">tout</strong>{" "}
-            ce que tu vois ailleurs sur le site : d'où viennent les chiffres,
-            comment on les pondère, ce qu'on attend encore d'avoir, et comment
-            nous signaler une erreur. C'est volontairement plus long qu'un
+            ce qui apparaît ailleurs sur le site : d'où viennent les chiffres,
+            comment ils sont pondérés, ce qui manque encore, et comment
+            signaler une erreur. C'est volontairement plus long qu'un
             disclaimer — c'est ce qui sépare une référence d'un agrégat
             anonyme.
           </p>
@@ -348,8 +348,8 @@ export default function Methodologie() {
             </Prose>
           </section>
 
-          {/* Signature éditoriale — referme la page sur l'humain qui l'écrit.
-              Aligne avec la section "Qui écrit ce truc" de /a-propos. */}
+          {/* Document vivant — referme la page sur le pacte de continuité,
+              sans signature personnelle. */}
           <section className="border-t border-border pt-12">
             <Kicker icon={<Mail className="h-3 w-3" />}>Une dernière chose</Kicker>
             <h2 className="mt-3 font-serif text-3xl text-foreground">
@@ -359,19 +359,20 @@ export default function Methodologie() {
               <p>
                 Chaque correction reçue est intégrée à l'édition suivante,
                 chaque source manquante est documentée ici, chaque axe en
-                attente de donnée est listé. Ce qui n'est pas écrit n'est pas
-                vrai pour nous — si tu trouves une affirmation non sourcée
-                ailleurs sur le site, c'est un bug, pas un parti pris.
+                attente de donnée est listé. Ce qui n'est pas écrit n'est
+                pas vrai — une affirmation non sourcée ailleurs sur le site
+                est un bug, pas un parti pris.
               </p>
               <p>
-                <strong className="text-foreground">— Alexandre Ngomo</strong>{" "}
-                · Diaspora RDC, Paris ·{" "}
+                Pour signaler une erreur, proposer une source ou suggérer un
+                joueur :{" "}
                 <a
-                  href="/leopardsradar/a-propos"
+                  href="mailto:contact@leopardsradar.com"
                   className="text-primary hover:text-primary-hover underline underline-offset-4"
                 >
-                  qui suis-je
+                  contact@leopardsradar.com
                 </a>
+                .
               </p>
             </Prose>
           </section>
