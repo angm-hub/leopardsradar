@@ -6,28 +6,32 @@ import Footer from "@/components/layout/Footer";
 import { Button } from "@/components/ui/ButtonPrimitive";
 import { StoryMeta } from "@/components/stories/StoryMeta";
 import { StoryCard } from "@/components/stories/StoryCard";
-import { getStoryBySlug, getRelatedStories, type StoryBlock } from "@/data/stories";
+import { useArticle, type ArticleBlock } from "@/hooks/useArticles";
 
 /**
- * Page Histoire (single article) — single column éditorial dark.
+ * Page Histoire (single article) — Supabase-backed.
  *
- * Inspiration : Linear blog (sobriété, generous whitespace, headline XL).
- * Rendu typé des blocs (h2, p, quote) pour préserver la sémantique.
+ * Migration : avant, lookup local via getStoryBySlug(slug). Maintenant,
+ * useArticle(slug) hit la table `articles` avec RLS publique en lecture.
+ * Les related sont aussi fetchés via la RPC get_related_articles qui
+ * priorise la même catégorie + fallback récents.
  */
 export default function Histoire() {
   const { slug } = useParams<{ slug: string }>();
-  const story = slug ? getStoryBySlug(slug) : undefined;
+  const { article, related, loading } = useArticle(slug);
 
   useEffect(() => {
-    if (story) {
-      document.title = `${story.title} | Histoires | Léopards Radar`;
+    if (article) {
+      document.title = `${article.title} | Histoires | Léopards Radar`;
     }
     return () => {
       document.title = "Léopards Radar";
     };
-  }, [story]);
+  }, [article]);
 
-  if (!story) {
+  if (loading) return <ArticleSkeleton />;
+
+  if (!article) {
     return (
       <div className="min-h-screen bg-background">
         <Navbar />
@@ -48,14 +52,11 @@ export default function Histoire() {
     );
   }
 
-  const related = getRelatedStories(story.slug, 2);
-
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
 
       <main className="flex-1">
-        {/* Header article */}
         <header className="container-site pt-32 pb-10 max-w-3xl">
           <nav aria-label="breadcrumb" className="text-sm text-muted">
             <a href="/" className="hover:text-foreground transition-colors">
@@ -70,36 +71,34 @@ export default function Histoire() {
             </Link>
             <span className="mx-2 text-muted/60">/</span>
             <span className="text-foreground/80 truncate inline-block max-w-xs align-bottom">
-              {story.category}
+              {article.category}
             </span>
           </nav>
 
           <div className="mt-6">
-            <StoryMeta story={story} size="md" />
+            <StoryMeta story={article} size="md" />
           </div>
 
           <h1 className="mt-5 font-serif text-4xl md:text-6xl text-foreground tracking-tight leading-[1.05] text-balance">
-            {story.title}
+            {article.title}
           </h1>
 
           <p className="mt-5 font-serif text-lg md:text-xl italic text-foreground/85 leading-relaxed text-balance">
-            {story.subtitle}
+            {article.subtitle}
           </p>
         </header>
 
-        {/* Corps de l'article */}
         <article className="container-site pb-16 max-w-2xl">
           <div className="space-y-6 md:space-y-7">
-            {story.body.map((block, i) => (
+            {article.body.map((block, i) => (
               <BodyBlock key={i} block={block} />
             ))}
           </div>
 
-          {/* Author footer + CTA */}
           <div className="mt-14 pt-8 border-t border-border space-y-5">
             <p className="text-sm text-muted-light font-mono">
-              Texte signé <span className="text-foreground">{story.author}</span>.
-              Vous avez du contexte à ajouter ?{" "}
+              Texte signé <span className="text-foreground">{article.author}</span>.
+              Une donnée à corriger ?{" "}
               <a
                 href="mailto:contact@leopardsradar.com"
                 className="text-primary hover:underline"
@@ -124,15 +123,14 @@ export default function Histoire() {
           </div>
         </article>
 
-        {/* Related */}
         {related.length > 0 ? (
           <section className="container-site py-16 border-t border-border">
             <h2 className="font-serif text-2xl text-foreground mb-6">
               À lire ensuite.
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-              {related.map((s) => (
-                <StoryCard key={s.slug} story={s} />
+              {related.map((a) => (
+                <StoryCard key={a.slug} story={a} />
               ))}
             </div>
           </section>
@@ -144,12 +142,48 @@ export default function Histoire() {
   );
 }
 
+function ArticleSkeleton() {
+  return (
+    <div className="min-h-screen bg-background flex flex-col">
+      <Navbar />
+      <main className="flex-1 container-site pt-32 pb-16 max-w-3xl">
+        <div
+          className="h-3 w-40 rounded bg-card animate-shimmer"
+          style={{ backgroundSize: "200% 100%" }}
+          aria-hidden
+        />
+        <div
+          className="mt-6 h-16 w-full rounded bg-card animate-shimmer"
+          style={{ backgroundSize: "200% 100%" }}
+          aria-hidden
+        />
+        <div
+          className="mt-4 h-6 w-2/3 rounded bg-card animate-shimmer"
+          style={{ backgroundSize: "200% 100%" }}
+          aria-hidden
+        />
+        <div className="mt-12 space-y-3">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div
+              key={i}
+              className="h-4 rounded bg-card animate-shimmer"
+              style={{ backgroundSize: "200% 100%", width: `${85 + (i % 3) * 5}%` }}
+              aria-hidden
+            />
+          ))}
+        </div>
+      </main>
+      <Footer />
+    </div>
+  );
+}
+
 /**
- * BodyBlock — rendu typé d'un bloc d'article. Sépare la sémantique
- * (paragraphe, titre h2, citation) du style — facilite une migration
- * vers un format structuré (Sanity, MDX, etc.) sans réécrire le rendu.
+ * BodyBlock — rendu typé d'un bloc (h2 / p / quote). Sépare la sémantique
+ * du style. Si on migre un jour vers un format richer (MDX, Sanity), il
+ * suffit d'ajouter d'autres types ici sans toucher au reste.
  */
-function BodyBlock({ block }: { block: StoryBlock }) {
+function BodyBlock({ block }: { block: ArticleBlock }) {
   if (block.type === "h2") {
     return (
       <h2 className="font-serif text-2xl md:text-3xl text-foreground tracking-tight pt-4">
@@ -171,7 +205,6 @@ function BodyBlock({ block }: { block: StoryBlock }) {
       </blockquote>
     );
   }
-  // Paragraphe par défaut
   return (
     <p className="text-base md:text-lg text-foreground/90 leading-[1.75]">
       {block.text}

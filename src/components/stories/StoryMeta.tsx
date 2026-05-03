@@ -1,8 +1,8 @@
 import { Clock, User } from "lucide-react";
-import type { Story } from "@/data/stories";
+import type { Article } from "@/hooks/useArticles";
 
 interface StoryMetaProps {
-  story: Story;
+  story: Article;
   size?: "sm" | "md";
 }
 
@@ -28,11 +28,11 @@ export function StoryMeta({ story, size = "sm" }: StoryMetaProps) {
     >
       <span className="text-primary/85">{story.category}</span>
       <span className="text-muted/60">·</span>
-      <span>{formatDate(story.publishedAt)}</span>
+      <span>{formatDate(story.published_at)}</span>
       <span className="text-muted/60">·</span>
       <span className="inline-flex items-center gap-1">
         <Clock className="h-3 w-3" />
-        {story.readingMinutes} min
+        {story.reading_minutes} min
       </span>
       {size === "md" ? (
         <>

@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { StoryMeta } from "./StoryMeta";
-import type { Story } from "@/data/stories";
+import type { Article } from "@/hooks/useArticles";
 
 interface StoryHeroProps {
-  story: Story;
+  story: Article;
 }
 
 /**
