@@ -9,6 +9,7 @@ import {
   Link2,
   Check,
   ListPlus,
+  ArrowRightLeft,
 } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -285,6 +286,11 @@ export default function PlayerPage() {
                   <Link to="/ma-liste">
                     <Button size="sm">
                       <ListPlus className="h-4 w-4" /> Ajouter à ma liste
+                    </Button>
+                  </Link>
+                  <Link to={`/compare?p1=${player.slug}`}>
+                    <Button variant="outline" size="sm" type="button">
+                      <ArrowRightLeft className="h-4 w-4" /> Comparer
                     </Button>
                   </Link>
                   {player.transfermarkt_id ? (
