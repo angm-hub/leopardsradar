@@ -35,6 +35,40 @@ export function StatsSection() {
       : null;
   const statFallback = statsLoading ? "—" : statsError ? "Erreur" : "—";
 
+  // Renders a stat number with a shimmer skeleton while data loads.
+  // Replaces the bare "—" fallback that flashed for ~300 ms on every page
+  // load and made the bento grid look broken on slow networks.
+  const StatNumber = ({
+    value,
+    suffix = "",
+    className = "font-mono text-5xl font-bold text-foreground leading-none",
+    width = "w-[3ch]",
+  }: {
+    value: number | string | null;
+    suffix?: string;
+    className?: string;
+    width?: string;
+  }) => {
+    if (statsLoading) {
+      return (
+        <div
+          className={`${width} h-[1em] rounded bg-gradient-to-r from-card via-card-hover to-card animate-shimmer ${className.includes("text-5xl") ? "h-12" : "h-9"}`}
+          style={{ backgroundSize: "200% 100%" }}
+          aria-hidden
+        />
+      );
+    }
+    if (value === null || value === undefined) {
+      return <div className={`${className} text-muted`}>{statFallback}</div>;
+    }
+    return (
+      <div className={className}>
+        {value}
+        {suffix}
+      </div>
+    );
+  };
+
 
   return (
     <section className="relative py-16 md:py-20 bg-background overflow-hidden">
@@ -112,9 +146,7 @@ export function StatsSection() {
               Joueurs
             </span>
             <div>
-              <div className="font-mono text-5xl font-bold text-foreground leading-none">
-                {rosterCount ?? statFallback}
-              </div>
+              <StatNumber value={rosterCount} />
               <p className="mt-2 text-xs text-muted">dans le roster actif</p>
             </div>
           </motion.div>
@@ -128,9 +160,7 @@ export function StatsSection() {
               Pays
             </span>
             <div>
-              <div className="font-mono text-5xl font-bold text-foreground leading-none">
-                {totalCountries ?? statFallback}
-              </div>
+              <StatNumber value={totalCountries} />
               <p className="mt-2 text-xs text-muted">où les Léopards évoluent</p>
             </div>
           </motion.div>
@@ -164,9 +194,7 @@ export function StatsSection() {
               Âge moyen
             </span>
             <div>
-              <div className="font-mono text-5xl font-bold text-foreground leading-none">
-                {avgAge ?? statFallback}
-              </div>
+              <StatNumber value={avgAge} />
               <p className="mt-2 text-xs text-muted">ans · génération pic</p>
             </div>
           </motion.div>
@@ -184,9 +212,11 @@ export function StatsSection() {
                 <span className="text-[10px] uppercase tracking-[0.2em] text-muted">
                   Radar
                 </span>
-                <p className="mt-1 font-mono text-2xl font-bold text-foreground leading-none">
-                  {totalRadar ?? statFallback}
-                </p>
+                <StatNumber
+                  value={totalRadar}
+                  className="mt-1 font-mono text-2xl font-bold text-foreground leading-none"
+                  width="w-[2.5ch]"
+                />
                 <p className="mt-1 text-xs text-muted truncate">
                   talents éligibles trackés
                 </p>

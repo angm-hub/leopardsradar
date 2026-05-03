@@ -26,6 +26,7 @@ import { PlayerStatProfile } from "@/components/player/PlayerStatProfile";
 import { RelatedPlayers } from "@/components/player/RelatedPlayers";
 import { usePlayer } from "@/hooks/usePlayer";
 import { useDominantColor } from "@/hooks/useDominantColor";
+import { useDocumentMeta } from "@/hooks/useDocumentMeta";
 import { cn } from "@/lib/utils";
 import {
   POSITION_LABEL,
@@ -91,6 +92,19 @@ export default function PlayerPage() {
   const photoShadow = dominant
     ? `0 20px 80px rgba(${r}, ${g}, ${b}, 0.35), 0 8px 24px rgba(0,0,0,0.5)`
     : `0 20px 80px rgba(0,0,0,0.5)`;
+
+  // Update tab title + OG meta when the player is loaded. Hook is called
+  // unconditionally (per Rules of Hooks) ; falls back to site defaults
+  // when player is still loading or null.
+  useDocumentMeta(
+    player
+      ? {
+          title: player.name,
+          description: buildPlayerMetaDescription(player),
+          image: player.image_url ?? undefined,
+        }
+      : { title: "Profil joueur" },
+  );
 
   if (loading) return <PlayerSkeleton />;
   if (!player) return <NotFound />;
@@ -449,6 +463,23 @@ export default function PlayerPage() {
       <Footer />
     </div>
   );
+}
+
+/**
+ * Build the OG/twitter description shown when a player URL is shared.
+ *
+ * Format : "<position> · <club> · <caps> caps RDC · <market value>".
+ * Skips fields when missing — keeps it under 160 chars even with long
+ * club names. The leading "Léopards Radar — " prefix is added by the
+ * meta hook elsewhere, this is just the differentiating payload.
+ */
+function buildPlayerMetaDescription(p: import("@/types/dbPlayer").DBPlayer): string {
+  const bits: string[] = [];
+  if (p.position) bits.push(POSITION_LABEL[p.position]);
+  if (p.current_club) bits.push(p.current_club);
+  if (p.caps_rdc > 0) bits.push(`${p.caps_rdc} cap${p.caps_rdc > 1 ? "s" : ""} RDC`);
+  if (p.market_value_eur && p.market_value_eur > 0) bits.push(formatMarketValue(p.market_value_eur));
+  return bits.length > 0 ? bits.join(" · ") : `Profil ${p.name} sur Léopards Radar`;
 }
 
 /**
