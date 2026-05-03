@@ -105,6 +105,15 @@ export function CompareDeltas({
       dispA: formatMarketValue(playerA.market_value_eur),
       dispB: formatMarketValue(playerB.market_value_eur),
     },
+    // Efficacité internationale : valeur marché par cap RDC. Sépare nettement
+    // un titulaire en formation (faible €/cap) d'un vétéran à valeur stable
+    // étalée sur des dizaines de sélections. Casse l'effet "égalité partout"
+    // que l'audit avait flaggé sur les axes Volume/Régularité.
+    valuePerCapRow(playerA, playerB),
+    // G+A par 90 min — métrique offensive normalisée. Différenciante même
+    // quand les deux joueurs jouent un nombre proche de matchs (où Volume
+    // et Régularité tombent à égalité).
+    contributionPer90Row(playerA, playerB),
     {
       label: "Âge",
       vA: playerA.age,
@@ -122,6 +131,68 @@ export function CompareDeltas({
       <DeltasBlock title="Saison & identité" rows={factualRows} />
     </div>
   );
+}
+
+/**
+ * "Valeur marché par cap RDC" — efficience nationale.
+ *
+ * Un jeune titulaire à 32M€ + 5 caps a un €/cap massif (potentiel non
+ * encore acté). Un vétéran à 1.5M€ + 50 caps a un €/cap faible mais une
+ * contribution étalée. La métrique sépare clairement les deux profils
+ * même quand leurs stats club sont proches.
+ */
+function valuePerCapRow(a: DBPlayer, b: DBPlayer): Row {
+  const compute = (p: DBPlayer): number | null => {
+    if (!p.market_value_eur || !p.caps_rdc || p.caps_rdc <= 0) return null;
+    return Math.round(p.market_value_eur / p.caps_rdc);
+  };
+  const valA = compute(a);
+  const valB = compute(b);
+  const fmt = (v: number | null): string => {
+    if (v === null) return "—";
+    if (v >= 1_000_000) return `${(v / 1_000_000).toFixed(1).replace(/\.0$/, "")} M €/cap`;
+    if (v >= 1_000) return `${Math.round(v / 1_000)} K €/cap`;
+    return `${v} €/cap`;
+  };
+  return {
+    label: "Valeur / cap RDC",
+    vA: valA,
+    vB: valB,
+    dispA: fmt(valA),
+    dispB: fmt(valB),
+    hint: "Valeur marché divisée par sélections. Sépare jeune titulaire et vétéran établi.",
+  };
+}
+
+/**
+ * "G+A par 90 min" — contribution offensive normalisée.
+ *
+ * Utilise effectiveMinutes (games × 80 si season_minutes manque) pour rester
+ * cohérent avec le hexagone. Métrique différenciante là où Volume et
+ * Régularité tombent à égalité (même nombre de matchs joués).
+ */
+function contributionPer90Row(a: DBPlayer, b: DBPlayer): Row {
+  const ESTIMATED_MIN_PER_GAME = 80;
+  const compute = (p: DBPlayer): number | null => {
+    const m = (p.season_minutes && p.season_minutes > 0)
+      ? p.season_minutes
+      : (p.season_games > 0 ? p.season_games * ESTIMATED_MIN_PER_GAME : null);
+    if (!m) return null;
+    const ga = (p.season_goals ?? 0) + (p.season_assists ?? 0);
+    return (ga * 90) / m;
+  };
+  const valA = compute(a);
+  const valB = compute(b);
+  const fmt = (v: number | null): string =>
+    v === null ? "—" : `${v.toFixed(2)} G+A/90`;
+  return {
+    label: "Contribution / 90 min",
+    vA: valA === null ? null : Math.round(valA * 1000), // scale up so delta math reads cleanly
+    vB: valB === null ? null : Math.round(valB * 1000),
+    dispA: fmt(valA),
+    dispB: fmt(valB),
+    hint: "Buts + passes décisives par 90 min. Minutes estimées (matchs × 80) si l'API ne les livre pas.",
+  };
 }
 
 function DeltasBlock({ title, rows }: { title: string; rows: Row[] }) {

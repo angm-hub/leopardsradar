@@ -269,18 +269,35 @@ export default function Radar() {
           ) : error ? (
             <p className="py-16 text-center text-muted-light">{error}</p>
           ) : filtered.length === 0 && view !== "carte" ? (
-            <div className="flex flex-col items-center justify-center py-20 gap-5">
+            <div className="flex flex-col items-center justify-center py-20 gap-5 text-center max-w-md mx-auto">
               <Search className="h-10 w-10 text-foreground/30" />
-              <p className="text-muted-light">
-                {players.length === 0
-                  ? "Aucun profil radar pour l'instant."
-                  : "Aucun joueur ne correspond à ces filtres."}
-              </p>
-              {players.length > 0 ? (
-                <Button variant="outline" size="sm" onClick={reset}>
-                  Réinitialiser les filtres
-                </Button>
-              ) : null}
+              {players.length === 0 ? (
+                <>
+                  <p className="font-serif text-xl text-foreground">
+                    Le Radar se construit.
+                  </p>
+                  <p className="text-sm text-muted-light">
+                    Le Radar trace les joueurs éligibles ou à ascendance RDC
+                    dans les championnats du monde. La cartographie initiale
+                    arrive à la prochaine mise à jour.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className="font-serif text-xl text-foreground">
+                    Aucun talent ne matche.
+                  </p>
+                  <p className="text-sm text-muted-light">
+                    Sur les{" "}
+                    {radarTotal ? `${radarTotal} profils` : "profils"} du Radar,
+                    cette combinaison de filtres ne renvoie rien. Essaie un
+                    poste ou un tier plus large.
+                  </p>
+                  <Button variant="outline" size="sm" onClick={reset}>
+                    Réinitialiser les filtres
+                  </Button>
+                </>
+              )}
             </div>
           ) : view === "carte" ? (
             <RadarCanvas players={filtered} totalRoster={players.length} />

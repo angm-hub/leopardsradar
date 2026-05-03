@@ -215,16 +215,32 @@ const Roster = () => {
               <p className="text-xs text-muted">{error}</p>
             </div>
           ) : filtered.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-20 gap-5">
+            <div className="flex flex-col items-center justify-center py-20 gap-5 text-center max-w-md mx-auto">
               <Search className="h-10 w-10 text-foreground/30" />
-              <p className="text-muted-light">
-                {players.length === 0 ? "Aucun joueur trouvé." : "Aucun joueur ne correspond."}
-              </p>
-              {players.length > 0 ? (
-                <Button variant="outline" size="sm" onClick={reset}>
-                  Réinitialiser les filtres
-                </Button>
-              ) : null}
+              {players.length === 0 ? (
+                <>
+                  <p className="font-serif text-xl text-foreground">
+                    Le roster est encore vide.
+                  </p>
+                  <p className="text-sm text-muted-light">
+                    Mise à jour à chaque trêve internationale. La prochaine
+                    convocation tombe d'ici quelques jours.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className="font-serif text-xl text-foreground">
+                    Aucun Léopard avec ces filtres.
+                  </p>
+                  <p className="text-sm text-muted-light">
+                    Sur les 65 internationaux du roster, aucun ne matche cette
+                    combinaison. Essaie de changer le poste ou le tri.
+                  </p>
+                  <Button variant="outline" size="sm" onClick={reset}>
+                    Réinitialiser les filtres
+                  </Button>
+                </>
+              )}
             </div>
           ) : effectiveMode === "editorial" ? (
             <div className="space-y-16">
