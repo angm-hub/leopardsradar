@@ -18,7 +18,24 @@ export default defineConfig(({ mode }) => ({
       overlay: false,
     },
   },
-  plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
+  plugins: [
+    react(),
+    mode === "development" && componentTagger(),
+    // Réécrit les paths "./" dans index.html pour qu'ils soient absolus
+    // depuis la base. Sinon en prod, sur une route deep type
+    // /leopardsradar/player/<slug>, le browser résout "./fonts/..." depuis
+    // /leopardsradar/player/ et 404. Avec ce remplacement on a
+    // /leopardsradar/fonts/... peu importe la profondeur.
+    {
+      name: "rewrite-relative-public-paths",
+      transformIndexHtml(html: string) {
+        const base = mode === "production" ? "/leopardsradar/" : "/";
+        return html
+          .replace(/href="\.\/fonts\.css"/g, `href="${base}fonts.css"`)
+          .replace(/href="\.\/fonts\//g, `href="${base}fonts/`);
+      },
+    },
+  ].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

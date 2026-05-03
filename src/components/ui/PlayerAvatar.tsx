@@ -60,6 +60,13 @@ export function PlayerAvatar({
             "h-full w-full",
             cover ? "object-cover" : "object-contain",
           )}
+          // Cadrage : on tire le focus vers le haut de la photo où se trouve
+          // le visage dans la quasi-totalité des photos sportives (Wikimedia,
+          // photos officielles club). object-position 'center' tombait
+          // souvent sur le buste pour les photos plein corps. 28% est un bon
+          // compromis : le visage reste visible sur les portraits cadrés
+          // serré et apparaît correctement sur les photos plein corps.
+          style={cover ? { objectPosition: "center 28%" } : undefined}
         />
       ) : (
         <span

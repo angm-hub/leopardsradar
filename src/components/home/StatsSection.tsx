@@ -258,14 +258,18 @@ function MiniWorldMap() {
       aria-hidden
     >
       <defs>
+        {/* Pattern de fond pointillé. Avant : pointait sur une variable CSS
+            inexistante (--border-hover) → motif invisible sur fond noir.
+            Maintenant : couleur en clair pour rester perceptible sur la card. */}
         <pattern id="dots" width="2" height="2" patternUnits="userSpaceOnUse">
-          <circle cx="0.5" cy="0.5" r="0.3" fill="hsl(var(--border-hover, 240 5% 18%))" opacity="0.6" />
+          <circle cx="0.5" cy="0.5" r="0.3" fill="#3a3a44" opacity="0.6" />
         </pattern>
       </defs>
       <rect width="100" height="60" fill="url(#dots)" />
+      {/* Dots diaspora — un par continent + Europe densifiée. */}
       {dots.map((d, i) => (
         <g key={i}>
-          <circle cx={d.x} cy={d.y} r="2.4" fill="#FCD116" opacity="0.18" />
+          <circle cx={d.x} cy={d.y} r="2.4" fill="#FCD116" opacity="0.25" />
           <circle cx={d.x} cy={d.y} r="0.9" fill="#FCD116" />
         </g>
       ))}

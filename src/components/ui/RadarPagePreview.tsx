@@ -3,7 +3,8 @@ import { Crosshair } from "lucide-react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
-import { flagFor, formatMarketValue } from "@/lib/playerHelpers";
+import { flagFor, formatMarketValue, POSITION_LABEL } from "@/lib/playerHelpers";
+import type { DBPosition } from "@/types/dbPlayer";
 
 interface RadarTeaserPlayer {
   name: string;
@@ -123,7 +124,7 @@ export function RadarPagePreview() {
                   </span>
                 </div>
                 <div className="text-[10px] uppercase tracking-wider text-primary/80 mt-0.5 truncate">
-                  {p.position ? `${p.position}` : ""}
+                  {p.position ? POSITION_LABEL[p.position as DBPosition] ?? p.position : ""}
                   {p.position && p.current_club ? " · " : ""}
                   {p.current_club ?? ""}
                 </div>
