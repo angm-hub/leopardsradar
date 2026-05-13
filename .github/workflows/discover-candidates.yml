@@ -1,0 +1,54 @@
+name: Discover RDC candidates
+
+# ──────────────────────────────────────────────────────────────────────
+# Léopards Radar — Job mensuel de découverte de nouveaux candidats RDC.
+# Tourne le 1er dimanche du mois à 04:00 UTC (après le sync hebdo).
+#
+# Crawl la page Transfermarkt qui liste les joueurs avec nationalité RDC,
+# insère les nouveaux dans `players` avec verified=false.
+# ──────────────────────────────────────────────────────────────────────
+
+on:
+  schedule:
+    # 1er du mois à 04:00 UTC (cron approximatif, vrai 1er dimanche calculé en script)
+    - cron: '0 4 1-7 * 0'
+  workflow_dispatch:
+    inputs:
+      max_new_candidates:
+        description: 'Max new candidates to insert per run (default 50)'
+        required: false
+        default: '50'
+
+permissions:
+  contents: read
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    concurrency:
+      group: discover-candidates
+      cancel-in-progress: false
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: scripts/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Run discovery
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          MAX_NEW_CANDIDATES: ${{ github.event.inputs.max_new_candidates || '50' }}
+          GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        working-directory: scripts
+        run: python discover_candidates.py
