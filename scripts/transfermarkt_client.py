@@ -121,19 +121,25 @@ class TransfermarktClient:
         Fetch + parse un profil joueur Transfermarkt.
 
         URL pattern : https://www.transfermarkt.com/-/profil/spieler/{ID}
+
+        Note : sans slug placeholder ("-"), TM renvoie 404. Avec "-" il fait
+        un 301 vers la bonne URL canonique, qu'on suit (allow_redirects=True
+        par défaut sur requests).
         """
-        url = f"{BASE}/profil/spieler/{tm_id}"
+        url = f"{BASE}/-/profil/spieler/{tm_id}"
         html = self._get(url)
         if not html:
             return None
 
         soup = BeautifulSoup(html, "html.parser")
 
-        # Identité
+        # Identité — utiliser separator=" " pour éviter "FirstNameLastName" collé
+        # quand le numéro de maillot et le nom sont dans des spans séparés.
         name_tag = soup.select_one("h1.data-header__headline-wrapper")
-        name = name_tag.get_text(strip=True) if name_tag else f"Unknown {tm_id}"
-        # Strip leading "#7"
+        name = name_tag.get_text(separator=" ", strip=True) if name_tag else f"Unknown {tm_id}"
+        # Strip leading "#7" et normalise les espaces multiples
         name = re.sub(r"^#\d+\s*", "", name)
+        name = re.sub(r"\s+", " ", name).strip()
 
         player = TmPlayer(transfermarkt_id=tm_id, name=name, profile_url=url)
 
@@ -198,14 +204,22 @@ class TransfermarktClient:
                 elif "both" in label:
                     player.foot = "both"
 
-        # Nationalities
-        nat_imgs = soup.select("span.data-header__content img.flaggenrahmen")
+        # Nationalities — sélecteur cible le <span> qui suit "Citizenship:"
+        # (on évite les drapeaux de logo club qui pollueraient la liste).
         seen = set()
-        for img in nat_imgs:
-            title = img.get("title")
-            if title and title not in seen:
-                player.nationalities.append(title)
-                seen.add(title)
+        for span in soup.select("span.info-table__content--regular"):
+            label = span.get_text(strip=True).lower()
+            if "citizenship" not in label:
+                continue
+            value_span = span.find_next_sibling("span", class_="info-table__content--bold")
+            if not value_span:
+                continue
+            for img in value_span.select("img.flaggenrahmen"):
+                title = img.get("title") or img.get("alt")
+                if title and title not in seen:
+                    player.nationalities.append(title)
+                    seen.add(title)
+            break  # une seule section Citizenship
 
         # Position
         pos_tag = soup.select_one("dd.detail-position__position")
@@ -290,7 +304,7 @@ class TransfermarktClient:
         Retourne une liste de dicts compatibles `selections` :
           { federation_code, category, competition, is_major_competition, match_date, opponent, source_url }
         """
-        url = f"{BASE}/nationalmannschaft/spieler/{tm_id}"
+        url = f"{BASE}/-/nationalmannschaft/spieler/{tm_id}"
         html = self._get(url)
         if not html:
             return []
