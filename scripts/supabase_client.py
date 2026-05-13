@@ -64,18 +64,28 @@ class SupabaseClient:
         }
 
     def ping(self) -> None:
-        """Sanity check: hit /rest/v1/ to validate URL + key before doing real work."""
-        r = requests.get(f"{self.url}/rest/v1/", headers=self.headers, timeout=10)
+        """
+        Sanity check: hit /rest/v1/players?limit=1 to validate URL + key + RLS access.
+
+        Note : /rest/v1/ tout court renvoie 404 (PGRST125), il faut hitter
+        une vraie ressource. On utilise `players` qui est public via RLS.
+        """
+        r = requests.get(
+            f"{self.url}/rest/v1/players",
+            headers=self.headers,
+            params={"select": "id", "limit": "1"},
+            timeout=10,
+        )
         if r.status_code == 401:
             raise RuntimeError(
                 f"Supabase auth FAILED (HTTP 401). The SUPABASE_SERVICE_ROLE_KEY "
                 f"is invalid for this project. Check the key in GitHub Secrets. "
                 f"Body: {r.text[:200]}"
             )
-        if r.status_code >= 400:
+        if r.status_code != 200:
             raise RuntimeError(
-                f"Supabase ping failed (HTTP {r.status_code}). URL={self.url}. "
-                f"Body: {r.text[:200]}"
+                f"Supabase ping failed (HTTP {r.status_code}). "
+                f"URL={self.url}/rest/v1/players. Body: {r.text[:200]}"
             )
 
     def select(self, table: str, **params) -> list:
