@@ -41,6 +41,16 @@ def main():
     print(f"Batch : {BATCH_SIZE} | Rate : {RATE_LIMIT}s/req")
 
     sb = SupabaseClient()
+
+    # Sanity check : valider l'auth Supabase AVANT de scraper. Sans ça, le job
+    # crash silencieusement après 10 min sans rien logger dans sync_logs.
+    try:
+        sb.ping()
+        print("[Supabase] auth OK")
+    except RuntimeError as e:
+        print(f"!!! ABORTING: {e}", file=sys.stderr)
+        sys.exit(1)
+
     tm = TransfermarktClient(rate_limit_seconds=RATE_LIMIT)
 
     # 1. Sélectionner les joueurs à refresh
