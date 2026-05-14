@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Léopards Radar — Histoires</title>
+    <link>https://angm-hub.github.io/leopardsradar/histoires</link>
+    <atom:link href="https://angm-hub.github.io/leopardsradar/rss.xml" rel="self" type="application/rss+xml"/>
+    <description>Histoires éditoriales des Léopards de la République Démocratique du Congo. Roster, radar, diaspora — édité par Cobalt Sports &amp; Entertainment.</description>
+    <language>fr-FR</language>
+    <copyright>© 2026 Cobalt Sports &amp; Entertainment</copyright>
+    <lastBuildDate>Thu, 14 May 2026 09:51:23 GMT</lastBuildDate>
+    <ttl>1440</ttl>
+    <item>
+      <title>Les Léopards oubliés.</title>
+      <link>https://angm-hub.github.io/leopardsradar/histoires/leopards-oublies-5-talents-rdc</link>
+      <guid isPermaLink="true">https://angm-hub.github.io/leopardsradar/histoires/leopards-oublies-5-talents-rdc</guid>
+      <pubDate>Wed, 22 Apr 2026 12:00:00 GMT</pubDate>
+      <author>contact@leopardsradar.com (Léopards Radar)</author>
+      <category>Investigation</category>
+      <description>À chaque cycle, des binationaux choisissent une autre sélection. Pas par mépris — par défaut de structure. Enquête sur cinq cas qui auraient dû finir Léopards.</description>
+    </item>
+    <item>
+      <title>Pourquoi le Best XI #15 marque un tournant.</title>
+      <link>https://angm-hub.github.io/leopardsradar/histoires/best-xi-15-tournant</link>
+      <guid isPermaLink="true">https://angm-hub.github.io/leopardsradar/histoires/best-xi-15-tournant</guid>
+      <pubDate>Sun, 19 Apr 2026 12:00:00 GMT</pubDate>
+      <author>contact@leopardsradar.com (Léopards Radar)</author>
+      <category>Analyse</category>
+      <description>Pour la première fois depuis le début de notre Best XI hebdomadaire, le onze ne pioche pas dans deux générations en concurrence. Il en assume une. Et ça change tout.</description>
+    </item>
+    <item>
+      <title>Wissa, la patience d&apos;un Léopard.</title>
+      <link>https://angm-hub.github.io/leopardsradar/histoires/wissa-patience-leopard</link>
+      <guid isPermaLink="true">https://angm-hub.github.io/leopardsradar/histoires/wissa-patience-leopard</guid>
+      <pubDate>Wed, 15 Apr 2026 12:00:00 GMT</pubDate>
+      <author>contact@leopardsradar.com (Léopards Radar)</author>
+      <category>Profil</category>
+      <description>Yoane Wissa a mis le temps. Brentford, Premier League, Newcastle. À 29 ans, il devient ce que personne n&apos;avait osé prédire en 2018 : la pointe assumée des Léopards.</description>
+    </item>
+  </channel>
+</rss>
