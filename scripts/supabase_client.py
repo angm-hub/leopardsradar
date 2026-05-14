@@ -18,13 +18,27 @@ class SupabaseClient:
         # often introduces, then strip slashes
         raw_url = (url or os.environ.get("SUPABASE_URL", "")).strip()
         raw_key = (service_role_key or os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")).strip()
-        self.url = raw_url.rstrip("/")
+
+        # Normalise l'URL : retire trailing slashes ET les chemins parasites
+        # courants comme '/rest/v1' que les gens copient parfois par erreur.
+        normalized = raw_url.rstrip("/")
+        for suffix in ("/rest/v1", "/rest", "/api"):
+            if normalized.endswith(suffix):
+                print(f"[Supabase] WARNING: SUPABASE_URL ended with '{suffix}', auto-stripping.")
+                normalized = normalized[: -len(suffix)].rstrip("/")
+        self.url = normalized
         self.key = raw_key
 
         if not self.url:
             raise RuntimeError("SUPABASE_URL is missing or empty.")
         if not self.key:
             raise RuntimeError("SUPABASE_SERVICE_ROLE_KEY is missing or empty.")
+        if not self.url.startswith("https://"):
+            raise RuntimeError(
+                f"SUPABASE_URL must start with 'https://' — got '{self.url[:30]}...'"
+            )
+        if "supabase.co" not in self.url:
+            print(f"[Supabase] WARNING: SUPABASE_URL doesn't contain 'supabase.co' — got '{self.url}' (custom domain ?)")
 
         # Heuristic warnings: catch the most common copy-paste mistakes.
         if self.key.startswith("sb_publishable_"):
@@ -81,6 +95,14 @@ class SupabaseClient:
                 f"Supabase auth FAILED (HTTP 401). The SUPABASE_SERVICE_ROLE_KEY "
                 f"is invalid for this project. Check the key in GitHub Secrets. "
                 f"Body: {r.text[:200]}"
+            )
+        if r.status_code == 404 and "PGRST125" in r.text:
+            raise RuntimeError(
+                f"Supabase ping failed (HTTP 404 PGRST125 'Invalid path'). "
+                f"This typically means SUPABASE_URL contains an extra path "
+                f"like '/rest/v1' at the end. "
+                f"Expected SUPABASE_URL format: 'https://xxxxx.supabase.co' (no trailing path). "
+                f"Computed URL: {self.url}/rest/v1/players. Body: {r.text[:200]}"
             )
         if r.status_code != 200:
             raise RuntimeError(
