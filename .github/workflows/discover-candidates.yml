@@ -38,6 +38,7 @@ on:
         options:
           - 'rdc_pool'        # crawl TM stats filtered by DR Congo nationality (~500 joueurs)
           - 'linafoot_clubs'  # crawl rosters of 10 Linafoot D1 clubs (~200-300 joueurs locaux)
+          - 'national_teams'  # crawl rosters of 8 RDC national teams (A + U23/21/20/19/17/16/15)
 
 permissions:
   contents: read

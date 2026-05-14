@@ -427,6 +427,24 @@ class TransfermarktClient:
         {"id": "135486", "name": "FC Renaissance du Congo"},
     ]
 
+    # ─────────────────────────────────────────────────────────────────
+    # Sélections nationales RDC (toutes catégories)
+    # IDs Transfermarkt confirmés via schnellsuche
+    # IMPORTANT : les joueurs trouvés ici ont par définition une base
+    # juridique RDC validée → on peut leur attribuer FATHER/MOTHER/etc.
+    # avec confidence HIGH (sélectionné jeune = nationalité prouvée).
+    # ─────────────────────────────────────────────────────────────────
+    NATIONAL_TEAMS_RDC = [
+        {"id": "3854",   "name": "DR Congo A senior", "category": "A"},
+        {"id": "74644",  "name": "DR Congo U23",      "category": "U23"},
+        {"id": "37488",  "name": "DR Congo U21",      "category": "U21"},
+        {"id": "27262",  "name": "DR Congo U20",      "category": "U20"},
+        {"id": "45194",  "name": "DR Congo U19",      "category": "U19"},
+        {"id": "51024",  "name": "DR Congo U17",      "category": "U17"},
+        {"id": "141497", "name": "DR Congo U16",      "category": "U16"},
+        {"id": "141379", "name": "DR Congo U15",      "category": "U15"},
+    ]
+
     def discover_by_clubs(self, club_ids: list) -> list:
         """
         Crawl les rosters d'une liste de clubs Transfermarkt.

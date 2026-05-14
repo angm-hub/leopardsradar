@@ -75,11 +75,26 @@ def main():
 
     # 2. Découverte exhaustive (selon DISCOVERY_MODE)
     print(f"Mode discovery : {DISCOVERY_MODE}")
+    discovered_via_national_team = {}  # tm_id → category (A/U23/U21/...)
     try:
         if DISCOVERY_MODE == "linafoot_clubs":
             club_ids = [c["id"] for c in tm.LINAFOOT_CLUBS]
             print(f"Crawl rosters de {len(club_ids)} clubs Linafoot...")
             candidates = tm.discover_by_clubs(club_ids)
+        elif DISCOVERY_MODE == "national_teams":
+            # Crawl chaque sélection nationale, en taggant la catégorie
+            candidates = []
+            seen = set()
+            for nt in tm.NATIONAL_TEAMS_RDC:
+                print(f"  → {nt['name']} (verein/{nt['id']})")
+                team_candidates = tm.discover_by_clubs([nt["id"]])
+                for c in team_candidates:
+                    if c["transfermarkt_id"] in seen:
+                        continue
+                    seen.add(c["transfermarkt_id"])
+                    discovered_via_national_team[c["transfermarkt_id"]] = nt["category"]
+                    candidates.append(c)
+            print(f"Total uniques (toutes catégories) : {len(candidates)}")
         else:
             print(f"Crawl Transfermarkt RDC pool ({MAX_PAGES} pages max)...")
             candidates = tm.discover_rdc_pool(max_pages=MAX_PAGES)
