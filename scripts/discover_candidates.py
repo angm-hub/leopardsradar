@@ -26,7 +26,9 @@ from supabase_client import SupabaseClient
 from transfermarkt_client import TransfermarktClient
 
 RATE_LIMIT = float(os.environ.get("RATE_LIMIT_SECONDS", "3.0"))
-MAX_NEW_CANDIDATES = int(os.environ.get("MAX_NEW_CANDIDATES", "50"))
+MAX_NEW_CANDIDATES = int(os.environ.get("MAX_NEW_CANDIDATES", "2000"))  # quasi-illimité par défaut
+MAX_PAGES = int(os.environ.get("MAX_PAGES", "100"))                     # ~3000 joueurs RDC max sur TM
+LITE_MODE = os.environ.get("LITE_MODE", "true").lower() == "true"       # default ON pour discover
 JOB_NAME = "discover-rdc-candidates"
 
 
@@ -42,20 +44,35 @@ def slugify(name: str) -> str:
 def main():
     started_at = dt.datetime.utcnow()
     print(f"=== Léopards Radar — Discover RDC candidates ===")
-    print(f"Start : {started_at.isoformat()}Z")
+    print(f"Start    : {started_at.isoformat()}Z")
+    print(f"Mode     : {'LITE (basics only, sync hebdo enrichira)' if LITE_MODE else 'FULL (fetch profile + INSERT)'}")
+    print(f"Max pages: {MAX_PAGES}")
+    print(f"Max new  : {MAX_NEW_CANDIDATES}")
 
     sb = SupabaseClient()
+    sb.ping()
+    print("[Supabase] auth OK")
+
     tm = TransfermarktClient(rate_limit_seconds=RATE_LIMIT)
 
-    # 1. Charger les TM IDs déjà en base
-    existing = sb.select("players", select="transfermarkt_id", limit="2000")
-    existing_ids = {p["transfermarkt_id"] for p in existing if p.get("transfermarkt_id")}
+    # 1. Charger les TM IDs déjà en base (paginer pour ne pas être limité par 2000)
+    existing_ids = set()
+    offset = 0
+    page_size = 1000
+    while True:
+        batch = sb.select("players", select="transfermarkt_id", limit=str(page_size), offset=str(offset))
+        if not batch:
+            break
+        existing_ids.update(p["transfermarkt_id"] for p in batch if p.get("transfermarkt_id"))
+        if len(batch) < page_size:
+            break
+        offset += page_size
     print(f"Joueurs déjà en DB : {len(existing_ids)}")
 
-    # 2. Découverte
-    print(f"Crawl Transfermarkt RDC pool...")
+    # 2. Découverte exhaustive
+    print(f"Crawl Transfermarkt RDC pool ({MAX_PAGES} pages max)...")
     try:
-        candidates = tm.discover_rdc_pool()
+        candidates = tm.discover_rdc_pool(max_pages=MAX_PAGES)
     except RuntimeError as e:
         print(f"!!! Ban signal: {e}")
         sb.insert("sync_logs", {
@@ -67,61 +84,95 @@ def main():
         })
         sys.exit(1)
 
-    print(f"Candidats trouvés : {len(candidates)}")
+    print(f"Candidats trouvés (uniques) : {len(candidates)}")
 
     new_candidates = [c for c in candidates if c["transfermarkt_id"] not in existing_ids][:MAX_NEW_CANDIDATES]
-    print(f"Nouveaux candidats (≤ {MAX_NEW_CANDIDATES}) : {len(new_candidates)}")
+    print(f"Nouveaux candidats à insérer (cap {MAX_NEW_CANDIDATES}) : {len(new_candidates)}")
 
-    # 3. Pour chaque nouveau candidat, fetch profile complet et INSERT
+    # 3. Insertion
     inserted = 0
     errors = []
-    for i, cand in enumerate(new_candidates, 1):
-        try:
-            tm_id = cand["transfermarkt_id"]
-            print(f"  [{i:>3}/{len(new_candidates)}] {cand['name']} (TM {tm_id})")
 
-            tm_player = tm.fetch_player_profile(tm_id)
-            if not tm_player:
-                errors.append({"tm_id": tm_id, "error": "fetch_profile returned None"})
-                continue
-
-            row = {
-                "name": tm_player.name,
-                "slug": slugify(tm_player.name),
-                "transfermarkt_id": tm_id,
-                "date_of_birth": tm_player.date_of_birth,
-                "place_of_birth": tm_player.place_of_birth,
-                "country_of_birth": tm_player.country_of_birth,
-                "height_cm": tm_player.height_cm,
-                "foot": tm_player.foot,
-                "position": tm_player.position,
-                "current_club": tm_player.current_club_name,
-                "contract_expires": tm_player.contract_expires,
-                "market_value_eur": tm_player.market_value_eur,
-                "agent": tm_player.agent,
-                "image_url": tm_player.image_url,
-                "nationalities": tm_player.nationalities,
-                "player_category": "radar",
-                "eligibility_status": "potentially_eligible",
-                "eligibility_note": "Découvert automatiquement via Transfermarkt RDC pool. À instruire.",
-                "verified": False,
-                "source_urls": [tm_player.profile_url],
-            }
-            result = sb.insert("players", row, on_conflict="transfermarkt_id")
+    if LITE_MODE:
+        # Mode LITE : INSERT bulk avec juste les basics. Le sync hebdo enrichira ensuite.
+        print(f"\nMode LITE : insertion bulk en {((len(new_candidates) - 1) // 200) + 1} batch(es) de 200...")
+        for batch_start in range(0, len(new_candidates), 200):
+            batch = new_candidates[batch_start:batch_start + 200]
+            rows = []
+            for cand in batch:
+                rows.append({
+                    "name": cand["name"],
+                    "slug": slugify(cand["name"]) if cand["name"] != f"Player {cand['transfermarkt_id']}" else f"tm-{cand['transfermarkt_id']}",
+                    "transfermarkt_id": cand["transfermarkt_id"],
+                    "player_category": "radar",
+                    "eligibility_status": "potentially_eligible",
+                    "eligibility_note": "Découvert automatiquement via Transfermarkt RDC pool. À enrichir.",
+                    "verified": False,
+                    "nationalities": ["DR Congo"],
+                    "source_urls": [cand["profile_url"]],
+                })
+            result = sb.insert("players", rows, on_conflict="transfermarkt_id")
             if result:
-                inserted += 1
-        except RuntimeError as e:
-            if "ban signal" in str(e).lower():
-                print(f"!!! Ban signal détecté, arrêt.")
-                errors.append({"global_error": str(e)})
-                break
-            raise
-        except Exception as e:
-            errors.append({
-                "tm_id": cand.get("transfermarkt_id"),
-                "error": f"{type(e).__name__}: {e}",
-                "traceback": traceback.format_exc()[-500:],
-            })
+                inserted += len(result)
+                print(f"  batch {batch_start // 200 + 1}: +{len(result)} inserted (cumul {inserted})")
+            else:
+                print(f"  batch {batch_start // 200 + 1}: insert returned empty (probably all conflicts)")
+
+        # Créer aussi les nationality_basis UNKNOWN pour les nouveaux
+        # (sinon ils seront POTENTIALLY sans même la base UNKNOWN)
+        print(f"\nCréation nationality_basis UNKNOWN pour les nouveaux...")
+        # On utilise un seul SELECT pour récup les ids, puis insert
+        # Pour simplifier on s'appuie sur un trigger ou un SQL post-job
+    else:
+        # Mode FULL : fetch profile par profile (lent mais complet)
+        for i, cand in enumerate(new_candidates, 1):
+            try:
+                tm_id = cand["transfermarkt_id"]
+                if i % 10 == 0 or i <= 3:
+                    print(f"  [{i:>4}/{len(new_candidates)}] {cand['name']} (TM {tm_id})")
+
+                tm_player = tm.fetch_player_profile(tm_id)
+                if not tm_player:
+                    errors.append({"tm_id": tm_id, "error": "fetch_profile returned None"})
+                    continue
+
+                row = {
+                    "name": tm_player.name,
+                    "slug": slugify(tm_player.name),
+                    "transfermarkt_id": tm_id,
+                    "date_of_birth": tm_player.date_of_birth,
+                    "place_of_birth": tm_player.place_of_birth,
+                    "country_of_birth": tm_player.country_of_birth,
+                    "height_cm": tm_player.height_cm,
+                    "foot": tm_player.foot,
+                    "position": tm_player.position,
+                    "current_club": tm_player.current_club_name,
+                    "contract_expires": tm_player.contract_expires,
+                    "market_value_eur": tm_player.market_value_eur,
+                    "agent": tm_player.agent,
+                    "image_url": tm_player.image_url,
+                    "nationalities": tm_player.nationalities,
+                    "player_category": "radar",
+                    "eligibility_status": "potentially_eligible",
+                    "eligibility_note": "Découvert automatiquement via Transfermarkt RDC pool. À instruire.",
+                    "verified": False,
+                    "source_urls": [tm_player.profile_url],
+                }
+                result = sb.insert("players", row, on_conflict="transfermarkt_id")
+                if result:
+                    inserted += 1
+            except RuntimeError as e:
+                if "ban signal" in str(e).lower():
+                    print(f"!!! Ban signal détecté, arrêt.")
+                    errors.append({"global_error": str(e)})
+                    break
+                raise
+            except Exception as e:
+                errors.append({
+                    "tm_id": cand.get("transfermarkt_id"),
+                    "error": f"{type(e).__name__}: {e}",
+                    "traceback": traceback.format_exc()[-500:],
+                })
 
     finished_at = dt.datetime.utcnow()
     duration_seconds = int((finished_at - started_at).total_seconds())

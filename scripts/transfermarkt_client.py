@@ -410,35 +410,61 @@ class TransfermarktClient:
     # ─────────────────────────────────────────────────────────────────
     # Discovery — RDC pool
     # ─────────────────────────────────────────────────────────────────
-    def discover_rdc_pool(self) -> list:
+    def discover_rdc_pool(self, max_pages: int = 100, early_stop_after_empty: int = 3) -> list:
         """
         Crawl la page Transfermarkt qui liste les joueurs avec nationalité RDC.
 
         URL : https://www.transfermarkt.com/spieler-statistik/wertvollstespieler/marktwertetop?land_id=140
-
         (140 = code Transfermarkt pour DR Congo)
+
+        :param max_pages: nombre max de pages à parcourir (default 100, ~3000 joueurs).
+        :param early_stop_after_empty: arrêter après N pages consécutives sans nouveau ID.
+
+        Returns une liste de dicts {transfermarkt_id, name, profile_url}.
+        Dédup interne sur transfermarkt_id.
         """
+        seen_ids: set = set()
         results = []
-        for page in range(1, 11):  # 10 pages × 25 = 250 candidats max par run
+        empty_streak = 0
+
+        for page in range(1, max_pages + 1):
             url = f"{BASE}/spieler-statistik/wertvollstespieler/marktwertetop?land_id=140&page={page}"
             html = self._get(url)
             if not html:
+                print(f"[TM discover] page {page} : empty response, stopping")
                 break
 
+            # Sélecteur robuste : on cible directement les liens vers /profil/spieler/<id>
+            # qui apparaissent dans n'importe quel élément de table.
             soup = BeautifulSoup(html, "html.parser")
-            rows = soup.select("table.items tbody tr.odd, table.items tbody tr.even")
-            if not rows:
-                break
-
-            for row in rows:
-                link = row.select_one("a.spielprofil_tooltip")
-                if not link:
-                    continue
+            page_new_count = 0
+            for link in soup.select('a[href*="/profil/spieler/"]'):
                 href = link.get("href", "")
-                m = re.search(r"/spieler/(\d+)", href)
+                m = re.search(r"/profil/spieler/(\d+)", href)
                 if not m:
                     continue
                 tm_id = m.group(1)
-                name = link.get_text(strip=True)
-                results.append({"transfermarkt_id": tm_id, "name": name, "profile_url": urljoin(BASE, href)})
+                if tm_id in seen_ids:
+                    continue
+                seen_ids.add(tm_id)
+                # Le name du link peut être vide (icône/image) ; on accepte quand même
+                # et on enrichira au sync. Sinon on l'utilise.
+                name_text = link.get_text(strip=True)
+                results.append({
+                    "transfermarkt_id": tm_id,
+                    "name": name_text or f"Player {tm_id}",
+                    "profile_url": urljoin(BASE, href.split("?")[0]),
+                })
+                page_new_count += 1
+
+            print(f"[TM discover] page {page:>3} : +{page_new_count:>3} new (total {len(results)})")
+
+            if page_new_count == 0:
+                empty_streak += 1
+                if empty_streak >= early_stop_after_empty:
+                    print(f"[TM discover] {empty_streak} pages sans nouveaux ID, arrêt à page {page}")
+                    break
+            else:
+                empty_streak = 0
+
         return results

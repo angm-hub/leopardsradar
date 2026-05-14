@@ -15,9 +15,21 @@ on:
   workflow_dispatch:
     inputs:
       max_new_candidates:
-        description: 'Max new candidates to insert per run (default 50)'
+        description: 'Max new candidates to insert per run (default 2000 = quasi-illimité)'
         required: false
-        default: '50'
+        default: '2000'
+      max_pages:
+        description: 'Max Transfermarkt pages to crawl (default 100)'
+        required: false
+        default: '100'
+      lite_mode:
+        description: 'LITE mode (basics only, no profile fetch) — recommandé pour exhaustive run'
+        required: false
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
 
 permissions:
   contents: read
@@ -48,7 +60,9 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-          MAX_NEW_CANDIDATES: ${{ github.event.inputs.max_new_candidates || '50' }}
+          MAX_NEW_CANDIDATES: ${{ github.event.inputs.max_new_candidates || '2000' }}
+          MAX_PAGES: ${{ github.event.inputs.max_pages || '100' }}
+          LITE_MODE: ${{ github.event.inputs.lite_mode || 'true' }}
           GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         working-directory: scripts
         run: python discover_candidates.py
