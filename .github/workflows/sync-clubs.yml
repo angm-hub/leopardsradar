@@ -1,0 +1,95 @@
+name: Sync Clubs (référentiel)
+
+# ──────────────────────────────────────────────────────────────────────
+# Léopards Radar — Sprint 1 : Peuplement du référentiel clubs.
+#
+# Ce job tourne chaque lundi à 03h UTC, en amont des jobs hebdo
+# backfill-photos (04h) et audit-caps (05h), pour que les FK clubs
+# soient à jour avant les analyses dépendantes.
+#
+# Flux :
+#   1. Lit les ~250 current_club distincts dans players
+#   2. Fetch Transfermarkt pour chaque club avec un TM ID connu
+#   3. Tente une recherche TM pour les clubs sans ID (sauf --no-search)
+#   4. Upsert dans clubs (idempotent)
+#   5. Backfill players.current_club_fk
+#   6. Log dans sync_logs
+#
+# Timeout 30 min :
+#   250 clubs × 1s rate-limit = 4m17s de rate-limit seul
+#   + overhead HTTP + Supabase writes → 10-15 min typique
+#   30 min donne une marge confortable sans bloquer l'infra GH.
+# ──────────────────────────────────────────────────────────────────────
+
+on:
+  schedule:
+    # Lundi 03:00 UTC — avant backfill-photos (04h) et audit-caps (05h)
+    - cron: '0 3 * * 1'
+
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'dry-run : affiche sans écrire en base (true/false)'
+        required: false
+        default: 'false'
+      force_full_resync:
+        description: 'force-resync : refetch TM même pour les clubs déjà en base (true/false)'
+        required: false
+        default: 'false'
+      no_search:
+        description: 'no-search : saute la recherche TM pour les clubs sans ID (true/false)'
+        required: false
+        default: 'false'
+
+permissions:
+  contents: read
+
+jobs:
+  sync-clubs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    concurrency:
+      group: sync-clubs
+      # Ne pas annuler un run en cours : un sync interrompu laisse la BDD
+      # dans un état partiel qui vaut mieux être laissé finir.
+      cancel-in-progress: false
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: scripts/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Run sync_clubs
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        working-directory: scripts
+        run: |
+          # Construction des flags CLI selon les inputs workflow_dispatch
+          FLAGS=""
+
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            FLAGS="$FLAGS --dry-run"
+          fi
+
+          if [ "${{ github.event.inputs.force_full_resync }}" = "true" ]; then
+            FLAGS="$FLAGS --force-resync"
+          fi
+
+          if [ "${{ github.event.inputs.no_search }}" = "true" ]; then
+            FLAGS="$FLAGS --no-search"
+          fi
+
+          echo "Flags: $FLAGS"
+          python sync_clubs.py $FLAGS
