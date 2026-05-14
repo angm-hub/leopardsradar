@@ -1,0 +1,97 @@
+name: Backfill Player Clubs (historique carrière)
+
+# ──────────────────────────────────────────────────────────────────────
+# Léopards Radar — Sprint 2 : Backfill player_clubs depuis TM.
+#
+# Ce job tourne chaque mardi à 02h UTC, en cascade après sync-clubs
+# du lundi (03h) — les clubs sont donc déjà peuplés quand ce job démarre.
+#
+# Flux :
+#   1. Sélectionne les 165 joueurs prioritaires (roster + top 100 radar)
+#   2. Fetch la page career history Transfermarkt de chaque joueur
+#   3. Parse les passages club (date, type, fee)
+#   4. Crée les clubs manquants à la volée si sync-clubs ne les a pas couverts
+#   5. UPSERT dans player_clubs (idempotent)
+#   6. Log dans sync_logs
+#
+# Timeout 60 min :
+#   165 joueurs × 1s rate-limit = 2m45s de rate-limit minimum
+#   + ~5 passages par joueur × fetch club éventuel (1s) → ~15-25 min typique
+#   60 min donne une marge confortable pour les clubs manquants à créer à la volée.
+# ──────────────────────────────────────────────────────────────────────
+
+on:
+  schedule:
+    # Mardi 02:00 UTC — en cascade après sync-clubs du lundi (03h)
+    # Note : sync-clubs tourne lundi 03h → player_clubs démarre mardi 02h
+    # (24h de fenêtre pour que sync-clubs finisse et que les clubs soient en BDD)
+    - cron: '0 2 * * 2'
+
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'dry-run : affiche sans écrire en base (true/false)'
+        required: false
+        default: 'false'
+      priority_only:
+        description: 'priority-only : traite uniquement les 165 joueurs prioritaires (true/false)'
+        required: false
+        default: 'true'
+      batch_size:
+        description: 'batch-size : nombre max de joueurs (défaut: 165, max: 500)'
+        required: false
+        default: '165'
+
+permissions:
+  contents: read
+
+jobs:
+  backfill-player-clubs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    concurrency:
+      group: backfill-player-clubs
+      # Ne pas annuler un run en cours : un backfill interrompu laisse des
+      # données partielles qui valent mieux être laissées terminer proprement.
+      cancel-in-progress: false
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: scripts/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Run backfill_player_clubs
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          BATCH_SIZE: ${{ github.event.inputs.batch_size || '165' }}
+        working-directory: scripts
+        run: |
+          # Construction des flags CLI selon les inputs workflow_dispatch
+          FLAGS=""
+
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            FLAGS="$FLAGS --dry-run"
+          fi
+
+          # priority_only=false → --all-players
+          if [ "${{ github.event.inputs.priority_only }}" = "false" ]; then
+            FLAGS="$FLAGS --all-players"
+          fi
+
+          # batch_size transmis via env BATCH_SIZE (lu dans le script Python)
+          FLAGS="$FLAGS --batch-size ${{ github.event.inputs.batch_size || '165' }}"
+
+          echo "Flags: $FLAGS"
+          python backfill_player_clubs.py $FLAGS

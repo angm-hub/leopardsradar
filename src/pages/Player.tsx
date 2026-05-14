@@ -30,6 +30,7 @@ import { PlayerPressMentions } from "@/components/player/PlayerPressMentions";
 import { PlayerStatProfile } from "@/components/player/PlayerStatProfile";
 import { PlayerWeeklyProgress } from "@/components/player/PlayerWeeklyProgress";
 import { PlayerScrollNav } from "@/components/player/PlayerScrollNav";
+import { PlayerCareerTimeline } from "@/components/player/PlayerCareerTimeline";
 import { PlayerValueSparkline } from "@/components/player/PlayerValueSparkline";
 import { RelatedPlayers } from "@/components/player/RelatedPlayers";
 import { usePlayer } from "@/hooks/usePlayer";
@@ -228,6 +229,7 @@ export default function PlayerPage() {
     { id: "hero", label: "Profil" },
     !isProfileSparse && { id: "stats", label: "Statistiques" },
     !isProfileSparse && { id: "identite", label: "Identité" },
+    { id: "carriere", label: "Carrière" },
     { id: "fifa", label: "FIFA" },
     !isProfileSparse && { id: "saison", label: "Saison" },
     { id: "presse", label: "Presse" },
@@ -567,6 +569,12 @@ export default function PlayerPage() {
             </div>
           </section>
         )}
+
+        {/* CARRIÈRE — frise historique des passages en club depuis Transfermarkt.
+            Le composant se cache automatiquement (return null) si player_clubs
+            est vide pour ce joueur — pas de section creuse pendant le backfill.
+            id="carriere" : ancre sticky nav, posé dans le composant lui-même. */}
+        <PlayerCareerTimeline playerId={player.id} />
 
         {/* STATUT ÉLIGIBILITÉ FIFA — bloc enrichi avec bases juridiques,
             verrous, fenêtre switch FIFA, procédure FECOFA, sources.
