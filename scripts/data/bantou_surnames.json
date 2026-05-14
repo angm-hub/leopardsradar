@@ -7,6 +7,28 @@
     "MEDIUM": "occurrences = 2 in clean DB",
     "LOW": "occurrences = 1, possible false positive (verify on hit)"
   },
+  "ambiguous_shared_bantu": {
+    "_comment": "Patronymes Bantu partagés entre RDC et autres pays (Congo-Brazza, Angola, Cameroun, Burundi, Rwanda). Match potentiel mais REQUIERT vérification Wikipedia obligatoire avant insertion.",
+    "shared_with_brazzaville": [
+      "Matondo", "Mavinga", "Mbenza", "Menga", "Mokoko",
+      "Bouanga", "Bitsamou", "Bifouma", "Itoua",
+      "Goma", "Massamba", "Massengo", "Mbongo", "Mbouma"
+    ],
+    "shared_with_angola": [
+      "Camavinga", "Cavanda", "Pululu", "Bakwa-Lufu",
+      "Massunguna", "Tomas", "Cabral"
+    ],
+    "shared_with_cameroon": [
+      "Manga", "Nkufo", "Kembolo", "Mboma", "Mvuemba"
+    ],
+    "shared_with_rwanda_burundi": [
+      "Tchité", "Nahimana", "Nonda", "Cyiza", "Ntaganda",
+      "Kalisa", "Bwalya"
+    ],
+    "shared_with_other_west_africa": [
+      "Bamba", "Saka", "Bassey", "Adjei", "Amoako", "Akolo"
+    ]
+  },
   "blacklist": [
     "Costa", "Mendes", "Pedro", "Santos", "Sousa", "Bertaud", "Bianchini",
     "Bonet", "Bozga", "Brunner", "Castegnaro", "Cercel", "Cestor",

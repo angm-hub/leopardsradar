@@ -63,14 +63,106 @@ YOUTH_EU_TEAMS = [
 
 
 def load_whitelist() -> dict:
-    """Charge la whitelist + blacklist depuis le JSON."""
+    """Charge la whitelist + blacklist + ambiguës depuis le JSON."""
     with open(WHITELIST_PATH, "r", encoding="utf-8") as f:
         data = json.load(f)
     blacklist = {strip_accents(s).lower() for s in data["blacklist"]}
     high = {strip_accents(s).lower() for s in data["high_confidence"]}
     medium = {strip_accents(s).lower() for s in data["medium_confidence"]}
     low = {strip_accents(s).lower() for s in data["low_confidence_radicals"]}
-    return {"blacklist": blacklist, "high": high, "medium": medium, "low": low}
+    ambiguous = set()
+    for k, v in data.get("ambiguous_shared_bantu", {}).items():
+        if k.startswith("_"):
+            continue
+        for s in v:
+            ambiguous.add(strip_accents(s).lower())
+    return {
+        "blacklist": blacklist, "high": high, "medium": medium,
+        "low": low, "ambiguous": ambiguous,
+    }
+
+
+def verify_via_wikipedia(player_name: str) -> dict:
+    """
+    Vérification Wikipedia : cherche la page (FR puis EN) du joueur et
+    parse l'extract pour mots-clés indiquant l'origine.
+
+    Retourne un dict :
+      {
+        'verdict': 'CONFIRMED_RDC' | 'OTHER_CONGO' | 'OTHER_AFRICA' | 'NOT_FOUND' | 'AMBIGUOUS',
+        'evidence': str,
+        'source_url': str | None
+      }
+    """
+    import requests
+    headers = {"User-Agent": "leopards-radar-scraper/1.0 (alexandre@withkaira.com)"}
+
+    for lang in ("fr", "en"):
+        url = f"https://{lang}.wikipedia.org/api/rest_v1/page/summary/{player_name.replace(' ', '_')}"
+        try:
+            r = requests.get(url, headers=headers, timeout=10)
+            if r.status_code != 200:
+                continue
+            data = r.json()
+            extract = (data.get("extract") or "").lower()
+            page_url = data.get("content_urls", {}).get("desktop", {}).get("page")
+            if not extract:
+                continue
+
+            # Mots-clés clairement RDC
+            rdc_kw_strict = [
+                "republique democratique du congo", "république démocratique du congo",
+                "democratic republic of the congo", "kinshasa", "lubumbashi",
+                "rd congo", "drc ", "drcongo", "ex-zaire", "ex-zaïre",
+            ]
+            # Mots-clés Congo-Brazza
+            brazza_kw = [
+                "republique du congo", "république du congo",
+                "republic of the congo", "brazzaville", "congo-brazzaville",
+            ]
+            # Autres pays partageant patronymes bantu
+            other_kw = [
+                "angolais", "angolan", "angola",
+                "camerounais", "cameroonian", "cameroon",
+                "rwandais", "rwandan", "rwanda",
+                "burundais", "burundian", "burundi",
+                "ghanaian", "ghanéen", "ghana",
+                "nigerian", "nigérian", "nigeria",
+            ]
+
+            rdc_hits = sum(kw in extract for kw in rdc_kw_strict)
+            brazza_hits = sum(kw in extract for kw in brazza_kw)
+            other_hits = sum(kw in extract for kw in other_kw)
+
+            # Decision logic
+            if rdc_hits > 0 and brazza_hits == 0:
+                return {
+                    "verdict": "CONFIRMED_RDC",
+                    "evidence": extract[:300],
+                    "source_url": page_url,
+                }
+            if brazza_hits > rdc_hits:
+                return {
+                    "verdict": "OTHER_CONGO",
+                    "evidence": extract[:300],
+                    "source_url": page_url,
+                }
+            if other_hits > 0 and rdc_hits == 0:
+                return {
+                    "verdict": "OTHER_AFRICA",
+                    "evidence": extract[:300],
+                    "source_url": page_url,
+                }
+            if rdc_hits > 0 and brazza_hits > 0:
+                return {
+                    "verdict": "AMBIGUOUS",
+                    "evidence": extract[:300],
+                    "source_url": page_url,
+                }
+        except Exception as e:
+            continue
+
+    return {"verdict": "NOT_FOUND", "evidence": "", "source_url": None}
 
 
 def strip_accents(s: str) -> str:
@@ -100,12 +192,17 @@ def extract_surname(full_name: str) -> str:
 def match_surname(surname: str, wl: dict) -> tuple[bool, str]:
     """
     Retourne (is_match, confidence_label).
-    Confidence : 'HIGH' / 'MEDIUM' / 'LOW' / None
+    Confidence : 'HIGH' / 'MEDIUM' / 'LOW' / 'AMBIGUOUS' / None
+
+    AMBIGUOUS = patronyme partagé avec autre pays bantu — déclenche
+    la vérification Wikipedia obligatoire.
     """
     if not surname or len(surname) < 4:
         return False, None
     if surname in wl["blacklist"]:
         return False, None
+    if surname in wl["ambiguous"]:
+        return True, "AMBIGUOUS"
     if surname in wl["high"]:
         return True, "HIGH"
     if surname in wl["medium"]:
@@ -179,20 +276,61 @@ def main():
     for tm_id, c in list(all_candidates.items())[:20]:
         print(f"  TM {tm_id:>8} | {c['confidence']:6} | {c['name'][:30]:30} | via {c['source_team_name']} | surname='{c['surname']}'")
 
-    # 4. INSERT en base
+    # 4. Vérification Wikipedia automatique pour chaque candidat
+    print(f"\n=== Vérification Wikipedia pour {len(all_candidates)} candidats ===")
+    verified_rdc = []
+    rejected_other_congo = []
+    rejected_other_africa = []
+    not_found_or_ambiguous = []
+
+    for tm_id, c in all_candidates.items():
+        wiki = verify_via_wikipedia(c["name"])
+        c["wiki_verdict"] = wiki["verdict"]
+        c["wiki_evidence"] = wiki["evidence"]
+        c["wiki_url"] = wiki["source_url"]
+
+        if wiki["verdict"] == "CONFIRMED_RDC":
+            verified_rdc.append(c)
+            print(f"  ✓ {c['name']:30} | RDC confirmé via Wikipedia")
+        elif wiki["verdict"] == "OTHER_CONGO":
+            rejected_other_congo.append(c)
+            print(f"  ✗ {c['name']:30} | Congo-Brazza détecté → reject")
+        elif wiki["verdict"] == "OTHER_AFRICA":
+            rejected_other_africa.append(c)
+            print(f"  ✗ {c['name']:30} | Autre pays africain détecté → reject")
+        else:
+            not_found_or_ambiguous.append(c)
+            verdict_str = "non trouvé" if wiki["verdict"] == "NOT_FOUND" else "ambigu"
+            # On garde si confidence HIGH (whitelist forte) MÊME si Wikipedia muet
+            if c["confidence"] == "HIGH":
+                verified_rdc.append(c)
+                print(f"  ? {c['name']:30} | Wiki {verdict_str}, gardé (HIGH whitelist)")
+            else:
+                print(f"  ? {c['name']:30} | Wiki {verdict_str}, skip (confiance {c['confidence']})")
+
+    print(f"\nRépartition après vérification :")
+    print(f"  ✓ RDC confirmé              : {len(verified_rdc)}")
+    print(f"  ✗ Congo-Brazza détecté      : {len(rejected_other_congo)}")
+    print(f"  ✗ Autre pays africain       : {len(rejected_other_africa)}")
+    print(f"  ? Non trouvé / Ambigu       : {len(not_found_or_ambiguous) - sum(1 for c in not_found_or_ambiguous if c['confidence'] == 'HIGH')}")
+
+    # 5. INSERT en base UNIQUEMENT les confirmés RDC
     inserted = 0
     rows = []
-    for tm_id, c in all_candidates.items():
+    for c in verified_rdc:
+        wiki_note = ""
+        if c["wiki_url"]:
+            wiki_note = f" Wikipedia ({c['wiki_verdict']}) : {c['wiki_url']}"
         rows.append({
             "name": c["name"],
-            "slug": slugify(c["name"]) or f"surname-{tm_id}",
-            "transfermarkt_id": tm_id,
+            "slug": slugify(c["name"]) or f"surname-{c.get('transfermarkt_id') or 'unknown'}",
+            "transfermarkt_id": [tid for tid, ca in all_candidates.items() if ca == c][0],
             "player_category": "radar",
             "eligibility_status": "potentially_eligible",
-            "eligibility_note": f"BINATIONAL INVISIBLE — découvert via {c['source_team_name']} avec patronyme bantou-RDC '{c['surname']}' (confiance {c['confidence']}). À vérifier manuellement (origine RDC à confirmer).",
+            "eligibility_note": f"BINATIONAL INVISIBLE — découvert via {c['source_team_name']} (patronyme '{c['surname']}', confiance {c['confidence']}).{wiki_note} À vérifier manuellement (origine RDC à confirmer).",
             "verified": False,
-            "nationalities": ["DR Congo"],  # à valider
-            "source_urls": [c["profile_url"]],
+            "nationalities": ["DR Congo"],
+            "source_urls": [c["profile_url"]] + ([c["wiki_url"]] if c["wiki_url"] else []),
         })
         if len(rows) >= 100:
             result = sb.insert("players", rows, on_conflict="transfermarkt_id")
@@ -229,7 +367,7 @@ def main():
 
 
 def _conf_rank(c: str) -> int:
-    return {"HIGH": 3, "MEDIUM": 2, "LOW": 1, None: 0}[c]
+    return {"HIGH": 3, "AMBIGUOUS": 2.5, "MEDIUM": 2, "LOW": 1, None: 0}[c]
 
 
 if __name__ == "__main__":
