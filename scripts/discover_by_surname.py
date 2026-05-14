@@ -68,14 +68,39 @@ YOUTH_EU_TEAMS = [
     {"id": "16298",  "name": "Poland U19"},
     {"id": "11946",  "name": "USA U20"},
     {"id": "27261",  "name": "Canada U20"},
-    # Clubs académies binationales — historiquement riches en RDC (Levier 3)
+    # Clubs académies binationales — historiquement riches en RDC (Levier 3 v3.0)
+    # France
     {"id": "86347",  "name": "Charleroi academy"},
     {"id": "7817",   "name": "AJ Auxerre U19"},
     {"id": "12278",  "name": "Le Havre AC U19"},
     {"id": "10826",  "name": "FC Sochaux U19"},
+    {"id": "6326",   "name": "PSG U19"},
+    {"id": "8058",   "name": "Olympique Marseille U19"},
+    {"id": "7874",   "name": "Stade Rennais U19"},
+    {"id": "10851",  "name": "FC Nantes U19"},
+    {"id": "10849",  "name": "FC Metz U19"},
+    {"id": "10873",  "name": "Girondins Bordeaux U19"},
+    {"id": "9372",   "name": "Toulouse FC U19"},
+    {"id": "12774",  "name": "Stade Reims U19"},
+    {"id": "10824",  "name": "RC Lens U19"},
+    {"id": "12745",  "name": "AS Saint-Etienne U19"},
+    {"id": "9669",   "name": "AS Monaco U19"},
+    {"id": "12769",  "name": "Angers SCO U19"},
+    {"id": "7875",   "name": "LOSC Lille U19"},
+    # England
     {"id": "6945",   "name": "Crystal Palace U23"},
-    {"id": "9254",   "name": "Tottenham Hotspur U23"},
+    {"id": "9254",   "name": "Tottenham U23"},
     {"id": "37993",  "name": "Watford U23"},
+    {"id": "39336",  "name": "Brighton U23"},
+    {"id": "46959",  "name": "Brentford U21"},
+    {"id": "38967",  "name": "Bournemouth U21"},
+    {"id": "9267",   "name": "West Ham U23"},
+    # Switzerland (forte diaspora RDC à Genève/Bâle/Zurich)
+    {"id": "5299",   "name": "FC Basel U21"},
+    {"id": "5508",   "name": "Young Boys U21"},
+    # Pays-Bas (académies importantes)
+    {"id": "2824",   "name": "Ajax Amsterdam U19"},
+    {"id": "4575",   "name": "PSV Eindhoven U19"},
 ]
 
 
