@@ -22,6 +22,7 @@ import {
 } from "@/components/player/PlayerWhySection";
 import { PlayerIdentityCards } from "@/components/player/PlayerIdentityCards";
 import { PlayerCareerCard } from "@/components/player/PlayerCareerCard";
+import { PlayerEligibilityBlock } from "@/components/player/PlayerEligibilityBlock";
 import { PlayerStatProfile } from "@/components/player/PlayerStatProfile";
 import { PlayerWeeklyProgress } from "@/components/player/PlayerWeeklyProgress";
 import { RelatedPlayers } from "@/components/player/RelatedPlayers";
@@ -84,7 +85,7 @@ function PlayerSkeleton() {
 
 export default function PlayerPage() {
   const { slug } = useParams<{ slug: string }>();
-  const { player, loading } = usePlayer(slug);
+  const { player, bases, selections, loading } = usePlayer(slug);
   const [copied, setCopied] = useState(false);
 
   const dominant = useDominantColor(player?.image_url ?? undefined);
@@ -389,31 +390,13 @@ export default function PlayerPage() {
           </div>
         </section>
 
-        {/* SÉLECTION RDC (note retirée — remontée dans PlayerWhySection) */}
-        <section className="container-site py-12 border-t border-border">
-          <h2 className="font-serif text-3xl text-foreground">En sélection RDC.</h2>
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-            <div className="rounded-card border border-border bg-card p-6 md:p-8">
-              <StatBlock label="Sélections (caps)" value={player.caps_rdc} />
-            </div>
-            <div className="rounded-card border border-border bg-card p-6 md:p-8 md:col-span-2">
-              <span className="text-[10px] uppercase tracking-[0.25em] text-muted font-mono">
-                Statut d'éligibilité
-              </span>
-              <div className="mt-2.5">
-                <span
-                  className={cn(
-                    "inline-flex items-center rounded-full border px-3 py-1 text-xs uppercase tracking-wider",
-                    ELIGIBILITY_BADGE[player.eligibility_status ?? "unknown"] ??
-                      ELIGIBILITY_BADGE.unknown,
-                  )}
-                >
-                  {eligibilityLabel(player.eligibility_status)}
-                </span>
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* STATUT ÉLIGIBILITÉ FIFA — bloc enrichi avec bases juridiques,
+            verrous, fenêtre switch FIFA, procédure FECOFA, sources */}
+        <PlayerEligibilityBlock
+          player={player}
+          bases={bases}
+          selections={selections}
+        />
 
         {/* STATS SAISON */}
         <section className="container-site py-12 border-t border-border">
