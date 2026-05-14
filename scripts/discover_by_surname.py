@@ -35,6 +35,7 @@ WHITELIST_PATH = Path(__file__).parent / "data" / "bantou_surnames.json"
 
 # Catalogue des sélections jeunes EU à crawler (verein IDs TM confirmés)
 YOUTH_EU_TEAMS = [
+    # Sélections jeunes EU principales (24)
     {"id": "10831",  "name": "France U17"},
     {"id": "25250",  "name": "France U18"},
     {"id": "23101",  "name": "France U19"},
@@ -59,6 +60,22 @@ YOUTH_EU_TEAMS = [
     {"id": "12609",  "name": "Spain U19"},
     {"id": "104772", "name": "Portugal U19"},
     {"id": "23102",  "name": "Ireland U19"},
+    # Sélections jeunes étendues (Levier 2)
+    {"id": "12519",  "name": "Austria U19"},
+    {"id": "23488",  "name": "Sweden U19"},
+    {"id": "22515",  "name": "Norway U19"},
+    {"id": "20902",  "name": "Denmark U19"},
+    {"id": "16298",  "name": "Poland U19"},
+    {"id": "11946",  "name": "USA U20"},
+    {"id": "27261",  "name": "Canada U20"},
+    # Clubs académies binationales — historiquement riches en RDC (Levier 3)
+    {"id": "86347",  "name": "Charleroi academy"},
+    {"id": "7817",   "name": "AJ Auxerre U19"},
+    {"id": "12278",  "name": "Le Havre AC U19"},
+    {"id": "10826",  "name": "FC Sochaux U19"},
+    {"id": "6945",   "name": "Crystal Palace U23"},
+    {"id": "9254",   "name": "Tottenham Hotspur U23"},
+    {"id": "37993",  "name": "Watford U23"},
 ]
 
 
