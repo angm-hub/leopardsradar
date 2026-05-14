@@ -69,7 +69,14 @@ def slugify(name: str) -> str:
 
 
 def fetch_wikidata() -> list:
-    """Run SPARQL query, return list of player dicts."""
+    """
+    Run SPARQL query and aggregate per Wikidata player.
+
+    Wikidata retourne 1 row par citizenship — un joueur belgo-congolais
+    apparaît 2 fois (Q31 Belgium + Q974 DRC). On agrège côté client en
+    1 seul dict avec toutes les citizenships, sinon on fait des doublons
+    de slug à l'INSERT.
+    """
     print("Querying Wikidata SPARQL...")
     headers = {
         "Accept": "application/sparql-results+json",
@@ -84,26 +91,48 @@ def fetch_wikidata() -> list:
     r.raise_for_status()
     data = r.json()
     rows = data.get("results", {}).get("bindings", [])
-    print(f"Wikidata returned {len(rows)} rows")
+    print(f"Wikidata returned {len(rows)} rows (avant dédup)")
 
-    players = []
-    for r in rows:
-        wd_uri = r.get("player", {}).get("value", "")
+    # Aggrégation par wikidata_id
+    by_wd: dict = {}
+    for row in rows:
+        wd_uri = row.get("player", {}).get("value", "")
         wikidata_id = wd_uri.rsplit("/", 1)[-1] if wd_uri else None
-        name = r.get("playerLabel", {}).get("value", "")
-        # Skip si le label est juste l'ID Q12345 (pas de label en EN)
-        if not name or name.startswith("Q") and name[1:].isdigit():
+        if not wikidata_id:
             continue
-        tm_id = r.get("tmId", {}).get("value")
-        birth_place = r.get("birthPlaceLabel", {}).get("value")
-        citizenship = r.get("countryOfCitizenshipLabel", {}).get("value")
-        players.append({
-            "wikidata_id": wikidata_id,
-            "name": name,
-            "transfermarkt_id": tm_id,
-            "birth_place": birth_place,
-            "citizenship": citizenship,
-        })
+        name = row.get("playerLabel", {}).get("value", "")
+        # Skip si le label est juste l'ID Q12345 (pas de label en EN)
+        if not name or (name.startswith("Q") and name[1:].isdigit()):
+            continue
+
+        if wikidata_id not in by_wd:
+            by_wd[wikidata_id] = {
+                "wikidata_id": wikidata_id,
+                "name": name,
+                "transfermarkt_id": row.get("tmId", {}).get("value"),
+                "birth_place": row.get("birthPlaceLabel", {}).get("value"),
+                "citizenships": set(),
+            }
+
+        # Ajouter cette citizenship
+        cit = row.get("countryOfCitizenshipLabel", {}).get("value")
+        if cit:
+            by_wd[wikidata_id]["citizenships"].add(cit)
+
+    # Convertir set → list (ordre stable, RDC first si présent)
+    players = []
+    for wd_id, p in by_wd.items():
+        cits = sorted(p["citizenships"])
+        # Mettre RDC en premier dans la liste
+        rdc_variants = ["Democratic Republic of the Congo", "Zaire", "Republic of the Congo"]
+        rdc_in_list = next((c for c in cits if c in rdc_variants), None)
+        if rdc_in_list:
+            cits.remove(rdc_in_list)
+            cits.insert(0, rdc_in_list)
+        p["citizenships"] = cits
+        players.append(p)
+
+    print(f"Wikidata aggregated to {len(players)} unique players")
     return players
 
 
@@ -146,10 +175,33 @@ def main():
     new = [p for p in with_tm if p["transfermarkt_id"] not in existing_tm_ids]
     print(f"Nouveaux à insérer : {len(new)}")
 
+    # Dédup additionnel par slug (au cas où 2 wikidata_id différents donnent le même slug)
+    used_slugs = set()
+    deduped_new = []
+    skipped_dup_slug = 0
+    for p in new:
+        base_slug = slugify(p["name"]) or f"wd-{p['wikidata_id']}"
+        slug = base_slug
+        counter = 2
+        while slug in used_slugs:
+            slug = f"{base_slug}-{counter}"
+            counter += 1
+            if counter > 99:
+                slug = f"wd-{p['wikidata_id']}"
+                break
+        if slug != base_slug:
+            skipped_dup_slug += 1
+        used_slugs.add(slug)
+        p["_final_slug"] = slug
+        deduped_new.append(p)
+    if skipped_dup_slug:
+        print(f"  → {skipped_dup_slug} slugs ont dû être suffixés pour éviter doublon")
+    new = deduped_new
+
     if args.dry_run:
         print("Dry run — sample 5 nouveaux :")
         for p in new[:5]:
-            print(f"  TM {p['transfermarkt_id']:>10} | {p['name'][:30]:30} | né à {p['birth_place'] or '?'}")
+            print(f"  TM {p['transfermarkt_id']:>10} | {p['name'][:30]:30} | né à {p['birth_place'] or '?'} | cits: {p['citizenships']}")
         return
 
     # 4. Insertion bulk
@@ -158,30 +210,45 @@ def main():
         batch = new[batch_start:batch_start + 200]
         rows = []
         for p in batch:
-            # Si né en RDC : base BIRTH HIGH directement (Wikidata est sourcé)
             evidence = []
             if p["birth_place"]:
                 evidence.append(f"Born in {p['birth_place']} per Wikidata")
-            if p["citizenship"]:
-                evidence.append(f"Citizenship: {p['citizenship']} per Wikidata")
+            if p["citizenships"]:
+                evidence.append(f"Citizenship(s): {', '.join(p['citizenships'])} per Wikidata")
             evidence_str = ". ".join(evidence) if evidence else "Discovered via Wikidata SPARQL"
+
+            # Build nationalities list :
+            # Toujours commencer par DR Congo, puis ajouter les autres citizenships.
+            # On normalise "Democratic Republic of the Congo" → "DR Congo".
+            nats = ["DR Congo"]
+            for cit in p["citizenships"]:
+                # Exclure variantes de RDC déjà présentes
+                if cit in ("Democratic Republic of the Congo", "Zaire"):
+                    continue
+                if cit not in nats:
+                    nats.append(cit)
 
             rows.append({
                 "name": p["name"],
-                "slug": slugify(p["name"]) or f"wd-{p['wikidata_id']}",
+                "slug": p["_final_slug"],
                 "transfermarkt_id": p["transfermarkt_id"],
                 "player_category": "radar",
                 "eligibility_status": "potentially_eligible",
                 "eligibility_note": f"Découvert via Wikidata. {evidence_str}.",
                 "verified": False,
-                "nationalities": ["DR Congo"] + ([p["citizenship"]] if p["citizenship"] and p["citizenship"] != "Democratic Republic of the Congo" else []),
+                "nationalities": nats,
                 "country_of_birth": p["birth_place"] if p["birth_place"] and "congo" in p["birth_place"].lower() else None,
-                "source_urls": [f"https://www.wikidata.org/wiki/{p['wikidata_id']}", f"https://www.transfermarkt.com/-/profil/spieler/{p['transfermarkt_id']}"],
+                "source_urls": [
+                    f"https://www.wikidata.org/wiki/{p['wikidata_id']}",
+                    f"https://www.transfermarkt.com/-/profil/spieler/{p['transfermarkt_id']}",
+                ],
             })
         result = sb.insert("players", rows, on_conflict="transfermarkt_id")
         if result:
             inserted += len(result)
             print(f"  batch {batch_start // 200 + 1}: +{len(result)} inserted (cumul {inserted})")
+        else:
+            print(f"  batch {batch_start // 200 + 1}: insert returned empty — error logged above")
 
     finished_at = dt.datetime.utcnow()
     duration = int((finished_at - started_at).total_seconds())
