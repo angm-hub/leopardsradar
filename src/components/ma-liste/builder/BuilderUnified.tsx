@@ -5,6 +5,7 @@ import { useMaListeStore } from "@/store/maListeStore";
 import { Button } from "@/components/ui/ButtonPrimitive";
 import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
 import { BuilderLibrary } from "./BuilderLibrary";
+import { MaListeHints } from "@/components/ma-liste/MaListeHints";
 import { usePlayers } from "@/hooks/usePlayers";
 import {
   FORMATION_SLOTS,
@@ -145,8 +146,8 @@ export function BuilderUnified() {
         {/* Top bar */}
         <BuilderTopBar onBack={previousStep} formation={formation} onSwitchFormation={handleSwitchFormation} />
 
-        {/* Title + global progress */}
-        <div className="mt-6 mb-6 flex flex-wrap items-end justify-between gap-4">
+        {/* Title + global progress + contextual hint */}
+        <div className="mt-6 mb-4 flex flex-wrap items-end justify-between gap-4">
           <div>
             <h2 className="font-serif text-3xl md:text-4xl text-foreground tracking-tight">
               Compose ton 26.
@@ -159,6 +160,12 @@ export function BuilderUnified() {
           </div>
 
           <BuilderProgress xiCount={xiCount} benchCount={bench.length} hasCaptain={!!captain} />
+        </div>
+
+        {/* Hint contextuel — un seul à la fois, pondéré par priorité.
+            Guide l'utilisateur dans le builder dense (FUT-like). */}
+        <div className="mb-6">
+          <MaListeHints />
         </div>
 
         {/* MAIN GRID — pitch + bench center, library right */}

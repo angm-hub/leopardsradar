@@ -8,9 +8,11 @@ import { Button } from "@/components/ui/ButtonPrimitive";
 import { Select } from "@/components/ui/SelectPrimitive";
 import { usePlayers } from "@/hooks/usePlayers";
 import { useHomeStats } from "@/hooks/useHomeStats";
+import { useDocumentMeta } from "@/hooks/useDocumentMeta";
 import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
 import { ViewTabs, type RadarView } from "@/components/radar/ViewTabs";
 import { RadarCanvas } from "@/components/radar/RadarCanvas";
+import { RadarHighlights } from "@/components/radar/RadarHighlights";
 import {
   POSITION_BADGE,
   POSITION_DOT,
@@ -123,6 +125,11 @@ function RadarCard({ player }: { player: DBPlayer }) {
 }
 
 export default function Radar() {
+  useDocumentMeta({
+    title: "Radar",
+    description:
+      "Le Radar Léopards — talents éligibles RDC et diaspora binationale, cartographiés par valeur marchande, jeunesse et tier UEFA.",
+  });
   const { players, loading, error } = usePlayers({
     categories: ["radar", "heritage"],
     excludeEligibilityStatus: "ineligible",
@@ -139,7 +146,14 @@ export default function Radar() {
   const [nation, setNation] = useState<string>("ALL");
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
-  const [view, setView] = useState<RadarView>("carte");
+  // Default to "liste" on mobile (galaxy view labels are sub-6px and
+  // unreadable on a 390px viewport). Desktop keeps "carte" as default
+  // — that's the editorial moment of the radar. SSR-safe : if window
+  // is undefined (no SSR for now but future-proof), fall back to liste.
+  const [view, setView] = useState<RadarView>(() => {
+    if (typeof window === "undefined") return "liste";
+    return window.matchMedia("(min-width: 768px)").matches ? "carte" : "liste";
+  });
 
   useEffect(() => {
     const t = setTimeout(() => setDebouncedQuery(query.trim().toLowerCase()), 300);
@@ -254,6 +268,12 @@ export default function Radar() {
             ) : null}
           </div>
         </div>
+
+        {/* Pépites de la semaine — ancrage éditorial avant le canvas.
+            WHY ici plutôt que dans le header : ça reste dans le flux de lecture,
+            après la barre de filtres, pour que les visiteurs qui arrivent directo
+            sur /radar voient d'abord 5 noms commentés avant les 988 nodes. */}
+        <RadarHighlights />
 
         <section className="container-site py-12">
           {loading ? (

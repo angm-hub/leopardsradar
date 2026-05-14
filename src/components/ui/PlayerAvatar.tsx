@@ -44,11 +44,17 @@ export function PlayerAvatar({
 }: PlayerAvatarProps) {
   // Étape 0 = src primaire, 1 = src alt, 2 = initials fallback
   const [stage, setStage] = useState<0 | 1 | 2>(0);
+  // Track whether the current image has finished decoding so we can hide a
+  // shimmer skeleton underneath. Without this, the photo "pops in" abruptly
+  // and creates a flicker; with it, the avatar transitions cleanly from a
+  // shimmering placeholder to the loaded image.
+  const [imgLoaded, setImgLoaded] = useState(false);
 
   // Reset stage quand on change de joueur. Sans ça, si le précédent joueur
   // avait fail au stage 2, le nouveau joueur reste bloqué sur initials.
   useEffect(() => {
     setStage(src ? 0 : srcAlt ? 1 : 2);
+    setImgLoaded(false);
   }, [src, srcAlt]);
 
   const currentSrc = stage === 0 ? src : stage === 1 ? srcAlt : null;
@@ -87,35 +93,51 @@ export function PlayerAvatar({
       aria-label={name}
     >
       {showImage ? (
-        <img
-          // key force un re-mount quand on change de stage : sinon React
-          // garde l'ancien <img> sans replay le download.
-          key={`${name}-${stage}`}
-          src={currentSrc!}
-          alt={name}
-          loading="lazy"
-          onError={() => {
-            // Cascade : si on était sur src primaire et qu'il y a un alt,
-            // on tente l'alt. Sinon, fallback initials.
-            if (stage === 0 && srcAlt) setStage(1);
-            else setStage(2);
-          }}
-          className={cn(
-            "h-full w-full",
-            cover ? "object-cover" : "object-contain",
-          )}
-          // Cadrage 28% : visage en haut. Filter : touche colorimétrique
-          // pour homogénéiser les sources hétérogènes (Wikimedia, club
-          // officielle, smartphones de presse).
-          style={
-            cover
-              ? {
-                  objectPosition: "center 28%",
-                  filter: "saturate(1.06) contrast(1.03)",
-                }
-              : undefined
-          }
-        />
+        <>
+          {/* Shimmer skeleton underneath the image. Visible only while the
+              image is still loading (imgLoaded === false). Uses the same
+              gradient as the avatar so the transition feels continuous,
+              and the existing tailwind `animate-shimmer` keyframes for the
+              moving sheen. */}
+          {!imgLoaded ? (
+            <div
+              aria-hidden
+              className="absolute inset-0 bg-gradient-to-r from-card via-card-hover to-card animate-shimmer"
+              style={{ backgroundSize: "200% 100%" }}
+            />
+          ) : null}
+          <img
+            // key force un re-mount quand on change de stage : sinon React
+            // garde l'ancien <img> sans replay le download.
+            key={`${name}-${stage}`}
+            src={currentSrc!}
+            alt={name}
+            loading="lazy"
+            onLoad={() => setImgLoaded(true)}
+            onError={() => {
+              // Cascade : si on était sur src primaire et qu'il y a un alt,
+              // on tente l'alt. Sinon, fallback initials.
+              if (stage === 0 && srcAlt) setStage(1);
+              else setStage(2);
+            }}
+            className={cn(
+              "h-full w-full transition-opacity duration-300",
+              cover ? "object-cover" : "object-contain",
+              imgLoaded ? "opacity-100" : "opacity-0",
+            )}
+            // Cadrage 28% : visage en haut. Filter : touche colorimétrique
+            // pour homogénéiser les sources hétérogènes (Wikimedia, club
+            // officielle, smartphones de presse).
+            style={
+              cover
+                ? {
+                    objectPosition: "center 28%",
+                    filter: "saturate(1.06) contrast(1.03)",
+                  }
+                : undefined
+            }
+          />
+        </>
       ) : (
         <PremiumInitials initials={initials} className={initialsClassName} />
       )}

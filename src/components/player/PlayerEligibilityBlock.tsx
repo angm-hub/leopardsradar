@@ -193,6 +193,7 @@ export function PlayerEligibilityBlock({ player, bases, selections }: PlayerElig
             ) : null}
           </div>
           {player.switch_window ? (
+            // Desktop : right-aligned aside.
             <div className="hidden md:block text-right">
               <p className="text-[10px] uppercase tracking-[0.25em] text-muted font-mono">
                 Fenêtre switch FIFA
@@ -206,6 +207,22 @@ export function PlayerEligibilityBlock({ player, bases, selections }: PlayerElig
             </div>
           ) : null}
         </div>
+        {player.switch_window ? (
+          // Mobile : full-width row below the status, separated by a divider.
+          // Was hidden entirely on mobile before — so a critical FIFA detail
+          // ("can this player still switch ?") was invisible on phones.
+          <div className="md:hidden mt-4 pt-4 border-t border-border/50 flex items-center justify-between gap-3">
+            <p className="text-[10px] uppercase tracking-[0.22em] text-muted font-mono">
+              Fenêtre switch FIFA
+            </p>
+            <div className="flex items-center gap-1.5">
+              <Clock className="h-3.5 w-3.5 text-muted-light" />
+              <span className="text-sm font-mono text-foreground">
+                {SWITCH_WINDOW_LABEL[player.switch_window] ?? player.switch_window}
+              </span>
+            </div>
+          </div>
+        ) : null}
       </div>
 
       {/* Bases juridiques */}

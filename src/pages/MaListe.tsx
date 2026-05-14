@@ -6,8 +6,10 @@ import { IntroScreen } from "@/components/ma-liste/IntroScreen";
 import { FormationPicker } from "@/components/ma-liste/FormationPicker";
 import { BuilderUnified } from "@/components/ma-liste/builder/BuilderUnified";
 import { ListRecap } from "@/components/ma-liste/ListRecap";
+import { MaListeProgress } from "@/components/ma-liste/MaListeProgress";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useDocumentMeta } from "@/hooks/useDocumentMeta";
 
 const stepFade = {
   initial: { opacity: 0, y: 16 },
@@ -36,28 +38,44 @@ function Placeholder({ label, prompt }: { label: string; prompt: string }) {
 }
 
 export default function MaListe() {
+  useDocumentMeta({
+    title: "Ma Liste des 26",
+    description:
+      "Compose ta liste des 26 Léopards pour le Mondial 2026. 11 titulaires, 15 remplaçants, 1 capitaine — partage ton onze idéal.",
+  });
   const currentStep = useMaListeStore((s) => s.currentStep);
   const [listCount, setListCount] = useState(0);
 
   useEffect(() => {
-    // Fetch real count from database
+    // Récupère le compteur de listes publiées. La table `user_lists` peut
+    // ne pas être encore exposée publiquement (RLS / permissions) — dans ce
+    // cas le 404 partit en console à chaque visite. On absorbe l'erreur en
+    // silence et on garde le compteur à 0 plutôt que de polluer la console.
+    let cancelled = false;
     const fetchCount = async () => {
-      const { data, error } = await supabase
-        .from("user_lists")
-        .select("id", { count: "exact", head: true })
-        .eq("is_submitted", true);
-      
-      if (!error && data !== null) {
-        const count = Array.isArray(data) ? data.length : 0;
-        setListCount(count);
+      try {
+        const { count, error } = await supabase
+          .from("user_lists")
+          .select("id", { count: "exact", head: true })
+          .eq("is_submitted", true);
+        if (cancelled) return;
+        if (!error && typeof count === "number") {
+          setListCount(count);
+        }
+      } catch {
+        /* silencieux : compteur reste à 0, l'UI reste propre */
       }
     };
     fetchCount();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
       <Navbar />
+      <MaListeProgress />
       <main className="flex-1 pt-16">
         <AnimatePresence mode="wait">
           <motion.div key={currentStep} {...stepFade}>

@@ -10,6 +10,7 @@ import { computePlayerScores } from "@/lib/playerScores";
 import { PlayerPicker } from "@/components/compare/PlayerPicker";
 import { HexagonCompare, CompareLegend } from "@/components/compare/HexagonCompare";
 import { CompareDeltas } from "@/components/compare/CompareDeltas";
+import { useDocumentMeta } from "@/hooks/useDocumentMeta";
 
 /**
  * Compare — head-to-head comparison page (`/compare?p1=<slug>&p2=<slug>`).
@@ -31,6 +32,12 @@ export default function ComparePage() {
   const [params, setParams] = useSearchParams();
   const slugA = params.get("p1");
   const slugB = params.get("p2");
+
+  useDocumentMeta({
+    title: "Comparateur",
+    description:
+      "Compare deux Léopards côte à côte — six axes statistiques, lecture des écarts, suggestions de paires.",
+  });
 
   const { player: playerA, loading: loadingA } = usePlayerBySlug(slugA);
   const { player: playerB, loading: loadingB } = usePlayerBySlug(slugB);

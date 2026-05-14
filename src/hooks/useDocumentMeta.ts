@@ -9,12 +9,15 @@ interface DocumentMeta {
   image?: string;
   /** Optional canonical URL — defaults to current location. */
   url?: string;
+  /** When true, sets <meta name="robots" content="noindex,nofollow"> so
+   *  search engines don't index error/empty pages (404 player, soft-404, etc). */
+  noindex?: boolean;
 }
 
 const SUFFIX = " | Léopards Radar";
 const DEFAULT_TITLE = "Léopards Radar";
 const DEFAULT_DESCRIPTION =
-  "Léopards Radar — radar éditorial premium des joueurs de la RDC et talents éligibles de la diaspora.";
+  "Toute la data du football congolais. En un seul endroit. Joueurs RDC, diaspora éligible, statut FIFA recalculé chaque dimanche.";
 
 /**
  * useDocumentMeta — updates document title + meta tags at runtime.
@@ -48,6 +51,13 @@ export function useDocumentMeta(meta: DocumentMeta) {
       setMeta("property", "og:image", meta.image);
       setMeta("name", "twitter:image", meta.image);
     }
+    // Robots noindex,nofollow on error/empty pages so Google doesn't
+    // index "Joueur introuvable" as valid content (soft-404 SEO trap).
+    if (meta.noindex) {
+      setMeta("name", "robots", "noindex,nofollow");
+    } else {
+      removeMeta("name", "robots");
+    }
 
     return () => {
       // Restore site-wide defaults on unmount so a SPA back-navigation
@@ -58,8 +68,9 @@ export function useDocumentMeta(meta: DocumentMeta) {
       setMeta("property", "og:description", DEFAULT_DESCRIPTION);
       setMeta("name", "twitter:title", DEFAULT_TITLE);
       setMeta("name", "twitter:description", DEFAULT_DESCRIPTION);
+      removeMeta("name", "robots");
     };
-  }, [meta.title, meta.description, meta.image, meta.url]);
+  }, [meta.title, meta.description, meta.image, meta.url, meta.noindex]);
 }
 
 function setMeta(attr: "name" | "property", key: string, value: string) {
@@ -70,4 +81,9 @@ function setMeta(attr: "name" | "property", key: string, value: string) {
     document.head.appendChild(el);
   }
   el.setAttribute("content", value);
+}
+
+function removeMeta(attr: "name" | "property", key: string) {
+  const el = document.head.querySelector<HTMLMetaElement>(`meta[${attr}="${key}"]`);
+  if (el) el.remove();
 }

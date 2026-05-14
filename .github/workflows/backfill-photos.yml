@@ -1,0 +1,66 @@
+name: Backfill Photos (Wikipedia / Wikidata)
+
+# ──────────────────────────────────────────────────────────────────────
+# Léopards Radar — Backfill hebdo des photos manquantes.
+#
+# 859 joueurs radar sans image_url ni image_url_alt au lancement.
+# Ce job en traite 50/semaine via Wikipedia EN, FR et Wikidata P18.
+# Couverture complète estimée : ~17 semaines.
+#
+# Écriture uniquement dans image_url_alt (image_url est réservée TM).
+# ──────────────────────────────────────────────────────────────────────
+
+on:
+  schedule:
+    # Lundi 04:00 UTC = Lundi 05:00 Paris (UTC+1) / 06:00 (UTC+2 été)
+    - cron: '0 4 * * 1'
+  workflow_dispatch:
+    inputs:
+      batch_size:
+        description: 'Nombre de joueurs à traiter (défaut 50)'
+        required: false
+        default: '50'
+      dry_run:
+        description: 'dry-run : affiche sans écrire en base (true/false)'
+        required: false
+        default: 'false'
+
+permissions:
+  contents: read
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60     # 50 joueurs × 3 appels × 0.5s + overhead = ~5 min max
+
+    concurrency:
+      group: backfill-photos
+      cancel-in-progress: false
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: scripts/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Run backfill
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          BATCH_SIZE: ${{ github.event.inputs.batch_size || '50' }}
+          GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        working-directory: scripts
+        run: |
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            python backfill_photos.py --dry-run
+          else
+            python backfill_photos.py
+          fi

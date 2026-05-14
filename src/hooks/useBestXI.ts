@@ -70,7 +70,7 @@ export function useBestXI() {
             "id, name, slug, image_url, image_url_alt, current_club, position, age, market_value_eur, nationalities, other_nationalities, caps_rdc",
           )
           .in("id", playerIds)
-          .neq("eligibility_status", "ineligible");
+          .neq("computed_eligibility_status", "INELIGIBLE");
 
         if (playersErr) throw playersErr;
 

@@ -9,10 +9,12 @@ const NAV_LINKS: Array<{ label: string; href: string; badge?: string }> = [
   { label: "Roster", href: "/roster" },
   { label: "Radar", href: "/radar" },
   { label: "Best XI", href: "/best-xi" },
+  { label: "Revue de presse", href: "/revue-de-presse", badge: "NOUVEAU" },
   { label: "Histoires", href: "/histoires" },
-  { label: "Ma Liste", href: "/ma-liste", badge: "NOUVEAU" },
+  { label: "Ma Liste", href: "/ma-liste" },
   { label: "À propos", href: "/a-propos" },
-  { label: "Newsletter", href: "/newsletter" },
+  // "Newsletter" retiré du nav — bouton sticky "S'ABONNER" + section
+  // dédiée sur la home sont déjà 2 entrées vers le même tunnel.
 ];
 
 export function Navbar() {

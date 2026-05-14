@@ -1,7 +1,19 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { useDocumentMeta } from "@/hooks/useDocumentMeta";
+import {
+  MissionVisual,
+  MethodVisual,
+  IndependanceVisual,
+  EditeurVisual,
+} from "@/components/about/AboutSectionVisuals";
 
 export default function About() {
+  useDocumentMeta({
+    title: "À propos",
+    description:
+      "Léopards Radar — média indépendant édité par Cobalt Sports & Entertainment. Data + curation + analyse sur le vivier congolais.",
+  });
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
@@ -13,12 +25,16 @@ export default function About() {
             <span className="text-foreground/80">À propos</span>
           </nav>
 
+          {/* H1 différencié de la home (qui dit déjà la promesse). Ici on est
+              sur le projet : qui le fait, comment, pourquoi. Le H1 doit
+              annoncer ce qu'on va lire, pas répéter le pitch. */}
           <h1 className="mt-4 font-serif text-5xl md:text-6xl font-semibold text-foreground tracking-tight">
-            À propos de Léopards Radar.
+            Le projet.
           </h1>
           <p className="mt-6 font-serif text-xl leading-[1.6] text-foreground/80 max-w-2xl">
-            Un site indépendant pour suivre les Léopards de la République Démocratique du Congo —
-            roster, radar, diaspora — avec rigueur, données et amour du jeu.
+            Un média indépendant qui trace tout le vivier congolais. Roster RDC,
+            diaspora éligible, statut FIFA — sourcé, structuré, mis à jour
+            chaque dimanche.
           </p>
 
           {/* La mission */}
@@ -27,20 +43,20 @@ export default function About() {
               01 — La mission
             </p>
             <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-6">
-              Tracer la route vers le Mondial 2026.
+              La source de référence sur le vivier congolais.
             </h2>
+            <MissionVisual />
             <div className="space-y-5 text-lg leading-[1.75] text-foreground/85">
               <p>
-                Léopards Radar traque les <strong className="text-foreground">26 joueurs</strong> qui
-                porteront le maillot de la RDC au Mondial 2026. On suit le roster actif convoqué par
-                le sélectionneur, on cartographie la diaspora binationale éligible selon
-                l'<strong className="text-foreground">article 9 FIFA</strong>, et on documente chaque
-                trajectoire — du Tout-Puissant Mazembe à Manchester, de Kinshasa à Bruxelles.
+                Léopards Radar trace l'intégralité du vivier congolais : roster actif,
+                diaspora éligible selon l'<strong className="text-foreground">article 9 FIFA</strong>,
+                joueurs en formation, binationaux à instruire. On documente chaque trajectoire — du
+                Tout-Puissant Mazembe à Manchester, de Kinshasa à Bruxelles.
               </p>
               <p>
-                On parle data, scouting, diaspora et projection. Pas de hype, pas de remplissage.
-                L'idée : qu'un fan congolais à Paris, Montréal ou Lubumbashi sache exactement qui
-                joue où, qui peut être convoqué, et qui mérite un appel.
+                On fait de la data, du scouting et de l'analyse. Pas de hype, pas de remplissage.
+                L'idée : qu'un fan congolais à Paris, Montréal ou Lubumbashi puisse savoir
+                exactement qui joue où, qui peut être convoqué, et qui mérite un appel.
               </p>
             </div>
           </section>
@@ -53,6 +69,7 @@ export default function About() {
             <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-6">
               Sources vérifiées, règles FIFA appliquées.
             </h2>
+            <MethodVisual />
             <div className="space-y-5 text-lg leading-[1.75] text-foreground/85">
               <p>
                 Les données viennent de <strong className="text-foreground">Transfermarkt</strong>,
@@ -83,6 +100,7 @@ export default function About() {
             <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-6">
               Pas affilié. Pas commandité. Pas négociable.
             </h2>
+            <IndependanceVisual />
             <div className="space-y-5 text-lg leading-[1.75] text-foreground/85">
               <p>
                 Léopards Radar est un projet <strong className="text-foreground">indépendant</strong>{" "}
@@ -107,6 +125,42 @@ export default function About() {
                   contact@leopardsradar.com
                 </a>
                 .
+              </p>
+            </div>
+          </section>
+
+          {/* Signature institutionnelle — pas de nom personnel : la maison
+              mère assume seule. Crédibilité = structure éditoriale claire,
+              pas une signature individuelle. */}
+          <section className="mt-20 border-t border-border pt-12">
+            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-primary mb-4">
+              04 — Qui édite Léopards Radar
+            </p>
+            <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-6">
+              Édité par Cobalt Sports & Entertainment.
+            </h2>
+            <EditeurVisual />
+            <div className="space-y-5 text-lg leading-[1.75] text-foreground/85">
+              <p>
+                Léopards Radar est édité par{" "}
+                <strong className="text-foreground">Cobalt Sports &
+                Entertainment</strong>, studio indépendant basé à Paris.
+                On construit des médias et des outils éditoriaux autour du
+                sport, de la musique et de la culture africaine.
+              </p>
+              <p>
+                Léopards Radar est notre premier produit ouvert au public
+                — d'autres suivront, dans la même logique : data sourcée,
+                voix éditoriale claire, zéro hype.
+              </p>
+              <p className="text-base text-muted-light">
+                Pour toute question éditoriale, partenariat presse ou
+                proposition de source : <a
+                  href="mailto:contact@leopardsradar.com"
+                  className="text-primary hover:text-primary-hover underline underline-offset-4"
+                >
+                  contact@leopardsradar.com
+                </a>.
               </p>
             </div>
           </section>

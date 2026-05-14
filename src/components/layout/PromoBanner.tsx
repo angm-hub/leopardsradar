@@ -7,7 +7,11 @@ import { useMondialCountdown } from "@/hooks/useMondialCountdown";
 // Bumped after audit day 1 — copy changed (J-N + 11 juin) so previous
 // dismissals shouldn't suppress the new banner.
 const STORAGE_KEY = "promo_banner_mondial_dismissed_2026_05_03";
-const DISMISS_DURATION_MS = 24 * 60 * 60 * 1000; // 24h
+// 24h was too short — users dismissed the banner thinking it would stay
+// down for at least a few days. 7 days is the standard "respect" window
+// for promotional bars (Linear, Stripe). Re-surface after a week so users
+// who actually want to act on the Mondial countdown still get reminded.
+const DISMISS_DURATION_MS = 7 * 24 * 60 * 60 * 1000; // 7 jours
 
 /**
  * Slim announcement bar (Vercel/Linear pattern).

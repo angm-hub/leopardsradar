@@ -1,12 +1,14 @@
 import { Activity, Sparkles, Feather } from "lucide-react";
+import { Link } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { NewsletterForm } from "@/components/newsletter/NewsletterForm";
+import { useDocumentMeta } from "@/hooks/useDocumentMeta";
 
 const PREVIEWS = [
   {
     icon: Activity,
-    title: "Performances internationaux",
+    title: "Performances internationales",
     desc: "Comment tes Léopards ont joué ce week-end. Buts, assists, minutes, analyses.",
   },
   {
@@ -22,11 +24,21 @@ const PREVIEWS = [
 ];
 
 export default function Newsletter() {
+  useDocumentMeta({
+    title: "Newsletter",
+    description:
+      "Une édition par semaine. Performances internationales, talent surveillé, analyse de la semaine. Soigné. Court. Gratuit.",
+  });
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
       <main>
         <section className="container-site pt-32 pb-16">
+          <nav aria-label="breadcrumb" className="text-sm text-muted mb-8">
+            <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
+            <span className="mx-2 text-muted/60">/</span>
+            <span className="text-foreground/80">Newsletter</span>
+          </nav>
           <div className="mx-auto max-w-3xl text-center">
             <span className="text-xs uppercase tracking-[0.2em] text-primary">
               Le Radar Léopards

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 import {
   ArrowLeft,
   ExternalLink,
@@ -9,8 +10,10 @@ import {
   Link2,
   Check,
   ListPlus,
+  ListChecks,
   ArrowRightLeft,
 } from "lucide-react";
+import { useMaListeStore } from "@/store/maListeStore";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { Button } from "@/components/ui/ButtonPrimitive";
@@ -23,8 +26,11 @@ import {
 import { PlayerIdentityCards } from "@/components/player/PlayerIdentityCards";
 import { PlayerCareerCard } from "@/components/player/PlayerCareerCard";
 import { PlayerEligibilityBlock } from "@/components/player/PlayerEligibilityBlock";
+import { PlayerPressMentions } from "@/components/player/PlayerPressMentions";
 import { PlayerStatProfile } from "@/components/player/PlayerStatProfile";
 import { PlayerWeeklyProgress } from "@/components/player/PlayerWeeklyProgress";
+import { PlayerScrollNav } from "@/components/player/PlayerScrollNav";
+import { PlayerValueSparkline } from "@/components/player/PlayerValueSparkline";
 import { RelatedPlayers } from "@/components/player/RelatedPlayers";
 import { usePlayer } from "@/hooks/usePlayer";
 import { useDominantColor } from "@/hooks/useDominantColor";
@@ -47,14 +53,49 @@ const NOISE_SVG =
   );
 
 function NotFound() {
+  // Soft-404 SEO trap fix : explicit title + noindex so Google doesn't
+  // index "Joueur introuvable" pages as valid content. Without this,
+  // every typo'd URL becomes an indexed "thin page" hurting overall SEO.
+  useDocumentMeta({
+    title: "Joueur introuvable",
+    description:
+      "Ce profil n'existe pas dans Léopards Radar. Parcourez le Roster ou le Radar pour trouver un joueur.",
+    noindex: true,
+  });
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
       <main className="container-site flex min-h-[70vh] flex-col items-center justify-center py-32 text-center">
+        <p className="text-xs uppercase tracking-[0.2em] text-primary mb-4">
+          404 · Profil introuvable
+        </p>
         <h1 className="font-serif text-5xl text-foreground">Joueur introuvable.</h1>
-        <p className="mt-4 text-muted">Ce profil n'existe pas (encore).</p>
-        <Link to="/roster" className="mt-8 inline-flex items-center gap-2 text-primary hover:text-primary-hover">
-          <ArrowLeft className="h-4 w-4" /> Retour au Roster
+        <p className="mt-4 max-w-md text-muted">
+          Ce profil n'existe pas (encore) dans notre radar. Si tu cherchais un
+          binational récemment dévoilé, on l'ajoute peut-être bientôt — propose-le.
+        </p>
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <Link
+            to="/roster"
+            className="inline-flex items-center gap-2 rounded-md bg-card border border-border px-5 py-2.5 text-sm text-foreground hover:bg-card-hover transition-colors"
+          >
+            Parcourir le Roster
+          </Link>
+          <Link
+            to="/radar"
+            className="inline-flex items-center gap-2 rounded-md bg-card border border-border px-5 py-2.5 text-sm text-foreground hover:bg-card-hover transition-colors"
+          >
+            Explorer le Radar
+          </Link>
+          <a
+            href="mailto:contact@leopardsradar.com?subject=Joueur à ajouter"
+            className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-background hover:bg-primary-hover transition-colors"
+          >
+            Proposer un joueur
+          </a>
+        </div>
+        <Link to="/" className="mt-12 inline-flex items-center gap-2 text-sm text-muted hover:text-foreground transition-colors">
+          <ArrowLeft className="h-4 w-4" /> Retour à l'accueil
         </Link>
       </main>
       <Footer />
@@ -87,6 +128,21 @@ export default function PlayerPage() {
   const { slug } = useParams<{ slug: string }>();
   const { player, bases, selections, loading } = usePlayer(slug);
   const [copied, setCopied] = useState(false);
+  const addToBench = useMaListeStore((s) => s.addToBench);
+  // IMPORTANT : returning a fresh array/object from a zustand selector at
+  // every render triggers React error #185 (max update depth) because the
+  // store thinks state changed every render. We compute primitive booleans
+  // directly inside the selector so the reference is stable across renders
+  // when the actual data hasn't changed.
+  const playerSlug = player?.slug;
+  const isInList = useMaListeStore((s) => {
+    if (!playerSlug) return false;
+    if (s.bench.some((p) => p.slug === playerSlug)) return true;
+    for (const slot of Object.values(s.startingXI)) {
+      if (slot?.slug === playerSlug) return true;
+    }
+    return false;
+  });
 
   const dominant = useDominantColor(player?.image_url ?? undefined);
   const [r, g, b] = dominant ?? [60, 60, 70];
@@ -129,6 +185,20 @@ export default function PlayerPage() {
     !player.season_minutes &&
     !player.season_rating;
 
+  // "Page-cimetière" detector : when 4+ identity fields are null AND the
+  // season is empty, the page would otherwise render 6 stat axes at "—",
+  // an identity grid full of "—" and an empty season block. We collapse
+  // all that into a single editorial block that explains why and points
+  // to the eligibility section (which is the actual story of the profile).
+  const identityEmptyCount = [
+    player.date_of_birth,
+    player.place_of_birth,
+    player.foot,
+    player.height_cm,
+    player.current_club,
+  ].filter((v) => !v).length;
+  const isProfileSparse = identityEmptyCount >= 4 && seasonEmpty;
+
   const handleShare = (channel: "twitter" | "whatsapp" | "copy") => {
     const url = typeof window !== "undefined" ? window.location.href : "";
     const text = `${player.name} — ${player.current_club ?? "profil RDC"} sur Léopards Radar`;
@@ -151,13 +221,27 @@ export default function PlayerPage() {
     }
   };
 
+  // Sticky anchor nav (lg+ uniquement). Items conditionnels selon ce qui est
+  // réellement rendu pour ce profil — un profil sparse n'a pas de stats, donc
+  // pas d'ancre stats. Évite les ancres dead-link.
+  const navItems = [
+    { id: "hero", label: "Profil" },
+    !isProfileSparse && { id: "stats", label: "Statistiques" },
+    !isProfileSparse && { id: "identite", label: "Identité" },
+    { id: "fifa", label: "FIFA" },
+    !isProfileSparse && { id: "saison", label: "Saison" },
+    { id: "presse", label: "Presse" },
+    { id: "similaires", label: "Similaires" },
+  ].filter((it): it is { id: string; label: string } => Boolean(it));
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
+      <PlayerScrollNav items={navItems} />
 
       <main>
         {/* HERO */}
-        <section className="relative overflow-hidden bg-background">
+        <section id="hero" className="relative overflow-hidden bg-background">
           <motion.div
             key={dominant ? `${r}-${g}-${b}` : "fallback"}
             aria-hidden
@@ -295,23 +379,60 @@ export default function PlayerPage() {
                   />
                 </div>
 
-                {/* Editorial pull quote — moved up from below the hero so
-                    the "why this player" answer is visible in the fold. */}
-                <PlayerEligibilityQuote
-                  text={buildPlayerEligibilityLine({
-                    eligibilityNote: player.eligibility_note,
-                    eligibilityStatus: player.eligibility_status,
-                    category: player.player_category,
-                    capsRdc: player.caps_rdc,
-                  })}
-                />
+                {/* Pull quote retiré du hero compact — il vit maintenant en
+                    section dédiée juste après le hero (variant="full") pour
+                    plus d'impact visuel. Voir bloc "POURQUOI" ci-dessous. */}
 
                 <div className="flex flex-wrap gap-2 pt-1">
-                  <Link to="/ma-liste">
-                    <Button size="sm">
-                      <ListPlus className="h-4 w-4" /> Ajouter à ma liste
+                  {player.computed_eligibility_status === "INELIGIBLE" ? (
+                    // FIFA cap-tied : pas dans la liste des 26 RDC possible.
+                    // On remplace le CTA par un état informatif clair.
+                    <Button size="sm" variant="outline" disabled type="button">
+                      <ListPlus className="h-4 w-4 opacity-50" /> Cap-tied — non éligible
                     </Button>
-                  </Link>
+                  ) : isInList ? (
+                    // Already in the local Ma Liste session : link to it
+                    // instead of re-adding (idempotent UX, avoid duplicate toast).
+                    <Link to="/ma-liste">
+                      <Button size="sm" variant="outline" type="button">
+                        <ListChecks className="h-4 w-4" /> Déjà dans ma liste
+                      </Button>
+                    </Link>
+                  ) : (
+                    // Real action : add the player to the local bench (zustand
+                    // persist) + sonner toast with link to /ma-liste. The
+                    // POTENTIALLY warning becomes part of the toast copy.
+                    <Button
+                      size="sm"
+                      variant={
+                        player.computed_eligibility_status === "POTENTIALLY"
+                          ? "outline"
+                          : "default"
+                      }
+                      type="button"
+                      onClick={() => {
+                        addToBench(player);
+                        toast.success(
+                          player.computed_eligibility_status === "POTENTIALLY"
+                            ? `${player.name} ajouté — profil à instruire avant Mondial.`
+                            : `${player.name} ajouté à ta liste.`,
+                          {
+                            action: {
+                              label: "Voir ma liste",
+                              onClick: () => {
+                                window.location.href = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/ma-liste`;
+                              },
+                            },
+                          },
+                        );
+                      }}
+                    >
+                      <ListPlus className="h-4 w-4" />
+                      {player.computed_eligibility_status === "POTENTIALLY"
+                        ? "Ajouter (à instruire)"
+                        : "Ajouter à ma liste"}
+                    </Button>
+                  )}
                   <Link to={`/compare?p1=${player.slug}`}>
                     <Button variant="outline" size="sm" type="button">
                       <ArrowRightLeft className="h-4 w-4" /> Comparer
@@ -363,43 +484,113 @@ export default function PlayerPage() {
           </div>
         </section>
 
+        {/* POURQUOI — pull quote éditorial gros format. Donne le "pourquoi je
+            lis cette fiche" en un coup d'œil avant les sections data détaillées.
+            La sparkline 12 mois est désactivée tant que `player_stats_weekly`
+            n'a pas assez d'historique (≥ 6 snapshots) — cf. PlayerValueSparkline. */}
+        <section className="container-site py-12 md:py-16 border-t border-border/40">
+          <PlayerEligibilityQuote
+            variant="full"
+            className="max-w-3xl"
+            text={buildPlayerEligibilityLine({
+              eligibilityNote: player.eligibility_note,
+              eligibilityStatus: player.eligibility_status,
+              category: player.player_category,
+              capsRdc: player.caps_rdc,
+            })}
+          />
+        </section>
+
         {/* CETTE SEMAINE — delta vs snapshot dimanche précédent. Matérialise
             la cadence éditoriale promise (mise à jour chaque dimanche). */}
         <PlayerWeeklyProgress slug={player.slug} />
 
-        {/* PROFIL STATISTIQUE — hexagon 6 axes (4 universels + 2 par poste) */}
-        <PlayerStatProfile player={player} />
-
-        {/* IDENTITÉ + CARRIÈRE — pull quote retirée, remontée dans le fold */}
-        <section className="container-site py-12 border-t border-border">
-          <h2 className="font-serif text-3xl text-foreground mb-6">Identité.</h2>
-          <PlayerIdentityCards
-            dateOfBirth={player.date_of_birth}
-            placeOfBirth={player.place_of_birth}
-            countryOfBirth={player.country_of_birth}
-            foot={player.foot}
-            heightCm={player.height_cm}
-          />
-          <div className="mt-6">
-            <PlayerCareerCard
-              currentClub={player.current_club}
-              contractExpires={player.contract_expires}
-              agent={player.agent}
-              onLoanFrom={player.on_loan_from}
-            />
+        {/* PROFIL STATISTIQUE — hexagon 6 axes (4 universels + 2 par poste).
+            Caché sur les profils "sparse" (binational invisible récemment
+            découvert) : afficher 6 axes à "—" donne l'impression d'un
+            produit incomplet. À la place, on remonte le statut éligibilité
+            qui est l'angle éditorial pertinent pour ce type de profil.
+            id="stats" : ancre pour la sticky nav PlayerScrollNav. */}
+        {!isProfileSparse && (
+          <div id="stats" className="scroll-mt-24">
+            <PlayerStatProfile player={player} />
           </div>
-        </section>
+        )}
+
+        {isProfileSparse ? (
+          <section id="identite" className="container-site py-12 border-t border-border scroll-mt-24">
+            <div className="rounded-card border border-dashed border-border bg-card/40 p-8 md:p-10">
+              <p className="text-xs uppercase tracking-[0.2em] text-primary mb-3">
+                Profil en cours d'enrichissement
+              </p>
+              <h2 className="font-serif text-2xl md:text-3xl text-foreground leading-tight mb-4">
+                {player.name} vient d'entrer dans notre radar.
+              </h2>
+              <p className="text-muted-light leading-relaxed max-w-2xl">
+                Détecté via la chaîne d'enrichissement (Wikidata, sélections jeunes
+                EU, patronymes bantu vérifiés via Wikipédia). Date de naissance,
+                club, taille et statistiques saison sont en cours de collecte —
+                on enrichit ces profils chaque dimanche.
+              </p>
+              <p className="text-muted text-sm mt-6">
+                L'angle éditorial du jour est plus bas <span aria-hidden>↓</span> :
+                base juridique RDC identifiée, fenêtre de switch FIFA, procédure
+                FECOFA.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <a
+                  href={`mailto:contact@leopardsradar.com?subject=Compl%C3%A9ter le profil de ${encodeURIComponent(player.name)}`}
+                  className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-4 py-2 text-sm text-foreground hover:bg-card-hover transition-colors"
+                >
+                  Proposer une source pour ce profil
+                </a>
+              </div>
+            </div>
+          </section>
+        ) : (
+          <section id="identite" className="container-site py-12 border-t border-border scroll-mt-24">
+            <h2 className="font-serif text-3xl text-foreground mb-6">Identité.</h2>
+            <PlayerIdentityCards
+              dateOfBirth={player.date_of_birth}
+              placeOfBirth={player.place_of_birth}
+              countryOfBirth={player.country_of_birth}
+              foot={player.foot}
+              heightCm={player.height_cm}
+            />
+            <div className="mt-6">
+              <PlayerCareerCard
+                currentClub={player.current_club}
+                contractExpires={player.contract_expires}
+                agent={player.agent}
+                onLoanFrom={player.on_loan_from}
+              />
+            </div>
+          </section>
+        )}
 
         {/* STATUT ÉLIGIBILITÉ FIFA — bloc enrichi avec bases juridiques,
-            verrous, fenêtre switch FIFA, procédure FECOFA, sources */}
-        <PlayerEligibilityBlock
-          player={player}
-          bases={bases}
-          selections={selections}
-        />
+            verrous, fenêtre switch FIFA, procédure FECOFA, sources.
+            id="fifa" : ancre sticky nav. */}
+        <div id="fifa" className="scroll-mt-24">
+          <PlayerEligibilityBlock
+            player={player}
+            bases={bases}
+            selections={selections}
+          />
+        </div>
 
-        {/* STATS SAISON */}
-        <section className="container-site py-12 border-t border-border">
+        {/* CITÉ DANS LA PRESSE — items press_items tagués player_id =
+            ce joueur. Auto-hidden si zéro mention pour éviter un bloc
+            triste sur les profils peu couverts.
+            id="presse" : ancre sticky nav. */}
+        <div id="presse" className="scroll-mt-24">
+          <PlayerPressMentions playerId={player.id} />
+        </div>
+
+        {/* STATS SAISON — sur les profils sparse, on saute cette section
+            (déjà couverte par le bloc éditorial plus haut). */}
+        {!isProfileSparse && (
+        <section id="saison" className="container-site py-12 border-t border-border scroll-mt-24">
           <h2 className="font-serif text-3xl text-foreground">
             Saison 2025/26 — Club.
           </h2>
@@ -432,12 +623,16 @@ export default function PlayerPage() {
             </div>
           )}
         </section>
+        )}
 
-        {/* E — PLUS DE LÉOPARDS : 4 joueurs du même poste */}
-        <RelatedPlayers
-          position={player.position}
-          excludeSlug={player.slug}
-        />
+        {/* E — PLUS DE LÉOPARDS : 4 joueurs du même poste.
+            id="similaires" : ancre sticky nav. */}
+        <div id="similaires" className="scroll-mt-24">
+          <RelatedPlayers
+            position={player.position}
+            excludeSlug={player.slug}
+          />
+        </div>
 
         <div className="container-site py-12">
           <Link

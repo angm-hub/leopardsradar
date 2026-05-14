@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Search, X } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -10,8 +11,10 @@ import { RosterHero } from "@/components/roster/RosterHero";
 import { PositionSection } from "@/components/roster/PositionSection";
 import { PlayerTable } from "@/components/roster/PlayerTable";
 import { RosterModeToggle, type RosterMode } from "@/components/roster/RosterModeToggle";
+import { RosterMoversSection } from "@/components/roster/RosterMoversSection";
 import { usePlayers } from "@/hooks/usePlayers";
 import { useHomeStats } from "@/hooks/useHomeStats";
+import { useDocumentMeta } from "@/hooks/useDocumentMeta";
 import type { DBPosition } from "@/types/dbPlayer";
 
 const POSITION_ORDER: DBPosition[] = [
@@ -40,8 +43,28 @@ const SORT_OPTIONS: { value: SortKey; label: string }[] = [
   { value: "AGE_DESC", label: "Âge ↓" },
 ];
 
+// Valeurs URL → types app
+function parsePosition(raw: string | null): PositionFilter {
+  const valid: PositionFilter[] = ["ALL", "Goalkeeper", "Defender", "Midfield", "Attack"];
+  return valid.includes(raw as PositionFilter) ? (raw as PositionFilter) : "ALL";
+}
+
+function parseSortKey(raw: string | null): SortKey {
+  const valid: SortKey[] = ["VALUE_DESC", "CAPS_DESC", "NAME_ASC", "AGE_ASC", "AGE_DESC"];
+  return valid.includes(raw as SortKey) ? (raw as SortKey) : "VALUE_DESC";
+}
+
+function parseMode(raw: string | null): RosterMode {
+  return raw === "liste" || raw === "editorial" ? raw : "editorial";
+}
+
 const Roster = () => {
-  // Default sort = market value DESC NULLS LAST (handled by usePlayers)
+  useDocumentMeta({
+    title: "Roster",
+    description:
+      "Le roster Léopards 2025/26 — internationaux RDC en activité, cartographiés par poste, valeur marchande, club et tier UEFA.",
+  });
+
   const { players, loading, error } = usePlayers({
     category: "roster",
     excludeEligibilityStatus: "ineligible",
@@ -50,14 +73,32 @@ const Roster = () => {
   const { stats, loading: statsLoading } = useHomeStats();
   const rosterCount = stats?.roster_count;
 
-  const [position, setPosition] = useState<PositionFilter>("ALL");
-  const [sort, setSort] = useState<SortKey>("VALUE_DESC");
-  const [query, setQuery] = useState("");
-  const [debouncedQuery, setDebouncedQuery] = useState("");
-  // Persist user's mode preference (editorial vs liste) — power users coming
-  // back default to "liste" because that's the dense view they want, casuals
-  // stay on "editorial". Defaults to "editorial" when storage is empty.
+  // ─── C1 : URL state sync ───────────────────────────────────────────────────
+  // WHY : un utilisateur qui partage /roster?poste=Attack&tri=age_asc doit
+  // retrouver exactement la même vue que celui qui l'a configurée. Sans URL
+  // sync, refresh = perte de contexte, partage de lien = inutilisable.
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Hydratation initiale depuis les params URL
+  const [position, setPositionState] = useState<PositionFilter>(
+    () => parsePosition(searchParams.get("poste")),
+  );
+  const [sort, setSortState] = useState<SortKey>(
+    () => parseSortKey(searchParams.get("tri")),
+  );
+  const [query, setQuery] = useState<string>(
+    () => searchParams.get("q") ?? "",
+  );
+  const [debouncedQuery, setDebouncedQuery] = useState<string>(
+    () => (searchParams.get("q") ?? "").trim().toLowerCase(),
+  );
+
+  // Persist user's mode preference — power users coming back default to "liste",
+  // casuals stay on "editorial". Defaults to "editorial" when storage is empty.
   const [mode, setMode] = useState<RosterMode>(() => {
+    const fromUrl = parseMode(searchParams.get("mode"));
+    // Si l'URL contient un mode explicite, il prime sur localStorage.
+    if (searchParams.has("mode")) return fromUrl;
     if (typeof window === "undefined") return "editorial";
     try {
       const saved = window.localStorage.getItem("lr_roster_mode");
@@ -66,6 +107,8 @@ const Roster = () => {
       return "editorial";
     }
   });
+
+  // Persist mode dans localStorage à chaque changement
   useEffect(() => {
     try {
       window.localStorage.setItem("lr_roster_mode", mode);
@@ -74,19 +117,90 @@ const Roster = () => {
     }
   }, [mode]);
 
-  // 300ms debounce on the search input
+  // Setters avec sync URL — on fait un push (pas replace) pour que le bouton
+  // Back du navigateur ramène au contexte précédent.
+  // WHY : on reconstruit toujours les params depuis zéro pour éviter
+  // d'écraser des params externes qui pourraient exister (ex. utm_*).
+  const syncParams = (overrides: {
+    poste?: PositionFilter;
+    tri?: SortKey;
+    q?: string;
+    mode?: RosterMode;
+  }) => {
+    setSearchParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+
+        const newPos = overrides.poste ?? position;
+        const newTri = overrides.tri ?? sort;
+        const newQ = overrides.q !== undefined ? overrides.q : query;
+        const newMode = overrides.mode ?? mode;
+
+        // Omettre les valeurs par défaut pour des URLs propres
+        if (newPos === "ALL") next.delete("poste");
+        else next.set("poste", newPos);
+
+        if (newTri === "VALUE_DESC") next.delete("tri");
+        else next.set("tri", newTri);
+
+        const qTrimmed = newQ.trim();
+        if (!qTrimmed) next.delete("q");
+        else next.set("q", qTrimmed);
+
+        if (newMode === "editorial") next.delete("mode");
+        else next.set("mode", newMode);
+
+        return next;
+      },
+      { replace: false },
+    );
+  };
+
+  const setPosition = (val: PositionFilter) => {
+    setPositionState(val);
+    syncParams({ poste: val });
+  };
+
+  const setSort = (val: SortKey) => {
+    setSortState(val);
+    syncParams({ tri: val });
+  };
+
+  const handleModeChange = (val: RosterMode) => {
+    setMode(val);
+    syncParams({ mode: val });
+  };
+
+  // 300ms debounce sur la recherche — on sync l'URL uniquement au debounce
+  // pour ne pas polluer l'historique à chaque frappe.
   useEffect(() => {
-    const t = setTimeout(() => setDebouncedQuery(query.trim().toLowerCase()), 300);
+    const t = setTimeout(() => {
+      const trimmed = query.trim().toLowerCase();
+      setDebouncedQuery(trimmed);
+      syncParams({ q: query });
+    }, 300);
     return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
   const filtersActive =
     position !== "ALL" || sort !== "VALUE_DESC" || debouncedQuery !== "";
 
   const reset = () => {
-    setPosition("ALL");
-    setSort("VALUE_DESC");
+    setPositionState("ALL");
+    setSortState("VALUE_DESC");
     setQuery("");
+    // Réinitialisation URL : on supprime tous les params de filtre
+    setSearchParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        next.delete("poste");
+        next.delete("tri");
+        next.delete("q");
+        return next;
+      },
+      { replace: false },
+    );
   };
 
   const filtered = useMemo(() => {
@@ -156,11 +270,19 @@ const Roster = () => {
           </p>
         </header>
 
+        {/* C2 — Section "Cette semaine, ça bouge" — avant la sticky filter bar,
+            masquée dès qu'un filtre est actif. WHY : en mode filtré, la section
+            movers n'a plus de contexte global ; l'utilisateur cherche quelque
+            chose de précis, on ne distrait pas. */}
+        <div className="container-site">
+          <RosterMoversSection hidden={filtersActive} />
+        </div>
+
         <div className="sticky top-16 z-20 bg-background/85 backdrop-blur-lg border-y border-border">
           <div className="container-site py-4 flex flex-wrap gap-3 items-center">
             <RosterModeToggle
               current={effectiveMode}
-              onChange={setMode}
+              onChange={handleModeChange}
               forcedListe={forcedListe}
             />
             <span className="hidden md:inline-block h-6 w-px bg-border mx-1" />

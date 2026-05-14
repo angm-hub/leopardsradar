@@ -1,6 +1,5 @@
 import { motion, useReducedMotion } from "framer-motion";
-import { Link } from "react-router-dom";
-import { Globe, Trophy, MapPin, Radar as RadarIcon, ArrowUpRight } from "lucide-react";
+import { Globe, Trophy, MapPin } from "lucide-react";
 import { Pill } from "@/components/ui/Pill";
 import { useHomeStats } from "@/hooks/useHomeStats";
 import { formatMarketValueCompact } from "@/lib/playerHelpers";
@@ -25,10 +24,6 @@ export function StatsSection() {
 
   const rosterCount = stats?.roster_count ?? null;
   const totalCountries = stats?.total_countries ?? null;
-  const avgAge = stats?.avg_age ? Math.round(stats.avg_age) : null;
-  const totalRadar = stats
-    ? (stats.radar_count ?? 0) + (stats.heritage_count ?? 0)
-    : null;
   const tier1Ratio =
     stats && stats.total_players
       ? Math.round(((stats.tier1_count ?? 0) / stats.total_players) * 100)
@@ -71,164 +66,143 @@ export function StatsSection() {
 
 
   return (
-    <section className="relative py-16 md:py-20 bg-background overflow-hidden">
+    <section className="relative py-20 md:py-28 bg-background overflow-hidden">
       <ResidualGradient position="top-bottom" />
-      <div className="container-site max-w-7xl relative">
-        {/* Header */}
-        <div className="flex flex-col gap-4 mb-12 max-w-2xl">
-          <span className="text-xs uppercase tracking-[0.2em] text-primary">
-            Les Léopards en chiffres
+      <div className="container-site max-w-6xl relative">
+        {/* Header — éditorial sec, pas de duplication entre eyebrow et H2.
+            Le H2 fait le travail seul, l'eyebrow donne juste l'ancrage. */}
+        <motion.div
+          {...fadeUp(0)}
+          className="flex flex-col gap-4 mb-16 md:mb-20 max-w-2xl"
+        >
+          <span className="text-xs uppercase tracking-[0.2em] text-success font-mono">
+            Vue d'ensemble
           </span>
-          <h2 className="font-serif text-4xl md:text-5xl font-semibold text-foreground tracking-tight text-balance">
+          <h2 className="font-serif text-4xl md:text-6xl font-semibold text-foreground tracking-tight text-balance leading-[1.05]">
             Les Léopards en chiffres.
           </h2>
-          <p className="text-muted text-base md:text-lg leading-relaxed max-w-xl">
+          <p className="text-muted-light text-base md:text-lg leading-relaxed max-w-xl">
             Derrière chaque joueur, une trajectoire. Ensemble, une cartographie.
           </p>
-        </div>
+        </motion.div>
 
-        {/* Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-3 gap-4 md:auto-rows-[180px]">
-          {/* CARD A — Hero */}
-          <motion.div
-            {...fadeUp(0)}
-            className={`${cardBase} md:col-span-2 md:row-span-2 p-8 flex flex-col justify-between`}
-          >
-            <div className="pointer-events-none absolute -top-16 -right-16 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
-
-            <div className="relative">
-              <span className="text-xs uppercase tracking-[0.2em] text-muted">
-                Valeur marchande cumulée
-              </span>
-              <div
-                className={`mt-4 font-mono font-bold leading-none ${
-                  hasMarketValue
-                    ? "text-6xl md:text-7xl text-foreground"
-                    : "text-4xl md:text-5xl text-muted"
-                }`}
-              >
-                {totalValueLabel}
-              </div>
+        {/* Format éditorial — sortie du bento générique. Un grand chiffre
+            dominant à gauche (la valeur marchande), 3 chiffres secondaires
+            empilés à droite avec divider. Pas de cards. Hiérarchie visuelle
+            par taille typographique uniquement, comme dans la presse écrite. */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+          {/* COLONNE GAUCHE — chiffre dominant : valeur marchande cumulée */}
+          <motion.div {...fadeUp(0.1)} className="lg:col-span-7">
+            <p className="text-[11px] uppercase tracking-[0.25em] text-muted font-mono mb-4">
+              Valeur marchande cumulée
+            </p>
+            <div
+              className={`font-serif font-semibold leading-[0.9] tracking-tight ${
+                hasMarketValue
+                  ? "text-7xl md:text-9xl text-foreground"
+                  : "text-5xl md:text-7xl text-muted"
+              }`}
+            >
+              {totalValueLabel}
             </div>
+            <p className="mt-6 max-w-md font-serif italic text-lg md:text-xl text-foreground/75 leading-snug">
+              {tier1Ratio !== null
+                ? `${tier1Ratio}% du roster joue dans un top 5 européen.`
+                : "Roster réparti entre clubs européens et africains."}
+            </p>
 
-            <div className="relative mt-8">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-muted">Joueurs en top 5 européen</span>
-                <span className="text-foreground font-medium">
+            {/* Barre de progression Tier 1 — gardée car elle matérialise le
+                ratio, mais en version épurée (h-1, sans card). */}
+            <div className="mt-6 max-w-sm">
+              <div className="flex items-center justify-between text-[11px] uppercase tracking-[0.18em] text-muted font-mono mb-2">
+                <span>Top 5 européen</span>
+                <span className="text-foreground/70">
                   {tier1Ratio !== null ? `${tier1Ratio}%` : statFallback}
                 </span>
               </div>
-              <div className="mt-2 h-2 w-full rounded-full bg-border overflow-hidden">
+              <div className="h-1 w-full rounded-full bg-border/60 overflow-hidden">
                 <motion.div
                   initial={reduced ? false : { width: 0 }}
                   animate={reduced ? { width: `${tier1Ratio ?? 0}%` } : undefined}
                   whileInView={reduced ? undefined : { width: `${tier1Ratio ?? 0}%` }}
                   viewport={reduced ? undefined : { once: true }}
                   transition={{ duration: reduced ? 0 : 1.2, ease: "easeOut", delay: reduced ? 0 : 0.3 }}
-                  className="h-full rounded-full bg-gradient-to-r from-primary to-success"
+                  className="h-full rounded-full bg-gradient-to-r from-success to-primary"
                 />
               </div>
             </div>
 
-            <div className="relative mt-6 flex flex-wrap gap-2">
+            <div className="mt-8 flex flex-wrap gap-2">
               <Pill dot dotColor="bg-success">Mondial 2026</Pill>
               <Pill icon={Trophy}>Play-offs conquis</Pill>
               <Pill icon={Globe}>Diaspora mondiale</Pill>
             </div>
           </motion.div>
 
-          {/* CARD B — JOUEURS */}
-          <motion.div
-            {...fadeUp(0.1)}
-            className={`${cardBase} md:col-span-1 md:row-span-1 p-6 flex flex-col justify-between`}
-          >
-            <span className="text-[10px] uppercase tracking-[0.2em] text-muted">
-              Joueurs
-            </span>
-            <div>
-              <StatNumber value={rosterCount} />
-              <p className="mt-2 text-xs text-muted">dans le roster actif</p>
-            </div>
-          </motion.div>
-
-          {/* CARD C — PAYS */}
-          <motion.div
+          {/* COLONNE DROITE — 3 chiffres secondaires empilés avec divider */}
+          <motion.dl
             {...fadeUp(0.2)}
-            className={`${cardBase} md:col-span-1 md:row-span-1 p-6 flex flex-col justify-between`}
+            className="lg:col-span-5 lg:pl-12 lg:border-l lg:border-border/40 flex flex-col gap-10"
           >
-            <span className="text-[10px] uppercase tracking-[0.2em] text-muted">
-              Pays
-            </span>
+            {/* Roster actif */}
             <div>
-              <StatNumber value={totalCountries} />
-              <p className="mt-2 text-xs text-muted">où les Léopards évoluent</p>
+              <dt className="text-[11px] uppercase tracking-[0.25em] text-muted font-mono">
+                Roster actif
+              </dt>
+              <dd className="mt-2 flex items-baseline gap-3">
+                <StatNumber
+                  value={rosterCount}
+                  className="font-serif text-5xl md:text-6xl font-semibold text-foreground leading-none"
+                  width="w-[2ch]"
+                />
+                <span className="text-sm text-muted-light">
+                  internationaux en activité
+                </span>
+              </dd>
             </div>
-          </motion.div>
 
-          {/* CARD D — Map miniature */}
+            {/* Pays */}
+            <div className="border-t border-border/40 pt-10">
+              <dt className="text-[11px] uppercase tracking-[0.25em] text-muted font-mono">
+                Pays d'évolution
+              </dt>
+              <dd className="mt-2 flex items-baseline gap-3">
+                <StatNumber
+                  value={totalCountries}
+                  className="font-serif text-5xl md:text-6xl font-semibold text-foreground leading-none"
+                  width="w-[2ch]"
+                />
+                <span className="text-sm text-muted-light">
+                  3 continents
+                </span>
+              </dd>
+            </div>
+
+            {/* Diaspora — phrase édito sans chiffre car elle n'a pas de stat
+                quanti propre, juste un mini visuel diaspora */}
+            <div className="border-t border-border/40 pt-10">
+              <dt className="text-[11px] uppercase tracking-[0.25em] text-muted font-mono mb-3 inline-flex items-center gap-2">
+                <MapPin className="h-3 w-3 text-success" /> Diaspora
+              </dt>
+              <dd>
+                <p className="font-serif italic text-xl text-foreground/85 leading-snug">
+                  Une diaspora, 3 continents, 22 pays.
+                </p>
+                <div className="mt-4 h-20 relative">
+                  <MiniWorldMap />
+                </div>
+              </dd>
+            </div>
+          </motion.dl>
+        </div>
+
+        {/* Prochain match — détaché du bento, en bandeau séparé sous le bloc
+            data. Termine la section sur un signal éditorial concret (le
+            prochain rdv des Léopards). */}
+        <div className="mt-16 md:mt-20">
           <motion.div
             {...fadeUp(0.3)}
-            className={`${cardBase} md:col-span-2 md:row-span-1 p-6`}
-          >
-            <div className="absolute inset-0 opacity-60">
-              <MiniWorldMap />
-            </div>
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-card via-card/40 to-transparent" />
-            <div className="relative h-full flex flex-col justify-end">
-              <div className="flex items-center gap-2 text-xs text-muted">
-                <MapPin className="h-3 w-3 text-primary" />
-                <span className="uppercase tracking-[0.2em]">Diaspora</span>
-              </div>
-              <p className="mt-1 font-serif text-xl text-foreground">
-                Une diaspora, 3 continents.
-              </p>
-            </div>
-          </motion.div>
-
-          {/* CARD E — ÂGE MOYEN */}
-          <motion.div
-            {...fadeUp(0.4)}
-            className={`${cardBase} md:col-span-1 md:row-span-1 p-6 flex flex-col justify-between`}
-          >
-            <span className="text-[10px] uppercase tracking-[0.2em] text-muted">
-              Âge moyen
-            </span>
-            <div>
-              <StatNumber value={avgAge} />
-              <p className="mt-2 text-xs text-muted">ans · génération pic</p>
-            </div>
-          </motion.div>
-
-          {/* CARD F — Radar talents */}
-          <motion.div {...fadeUp(0.5)} className={`${cardBase} md:col-span-1 md:row-span-1 p-0`}>
-            <Link
-              to="/radar"
-              className="group relative h-full w-full p-5 flex items-center gap-4 transition-colors hover:bg-card-hover"
-            >
-              <div className="h-16 w-16 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20 flex items-center justify-center shrink-0">
-                <RadarIcon className="h-7 w-7 text-primary" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <span className="text-[10px] uppercase tracking-[0.2em] text-muted">
-                  Radar
-                </span>
-                <StatNumber
-                  value={totalRadar}
-                  className="mt-1 font-mono text-2xl font-bold text-foreground leading-none"
-                  width="w-[2.5ch]"
-                />
-                <p className="mt-1 text-xs text-muted truncate">
-                  talents éligibles trackés
-                </p>
-              </div>
-              <ArrowUpRight className="h-4 w-4 text-muted group-hover:text-primary transition-colors shrink-0" />
-            </Link>
-          </motion.div>
-
-          {/* CARD G — Prochain match (data-driven) */}
-          <motion.div
-            {...fadeUp(0.6)}
-            className={`${cardBase} md:col-span-2 md:row-span-1`}
+            className="rounded-card border border-border bg-card overflow-hidden"
           >
             <NextMatchCard />
           </motion.div>

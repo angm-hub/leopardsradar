@@ -1,32 +1,150 @@
-import { lazy, Suspense } from "react";
-import { motion, type Variants, useReducedMotion } from "framer-motion";
+import { lazy, Suspense, useState } from "react";
+import { motion, type Variants, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/ButtonPrimitive";
 import { Pill } from "@/components/ui/Pill";
+import { RDCConstellation } from "@/components/ui/RDCConstellation";
+
+// Lazy : le shader Paper pèse ~30 kB gzip (WebGL). On le sort du bundle main
+// pour préserver le LCP. Pendant le chargement (~200ms cache cold), la
+// RDCConstellation SVG sert de fallback — même intention de signature
+// territoriale, zéro flash.
+const LeopardsGrainBackground = lazy(() =>
+  import("@/components/ui/LeopardsGrainBackground").then((m) => ({
+    default: m.LeopardsGrainBackground,
+  })),
+);
 import { useLatestBestXIMeta } from "@/hooks/useLatestBestXIMeta";
 import { useHomeStats } from "@/hooks/useHomeStats";
+import { useHomeStatsWeekly } from "@/hooks/useHomeStatsWeekly";
 import { useMondialCountdown } from "@/hooks/useMondialCountdown";
 
-// AuroraShader pèse ~30 kB gzip de WebGL (ogl). On le lazy-load pour le sortir
-// du bundle main et garder un LCP rapide. Le fallback est un gradient CSS qui
-// occupe l'espace pendant le chargement (≈ 200 ms en cache miss) — visuellement
-// proche, sans flash de couleur. Si l'utilisateur préfère le mouvement réduit,
-// on n'invoque jamais le shader et on reste sur le fallback statique.
-const AuroraShader = lazy(() =>
-  import("@/components/ui/AuroraShader").then((m) => ({ default: m.AuroraShader })),
-);
+// ─── Personas ─────────────────────────────────────────────────────────────────
 
-function AuroraFallback() {
+type PersonaKey = "fan" | "scout" | "journaliste" | "curieux";
+
+interface Persona {
+  key: PersonaKey;
+  label: string;
+  tagline: string;
+  cta: string;
+  href: string;
+}
+
+const PERSONAS: Persona[] = [
+  {
+    key: "fan",
+    label: "Fan",
+    tagline: "Tu suis les Léopards depuis toujours ?",
+    cta: "Compose ton Best XI",
+    href: "/best-xi",
+  },
+  {
+    key: "scout",
+    label: "Scout",
+    tagline: "Tu cherches le prochain talent ?",
+    cta: "Explorer le Radar",
+    href: "/radar",
+  },
+  {
+    key: "journaliste",
+    label: "Journaliste",
+    tagline: "Tu travailles sur un papier ?",
+    cta: "Consulter la revue de presse",
+    href: "/revue-de-presse",
+  },
+  {
+    key: "curieux",
+    label: "Curieux",
+    tagline: "Tu découvres le foot RDC ?",
+    cta: "En savoir plus",
+    href: "/a-propos",
+  },
+];
+
+const LS_KEY = "lr_home_persona";
+
+function readStoredPersona(): PersonaKey {
+  try {
+    const stored = localStorage.getItem(LS_KEY) as PersonaKey | null;
+    if (stored && PERSONAS.some((p) => p.key === stored)) return stored;
+  } catch {
+    // localStorage peut être bloqué (mode privé strict)
+  }
+  return "fan";
+}
+
+// ─── Segmented control personas ───────────────────────────────────────────────
+
+function PersonaTabs() {
+  const [active, setActive] = useState<PersonaKey>(readStoredPersona);
+
+  const persona = PERSONAS.find((p) => p.key === active)!;
+
+  function selectPersona(key: PersonaKey) {
+    setActive(key);
+    try {
+      localStorage.setItem(LS_KEY, key);
+    } catch {
+      // silencieux
+    }
+  }
+
   return (
-    <div
-      aria-hidden
-      className="absolute inset-0 h-full w-full"
-      style={{
-        background:
-          "radial-gradient(60% 80% at 50% 30%, rgba(0,166,81,0.55) 0%, rgba(10,10,11,0.85) 70%, rgba(10,10,11,1) 100%)",
-      }}
-    />
+    <div className="flex flex-col items-center gap-4">
+      {/* Segmented control */}
+      <div className="inline-flex rounded-full border border-border/60 bg-card/40 backdrop-blur-sm p-1">
+        {PERSONAS.map((p) => (
+          <button
+            key={p.key}
+            type="button"
+            onClick={() => selectPersona(p.key)}
+            className="relative px-3 py-1.5 text-xs font-mono uppercase tracking-[0.15em] transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            aria-pressed={active === p.key}
+          >
+            {/* Pill actif — layoutId pour la transition glissante */}
+            {active === p.key && (
+              <motion.span
+                layoutId="persona-pill"
+                className="absolute inset-0 rounded-full bg-primary"
+                transition={{ type: "spring", stiffness: 380, damping: 36 }}
+              />
+            )}
+            <span
+              className={
+                active === p.key
+                  ? "relative z-10 text-primary-foreground"
+                  : "relative z-10 text-muted-light"
+              }
+            >
+              {p.label}
+            </span>
+          </button>
+        ))}
+      </div>
+
+      {/* Contenu de la tab active — fade simple */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={active}
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -4 }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
+          className="flex flex-col items-center gap-2 text-center"
+        >
+          <p className="text-sm text-foreground/70">{persona.tagline}</p>
+          <Link
+            to={persona.href}
+            className="group inline-flex items-center gap-1.5 text-sm font-medium text-primary transition-opacity hover:opacity-80"
+          >
+            {persona.cta}
+            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+          </Link>
+        </motion.div>
+      </AnimatePresence>
+    </div>
   );
 }
 
@@ -47,8 +165,8 @@ const itemVariants: Variants = {
 export function LeopardsHero() {
   const { edition, formattedDate } = useLatestBestXIMeta();
   const { stats } = useHomeStats();
+  const { stats: weekly } = useHomeStatsWeekly();
   const { daysUntilKickoff, kickoffDateLabel, phase } = useMondialCountdown();
-  const reducedMotion = useReducedMotion();
   const totalPlayers = stats?.total_players ?? null;
   const radarCount = stats?.radar_count ?? null;
   const rosterCount = stats?.roster_count ?? null;
@@ -56,19 +174,24 @@ export function LeopardsHero() {
 
   return (
     <section className="relative min-h-[100dvh] overflow-hidden bg-background">
-      {/* Aurora shader rendu à 55% d'opacité — avant : 100% donnait un effet
-          "Lovable default" trop saturé. À 55% on garde la couleur signature
-          RDC sans que ça crie. Le voile noir bg-gradient-to-b est densifié
-          pour un fade out plus marqué vers le contenu. */}
-      <div className="absolute inset-0 opacity-55">
-        {reducedMotion ? (
-          <AuroraFallback />
-        ) : (
-          <Suspense fallback={<AuroraFallback />}>
-            <AuroraShader className="absolute inset-0 h-full w-full" />
-          </Suspense>
-        )}
-      </div>
+      {/* Backdrop gradient radial — première couche, fixe la teinte verte
+          signature même si le shader rate son chargement. */}
+      <div
+        aria-hidden
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(60% 80% at 50% 30%, rgba(0,166,81,0.45) 0%, rgba(10,10,11,0.80) 70%, rgba(10,10,11,1) 100%)",
+        }}
+      />
+
+      {/* Shader Paper Design (grain gradient blob) — couche signature qui
+          remplace la constellation statique. Lazy chargé pour préserver le
+          LCP. Pendant le chargement, la RDCConstellation SVG sert de fallback
+          (même intention de signature territoriale). */}
+      <Suspense fallback={<RDCConstellation />}>
+        <LeopardsGrainBackground />
+      </Suspense>
 
       {/* Grain subtle sur tout le hero — texture qui casse le côté plat
           des gradients shader / Tailwind. SVG noise inline, pas de poids. */}
@@ -96,13 +219,15 @@ export function LeopardsHero() {
             </Pill>
           </motion.div>
 
+          {/* H1 mobile : 4xl (au lieu de 5xl) pour éviter le break "footbal/l"
+              sur 390px. Sur md+ on garde 7xl/8xl pour l'impact visuel. */}
           <motion.h1
             variants={itemVariants}
-            className="font-serif text-5xl md:text-7xl lg:text-8xl font-semibold tracking-tight text-balance text-foreground"
+            className="font-serif text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-semibold tracking-tight text-balance text-foreground"
           >
-            Les yeux sur tous{" "}
+            Toute la data du{" "}
             <span className="bg-gradient-to-r from-foreground via-primary to-foreground/70 bg-clip-text text-transparent">
-              les Léopards.
+              football congolais.
             </span>
           </motion.h1>
 
@@ -110,10 +235,10 @@ export function LeopardsHero() {
             variants={itemVariants}
             className="text-lg md:text-xl text-foreground/75 max-w-2xl text-balance"
           >
-            {totalPlayers ?? "—"} internationaux et diaspora éligible, suivis chaque
-            dimanche.{" "}
+            {totalPlayers ?? "—"} joueurs trackés. Diaspora éligible cartographiée.
+            Statut FIFA recalculé chaque dimanche.{" "}
             {phase === "before"
-              ? `Compose ton 26 avant le coup d'envoi du Mondial — J-${daysUntilKickoff}.`
+              ? `Mondial 2026 — J-${daysUntilKickoff}.`
               : phase === "during"
                 ? "Suis les Léopards en direct du Mondial 2026."
                 : "Bilan et héritage du Mondial 2026."}
@@ -147,13 +272,26 @@ export function LeopardsHero() {
             </Link>
           </motion.div>
 
-          {/* Hero footer mini-grid — 4 numbers structured, no more raw text line.
-              Falls back to "—" while loading so the layout never collapses. */}
+          {/* Segmented control personas — 4 lectures différentes du site.
+              Discret, premium : petit font-mono, pill glissant Framer Motion. */}
+          <motion.div variants={itemVariants} className="w-full max-w-lg">
+            <PersonaTabs />
+          </motion.div>
+
+          {/* Hero footer mini-grid — 4 chiffres alignés. Cards séparées avec
+              gap réel (vs gap-px bg-border/40 qui faisait "tableur"). Le badge
+              "+N" sur Suivis n'apparaît plus qu'entre 1 et 30 — au-delà, c'est
+              un import en masse, pas un signal éditorial : afficher "+566"
+              donnerait l'impression d'une croissance gonflée. */}
           <motion.div
             variants={itemVariants}
-            className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-px overflow-hidden rounded-xl border border-border/40 bg-border/40 max-w-2xl w-full"
+            className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 max-w-2xl w-full"
           >
-            <HeroStat label="Suivis" value={totalPlayers} />
+            <HeroStat
+              label="Suivis"
+              value={totalPlayers}
+              delta={weekly?.newSinceSunday ?? null}
+            />
             <HeroStat label="Roster" value={rosterCount} />
             <HeroStat label="Radar" value={radarCount} />
             <HeroStat label="Pays" value={countries} />
@@ -163,7 +301,12 @@ export function LeopardsHero() {
             <span className="text-[11px] uppercase tracking-[0.2em] text-foreground/40 font-mono">
               Mis à jour chaque dimanche
             </span>
-            {edition && formattedDate ? (
+            {weekly && weekly.enrichedSinceSunday > 0 ? (
+              <span className="text-xs text-foreground/40">
+                {weekly.enrichedSinceSunday} profils enrichis cette semaine
+                {edition && formattedDate ? ` · Best XI #${edition} publié ${formattedDate}` : ""}
+              </span>
+            ) : edition && formattedDate ? (
               <span className="text-xs text-foreground/40">
                 Édition #{edition} du Best XI publiée {formattedDate}
               </span>
@@ -178,16 +321,40 @@ export function LeopardsHero() {
 /**
  * Hero footer mini-stat. 4 of these sit side-by-side, separated by a 1px
  * gap on a darker background to draw the dividers without extra borders.
+ *
+ * Optional `delta` surfaces a "+N" badge in the brand primary, signalling
+ * weekly motion. Hidden when delta is null/0 to avoid showing a flat zero
+ * (which would communicate "nothing happened" instead of just "no signal").
  */
-function HeroStat({ label, value }: { label: string; value: number | null }) {
+function HeroStat({
+  label,
+  value,
+  delta,
+}: {
+  label: string;
+  value: number | null;
+  delta?: number | null;
+}) {
+  // Affiche le badge delta uniquement entre 1 et 30 — fenêtre d'un signal
+  // éditorial crédible sur 7 jours. Au-delà, c'est un import (seed, scraping
+  // batch) et ça gonfle la métrique sans valeur éditoriale.
+  const showDelta = typeof delta === "number" && delta > 0 && delta <= 30;
   return (
-    <div className="bg-background/60 backdrop-blur-sm px-3 py-2.5 sm:py-3 text-center">
-      <div className="font-serif text-xl sm:text-2xl text-foreground leading-none">
+    <div className="relative rounded-lg border border-border/60 bg-background/70 backdrop-blur-sm px-3 py-3 sm:py-4 text-center">
+      <div className="font-serif text-2xl sm:text-3xl text-foreground leading-none tracking-tight">
         {value ?? "—"}
       </div>
-      <div className="mt-1 text-[10px] font-mono uppercase tracking-[0.18em] text-muted">
+      <div className="mt-1.5 text-[10px] font-mono uppercase tracking-[0.18em] text-muted">
         {label}
       </div>
+      {showDelta ? (
+        <div
+          className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 inline-flex items-center rounded-full bg-primary/15 text-primary text-[9px] font-mono font-medium leading-none px-1.5 py-0.5"
+          title={`+${delta} depuis dimanche dernier`}
+        >
+          +{delta}
+        </div>
+      ) : null}
     </div>
   );
 }

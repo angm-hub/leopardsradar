@@ -2,37 +2,33 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { RoutePrefetch } from "@/components/util/RoutePrefetch";
 import LeopardsHero from "@/components/home/LeopardsHero";
+import { PressReviewSection } from "@/components/home/PressReviewSection";
 import FeaturedThisWeek from "@/components/home/FeaturedThisWeek";
-import RadarPreviewSection from "@/components/home/RadarPreviewSection";
 import StatsSection from "@/components/home/StatsSection";
-import ClubsMarqueeSection from "@/components/home/ClubsMarqueeSection";
 import BestXIPreviewSection from "@/components/home/BestXIPreviewSection";
 import NewsletterSection from "@/components/home/NewsletterSection";
-import EditorialSeparator from "@/components/home/EditorialSeparator";
 import { MaListeCTA } from "@/components/home/MaListeCTA";
 
 /**
- * Home — flux narratif après l'audit.
+ * Home — pivot Revue de presse + landing sévèrement coupée (14 mai 2026).
  *
- * Avant : Hero → Stats → MaListeCTA → 52 → Radar → BestXI → Clubs → Newsletter,
- * séparés par des `<Divider />` 1 px qui ajoutaient du padding sans contenu →
- * grands trous noirs visibles dans le hero/StatsSection screenshot.
+ * Audit Sprint 1 a tué 3 sections qui ne servaient pas la conversion :
+ *   - RadarPreviewSection : doublon intégral avec /radar
+ *   - EditorialSeparator "52" : séparateur 480 px sans titre, padding pur
+ *   - ClubsMarqueeSection : carousel décoratif sans signal
  *
- * Après :
- *   1. Hero — promesse + CTA unique + stats live
- *   2. FeaturedThisWeek — 5 visages connus dès la 2e fold (proof immédiate,
- *      résout le leak CRO #2 de l'audit)
- *   3. StatsSection — bento grid valeur cumulée + chiffres
- *   4. EditorialSeparator "52" — punch émotionnel ("ans depuis la dernière Coupe")
- *   5. RadarPreviewSection — preview produit
- *   6. BestXIPreviewSection — autorité éditoriale
- *   7. MaListeCTA — push final avant newsletter
- *   8. ClubsMarqueeSection — preuve de couverture
- *   9. NewsletterSection — capture
+ * À leur place : PressReviewSection en 2e position (juste après le hero).
+ * C'est la nouvelle colonne vertébrale éditoriale — la "raison de revenir
+ * tous les jours". Le radar reste hebdo, mais la presse bouge en continu.
  *
- * Les Divider <hr> sont retirés : chaque <section> porte déjà son propre
- * padding `py-16 md:py-20`, en empiler 3 (section + divider + section) faisait
- * gonfler le scroll sans apporter d'information.
+ * Flux narratif final (7 sections, ~3 600 px scroll vs 6 057 px avant) :
+ *   1. Hero               — promesse + 2 CTA + mini-grid stats
+ *   2. Revue de presse    — 5 dernières items curées
+ *   3. Featured this week — 5 Léopards en mouvement (visages)
+ *   4. Stats              — bento chiffres clés
+ *   5. Best XI            — preview de la composition de la semaine
+ *   6. Ma Liste CTA       — push Mondial 2026
+ *   7. Newsletter         — capture email
  */
 const Home = () => {
   return (
@@ -41,17 +37,11 @@ const Home = () => {
       <RoutePrefetch />
       <main className="flex-1">
         <LeopardsHero />
+        <PressReviewSection />
         <FeaturedThisWeek />
         <StatsSection />
-        <EditorialSeparator
-          variant="bignumber"
-          content="52"
-          context="ans depuis la dernière Coupe du monde des Léopards."
-        />
-        <RadarPreviewSection />
         <BestXIPreviewSection />
         <MaListeCTA />
-        <ClubsMarqueeSection />
         <NewsletterSection />
       </main>
       <Footer />

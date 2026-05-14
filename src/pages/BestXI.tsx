@@ -1,12 +1,15 @@
 import { Link } from "react-router-dom";
+import { motion, useReducedMotion } from "framer-motion";
 import { Link2, MessageCircle, Twitter, Instagram, ArrowRight } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/ButtonPrimitive";
 import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
 import { useBestXI, type BestXIPlayer, type BestXISlot } from "@/hooks/useBestXI";
+import { useDocumentMeta } from "@/hooks/useDocumentMeta";
 import { XIStatsPanel } from "@/components/best-xi/XIStatsPanel";
 import { XIRosterCard } from "@/components/best-xi/XIRosterCard";
+import { BestXIArchiveSection } from "@/components/best-xi/BestXIArchiveSection";
 
 // Pitch slot coordinates per formation (% of pitch box, y=0 = attack)
 const FORMATION_COORDS: Record<string, Record<string, { x: number; y: number }[]>> = {
@@ -117,29 +120,58 @@ function formatDate(iso: string | null) {
 function PitchPlayer({
   slot,
   player,
+  index = 0,
 }: {
   slot: BestXISlot & { x: number; y: number };
   player: BestXIPlayer | undefined;
+  /** Position dans le tableau positionedSlots — pilote le stagger d'entrée. */
+  index?: number;
 }) {
+  // Stagger entrée joueurs : GK d'abord, puis défense, milieu, attaque.
+  // 80ms entre chaque joueur, ressort doux. Total ~880ms pour les 11.
+  // Reduced-motion : on saute l'animation, position finale immédiate.
+  const reduced = useReducedMotion();
+  const initial = reduced
+    ? { opacity: 1, scale: 1, y: 0 }
+    : { opacity: 0, scale: 0.6, y: 12 };
+  const animate = { opacity: 1, scale: 1, y: 0 };
+  const transition = reduced
+    ? { duration: 0 }
+    : {
+        delay: 0.4 + index * 0.08,
+        type: "spring" as const,
+        stiffness: 220,
+        damping: 18,
+      };
+
   if (!player) {
     // Fallback: keep a yellow dot if player record missing
     return (
-      <div
+      <motion.div
+        initial={initial}
+        animate={animate}
+        transition={transition}
         className="absolute z-10 -translate-x-1/2 -translate-y-1/2"
         style={{ left: `${slot.x}%`, top: `${slot.y}%` }}
       >
         <span className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/60 bg-background/80 font-mono text-xs font-bold text-primary backdrop-blur-md">
           {slot.label}
         </span>
-      </div>
+      </motion.div>
     );
   }
 
   return (
+    <motion.div
+      initial={initial}
+      animate={animate}
+      transition={transition}
+      className="absolute z-10 -translate-x-1/2 -translate-y-1/2"
+      style={{ left: `${slot.x}%`, top: `${slot.y}%` }}
+    >
     <Link
       to={`/player/${player.slug}`}
-      className="group absolute z-10 -translate-x-1/2 -translate-y-1/2"
-      style={{ left: `${slot.x}%`, top: `${slot.y}%` }}
+      className="group block"
       aria-label={`${player.name} — ${player.current_club ?? ""}`}
     >
       <div className="flex flex-col items-center gap-1">
@@ -181,10 +213,16 @@ function PitchPlayer({
         </div>
       </div>
     </Link>
+    </motion.div>
   );
 }
 
 export default function BestXI() {
+  useDocumentMeta({
+    title: "Best XI",
+    description:
+      "Le Best XI Léopards de la semaine — composition rêvée, formation, statistiques, valeur cumulée. Édition hebdomadaire chaque dimanche.",
+  });
   const { data, loading, error } = useBestXI();
 
   const positionedSlots = data ? getSlotCoords(data.formation, data.slots) : [];
@@ -232,6 +270,39 @@ export default function BestXI() {
             Chaque semaine, notre composition rêvée des Léopards.
           </p>
         </header>
+
+        {/* JSON-LD SportsTeam — microdata SEO pour l'indexation Google.
+            WHY ici (hors loading guard) : Google crawle le JS rendu, la
+            présence du script dès le montage garantit l'indexation même
+            quand la data n'est pas encore chargée. On re-rend le bloc
+            complet dès que `data` est disponible. */}
+        {data ? (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "SportsTeam",
+                name: "République Démocratique du Congo",
+                sport: "Soccer",
+                coach: {
+                  "@type": "Person",
+                  name: "Sébastien Desabre",
+                },
+                athlete: positionedSlots.map((slot) => {
+                  const p = data.playersById[slot.player_id];
+                  if (!p) return null;
+                  return {
+                    "@type": "Person",
+                    name: p.name,
+                    jobTitle: p.position ?? slot.position,
+                  };
+                }).filter(Boolean),
+                url: "https://angm-hub.github.io/leopardsradar/best-xi",
+              }),
+            }}
+          />
+        ) : null}
 
         <section className="container-site pb-20">
           {loading ? (
@@ -330,6 +401,7 @@ export default function BestXI() {
                         key={`${slot.position}-${i}`}
                         slot={slot}
                         player={data.playersById[slot.player_id]}
+                        index={i}
                       />
                     ))}
                     <div className="absolute bottom-3 left-0 right-0 z-20 text-center font-mono text-[9px] uppercase tracking-[0.25em] text-white/30">
@@ -367,6 +439,10 @@ export default function BestXI() {
             </>
           )}
         </section>
+
+        {/* Historique des éditions précédentes — visible uniquement
+            si ≥ 2 entrées existent en base (hook gère le masquage). */}
+        <BestXIArchiveSection />
 
         {/* CTA Ma Liste — remplace l'ancienne V2 tease */}
         <section className="container-site pb-24">

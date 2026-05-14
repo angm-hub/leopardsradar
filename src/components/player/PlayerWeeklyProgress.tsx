@@ -141,13 +141,20 @@ function DeltaTile({
   suffix?: string;
   kind?: "int" | "euro";
 }) {
-  if (value === null) {
+  // Etat null ou 0 → tile en sourdine. Avant : "—" en font-serif text-2xl,
+  // ce qui créait un mur de tirets visuel sur les semaines calmes (3 tiles
+  // sur 4 à "—" donnait l'impression d'un produit qui ne tracke rien).
+  // Maintenant : opacité réduite, label discret, "—" en plus petit. Les
+  // tiles avec un vrai signal ressortent visuellement.
+  const isEmpty = value === null || value === 0;
+
+  if (isEmpty) {
     return (
-      <div className="rounded-card border border-border/60 bg-card/40 p-4">
-        <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted">
+      <div className="rounded-card border border-border/40 bg-card/20 p-4 opacity-60">
+        <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted/70">
           {label}
         </div>
-        <div className="mt-2 font-serif text-2xl text-muted">—</div>
+        <div className="mt-2 font-serif text-base text-muted/80">—</div>
       </div>
     );
   }
@@ -159,8 +166,7 @@ function DeltaTile({
 
   let display: string;
   if (kind === "euro") {
-    if (value === 0) display = "—";
-    else if (Math.abs(value) >= 1_000_000)
+    if (Math.abs(value) >= 1_000_000)
       display =
         (value > 0 ? "+" : "−") +
         (Math.abs(value) / 1_000_000).toFixed(1).replace(/\.0$/, "") +
@@ -169,7 +175,7 @@ function DeltaTile({
       display = (value > 0 ? "+" : "−") + Math.round(Math.abs(value) / 1_000) + " K €";
     else display = (value > 0 ? "+" : "−") + Math.abs(value) + " €";
   } else {
-    display = value === 0 ? "—" : `${value > 0 ? "+" : ""}${value}${suffix}`;
+    display = `${value > 0 ? "+" : ""}${value}${suffix}`;
   }
 
   return (
@@ -178,7 +184,7 @@ function DeltaTile({
         {label}
       </div>
       <div className={`mt-2 inline-flex items-center gap-1.5 font-serif text-2xl ${color}`}>
-        {value !== 0 ? <Icon className="h-4 w-4" aria-hidden /> : null}
+        <Icon className="h-4 w-4" aria-hidden />
         {display}
       </div>
     </div>

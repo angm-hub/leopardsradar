@@ -1,0 +1,46 @@
+name: Revue de presse — RSS scraper
+
+# Polls the curated RSS feeds and pushes RDC-matching items into the
+# `press_items_pending` staging table on Supabase. A human then promotes
+# items to the published `press_items` table from there.
+#
+# Cadence : 3× per day at 06:00 / 12:00 / 18:00 UTC. Catches morning
+# (Europe), midday (Africa) and evening (publishing window) cycles.
+#
+# Manual trigger : `workflow_dispatch` so you can re-run after adding a
+# new feed without waiting for the next cron tick.
+
+on:
+  schedule:
+    - cron: "0 6,12,18 * * *"
+  workflow_dispatch: {}
+
+# Concurrency : a long-running scrape shouldn't be killed by the next
+# cron — but two simultaneous scrapes would just duplicate pending rows
+# (deduped by the URL UNIQUE), which is fine. We let them overlap.
+
+permissions:
+  contents: read
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install deps
+        run: npm ci --no-audit --no-fund
+
+      - name: Run RSS scraper
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/scrape-press-rss.mjs

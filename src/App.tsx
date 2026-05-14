@@ -37,6 +37,7 @@ const Histoires = lazy(() => import("./pages/Histoires.tsx"));
 const Histoire = lazy(() => import("./pages/Histoire.tsx"));
 const Methodologie = lazy(() => import("./pages/Methodologie.tsx"));
 const Compare = lazy(() => import("./pages/Compare.tsx"));
+const RevueDePresse = lazy(() => import("./pages/RevueDePresse.tsx"));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 
 const queryClient = new QueryClient();
@@ -54,6 +55,26 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, "")}>
+        {/* Skip-to-content link — invisible until focused via keyboard
+            (Tab on page load). Required for WCAG 2.1 AA. Skips Navbar +
+            PromoBanner directly to the page's <main>. We focus the first
+            <main> programmatically rather than relying on an id, so every
+            page works without per-page changes. */}
+        <a
+          href="#main"
+          onClick={(e) => {
+            e.preventDefault();
+            const main = document.querySelector("main");
+            if (main) {
+              main.setAttribute("tabindex", "-1");
+              (main as HTMLElement).focus();
+              main.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+          }}
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-background focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary"
+        >
+          Aller au contenu principal
+        </a>
         <PromoBanner />
         <Suspense fallback={<RouteFallback />}>
           <Routes>
@@ -62,6 +83,7 @@ const App = () => (
             <Route path="/player/:slug" element={<Player />} />
             <Route path="/radar" element={<Radar />} />
             <Route path="/best-xi" element={<BestXI />} />
+            <Route path="/revue-de-presse" element={<RevueDePresse />} />
             <Route path="/a-propos" element={<About />} />
             <Route path="/about" element={<About />} />
             <Route path="/newsletter" element={<Newsletter />} />

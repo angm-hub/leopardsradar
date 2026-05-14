@@ -5,6 +5,7 @@ import { InfoPanel } from "./InfoPanel";
 import { AxisGuides } from "./AxisGuides";
 import { QuadrantLabels } from "./QuadrantLabels";
 import { RadarHeader } from "./RadarHeader";
+import { RadarLegend } from "./RadarLegend";
 import type { DBPlayer } from "@/types/dbPlayer";
 
 interface RadarCanvasProps {
@@ -193,7 +194,7 @@ export function RadarCanvas({ players, totalRoster }: RadarCanvasProps) {
         ) : null}
       </div>
 
-      {/* Légende compacte */}
+      {/* Légende position (dots) */}
       <div className="mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[11px] text-muted-light">
         <LegendDot color="bg-pos-gk" label="Gardien" />
         <LegendDot color="bg-pos-def" label="Défenseur" />
@@ -204,6 +205,9 @@ export function RadarCanvas({ players, totalRoster }: RadarCanvasProps) {
           Halo doré = top {TOP_FEATURED} valeur
         </span>
       </div>
+
+      {/* Légende tier UEFA + taille valeur */}
+      <RadarLegend />
 
       {overflow ? (
         <p className="mt-3 text-xs text-muted-light text-center">

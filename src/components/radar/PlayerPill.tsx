@@ -12,6 +12,88 @@ const POSITION_DOT: Record<DBPosition, string> = {
   Attack: "bg-pos-att",
 };
 
+// ── Tier UEFA ────────────────────────────────────────────────────────────────
+
+type TierUEFA = "S" | "A" | "B" | "C";
+
+/**
+ * Dérive le tier UEFA d'un joueur.
+ *
+ * WHY heuristique valeur : le champ `tier` en base (tier1/tier2) n'a pas
+ * de granularité suffisante pour distinguer S/A/B/C. On utilise donc la
+ * valeur marchande comme proxy — distribution log-normale, les seuils
+ * 30M/10M/3M correspondent aux percentiles observés dans le vivier RDC.
+ */
+function getTierUEFA(player: DBPlayer): TierUEFA {
+  const value = player.market_value_eur ?? 0;
+  if (value >= 30_000_000) return "S";
+  if (value >= 10_000_000) return "A";
+  if (value >= 3_000_000) return "B";
+  return "C";
+}
+
+/**
+ * Style de fond/texte par tier.
+ *
+ * WHY style inline et non classes Tailwind dynamiques : les classes générées
+ * à la volée (bg-primary, bg-success/80…) ne sont pas garanties dans le
+ * bundle purged — l'inline est la seule approche sûre pour des valeurs
+ * runtime.
+ */
+function getTierStyle(tier: TierUEFA): { bg: string; color: string; border: string } {
+  switch (tier) {
+    case "S":
+      // Jaune RDC — top valeur, Champions League contender
+      return {
+        bg: "rgba(252,209,22,1)",
+        color: "#0A0A0B",
+        border: "rgba(252,209,22,0.9)",
+      };
+    case "A":
+      // Vert RDC vif — top 5 européen hors CL
+      return {
+        bg: "rgba(0,166,81,0.80)",
+        color: "#0A0A0B",
+        border: "rgba(0,166,81,0.65)",
+      };
+    case "B":
+      // Vert RDC atténué — compétitif Europe/national fort
+      return {
+        bg: "rgba(0,166,81,0.35)",
+        color: "#d1fae5",
+        border: "rgba(0,166,81,0.45)",
+      };
+    default:
+      // Gris neutre — autre ou valeur inconnue
+      return {
+        bg: "rgba(255,255,255,0.10)",
+        color: "#a1a1aa",
+        border: "rgba(255,255,255,0.12)",
+      };
+  }
+}
+
+// ── Taille proportionnelle ────────────────────────────────────────────────────
+
+const MIN_SIZE = 8;  // px — valeur ≤ 1M ou null
+const MAX_SIZE = 32; // px — valeur ≥ 100M
+
+/**
+ * Calcule le diamètre de la pill en px selon la valeur marchande.
+ *
+ * WHY échelle logarithmique : la distribution des valeurs est une power law
+ * (quelques joueurs à 50M+, majorité sous 5M). Le log compresse les écarts
+ * extrêmes et rend la variation de taille lisible sans écraser les petites
+ * valeurs. Le dénominateur log10(100_000_000) = 8 fixe le plafond à 100M.
+ */
+function getPillSize(value: number | null): number {
+  const v = Math.max(value ?? 0, 1);
+  const raw = MIN_SIZE + (MAX_SIZE - MIN_SIZE) * (Math.log10(v) / Math.log10(100_000_000));
+  return Math.min(MAX_SIZE, Math.max(MIN_SIZE, raw));
+}
+
+// ── Interface ─────────────────────────────────────────────────────────────────
+
 interface PlayerPillProps {
   player: DBPlayer;
   x: number;
@@ -24,11 +106,11 @@ interface PlayerPillProps {
  * PlayerPill — un joueur sur le canvas Radar.
  *
  * Variants :
- *  - default  : pill compact opaque (marker + nom)
+ *  - default  : pill compact avec couleur tier + taille valeur
  *  - featured : pill premium avec avatar + halo doré (top valeur)
  *
- * Choix de clarté : background à 95% d'opacité (pas semi-transparent)
- * pour que le texte reste 100% lisible quoi qu'il y ait derrière.
+ * Couleur = tier UEFA (S jaune / A vert vif / B vert pâle / C gris).
+ * Taille  = valeur marchande sur échelle log, 8px → 32px.
  */
 export function PlayerPill({
   player,
@@ -42,6 +124,10 @@ export function PlayerPill({
     ? POSITION_DOT[player.position]
     : "bg-muted";
   const lastName = player.name.split(/\s+/).slice(-1)[0] || player.name;
+
+  const tier = getTierUEFA(player);
+  const tierStyle = getTierStyle(tier);
+  const pillSize = getPillSize(player.market_value_eur);
 
   // Per-pill deterministic drift parameters. Same player.id always yields
   // the same drift so the cloud feels alive without ever shifting state
@@ -105,9 +191,16 @@ export function PlayerPill({
               player={player}
               lastName={lastName}
               positionClass={positionClass}
+              tierStyle={tierStyle}
+              pillSize={pillSize}
             />
           ) : (
-            <DefaultPill lastName={lastName} positionClass={positionClass} />
+            <DefaultPill
+              lastName={lastName}
+              positionClass={positionClass}
+              tierStyle={tierStyle}
+              pillSize={pillSize}
+            />
           )}
           <PillTooltip player={player} />
         </Link>
@@ -119,27 +212,39 @@ export function PlayerPill({
 function DefaultPill({
   lastName,
   positionClass,
+  tierStyle,
+  pillSize,
 }: {
   lastName: string;
   positionClass: string;
+  tierStyle: { bg: string; color: string; border: string };
+  pillSize: number;
 }) {
   return (
     <div
+      style={{
+        // WHY style inline : les valeurs bg/color/border sont runtime (tier).
+        // Les classes Tailwind dynamiques ne survivent pas au purge CSS en prod.
+        backgroundColor: tierStyle.bg,
+        color: tierStyle.color,
+        boxShadow: `0 0 0 0.5px ${tierStyle.border}, 0 2px 6px rgba(0,0,0,0.45)`,
+        // Taille proportionnelle à la valeur — largeur min fixée pour le texte.
+        minWidth: Math.max(pillSize + 32, 40),
+      }}
       className={cn(
         "flex items-center gap-1.5 rounded-full pl-1.5 pr-2.5 py-1",
-        "bg-card/95 backdrop-blur-sm",
-        "[box-shadow:0_0_0_0.5px_rgba(255,255,255,0.06),0_2px_6px_rgba(0,0,0,0.45)]",
+        "backdrop-blur-sm",
         "transition-[box-shadow,filter,background-color] duration-200",
         "hover:[filter:brightness(1.1)]",
-        "hover:[box-shadow:0_0_0_0.5px_rgba(252,209,22,0.5),0_4px_14px_rgba(252,209,22,0.18)]",
         "group-hover:z-10",
       )}
     >
       <span
-        className={cn("h-2.5 w-2.5 rounded-sm shrink-0", positionClass)}
+        className={cn("shrink-0 rounded-sm", positionClass)}
+        style={{ width: pillSize, height: pillSize }}
         aria-hidden
       />
-      <span className="text-[12px] font-medium text-foreground whitespace-nowrap leading-none">
+      <span className="text-[12px] font-medium whitespace-nowrap leading-none">
         {lastName}
       </span>
     </div>
@@ -150,10 +255,14 @@ function FeaturedPill({
   player,
   lastName,
   positionClass,
+  tierStyle,
+  pillSize,
 }: {
   player: DBPlayer;
   lastName: string;
   positionClass: string;
+  tierStyle: { bg: string; color: string; border: string };
+  pillSize: number;
 }) {
   return (
     <div className="relative">
@@ -168,13 +277,15 @@ function FeaturedPill({
         aria-hidden
       />
       <div
+        style={{
+          backgroundColor: tierStyle.bg,
+          color: tierStyle.color,
+          boxShadow: `0 0 0 0.5px ${tierStyle.border}, 0 4px 14px rgba(252,209,22,0.22)`,
+        }}
         className={cn(
           "relative flex items-center gap-2 rounded-full pl-1 pr-3 py-1",
-          "bg-card",
-          "[box-shadow:0_0_0_0.5px_rgba(252,209,22,0.55),0_4px_14px_rgba(252,209,22,0.22)]",
           "transition-[box-shadow,filter] duration-200",
           "hover:[filter:brightness(1.08)]",
-          "hover:[box-shadow:0_0_0_0.5px_rgba(252,209,22,0.85),0_6px_18px_rgba(252,209,22,0.32)]",
           "group-hover:z-20",
         )}
       >
@@ -188,10 +299,11 @@ function FeaturedPill({
           />
         </div>
         <span
-          className={cn("h-2 w-2 rounded-sm shrink-0", positionClass)}
+          className={cn("shrink-0 rounded-sm", positionClass)}
+          style={{ width: pillSize, height: pillSize }}
           aria-hidden
         />
-        <span className="font-serif text-[13px] text-foreground whitespace-nowrap leading-none">
+        <span className="font-serif text-[13px] whitespace-nowrap leading-none">
           {lastName}
         </span>
       </div>
