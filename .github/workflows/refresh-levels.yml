@@ -1,0 +1,68 @@
+name: Refresh player level bands
+
+# ──────────────────────────────────────────────────────────────────────
+# Léopards Radar — Sprint 3 : Level Band public.
+#
+# Tourne chaque jour à 03h00 UTC (04h00 Paris hiver / 05h00 été) :
+#   - Après les sync Transfermarkt et matchs du lundi
+#   - Avant que le trafic FR commence (pic 06h-08h)
+#
+# Appelle refresh_player_levels(NULL) via Postgres RPC :
+#   → recalcule level_score + level_band pour tous les joueurs
+#   → ne touche que les lignes qui ont réellement changé (IS DISTINCT FROM)
+#   → logue le résultat dans sync_logs
+#
+# Repo public → minutes GitHub Actions illimitées.
+# Job très court (<30s) — pas de timeout serré nécessaire.
+# ──────────────────────────────────────────────────────────────────────
+
+on:
+  schedule:
+    # Chaque jour à 03h00 UTC — après les syncs nocturnes, avant le trafic FR
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run — affiche sans modifier la base (true/false)'
+        required: false
+        default: 'false'
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    concurrency:
+      group: refresh-levels
+      cancel-in-progress: false   # un run en cours bloque les suivants
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: scripts/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Refresh level bands
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        working-directory: scripts
+        run: |
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            python refresh_levels.py --dry-run
+          else
+            python refresh_levels.py
+          fi

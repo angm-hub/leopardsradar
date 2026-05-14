@@ -7,6 +7,7 @@ import {
   ShieldCheck,
   Mail,
   ExternalLink,
+  BarChart2,
 } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -86,14 +87,17 @@ export default function Methodologie() {
             <a href="#hexagone" className="hover:text-foreground transition-colors">
               03 · Hexagone
             </a>
+            <a href="#niveau" className="hover:text-foreground transition-colors">
+              04 · Niveau de jeu
+            </a>
             <a href="#eligibilite" className="hover:text-foreground transition-colors">
-              04 · Éligibilité
+              05 · Éligibilité
             </a>
             <a href="#glossaire" className="hover:text-foreground transition-colors">
-              05 · Glossaire
+              06 · Glossaire
             </a>
             <a href="#corrections" className="hover:text-foreground transition-colors">
-              06 · Corrections
+              07 · Corrections
             </a>
           </div>
         </div>
@@ -255,9 +259,154 @@ export default function Methodologie() {
             </Prose>
           </section>
 
-          {/* 04 — Éligibilité */}
+          {/* 04 — Niveau de jeu */}
+          <section id="niveau" className="scroll-mt-24">
+            <Kicker icon={<BarChart2 className="h-3 w-3" />}>04 · Niveau de jeu</Kicker>
+            <h2 className="mt-3 font-serif text-3xl text-foreground">
+              Comment se calcule le niveau de jeu.
+            </h2>
+            <Prose>
+              <p>
+                Chaque joueur reçoit un <strong>score composite de 0 à 100</strong> qui
+                reflète son niveau de jeu réel — pas une note éditoriale subjective.
+                Ce score est <strong>public</strong> : il apparaît sur la fiche de chaque
+                joueur, sur les cards du Roster et du Radar, et se met à jour
+                automatiquement chaque nuit.
+              </p>
+
+              <h3>Les 4 facteurs pondérés</h3>
+              <p>
+                Le score est la somme de quatre composantes indépendantes :
+              </p>
+            </Prose>
+
+            {/* Tableau des 4 facteurs — inline pour contrôle exact du style */}
+            <div className="mt-5 overflow-x-auto">
+              <table className="w-full text-sm border-collapse">
+                <thead>
+                  <tr className="border-b border-border">
+                    <th className="py-2 pr-4 text-left font-mono text-[10px] uppercase tracking-[0.18em] text-muted w-[35%]">Facteur</th>
+                    <th className="py-2 pr-4 text-left font-mono text-[10px] uppercase tracking-[0.18em] text-muted w-[15%]">Poids</th>
+                    <th className="py-2 text-left font-mono text-[10px] uppercase tracking-[0.18em] text-muted">Logique</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border/50">
+                  <tr>
+                    <td className="py-3 pr-4 text-foreground font-semibold align-top">Tier UEFA du club actuel</td>
+                    <td className="py-3 pr-4 font-mono text-primary align-top">40 pts</td>
+                    <td className="py-3 text-foreground/75 text-sm align-top">
+                      CL (groupes) = 40 · Europa = 25 · Top 5 nat. = 18 · Top 10 = 10 · Linafoot/autres = 5 · Hors ligue connue = 0.
+                      Si la FK club n'est pas encore renseignée, une heuristique sur la valeur marchande assure la continuité.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="py-3 pr-4 text-foreground font-semibold align-top">Valeur marchande</td>
+                    <td className="py-3 pr-4 font-mono text-primary align-top">30 pts</td>
+                    <td className="py-3 text-foreground/75 text-sm align-top">
+                      Échelle logarithmique (base 10) entre 100 k€ et 1 Md€ pour comprimer l'écart
+                      entre Wissa (30 M€) et un espoir Linafoot (100 k€). Source : Transfermarkt.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="py-3 pr-4 text-foreground font-semibold align-top">Sélections A senior RDC</td>
+                    <td className="py-3 pr-4 font-mono text-primary align-top">20 pts</td>
+                    <td className="py-3 text-foreground/75 text-sm align-top">
+                      2 pts par sélection officielle ou amicale avec la fédération COD, capé à 20 pts
+                      (10 sélections = score max). Mesure l'engagement international, pas juste la présence.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="py-3 pr-4 text-foreground font-semibold align-top">Minutes jouées (saison en cours)</td>
+                    <td className="py-3 pr-4 font-mono text-primary align-top">10 pts</td>
+                    <td className="py-3 text-foreground/75 text-sm align-top">
+                      Capé à 1 500 minutes pour 10 pts max. Un titulaire sur ≈17 matchs complets
+                      atteint le plafond. Mesure la présence réelle sur le terrain cette saison.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <Prose>
+              <h3>Les 5 bandes de niveau</h3>
+              <p>Le score se traduit en une bande publique affichée sur chaque profil :</p>
+            </Prose>
+
+            {/* Tableau des bandes */}
+            <div className="mt-5 overflow-x-auto">
+              <table className="w-full text-sm border-collapse">
+                <thead>
+                  <tr className="border-b border-border">
+                    <th className="py-2 pr-4 text-left font-mono text-[10px] uppercase tracking-[0.18em] text-muted w-[20%]">Bande</th>
+                    <th className="py-2 pr-4 text-left font-mono text-[10px] uppercase tracking-[0.18em] text-muted w-[20%]">Score</th>
+                    <th className="py-2 pr-4 text-left font-mono text-[10px] uppercase tracking-[0.18em] text-muted w-[25%]">Profil type</th>
+                    <th className="py-2 text-left font-mono text-[10px] uppercase tracking-[0.18em] text-muted">Exemples roster RDC</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border/50">
+                  <tr>
+                    <td className="py-3 pr-4 font-semibold text-primary align-top">Elite</td>
+                    <td className="py-3 pr-4 font-mono text-foreground/80 align-top">80 – 100</td>
+                    <td className="py-3 pr-4 text-foreground/75 align-top">Titulaire régulier dans les plus grandes compétitions européennes avec expérience en sélection</td>
+                    <td className="py-3 text-foreground/75 align-top">Wissa, Lukebakio</td>
+                  </tr>
+                  <tr>
+                    <td className="py-3 pr-4 font-semibold text-success align-top">High</td>
+                    <td className="py-3 pr-4 font-mono text-foreground/80 align-top">60 – 79</td>
+                    <td className="py-3 pr-4 text-foreground/75 align-top">Rotation fiable dans un top 5 européen ou titulaire dans un championnat de premier plan</td>
+                    <td className="py-3 text-foreground/75 align-top">Mukau, Wan-Bissaka</td>
+                  </tr>
+                  <tr>
+                    <td className="py-3 pr-4 font-semibold text-success/70 align-top">Mid</td>
+                    <td className="py-3 pr-4 font-mono text-foreground/80 align-top">40 – 59</td>
+                    <td className="py-3 pr-4 text-foreground/75 align-top">Actif dans un championnat européen du top 10 ou équivalent africain de haut niveau</td>
+                    <td className="py-3 text-foreground/75 align-top">Sadiki, Stroeykens</td>
+                  </tr>
+                  <tr>
+                    <td className="py-3 pr-4 font-semibold text-muted-light align-top">Developing</td>
+                    <td className="py-3 pr-4 font-mono text-foreground/80 align-top">20 – 39</td>
+                    <td className="py-3 pr-4 text-foreground/75 align-top">Jeune en progression dans un championnat de niveau 2 ou 3 — profil à suivre</td>
+                    <td className="py-3 text-foreground/75 align-top">Engwanda, Mavissa</td>
+                  </tr>
+                  <tr>
+                    <td className="py-3 pr-4 font-semibold text-muted align-top">Watch</td>
+                    <td className="py-3 pr-4 font-mono text-foreground/80 align-top">0 – 19</td>
+                    <td className="py-3 pr-4 text-foreground/75 align-top">Profil identifié via vivier Linafoot ou diaspora, pas encore exposé au football européen professionnel</td>
+                    <td className="py-3 text-foreground/75 align-top">Vivier Linafoot non encore exposé</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <Prose>
+              <h3>Fréquence de mise à jour</h3>
+              <p>
+                Le score est recalculé <strong>automatiquement chaque nuit à 03h00 UTC</strong>{" "}
+                par un job GitHub Actions (<code>refresh-levels.yml</code>).
+                Il est aussi mis à jour <strong>immédiatement</strong> par un trigger Postgres
+                dès qu'un des trois facteurs change en base : valeur marchande, club actuel,
+                ou minutes jouées. Le calcul ne porte que sur les joueurs dont le score a
+                effectivement changé.
+              </p>
+              <p>
+                Pour la transparence complète, le code de la migration et de la vue
+                de calcul est disponible sur GitHub :{" "}
+                <a
+                  href="https://github.com/leopardsradar/leopardsradar/blob/main/scripts/migrations/2026_05_15_player_level_band.sql"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary hover:text-primary-hover underline underline-offset-4"
+                >
+                  scripts/migrations/2026_05_15_player_level_band.sql
+                </a>
+                .
+              </p>
+            </Prose>
+          </section>
+
+          {/* 05 — Éligibilité */}
           <section id="eligibilite" className="scroll-mt-24">
-            <Kicker icon={<ShieldCheck className="h-3 w-3" />}>04 · Éligibilité</Kicker>
+            <Kicker icon={<ShieldCheck className="h-3 w-3" />}>05 · Éligibilité</Kicker>
             <h2 className="mt-3 font-serif text-3xl text-foreground">
               Statuts d'éligibilité aux Léopards.
             </h2>
@@ -287,9 +436,9 @@ export default function Methodologie() {
             </Prose>
           </section>
 
-          {/* 05 — Glossaire */}
+          {/* 06 — Glossaire */}
           <section id="glossaire" className="scroll-mt-24">
-            <Kicker icon={<Database className="h-3 w-3" />}>05 · Glossaire</Kicker>
+            <Kicker icon={<Database className="h-3 w-3" />}>06 · Glossaire</Kicker>
             <h2 className="mt-3 font-serif text-3xl text-foreground">
               Glossaire.
             </h2>
@@ -305,9 +454,9 @@ export default function Methodologie() {
             </Prose>
           </section>
 
-          {/* 06 — Corrections */}
+          {/* 07 — Corrections */}
           <section id="corrections" className="scroll-mt-24">
-            <Kicker icon={<Mail className="h-3 w-3" />}>06 · Corrections</Kicker>
+            <Kicker icon={<Mail className="h-3 w-3" />}>07 · Corrections</Kicker>
             <h2 className="mt-3 font-serif text-3xl text-foreground">
               Une donnée à corriger ?
             </h2>

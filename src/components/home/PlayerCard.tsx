@@ -9,6 +9,7 @@ import {
   formatMarketValue,
 } from "@/lib/playerHelpers";
 import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
+import { LevelBandBadge } from "@/components/player/LevelBandBadge";
 
 interface PlayerCardProps {
   player: DBPlayer;
@@ -26,6 +27,8 @@ export function PlayerCard({ player, className }: PlayerCardProps) {
     nationalities,
     caps_rdc: capsRdc,
     market_value_eur: marketValue,
+    level_band: levelBand,
+    level_score: levelScore,
   } = player;
 
   // Build the bottom stats line. Filter empties so we never render dangling
@@ -60,9 +63,9 @@ export function PlayerCard({ player, className }: PlayerCardProps) {
       <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-3/5 bg-gradient-to-t from-background via-background/80 to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
 
-      {/* Top-left: position badge */}
-      {position ? (
-        <div className="absolute top-3 left-3">
+      {/* Top-left: position badge + level band chip (discret, à côté) */}
+      <div className="absolute top-3 left-3 flex items-center gap-1.5">
+        {position ? (
           <span
             className={cn(
               "inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider backdrop-blur-md",
@@ -75,8 +78,15 @@ export function PlayerCard({ player, className }: PlayerCardProps) {
             />
             {POSITION_LABEL[position]}
           </span>
-        </div>
-      ) : null}
+        ) : null}
+        {/* LevelBandBadge — null si pas encore calculé, pas de rendu vide */}
+        <LevelBandBadge
+          band={levelBand}
+          score={levelScore}
+          size="sm"
+          showScore={false}
+        />
+      </div>
 
       {/* Top-right: nationality flags (max 3) */}
       {nationalities.length > 0 ? (

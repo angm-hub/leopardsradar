@@ -20,6 +20,7 @@ import { cn } from "@/lib/utils";
 import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
 import { usePlayers } from "@/hooks/usePlayers";
 import { POSITION_LABEL, formatMarketValue } from "@/lib/playerHelpers";
+import { LevelBandBadge } from "@/components/player/LevelBandBadge";
 import type { DBPosition } from "@/types/dbPlayer";
 
 // ─── Card individuelle ────────────────────────────────────────────────────────
@@ -34,6 +35,8 @@ interface RadarTopCardProps {
   marketValue: number | null;
   imageUrl: string | null | undefined;
   imageUrlAlt: string | null | undefined;
+  levelBand?: string | null;
+  levelScore?: number | null;
 }
 
 function RadarTopCard({
@@ -46,6 +49,8 @@ function RadarTopCard({
   marketValue,
   imageUrl,
   imageUrlAlt,
+  levelBand,
+  levelScore,
 }: RadarTopCardProps) {
   const rankStr = String(rank).padStart(2, "0");
   const positionLabel = position ? POSITION_LABEL[position] : null;
@@ -86,11 +91,23 @@ function RadarTopCard({
         </div>
       </div>
 
-      {/* Footer : valeur marchande */}
+      {/* Footer : level band + valeur marchande à côté en plus petit.
+          Le LevelBandBadge remplace le label "VALEUR" fixe pour enrichir
+          le card sans alourdir le layout. Si la bande n'est pas calculée,
+          on affiche le label "VALEUR" classique en fallback. */}
       <div className="mt-auto flex items-center justify-between gap-2 pt-2 border-t border-border/60">
-        <span className="font-mono text-xs uppercase tracking-[0.18em] text-muted">
-          Valeur
-        </span>
+        <LevelBandBadge
+          band={levelBand}
+          score={levelScore}
+          size="sm"
+          showScore={false}
+        />
+        {/* Fallback label quand aucun band n'est disponible */}
+        {!levelBand && (
+          <span className="font-mono text-xs uppercase tracking-[0.18em] text-muted">
+            Valeur
+          </span>
+        )}
         <span className="font-mono text-sm font-semibold text-foreground">
           {marketValue ? formatMarketValue(marketValue) : "—"}
         </span>
@@ -167,6 +184,8 @@ export function RadarHighlights() {
             marketValue={p.market_value_eur}
             imageUrl={p.image_url}
             imageUrlAlt={p.image_url_alt}
+            levelBand={p.level_band}
+            levelScore={p.level_score}
           />
         ))}
       </div>

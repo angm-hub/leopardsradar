@@ -46,6 +46,8 @@ import {
   ELIGIBILITY_BADGE,
   eligibilityLabel,
 } from "@/lib/playerHelpers";
+import { LevelBandBadge } from "@/components/player/LevelBandBadge";
+import { LEVEL_BAND_DESCRIPTION, isLevelBand } from "@/lib/playerLevel";
 
 const NOISE_SVG =
   "data:image/svg+xml;utf8," +
@@ -362,9 +364,13 @@ export default function PlayerPage() {
                   </div>
                 ) : null}
 
-                {/* Hero stats — 3 hard numbers in the fold so the visitor
-                    sees the substance before scrolling. */}
-                <div className="grid grid-cols-3 gap-px overflow-hidden rounded-card border border-border bg-border">
+                {/* Hero stats — 4 données clés dans le fold. Le 4e bloc
+                    affiche le niveau de jeu composite (level_band) avec son
+                    score sur 100. Tooltip au hover pour expliquer la bande. */}
+                <div className={cn(
+                  "grid gap-px overflow-hidden rounded-card border border-border bg-border",
+                  isLevelBand(player.level_band) ? "grid-cols-4" : "grid-cols-3",
+                )}>
                   <FoldStat
                     label="Caps RDC"
                     value={player.caps_rdc ?? 0}
@@ -379,6 +385,34 @@ export default function PlayerPage() {
                     value={player.season_goals ?? "—"}
                     muted={!player.season_goals}
                   />
+                  {/* 4e stat : niveau de jeu — visible uniquement si calculé */}
+                  {isLevelBand(player.level_band) && (
+                    <div
+                      className="bg-card px-3 py-3 sm:px-4"
+                      title={
+                        isLevelBand(player.level_band)
+                          ? LEVEL_BAND_DESCRIPTION[player.level_band]
+                          : undefined
+                      }
+                    >
+                      <div className="flex items-center gap-1.5">
+                        <LevelBandBadge
+                          band={player.level_band}
+                          score={player.level_score}
+                          size="md"
+                          showScore={false}
+                        />
+                        {player.level_score != null && (
+                          <span className="font-serif text-xl md:text-2xl leading-none text-foreground">
+                            {player.level_score}
+                          </span>
+                        )}
+                      </div>
+                      <div className="mt-1 text-[10px] font-mono uppercase tracking-[0.18em] text-muted">
+                        Niveau · /100
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Pull quote retiré du hero compact — il vit maintenant en

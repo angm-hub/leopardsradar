@@ -116,6 +116,9 @@ export interface DBPlayer {
   switch_deadline?: string | null;
   computed_confidence?: Confidence | null;
   computed_at?: string | null;
+  // Sprint 3 — Score composite de niveau de jeu (public, affiché sur fiche + cards)
+  level_score?: number | null;
+  level_band?: string | null;
 }
 
 export interface HomeStats {
