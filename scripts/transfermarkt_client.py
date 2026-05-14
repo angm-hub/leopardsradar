@@ -487,7 +487,7 @@ class TransfermarktClient:
         """
         Crawl la page Transfermarkt qui liste les joueurs avec nationalité RDC.
 
-        URL : https://www.transfermarkt.com/spieler-statistik/wertvollstespieler/marktwertetop?land_id=140
+        URL : https://www.transfermarkt.com/spieler-statistik/wertvollstespieler/marktwertetop?land_id=193
         (140 = code Transfermarkt pour DR Congo)
 
         :param max_pages: nombre max de pages à parcourir (default 100, ~3000 joueurs).
@@ -501,7 +501,7 @@ class TransfermarktClient:
         empty_streak = 0
 
         for page in range(1, max_pages + 1):
-            url = f"{BASE}/spieler-statistik/wertvollstespieler/marktwertetop?land_id=140&page={page}"
+            url = f"{BASE}/spieler-statistik/wertvollstespieler/marktwertetop?land_id=193&page={page}"
             html = self._get(url)
             if not html:
                 print(f"[TM discover] page {page} : empty response, stopping")
