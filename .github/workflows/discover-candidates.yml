@@ -30,6 +30,14 @@ on:
         options:
           - 'true'
           - 'false'
+      discovery_mode:
+        description: 'Source of new candidates'
+        required: false
+        default: 'rdc_pool'
+        type: choice
+        options:
+          - 'rdc_pool'        # crawl TM stats filtered by DR Congo nationality (~500 joueurs)
+          - 'linafoot_clubs'  # crawl rosters of 10 Linafoot D1 clubs (~200-300 joueurs locaux)
 
 permissions:
   contents: read
@@ -63,6 +71,7 @@ jobs:
           MAX_NEW_CANDIDATES: ${{ github.event.inputs.max_new_candidates || '2000' }}
           MAX_PAGES: ${{ github.event.inputs.max_pages || '100' }}
           LITE_MODE: ${{ github.event.inputs.lite_mode || 'true' }}
+          DISCOVERY_MODE: ${{ github.event.inputs.discovery_mode || 'rdc_pool' }}
           GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         working-directory: scripts
         run: python discover_candidates.py

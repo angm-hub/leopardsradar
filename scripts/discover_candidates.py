@@ -26,9 +26,13 @@ from supabase_client import SupabaseClient
 from transfermarkt_client import TransfermarktClient
 
 RATE_LIMIT = float(os.environ.get("RATE_LIMIT_SECONDS", "3.0"))
-MAX_NEW_CANDIDATES = int(os.environ.get("MAX_NEW_CANDIDATES", "2000"))  # quasi-illimité par défaut
-MAX_PAGES = int(os.environ.get("MAX_PAGES", "100"))                     # ~3000 joueurs RDC max sur TM
-LITE_MODE = os.environ.get("LITE_MODE", "true").lower() == "true"       # default ON pour discover
+MAX_NEW_CANDIDATES = int(os.environ.get("MAX_NEW_CANDIDATES", "2000"))
+MAX_PAGES = int(os.environ.get("MAX_PAGES", "100"))
+LITE_MODE = os.environ.get("LITE_MODE", "true").lower() == "true"
+DISCOVERY_MODE = os.environ.get("DISCOVERY_MODE", "rdc_pool").lower()
+# DISCOVERY_MODE accepted values:
+#   "rdc_pool"        → scan TM stats page filtered by nationality DR Congo (~ 500 jrs)
+#   "linafoot_clubs"  → scan rosters of 10 main Linafoot D1 clubs (~ 200-300 jrs locaux)
 JOB_NAME = "discover-rdc-candidates"
 
 
@@ -69,10 +73,16 @@ def main():
         offset += page_size
     print(f"Joueurs déjà en DB : {len(existing_ids)}")
 
-    # 2. Découverte exhaustive
-    print(f"Crawl Transfermarkt RDC pool ({MAX_PAGES} pages max)...")
+    # 2. Découverte exhaustive (selon DISCOVERY_MODE)
+    print(f"Mode discovery : {DISCOVERY_MODE}")
     try:
-        candidates = tm.discover_rdc_pool(max_pages=MAX_PAGES)
+        if DISCOVERY_MODE == "linafoot_clubs":
+            club_ids = [c["id"] for c in tm.LINAFOOT_CLUBS]
+            print(f"Crawl rosters de {len(club_ids)} clubs Linafoot...")
+            candidates = tm.discover_by_clubs(club_ids)
+        else:
+            print(f"Crawl Transfermarkt RDC pool ({MAX_PAGES} pages max)...")
+            candidates = tm.discover_rdc_pool(max_pages=MAX_PAGES)
     except RuntimeError as e:
         print(f"!!! Ban signal: {e}")
         sb.insert("sync_logs", {

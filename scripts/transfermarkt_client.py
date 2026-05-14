@@ -410,6 +410,61 @@ class TransfermarktClient:
     # ─────────────────────────────────────────────────────────────────
     # Discovery — RDC pool
     # ─────────────────────────────────────────────────────────────────
+    # ─────────────────────────────────────────────────────────────────
+    # Catalogue des clubs Linafoot principaux (RDC, D1)
+    # IDs Transfermarkt confirmés via schnellsuche
+    # ─────────────────────────────────────────────────────────────────
+    LINAFOOT_CLUBS = [
+        {"id": "8428",   "name": "TP Mazembe"},
+        {"id": "32391",  "name": "TP Mazembe II"},
+        {"id": "2225",   "name": "AS Vita Club Kinshasa"},
+        {"id": "128513", "name": "AS Vita Club II"},
+        {"id": "1995",   "name": "DC Motema Pembe (DCMP)"},
+        {"id": "39376",  "name": "CS Don Bosco"},
+        {"id": "18102",  "name": "AS Maniema Union"},
+        {"id": "40991",  "name": "SM Sanga Balende"},
+        {"id": "59423",  "name": "Dauphins Noirs"},
+        {"id": "135486", "name": "FC Renaissance du Congo"},
+    ]
+
+    def discover_by_clubs(self, club_ids: list) -> list:
+        """
+        Crawl les rosters d'une liste de clubs Transfermarkt.
+
+        :param club_ids: liste d'IDs club TM (strings).
+        :return: liste de dicts {transfermarkt_id, name, profile_url, source_club_id}
+                 dédupliqués sur transfermarkt_id.
+        """
+        seen_ids: set = set()
+        results = []
+        for cid in club_ids:
+            url = f"{BASE}/-/startseite/verein/{cid}"
+            html = self._get(url)
+            if not html:
+                print(f"[TM clubs] club {cid} : empty response, skip")
+                continue
+            soup = BeautifulSoup(html, "html.parser")
+            club_count = 0
+            for link in soup.select('a[href*="/profil/spieler/"]'):
+                href = link.get("href", "")
+                m = re.search(r"/profil/spieler/(\d+)", href)
+                if not m:
+                    continue
+                tm_id = m.group(1)
+                if tm_id in seen_ids:
+                    continue
+                seen_ids.add(tm_id)
+                name_text = link.get_text(strip=True)
+                results.append({
+                    "transfermarkt_id": tm_id,
+                    "name": name_text or f"Player {tm_id}",
+                    "profile_url": urljoin(BASE, href.split("?")[0]),
+                    "source_club_id": cid,
+                })
+                club_count += 1
+            print(f"[TM clubs] club {cid:>6} : +{club_count:>3} new IDs (cumul {len(results)})")
+        return results
+
     def discover_rdc_pool(self, max_pages: int = 100, early_stop_after_empty: int = 3) -> list:
         """
         Crawl la page Transfermarkt qui liste les joueurs avec nationalité RDC.
