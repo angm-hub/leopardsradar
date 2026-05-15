@@ -27,7 +27,7 @@ interface NewsletterFormProps {
 export function NewsletterForm({
   source,
   variant = "full",
-  buttonLabel = "Recevoir l'édition du vendredi",
+  buttonLabel = "Recevoir l'édition du dimanche",
   placeholder = "Ton email",
   helper = "Une édition par semaine. Zéro spam. Désinscription en un clic.",
   className,

@@ -1,17 +1,30 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/ButtonPrimitive";
 import { CommandPalette } from "@/components/ui/CommandPalette";
 import { LRWordmark, LRMark } from "@/components/ui/Wordmark";
+import { useNavSectionVisibility } from "@/hooks/useNavSectionVisibility";
 import { cn } from "@/lib/utils";
 
-const NAV_LINKS: Array<{ label: string; href: string; badge?: string }> = [
+interface NavLinkConfig {
+  label: string;
+  href: string;
+  badge?: string;
+  /** Clé de visibilité conditionnelle. Si absent → toujours affiché. */
+  visibilityKey?: "bestXI" | "histoires" | "presse";
+}
+
+// Sprint 1.7 du brief 2026-05-15 : entrées avec contenu sont conditionnelles.
+// Best XI, Revue de presse, Histoires se cachent automatiquement de la nav
+// tant que le contenu n'est pas posté (seuils dans useNavSectionVisibility).
+// La route reste active — on ne casse pas les liens partagés.
+const NAV_LINKS: NavLinkConfig[] = [
   { label: "Roster", href: "/roster" },
   { label: "Radar", href: "/radar" },
-  { label: "Best XI", href: "/best-xi" },
-  { label: "Revue de presse", href: "/revue-de-presse", badge: "NOUVEAU" },
-  { label: "Histoires", href: "/histoires" },
+  { label: "Best XI", href: "/best-xi", visibilityKey: "bestXI" },
+  { label: "Revue de presse", href: "/revue-de-presse", badge: "NOUVEAU", visibilityKey: "presse" },
+  { label: "Histoires", href: "/histoires", visibilityKey: "histoires" },
   { label: "Ma Liste", href: "/ma-liste" },
   { label: "À propos", href: "/a-propos" },
   // "Newsletter" retiré du nav — bouton sticky "S'ABONNER" + section
@@ -22,6 +35,17 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
+  const visibility = useNavSectionVisibility();
+
+  // Filtre les NAV_LINKS selon la visibilité conditionnelle. Sans
+  // visibilityKey → toujours affiché. Avec → masqué si false.
+  const visibleLinks = useMemo(
+    () =>
+      NAV_LINKS.filter(
+        (link) => !link.visibilityKey || visibility[link.visibilityKey],
+      ),
+    [visibility],
+  );
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -75,7 +99,7 @@ export function Navbar() {
         </Link>
 
         <nav className="hidden md:flex items-center gap-8">
-          {NAV_LINKS.map((link) => (
+          {visibleLinks.map((link) => (
             <NavLink
               key={link.href}
               to={link.href}
@@ -155,7 +179,7 @@ export function Navbar() {
           </div>
 
           <nav className="flex flex-col gap-5">
-            {NAV_LINKS.map((link) => (
+            {visibleLinks.map((link) => (
               <Link
                 key={link.href}
                 to={link.href}

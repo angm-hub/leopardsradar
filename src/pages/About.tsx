@@ -79,14 +79,17 @@ export default function About() {
                 feuilles de match) avant publication.
               </p>
               <p>
-                On applique strictement l'<strong className="text-foreground">article 9 du règlement
-                FIFA (révision 2020)</strong> sur le changement d'association. Un joueur qui a
-                disputé un match A senior officiel d'une autre nation est marqué{" "}
-                <em className="text-foreground">cap-tied</em> et exclu du Radar. On distingue trois
-                statuts : <strong className="text-foreground">roster</strong> (déjà international
-                RDC), <strong className="text-foreground">radar</strong> (éligible, pas encore
-                convoqué), <strong className="text-foreground">heritage</strong> (ascendance RDC à
-                explorer). Mise à jour <strong className="text-foreground">hebdomadaire</strong>.
+                On applique strictement les{" "}
+                <strong className="text-foreground">articles 5 à 9 du Règlement régissant
+                l'application des Statuts FIFA</strong> (version consolidée février 2025,
+                intégrant la refonte 2023). Un joueur qui a disputé un match A senior
+                officiel d'une autre nation hors fenêtre de switch (art. 9.2) est marqué{" "}
+                <em className="text-foreground">cap-tied</em> et exclu du Radar. On distingue
+                trois statuts : <strong className="text-foreground">roster</strong> (déjà
+                international RDC), <strong className="text-foreground">radar</strong>{" "}
+                (éligible, pas encore convoqué), <strong className="text-foreground">heritage</strong>{" "}
+                (ascendance RDC à explorer). Mise à jour{" "}
+                <strong className="text-foreground">hebdomadaire</strong>.
               </p>
             </div>
           </section>

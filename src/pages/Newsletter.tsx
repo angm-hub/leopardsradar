@@ -44,7 +44,7 @@ export default function Newsletter() {
               Le Radar Léopards
             </span>
             <h1 className="mt-6 display-heading text-5xl md:text-6xl text-foreground">
-              Une édition. Tous les vendredis.
+              Une édition. Tous les dimanches soir.
             </h1>
             <p className="mt-6 text-xl text-muted-light max-w-xl mx-auto">
               Les performances de tes Léopards, un talent à surveiller, et
@@ -55,7 +55,7 @@ export default function Newsletter() {
               <NewsletterForm
                 source="page"
                 variant="full"
-                buttonLabel="Recevoir l'édition du vendredi"
+                buttonLabel="Recevoir l'édition du dimanche"
                 placeholder="Ton email"
                 helper="Une édition par semaine. Zéro spam. Désinscription en un clic."
               />
@@ -73,7 +73,7 @@ export default function Newsletter() {
                 <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10 text-primary ring-1 ring-primary/30">
                   <Icon className="h-5 w-5" />
                 </span>
-                <h3 className="mt-4 font-serif text-xl text-foreground">{title}</h3>
+                <h3 className="mt-4 display-heading text-xl text-foreground">{title}</h3>
                 <p className="mt-2 text-muted leading-relaxed">{desc}</p>
               </div>
             ))}

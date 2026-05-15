@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && cp dist/index.html dist/404.html && node scripts/build-rss.mjs",
-    "build:dev": "vite build --mode development && cp dist/index.html dist/404.html && node scripts/build-rss.mjs",
+    "build": "vite build && cp dist/index.html dist/404.html && node scripts/build-rss.mjs && node scripts/build-sitemap.mjs",
+    "build:dev": "vite build --mode development && cp dist/index.html dist/404.html && node scripts/build-rss.mjs && node scripts/build-sitemap.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",

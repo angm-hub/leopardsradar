@@ -12,3 +12,5 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+Sitemap: https://angm-hub.github.io/leopardsradar/sitemap.xml
