@@ -1,0 +1,59 @@
+name: Refresh insights materialized views
+
+# ──────────────────────────────────────────────────────────────────────
+# Sprint 5 du brief Léopards Radar v3 (2026-05-15).
+#
+# Refresh hebdo des 3 vues matérialisées qui alimentent /insights :
+#   - mv_eligibility_pipeline
+#   - mv_club_concentration
+#   - mv_profile_insights
+#
+# Tourne le dimanche à 14h00 UTC :
+#   - Après sync-transfermarkt (02h)
+#   - Après refresh-levels (03h)
+#   - Après sync-matches (06h)
+#   - Avant que la newsletter du dimanche soir ne soit envoyée
+#
+# Appelle refresh_sprint5_insights() via Postgres RPC. La fonction est
+# verrouillée pour anon (REVOKE EXECUTE), seul le SERVICE_ROLE_KEY peut
+# l'invoquer — d'où l'usage de SUPABASE_SERVICE_ROLE_KEY ici.
+# ──────────────────────────────────────────────────────────────────────
+
+on:
+  schedule:
+    - cron: '0 14 * * 0'   # Dimanche 14h UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    concurrency:
+      group: refresh-insights
+      cancel-in-progress: false
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: scripts/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Refresh insights views
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        working-directory: scripts
+        run: python refresh_insights.py
