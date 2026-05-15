@@ -7,7 +7,7 @@ export default function Cgu() {
       updatedAt="1er mai 2026"
     >
       <section className="space-y-3 mb-10">
-        <h2 className="font-serif text-2xl text-foreground mt-0 mb-4">
+        <h2 className="display-heading text-2xl text-foreground mt-0 mb-4">
           1. Objet
         </h2>
         <p>
@@ -30,7 +30,7 @@ export default function Cgu() {
       </section>
 
       <section className="space-y-3 mb-10">
-        <h2 className="font-serif text-2xl text-foreground mt-0 mb-4">
+        <h2 className="display-heading text-2xl text-foreground mt-0 mb-4">
           2. Description du service
         </h2>
         <p>
@@ -49,7 +49,7 @@ export default function Cgu() {
       </section>
 
       <section className="space-y-3 mb-10">
-        <h2 className="font-serif text-2xl text-foreground mt-0 mb-4">
+        <h2 className="display-heading text-2xl text-foreground mt-0 mb-4">
           3. Accès au service
         </h2>
         <p>
@@ -66,7 +66,7 @@ export default function Cgu() {
       </section>
 
       <section className="space-y-3 mb-10">
-        <h2 className="font-serif text-2xl text-foreground mt-0 mb-4">
+        <h2 className="display-heading text-2xl text-foreground mt-0 mb-4">
           4. Comportements interdits
         </h2>
         <p>Tu t'engages à ne pas :</p>
@@ -92,7 +92,7 @@ export default function Cgu() {
       </section>
 
       <section className="space-y-3 mb-10">
-        <h2 className="font-serif text-2xl text-foreground mt-0 mb-4">
+        <h2 className="display-heading text-2xl text-foreground mt-0 mb-4">
           5. Données et exactitude
         </h2>
         <p>
@@ -111,7 +111,7 @@ export default function Cgu() {
       </section>
 
       <section className="space-y-3 mb-10">
-        <h2 className="font-serif text-2xl text-foreground mt-0 mb-4">
+        <h2 className="display-heading text-2xl text-foreground mt-0 mb-4">
           6. Propriété intellectuelle
         </h2>
         <p>
@@ -128,7 +128,7 @@ export default function Cgu() {
       </section>
 
       <section className="space-y-3 mb-10">
-        <h2 className="font-serif text-2xl text-foreground mt-0 mb-4">
+        <h2 className="display-heading text-2xl text-foreground mt-0 mb-4">
           7. Données personnelles
         </h2>
         <p>
@@ -144,7 +144,7 @@ export default function Cgu() {
       </section>
 
       <section className="space-y-3 mb-10">
-        <h2 className="font-serif text-2xl text-foreground mt-0 mb-4">
+        <h2 className="display-heading text-2xl text-foreground mt-0 mb-4">
           8. Responsabilité
         </h2>
         <p>
@@ -156,7 +156,7 @@ export default function Cgu() {
       </section>
 
       <section className="space-y-3 mb-10">
-        <h2 className="font-serif text-2xl text-foreground mt-0 mb-4">
+        <h2 className="display-heading text-2xl text-foreground mt-0 mb-4">
           9. Modification des CGU
         </h2>
         <p>
@@ -167,7 +167,7 @@ export default function Cgu() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="font-serif text-2xl text-foreground mt-0 mb-4">
+        <h2 className="display-heading text-2xl text-foreground mt-0 mb-4">
           10. Droit applicable
         </h2>
         <p>

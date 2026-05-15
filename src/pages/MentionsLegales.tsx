@@ -23,7 +23,7 @@ export default function MentionsLegales() {
   return (
     <LegalLayout title="Mentions légales" updatedAt="15 mai 2026">
       <section className="space-y-3 mb-10">
-        <h2 className="font-serif text-2xl text-foreground mt-0 mb-4">
+        <h2 className="display-heading text-2xl text-foreground mt-0 mb-4">
           Éditeur du site
         </h2>
         <p>
@@ -48,7 +48,7 @@ export default function MentionsLegales() {
       </section>
 
       <section className="space-y-3 mb-10">
-        <h2 className="font-serif text-2xl text-foreground mt-0 mb-4">
+        <h2 className="display-heading text-2xl text-foreground mt-0 mb-4">
           Directeur de la publication
         </h2>
         <p>
@@ -58,7 +58,7 @@ export default function MentionsLegales() {
       </section>
 
       <section className="space-y-3 mb-10">
-        <h2 className="font-serif text-2xl text-foreground mt-0 mb-4">
+        <h2 className="display-heading text-2xl text-foreground mt-0 mb-4">
           Hébergement
         </h2>
         <p>
@@ -82,7 +82,7 @@ export default function MentionsLegales() {
       </section>
 
       <section className="space-y-3 mb-10">
-        <h2 className="font-serif text-2xl text-foreground mt-0 mb-4">
+        <h2 className="display-heading text-2xl text-foreground mt-0 mb-4">
           Propriété intellectuelle
         </h2>
         <p>
@@ -104,7 +104,7 @@ export default function MentionsLegales() {
       </section>
 
       <section className="space-y-3 mb-10">
-        <h2 className="font-serif text-2xl text-foreground mt-0 mb-4">
+        <h2 className="display-heading text-2xl text-foreground mt-0 mb-4">
           Crédits photo
         </h2>
         <p>
@@ -122,7 +122,7 @@ export default function MentionsLegales() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="font-serif text-2xl text-foreground mt-0 mb-4">
+        <h2 className="display-heading text-2xl text-foreground mt-0 mb-4">
           Données personnelles
         </h2>
         <p>

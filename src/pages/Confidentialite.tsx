@@ -12,7 +12,7 @@ export default function Confidentialite() {
       </section>
 
       <section className="space-y-3 mb-10">
-        <h2 className="font-serif text-2xl text-foreground mt-0 mb-4">
+        <h2 className="display-heading text-2xl text-foreground mt-0 mb-4">
           Responsable du traitement
         </h2>
         <p>
@@ -28,12 +28,12 @@ export default function Confidentialite() {
       </section>
 
       <section className="space-y-4 mb-10">
-        <h2 className="font-serif text-2xl text-foreground mt-0 mb-4">
+        <h2 className="display-heading text-2xl text-foreground mt-0 mb-4">
           Données collectées
         </h2>
 
         <div>
-          <h3 className="font-serif text-lg text-foreground mb-2">Newsletter</h3>
+          <h3 className="display-heading text-lg text-foreground mb-2">Newsletter</h3>
           <p>
             Lorsque tu t'abonnes à la newsletter, on collecte uniquement ton{" "}
             <strong>adresse email</strong> et la <strong>source</strong> de
@@ -49,7 +49,7 @@ export default function Confidentialite() {
         </div>
 
         <div>
-          <h3 className="font-serif text-lg text-foreground mb-2">
+          <h3 className="display-heading text-lg text-foreground mb-2">
             Mesure d'audience
           </h3>
           <p>
@@ -67,7 +67,7 @@ export default function Confidentialite() {
         </div>
 
         <div>
-          <h3 className="font-serif text-lg text-foreground mb-2">
+          <h3 className="display-heading text-lg text-foreground mb-2">
             « Ma Liste » et compositions partagées
           </h3>
           <p>
@@ -80,7 +80,7 @@ export default function Confidentialite() {
       </section>
 
       <section className="space-y-3 mb-10">
-        <h2 className="font-serif text-2xl text-foreground mt-0 mb-4">
+        <h2 className="display-heading text-2xl text-foreground mt-0 mb-4">
           Durée de conservation
         </h2>
         <ul className="list-disc pl-6 space-y-2">
@@ -100,7 +100,7 @@ export default function Confidentialite() {
       </section>
 
       <section className="space-y-3 mb-10">
-        <h2 className="font-serif text-2xl text-foreground mt-0 mb-4">
+        <h2 className="display-heading text-2xl text-foreground mt-0 mb-4">
           Tes droits
         </h2>
         <p>
@@ -145,7 +145,7 @@ export default function Confidentialite() {
       </section>
 
       <section className="space-y-3 mb-10">
-        <h2 className="font-serif text-2xl text-foreground mt-0 mb-4">
+        <h2 className="display-heading text-2xl text-foreground mt-0 mb-4">
           Sous-traitants et destinataires
         </h2>
         <p>
@@ -163,7 +163,7 @@ export default function Confidentialite() {
       </section>
 
       <section className="space-y-3 mb-10">
-        <h2 className="font-serif text-2xl text-foreground mt-0 mb-4">
+        <h2 className="display-heading text-2xl text-foreground mt-0 mb-4">
           Cookies
         </h2>
         <p>
@@ -174,7 +174,7 @@ export default function Confidentialite() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="font-serif text-2xl text-foreground mt-0 mb-4">
+        <h2 className="display-heading text-2xl text-foreground mt-0 mb-4">
           Mises à jour
         </h2>
         <p>

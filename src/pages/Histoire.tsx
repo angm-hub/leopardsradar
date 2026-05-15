@@ -83,7 +83,7 @@ export default function Histoire() {
             {article.title}
           </h1>
 
-          <p className="mt-5 font-serif text-lg md:text-xl italic text-foreground/85 leading-relaxed text-balance">
+          <p className="mt-5 text-lg md:text-xl italic text-foreground/85 leading-relaxed text-balance">
             {article.subtitle}
           </p>
         </header>
@@ -194,7 +194,7 @@ function BodyBlock({ block }: { block: ArticleBlock }) {
   if (block.type === "quote") {
     return (
       <blockquote className="border-l-2 border-primary/60 pl-5 md:pl-6 py-1">
-        <p className="font-serif text-xl md:text-2xl italic text-foreground/95 leading-relaxed">
+        <p className="text-xl md:text-2xl italic text-foreground/95 leading-relaxed">
           « {block.text} »
         </p>
         {block.cite ? (
