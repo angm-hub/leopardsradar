@@ -1,0 +1,38 @@
+name: Insert Munongo (one-shot)
+
+# Workflow one-shot : insère Believe Munongo (TM 1297673) en BDD.
+# À déclencher manuellement depuis GitHub Actions → workflow_dispatch.
+# Idempotent : si Munongo est déjà en BDD, le script le détecte et skip.
+# À supprimer une fois Munongo confirmé en BDD.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  insert-munongo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: scripts/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Insert Munongo
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        working-directory: scripts
+        run: python insert_munongo.py
