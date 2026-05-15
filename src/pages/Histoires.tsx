@@ -74,7 +74,7 @@ export default function Histoires() {
             <span className="mx-2 text-muted/60">/</span>
             <span className="text-foreground/80">Histoires</span>
           </nav>
-          <h1 className="mt-4 font-serif text-5xl md:text-6xl font-semibold text-foreground tracking-tight">
+          <h1 className="mt-4 display-heading text-5xl md:text-6xl text-foreground">
             Histoires.
           </h1>
           <p className="mt-3 max-w-2xl text-lg text-muted-light">

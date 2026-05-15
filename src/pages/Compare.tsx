@@ -73,7 +73,7 @@ export default function ComparePage() {
           <p className="text-[10px] uppercase tracking-[0.3em] text-primary/85 font-mono">
             Comparateur · Léopards
           </p>
-          <h1 className="mt-2 font-serif text-5xl md:text-7xl font-semibold leading-[1.05] text-balance text-foreground">
+          <h1 className="mt-2 display-heading text-5xl md:text-7xl leading-[1.05] text-balance text-foreground">
             {ready
               ? `${playerA!.name}.`
               : "Deux Léopards. Six axes. Une lecture."}

@@ -9,7 +9,7 @@ const Index = () => {
       <main className="flex-1 pt-16">
         <section className="container-site min-h-[180vh] flex items-center justify-center">
           <div className="text-center">
-            <h1 className="font-serif text-display-xl md:text-display-2xl text-foreground tracking-tight text-balance">
+            <h1 className="display-heading text-display-xl md:text-display-2xl text-foreground text-balance">
               Léopards Radar
             </h1>
             <p className="mt-6 font-sans text-base md:text-lg text-muted-light">

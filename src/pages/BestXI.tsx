@@ -263,7 +263,7 @@ export default function BestXI() {
             <span className="mx-2 text-muted/60">/</span>
             <span className="text-foreground/80">Best XI</span>
           </nav>
-          <h1 className="mt-4 font-serif text-5xl md:text-6xl text-foreground tracking-tight">
+          <h1 className="mt-4 display-heading text-5xl md:text-6xl text-foreground">
             Le Best XI Diaspora.
           </h1>
           <p className="mt-3 max-w-2xl text-lg text-muted-light">
@@ -336,7 +336,7 @@ export default function BestXI() {
                   </div>
 
                   <div>
-                    <h2 className="font-serif text-3xl md:text-4xl text-foreground tracking-tight leading-tight">
+                    <h2 className="display-heading text-3xl md:text-4xl text-foreground leading-tight">
                       {data.title}
                     </h2>
                     <p className="mt-2 font-mono text-sm text-muted">
@@ -414,7 +414,7 @@ export default function BestXI() {
               {/* Roster détaillé — sous le split, full width */}
               <div className="mt-16">
                 <div className="flex items-baseline justify-between flex-wrap gap-2 mb-6">
-                  <h3 className="font-serif text-2xl text-foreground">
+                  <h3 className="display-heading text-2xl text-foreground">
                     Le onze, joueur par joueur.
                   </h3>
                   <span className="text-xs text-muted-light font-mono">
@@ -450,7 +450,7 @@ export default function BestXI() {
             <span className="inline-block rounded-full bg-primary/15 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-primary">
               À ton tour
             </span>
-            <h3 className="mt-4 font-serif text-2xl md:text-3xl text-foreground">
+            <h3 className="mt-4 display-heading text-2xl md:text-3xl text-foreground">
               Compose ta sélection des 26.
             </h3>
             <p className="mt-3 text-muted-light max-w-md mx-auto">

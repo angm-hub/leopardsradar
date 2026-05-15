@@ -43,7 +43,7 @@ export default function Newsletter() {
             <span className="text-xs uppercase tracking-[0.2em] text-primary">
               Le Radar Léopards
             </span>
-            <h1 className="mt-6 font-serif text-5xl md:text-6xl font-semibold text-foreground tracking-tight">
+            <h1 className="mt-6 display-heading text-5xl md:text-6xl text-foreground">
               Une édition. Tous les vendredis.
             </h1>
             <p className="mt-6 text-xl text-muted-light max-w-xl mx-auto">

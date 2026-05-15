@@ -44,7 +44,7 @@ export default function Methodologie() {
             <span className="mx-2 text-muted/60">/</span>
             <span className="text-foreground/80">Méthodologie</span>
           </nav>
-          <h1 className="mt-4 font-serif text-5xl md:text-6xl font-semibold text-foreground tracking-tight">
+          <h1 className="mt-4 display-heading text-5xl md:text-6xl text-foreground">
             Méthodologie.
           </h1>
           <p className="mt-3 max-w-2xl text-lg text-muted-light">
@@ -106,7 +106,7 @@ export default function Methodologie() {
           {/* 01 — Sources */}
           <section id="sources" className="scroll-mt-24">
             <Kicker icon={<Database className="h-3 w-3" />}>01 · Sources</Kicker>
-            <h2 className="mt-3 font-serif text-3xl text-foreground">
+            <h2 className="mt-3 display-heading text-3xl text-foreground">
               D'où viennent les données.
             </h2>
             <Prose>
@@ -151,7 +151,7 @@ export default function Methodologie() {
           {/* 02 — Fréquence */}
           <section id="frequence" className="scroll-mt-24">
             <Kicker icon={<RefreshCw className="h-3 w-3" />}>02 · Fréquence</Kicker>
-            <h2 className="mt-3 font-serif text-3xl text-foreground">
+            <h2 className="mt-3 display-heading text-3xl text-foreground">
               Mise à jour : chaque dimanche.
             </h2>
             <Prose>
@@ -191,7 +191,7 @@ export default function Methodologie() {
           {/* 03 — Hexagone */}
           <section id="hexagone" className="scroll-mt-24">
             <Kicker icon={<ScanSearch className="h-3 w-3" />}>03 · Hexagone</Kicker>
-            <h2 className="mt-3 font-serif text-3xl text-foreground">
+            <h2 className="mt-3 display-heading text-3xl text-foreground">
               Comment se calcule le profil statistique.
             </h2>
             <Prose>
@@ -262,7 +262,7 @@ export default function Methodologie() {
           {/* 04 — Niveau de jeu */}
           <section id="niveau" className="scroll-mt-24">
             <Kicker icon={<BarChart2 className="h-3 w-3" />}>04 · Niveau de jeu</Kicker>
-            <h2 className="mt-3 font-serif text-3xl text-foreground">
+            <h2 className="mt-3 display-heading text-3xl text-foreground">
               Comment se calcule le niveau de jeu.
             </h2>
             <Prose>
@@ -407,7 +407,7 @@ export default function Methodologie() {
           {/* 05 — Éligibilité */}
           <section id="eligibilite" className="scroll-mt-24">
             <Kicker icon={<ShieldCheck className="h-3 w-3" />}>05 · Éligibilité</Kicker>
-            <h2 className="mt-3 font-serif text-3xl text-foreground">
+            <h2 className="mt-3 display-heading text-3xl text-foreground">
               Statuts d'éligibilité aux Léopards.
             </h2>
             <Prose>
@@ -439,7 +439,7 @@ export default function Methodologie() {
           {/* 06 — Glossaire */}
           <section id="glossaire" className="scroll-mt-24">
             <Kicker icon={<Database className="h-3 w-3" />}>06 · Glossaire</Kicker>
-            <h2 className="mt-3 font-serif text-3xl text-foreground">
+            <h2 className="mt-3 display-heading text-3xl text-foreground">
               Glossaire.
             </h2>
             <Prose>
@@ -457,7 +457,7 @@ export default function Methodologie() {
           {/* 07 — Corrections */}
           <section id="corrections" className="scroll-mt-24">
             <Kicker icon={<Mail className="h-3 w-3" />}>07 · Corrections</Kicker>
-            <h2 className="mt-3 font-serif text-3xl text-foreground">
+            <h2 className="mt-3 display-heading text-3xl text-foreground">
               Une donnée à corriger ?
             </h2>
             <Prose>
@@ -501,7 +501,7 @@ export default function Methodologie() {
               sans signature personnelle. */}
           <section className="border-t border-border pt-12">
             <Kicker icon={<Mail className="h-3 w-3" />}>Une dernière chose</Kicker>
-            <h2 className="mt-3 font-serif text-3xl text-foreground">
+            <h2 className="mt-3 display-heading text-3xl text-foreground">
               Cette page n'est jamais finie.
             </h2>
             <Prose>

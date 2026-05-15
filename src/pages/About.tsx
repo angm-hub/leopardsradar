@@ -29,7 +29,7 @@ export default function About() {
           {/* H1 différencié de la home (qui dit déjà la promesse). Ici on est
               sur le projet : qui le fait, comment, pourquoi. Le H1 doit
               annoncer ce qu'on va lire, pas répéter le pitch. */}
-          <h1 className="mt-4 font-serif text-5xl md:text-6xl font-semibold text-foreground tracking-tight">
+          <h1 className="mt-4 display-heading text-5xl md:text-6xl text-foreground">
             Le projet.
           </h1>
           <p className="mt-6 font-serif text-xl leading-[1.6] text-foreground/80 max-w-2xl">
@@ -43,7 +43,7 @@ export default function About() {
             <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-primary mb-4">
               01 — La mission
             </p>
-            <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-6">
+            <h2 className="display-heading text-3xl md:text-4xl text-foreground mb-6">
               La source de référence sur le vivier congolais.
             </h2>
             <MissionVisual />
@@ -67,7 +67,7 @@ export default function About() {
             <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-primary mb-4">
               02 — La méthode
             </p>
-            <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-6">
+            <h2 className="display-heading text-3xl md:text-4xl text-foreground mb-6">
               Sources vérifiées, règles FIFA appliquées.
             </h2>
             <MethodVisual />
@@ -98,7 +98,7 @@ export default function About() {
             <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-primary mb-4">
               03 — Indépendance
             </p>
-            <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-6">
+            <h2 className="display-heading text-3xl md:text-4xl text-foreground mb-6">
               Pas affilié. Pas commandité. Pas négociable.
             </h2>
             <IndependanceVisual />
@@ -137,7 +137,7 @@ export default function About() {
             <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-primary mb-4">
               04 — Qui édite Léopards Radar
             </p>
-            <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-6">
+            <h2 className="display-heading text-3xl md:text-4xl text-foreground mb-6">
               Édité par Cobalt Sports & Entertainment.
             </h2>
             <EditeurVisual />

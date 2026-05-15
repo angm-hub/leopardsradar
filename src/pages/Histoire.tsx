@@ -36,7 +36,7 @@ export default function Histoire() {
       <div className="min-h-screen bg-background">
         <Navbar />
         <main className="container-site flex min-h-[70vh] flex-col items-center justify-center py-32 text-center">
-          <h1 className="font-serif text-5xl text-foreground">
+          <h1 className="display-heading text-5xl text-foreground">
             Article introuvable.
           </h1>
           <p className="mt-4 text-muted">Cette histoire n'existe pas (encore).</p>
@@ -79,7 +79,7 @@ export default function Histoire() {
             <StoryMeta story={article} size="md" />
           </div>
 
-          <h1 className="mt-5 font-serif text-4xl md:text-6xl text-foreground tracking-tight leading-[1.05] text-balance">
+          <h1 className="mt-5 display-heading text-4xl md:text-6xl text-foreground leading-[1.05] text-balance">
             {article.title}
           </h1>
 
@@ -125,7 +125,7 @@ export default function Histoire() {
 
         {related.length > 0 ? (
           <section className="container-site py-16 border-t border-border">
-            <h2 className="font-serif text-2xl text-foreground mb-6">
+            <h2 className="display-heading text-2xl text-foreground mb-6">
               À lire ensuite.
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
@@ -186,7 +186,7 @@ function ArticleSkeleton() {
 function BodyBlock({ block }: { block: ArticleBlock }) {
   if (block.type === "h2") {
     return (
-      <h2 className="font-serif text-2xl md:text-3xl text-foreground tracking-tight pt-4">
+      <h2 className="display-heading text-2xl md:text-3xl text-foreground pt-4">
         {block.text}
       </h2>
     );
