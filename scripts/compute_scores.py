@@ -25,7 +25,15 @@ from datetime import datetime, timezone
 import requests
 
 
-SUPABASE_URL = os.environ.get("SUPABASE_URL", "").rstrip("/")
+def _normalize_supabase_url(raw: str) -> str:
+    """Strip trailing slashes + suffixes /rest/v1 ou /rest souvent copiés
+    par erreur dans le secret. Aligne avec scripts/supabase_client.py."""
+    s = (raw or "").strip().rstrip("/")
+    for suffix in ("/rest/v1", "/rest", "/api"):
+        if s.endswith(suffix):
+            s = s[: -len(suffix)].rstrip("/")
+    return s
+SUPABASE_URL = _normalize_supabase_url(os.environ.get("SUPABASE_URL", ""))
 SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
 RUN_URL = os.environ.get("GITHUB_RUN_URL", "")
 SEASON = "2025-2026"
