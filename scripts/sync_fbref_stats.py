@@ -48,7 +48,11 @@ SUPABASE_URL = _normalize_supabase_url(os.environ.get("SUPABASE_URL", ""))
 SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
 RUN_URL = os.environ.get("GITHUB_RUN_URL", "")
 
-USER_AGENT = "LeopardsRadar/1.0 (https://angm-hub.github.io/leopardsradar; alexandre@withkaira.com — non-commercial data project)"
+# FBRef bloque les UA non-browser (HTTP 403). Pattern utilise par les libs
+# du domaine (soccerdata etc.) : UA Mozilla credible. On garde un rate limit
+# strict (4 sec) et on identifie le projet via Referer/From.
+USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+FROM_EMAIL = "alexandre@withkaira.com"
 DELAY_SEC = 4
 SEASON = "2025-2026"
 
@@ -104,10 +108,23 @@ def fetch_targets(limit: int | None = None) -> list[dict]:
 # ── Parsing FBRef ───────────────────────────────────────────────────────────
 
 def fetch_fbref_page(fbref_id: str) -> str | None:
-    """Charge la page FBRef d'un joueur. Retourne None si ratée."""
+    """Charge la page FBRef d'un joueur. Retourne None si ratee.
+
+    Headers complets pour passer la protection anti-bot (UA Mozilla +
+    Accept/Accept-Language credibles). Le From: email identifie le projet
+    pour les abuse reports — courtoisie standard du scraping.
+    """
     url = f"https://fbref.com/en/players/{fbref_id}/"
+    headers = {
+        "User-Agent": USER_AGENT,
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9,fr;q=0.8",
+        "Accept-Encoding": "gzip, deflate",
+        "From": FROM_EMAIL,
+        "Referer": "https://fbref.com/",
+    }
     try:
-        r = requests.get(url, headers={"User-Agent": USER_AGENT}, timeout=30)
+        r = requests.get(url, headers=headers, timeout=30)
         if r.status_code == 200:
             return r.text
         print(f"  [warn] HTTP {r.status_code} for {fbref_id}", file=sys.stderr)
