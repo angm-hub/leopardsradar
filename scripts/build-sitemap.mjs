@@ -37,6 +37,7 @@ const STATIC_PAGES = [
   { path: "revue-de-presse", priority: "0.8", changefreq: "daily" },
   { path: "compare", priority: "0.7", changefreq: "monthly" },
   { path: "ma-liste", priority: "0.7", changefreq: "monthly" },
+  { path: "insights", priority: "0.7", changefreq: "weekly" },
   { path: "a-propos", priority: "0.6", changefreq: "monthly" },
   { path: "methodologie", priority: "0.6", changefreq: "monthly" },
   { path: "newsletter", priority: "0.6", changefreq: "monthly" },

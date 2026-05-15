@@ -38,6 +38,7 @@ const Histoire = lazy(() => import("./pages/Histoire.tsx"));
 const Methodologie = lazy(() => import("./pages/Methodologie.tsx"));
 const Compare = lazy(() => import("./pages/Compare.tsx"));
 const RevueDePresse = lazy(() => import("./pages/RevueDePresse.tsx"));
+const Insights = lazy(() => import("./pages/Insights.tsx"));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 
 const queryClient = new QueryClient();
@@ -103,6 +104,7 @@ const App = () => (
             <Route path="/histoires/:slug" element={<Histoire />} />
             <Route path="/methodologie" element={<Methodologie />} />
             <Route path="/compare" element={<Compare />} />
+            <Route path="/insights" element={<Insights />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

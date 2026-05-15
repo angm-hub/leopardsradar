@@ -12,6 +12,7 @@ const NAV_LINKS = [
 
 const METHOD_LINKS = [
   { label: "Méthodologie", href: "/methodologie" },
+  { label: "Insights", href: "/insights" },
   { label: "À propos", href: "/a-propos" },
   { label: "Newsletter", href: "/newsletter" },
 ];
