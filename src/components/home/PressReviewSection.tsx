@@ -25,10 +25,10 @@ export function PressReviewSection() {
       <div className="container-site">
         <div className="mb-8 flex flex-col gap-3 sm:mb-10 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-primary mb-2">
+            <p className="label-mono text-cobalt-mist mb-2">
               Revue de presse
             </p>
-            <h2 className="font-serif text-3xl md:text-4xl font-semibold text-foreground tracking-tight">
+            <h2 className="display-heading text-3xl md:text-4xl text-foreground">
               Ce qui s'est dit cette semaine.
             </h2>
             <p className="mt-2 text-sm md:text-base text-muted-light max-w-xl">

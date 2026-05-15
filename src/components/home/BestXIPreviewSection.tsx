@@ -27,10 +27,10 @@ export function BestXIPreviewSection() {
       <ResidualGradient position="top-bottom" />
       <div className="container-site relative">
         <div className="mb-10 max-w-2xl">
-          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-primary/85 mb-3">
+          <p className="label-mono text-cobalt-mist mb-3">
             Best XI Diaspora
           </p>
-          <h2 className="font-serif text-3xl md:text-5xl font-semibold text-foreground tracking-tight text-balance">
+          <h2 className="display-heading text-3xl md:text-5xl text-foreground text-balance">
             Le onze de la semaine.
           </h2>
           <p className="mt-4 text-muted-light text-base md:text-lg leading-relaxed">
@@ -50,9 +50,9 @@ export function BestXIPreviewSection() {
           // signal éditorial fort — la note + la formation + un CTA — pour
           // pousser vers la page dédiée. Hauteur passée de ~1080 px à ~480 px.
           <div className="max-w-3xl mx-auto text-center">
-            <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-muted mb-6">
+            <div className="label-mono-sm text-muted mb-6">
               Édition · {formatPublishedDate(data.published_at)} ·{" "}
-              <span className="text-primary/85">{data.formation}</span>
+              <span className="text-cobalt-mist">{data.formation}</span>
             </div>
             {data.editorial_note ? (
               <blockquote className="relative">
@@ -60,15 +60,15 @@ export function BestXIPreviewSection() {
                   className="absolute -left-2 -top-2 h-10 w-10 text-primary/15"
                   aria-hidden
                 />
-                <p className="px-8 font-serif italic text-2xl md:text-3xl leading-relaxed text-foreground/90 text-balance">
+                <p className="px-8 italic text-2xl md:text-3xl leading-relaxed text-foreground/90 text-balance">
                   {data.editorial_note}
                 </p>
-                <footer className="mt-6 text-[11px] font-mono uppercase tracking-[0.22em] text-muted">
+                <footer className="mt-6 label-mono-sm text-muted">
                   — Note éditoriale Léopards Radar
                 </footer>
               </blockquote>
             ) : (
-              <p className="font-serif text-2xl text-foreground/70 italic">
+              <p className="text-2xl text-foreground/70 italic">
                 {data.title}
               </p>
             )}
@@ -105,7 +105,7 @@ function BestXISkeleton() {
 function BestXIEmpty() {
   return (
     <div className="rounded-card border border-dashed border-border bg-card/30 p-10 text-center max-w-2xl mx-auto">
-      <p className="font-serif text-xl text-foreground">
+      <p className="display-heading text-xl text-foreground">
         Première composition à venir
       </p>
       <p className="mt-2 text-sm text-muted-light">

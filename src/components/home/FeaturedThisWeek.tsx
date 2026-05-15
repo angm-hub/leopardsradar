@@ -40,7 +40,7 @@ export function FeaturedThisWeek() {
     <section className="container-site py-16 border-t border-border/40">
       <div className="flex items-baseline justify-between flex-wrap gap-3 mb-8">
         <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-primary/85 mb-2">
+          <p className="label-mono text-cobalt-mist mb-2">
             Le 5 du dimanche
             {hasAnyWeekly ? (
               <span className="ml-3 inline-flex items-center gap-1 text-success">
@@ -49,7 +49,7 @@ export function FeaturedThisWeek() {
               </span>
             ) : null}
           </p>
-          <h2 className="font-serif text-3xl md:text-4xl text-foreground tracking-tight">
+          <h2 className="display-heading text-3xl md:text-4xl text-foreground">
             Cinq Léopards en mouvement.
           </h2>
         </div>
@@ -89,7 +89,7 @@ function MoverCard({ mover, index }: { mover: WeeklyMover | null; index: number 
     >
       <Link
         to={`/player/${mover.slug}`}
-        className="group relative block aspect-[3/4] rounded-[14px] overflow-hidden surface-1 transition-[box-shadow,filter] duration-300 hover:[filter:brightness(1.06)] hover:[box-shadow:0_0_0_0.5px_rgba(252,209,22,0.35),0_1px_2px_rgba(0,0,0,0.4),0_12px_32px_rgba(252,209,22,0.12)]"
+        className="group relative block aspect-[3/4] rounded-[14px] overflow-hidden surface-1 transition-[box-shadow,filter] duration-300 hover:[filter:brightness(1.06)] hover:[box-shadow:0_0_0_0.5px_rgba(245,197,24,0.35),0_1px_2px_rgba(0,0,0,0.4),0_12px_32px_rgba(245,197,24,0.12)]"
       >
         <PlayerAvatar
           name={mover.name}
@@ -103,7 +103,7 @@ function MoverCard({ mover, index }: { mover: WeeklyMover | null; index: number 
           className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-background via-background/85 to-transparent"
         />
         <div className="absolute inset-x-0 bottom-0 p-3 sm:p-4">
-          <div className="font-serif text-base sm:text-lg text-foreground leading-tight truncate">
+          <div className="display-heading text-base sm:text-lg text-foreground leading-tight truncate">
             {mover.name}
           </div>
           <div className="mt-0.5 text-[10px] sm:text-[11px] text-muted-light truncate">
