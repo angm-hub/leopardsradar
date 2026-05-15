@@ -408,6 +408,183 @@ class TransfermarktClient:
         return None
 
     # ─────────────────────────────────────────────────────────────────
+    # Fiche individuelle — multi-nationalités (pour méthode E)
+    # ─────────────────────────────────────────────────────────────────
+    def fetch_player_details(self, tm_id: str) -> Optional[dict]:
+        """
+        Fetch la fiche TM d'un joueur et retourne TOUTES ses nationalités,
+        même quand la nationalité primaire n'est pas RDC.
+
+        C'est le point d'entrée de la méthode E : on scanne le squad complet
+        d'un club, puis pour chaque joueur inconnu on fetch sa fiche pour
+        vérifier si COD apparaît en n'importe quelle position de nationalité.
+
+        Retourne un dict minimal :
+          {
+            'transfermarkt_id': str,
+            'name': str,
+            'nationalities': list[str],       # ex. ['France', 'DR Congo']
+            'other_nationalities': list[str],  # nationalités supplémentaires (même contenu)
+            'current_club_name': str | None,
+            'current_club_id': str | None,
+            'date_of_birth': str | None,       # ISO YYYY-MM-DD
+            'place_of_birth': str | None,
+            'height_cm': int | None,
+            'foot': str | None,
+            'position': str | None,
+            'market_value_eur': int | None,
+            'image_url': str | None,
+            'profile_url': str,
+          }
+        Retourne None si la page ne se charge pas.
+        """
+        url = f"{BASE}/-/profil/spieler/{tm_id}"
+        html = self._get(url)
+        if not html:
+            return None
+
+        soup = BeautifulSoup(html, "html.parser")
+
+        # Nom
+        name_tag = soup.select_one("h1.data-header__headline-wrapper")
+        name = name_tag.get_text(separator=" ", strip=True) if name_tag else f"Player {tm_id}"
+        name = re.sub(r"^#\d+\s*", "", name)
+        name = re.sub(r"\s+", " ", name).strip()
+
+        # Toutes les nationalités listées dans la section Citizenship
+        # TM peut afficher plusieurs drapeaux dans le même span bold.
+        nationalities: list = []
+        seen_nats: set = set()
+        for span in soup.select("span.info-table__content--regular"):
+            label = span.get_text(strip=True).lower()
+            if "citizenship" not in label:
+                continue
+            value_span = span.find_next_sibling("span", class_="info-table__content--bold")
+            if not value_span:
+                continue
+            for img in value_span.select("img.flaggenrahmen"):
+                title = img.get("title") or img.get("alt")
+                if title and title not in seen_nats:
+                    nationalities.append(title)
+                    seen_nats.add(title)
+            break  # une seule section Citizenship
+
+        # Club actuel
+        current_club_name = None
+        current_club_id = None
+        club_link = soup.select_one("span.data-header__club a")
+        if club_link:
+            current_club_name = club_link.get_text(strip=True)
+            href = club_link.get("href", "")
+            m = re.search(r"/verein/(\d+)", href)
+            if m:
+                current_club_id = m.group(1)
+
+        # Date de naissance
+        date_of_birth = None
+        dob_tag = soup.select_one("span[itemprop='birthDate']")
+        if dob_tag:
+            dob_raw = dob_tag.get_text(strip=True)
+            # Format anglais : "Nov 23, 2009 (16)" ou format français : "23/11/2009 (16)"
+            m = re.match(r"(\w+)\s+(\d{1,2}),\s+(\d{4})", dob_raw)
+            if m:
+                month_map = {
+                    "Jan": "01", "Feb": "02", "Mar": "03", "Apr": "04",
+                    "May": "05", "Jun": "06", "Jul": "07", "Aug": "08",
+                    "Sep": "09", "Oct": "10", "Nov": "11", "Dec": "12",
+                }
+                mm = month_map.get(m.group(1)[:3])
+                if mm:
+                    date_of_birth = f"{m.group(3)}-{mm}-{int(m.group(2)):02d}"
+            else:
+                # Format DD/MM/YYYY
+                m2 = re.match(r"(\d{1,2})/(\d{1,2})/(\d{4})", dob_raw)
+                if m2:
+                    date_of_birth = f"{m2.group(3)}-{m2.group(2):>02}-{int(m2.group(1)):02d}"
+
+        # Lieu de naissance
+        place_of_birth = None
+        pob_tag = soup.select_one("span[itemprop='birthPlace']")
+        if pob_tag:
+            place_of_birth = pob_tag.get_text(strip=True)
+
+        # Taille
+        height_cm = None
+        height_tag = soup.select_one("span[itemprop='height']")
+        if height_tag:
+            h_text = height_tag.get_text(strip=True)
+            m = re.search(r"(\d),(\d{2})", h_text)
+            if m:
+                height_cm = int(m.group(1)) * 100 + int(m.group(2))
+
+        # Pied
+        foot = None
+        for li in soup.select("li.data-header__label"):
+            label = li.get_text(separator=" ", strip=True).lower()
+            if "foot" in label:
+                if "left" in label:
+                    foot = "left"
+                elif "right" in label:
+                    foot = "right"
+                elif "both" in label:
+                    foot = "both"
+
+        # Position
+        position = None
+        pos_tag = soup.select_one("dd.detail-position__position")
+        if pos_tag:
+            pos_text = pos_tag.get_text(strip=True).lower()
+            if "goalkeeper" in pos_text:
+                position = "Goalkeeper"
+            elif "back" in pos_text or "defender" in pos_text:
+                position = "Defender"
+            elif "midfield" in pos_text:
+                position = "Midfield"
+            elif "forward" in pos_text or "winger" in pos_text or "striker" in pos_text or "attack" in pos_text:
+                position = "Attack"
+
+        # Valeur marchande
+        market_value_eur = None
+        mv_tag = soup.select_one("a.data-header__market-value-wrapper")
+        if mv_tag:
+            mv_text = mv_tag.get_text(strip=True)
+            m_eur = re.search(r"€\s*([\d\.,]+)\s*(m|k)?", mv_text, re.IGNORECASE)
+            if m_eur:
+                num = float(m_eur.group(1).replace(",", ".").replace(" ", ""))
+                unit = (m_eur.group(2) or "").lower()
+                multiplier = 1_000_000 if unit == "m" else (1_000 if unit == "k" else 1)
+                market_value_eur = int(num * multiplier)
+
+        # Image
+        image_url = None
+        img_tag = soup.select_one("img.data-header__profile-image")
+        if img_tag:
+            src = img_tag.get("src") or img_tag.get("data-src")
+            if src:
+                image_url = urljoin(BASE, src)
+
+        # Les nationalités 2+ sont les "other_nationalities"
+        # (toutes sauf la première = primary)
+        other_nationalities = nationalities[1:] if len(nationalities) > 1 else []
+
+        return {
+            "transfermarkt_id": tm_id,
+            "name": name,
+            "nationalities": nationalities,
+            "other_nationalities": other_nationalities,
+            "current_club_name": current_club_name,
+            "current_club_id": current_club_id,
+            "date_of_birth": date_of_birth,
+            "place_of_birth": place_of_birth,
+            "height_cm": height_cm,
+            "foot": foot,
+            "position": position,
+            "market_value_eur": market_value_eur,
+            "image_url": image_url,
+            "profile_url": url,
+        }
+
+    # ─────────────────────────────────────────────────────────────────
     # Discovery — RDC pool
     # ─────────────────────────────────────────────────────────────────
     # ─────────────────────────────────────────────────────────────────

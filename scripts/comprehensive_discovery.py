@@ -79,10 +79,8 @@ TOP_LEAGUE_CLUBS = [
     {"id": "3522",   "name": "Brest",                 "league": "L1"},
     {"id": "1104",   "name": "Strasbourg",            "league": "L1"},
     {"id": "130",    "name": "Girondins de Bordeaux", "league": "L1"},
-    {"id": "432",    "name": "FC Lorient",            "league": "L1"},  # ← MUNONGO
-    {"id": "391",    "name": "FC Metz",               "league": "L1"},
-    {"id": "1082",   "name": "Havre AC",              "league": "L1"},
-    {"id": "1082",   "name": "Clermont Foot",         "league": "L1"},
+    {"id": "432",    "name": "FC Lorient",            "league": "L1"},
+    {"id": "347",    "name": "FC Metz",               "league": "L1"},  # ID corrigé (était 391 = club allemand)
     {"id": "17750",  "name": "Clermont Foot",         "league": "L1"},
     {"id": "1169",   "name": "Angers SCO",            "league": "L1"},
     {"id": "12312",  "name": "Saint-Etienne",         "league": "L1"},
@@ -883,26 +881,316 @@ def method_d_patronymes_search(
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# MÉTHODE E — Scan squad complet + fiche individuelle (multi-nats)
+#
+# Pourquoi cette méthode existe :
+#   Les méthodes A-D ratent les joueurs dont la nationalité primaire est FR/BE/DE
+#   mais qui ont RDC en position secondaire sur Transfermarkt.
+#   Ex : Believe Munongo (TM 1297673) = France primary + DR Congo secondary.
+#   La méthode A ne filtre que sur le patronyme bantu (correct), mais ce filtre
+#   peut rater des joueurs avec des noms européens.
+#   La méthode E va plus loin : pour chaque joueur du squad (inconnu en BDD),
+#   elle fetch sa fiche individuelle et vérifie si COD apparaît en n'importe
+#   quelle position de nationalité. Aucun filtre patronyme = zéro blind spot.
+#
+# Coût : ~1.5s par joueur → ~500 joueurs/club × 100 clubs = 14h pour tout le périmètre.
+# En pratique : 20 clubs L1 × ~30 joueurs = ~15 min pour la Ligue 1 seule.
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Variantes connues de "DR Congo" sur Transfermarkt selon la langue de la page
+# et les différentes appellations historiques utilisées sur TM.
+COD_NATIONALITY_VARIANTS = {
+    "DR Congo",
+    "DR Congo (Zaire)",
+    "Democratic Republic of Congo",
+    "Democratic Republic of the Congo",
+    "Republic of the Congo (Léopoldville)",
+    "Belgian Congo",
+    "Congo DR",
+    "RD Congo",       # version française TM
+    "Congo, DR",
+    "Congo (RDC)",
+    "République démocratique du Congo",
+    "DRC",
+}
+
+
+def _is_cod_nationality(nat: str) -> bool:
+    """
+    Retourne True si la nationalité correspond à la RD Congo,
+    quelle que soit la variante d'écriture utilisée par Transfermarkt.
+    """
+    nat_lower = nat.lower().strip()
+    for variant in COD_NATIONALITY_VARIANTS:
+        if variant.lower() in nat_lower or nat_lower in variant.lower():
+            return True
+    # Filet de sécurité : présence de "congo" + ("democratic" ou "rd" ou "rdc" ou "dr")
+    if "congo" in nat_lower and any(kw in nat_lower for kw in ["democrat", " rd ", " dr ", "rdc", "(rdc)"]):
+        return True
+    return False
+
+
+def method_e_full_squad_nationality_scan(
+    clubs_list: list,
+    existing_ids: set,
+    rate_limiter: RateLimiter,
+    dry_run: bool = False,
+    test_player_id: Optional[str] = None,
+    leagues_filter: Optional[set] = None,
+) -> list:
+    """
+    Pour chaque club de clubs_list, crawl le roster complet TM puis fetch
+    la fiche individuelle de chaque joueur INCONNU en BDD.
+    Si COD apparaît dans n'importe quelle nationalité → candidat.
+
+    :param clubs_list: liste de dicts {id, name, league} (même format que TOP_LEAGUE_CLUBS)
+    :param existing_ids: set de TM IDs déjà en BDD (pour skip)
+    :param rate_limiter: RateLimiter partagé
+    :param dry_run: si True, n'insère rien mais loggue les trouvailles
+    :param test_player_id: si défini, force le fetch de ce TM ID individuel pour test
+    :param leagues_filter: si défini, ne scanne que les clubs dont league est dans ce set
+    :return: liste de dicts candidats (même format que méthodes A-D)
+    """
+    print("\n═══ MÉTHODE E — Scan squad complet + fiche individuelle (multi-nats) ═══")
+
+    # Mode test : fetch direct d'un joueur spécifique, ignore les clubs
+    if test_player_id:
+        print(f"\n[MODE TEST] Fetch fiche individuelle TM {test_player_id}")
+        tm_client = TransfermarktClient(rate_limit_seconds=rate_limiter.min_delay)
+        details = tm_client.fetch_player_details(test_player_id)
+        if not details:
+            print(f"  ERREUR : impossible de charger la fiche TM {test_player_id}")
+            return []
+        nats = details.get("nationalities", [])
+        other = details.get("other_nationalities", [])
+        all_nats = nats
+        cod_found = any(_is_cod_nationality(n) for n in all_nats)
+        print(f"  Nom       : {details['name']}")
+        print(f"  Club      : {details.get('current_club_name')} (ID={details.get('current_club_id')})")
+        print(f"  Naissance : {details.get('date_of_birth')} à {details.get('place_of_birth')}")
+        print(f"  Nats      : {all_nats}")
+        print(f"  Hauteur   : {details.get('height_cm')} cm")
+        print(f"  Pied      : {details.get('foot')}")
+        print(f"  Position  : {details.get('position')}")
+        print(f"  Valeur    : {details.get('market_value_eur')} €")
+        print(f"  COD détecté : {'OUI ✓' if cod_found else 'NON ✗'}")
+        if not cod_found:
+            return []
+        # Retourne comme candidat même en mode test
+        return [{
+            "transfermarkt_id": test_player_id,
+            "name": details["name"],
+            "profile_url": details["profile_url"],
+            "method": "E",
+            "source": f"Test unitaire : fiche individuelle TM {test_player_id}",
+            "nationalities": nats,
+            "other_nationalities": other,
+            "is_binational": len(nats) > 1,
+            "current_club": details.get("current_club_name"),
+            "date_of_birth": details.get("date_of_birth"),
+            "place_of_birth": details.get("place_of_birth"),
+            "height_cm": details.get("height_cm"),
+            "foot": details.get("foot"),
+            "position": details.get("position"),
+            "market_value_eur": details.get("market_value_eur"),
+        }]
+
+    # Dédupliquer les clubs (même ID peut apparaître deux fois)
+    seen_club_ids: set = set()
+    clubs_to_scan = []
+    for club in clubs_list:
+        if leagues_filter and club.get("league") not in leagues_filter:
+            continue
+        if club["id"] not in seen_club_ids:
+            seen_club_ids.add(club["id"])
+            clubs_to_scan.append(club)
+
+    if leagues_filter:
+        print(f"Filtre ligues : {', '.join(sorted(leagues_filter))}")
+    print(f"Clubs à scanner : {len(clubs_to_scan)}")
+
+    tm_client = TransfermarktClient(rate_limit_seconds=rate_limiter.min_delay)
+
+    candidates = []
+    seen_tm_ids: set = set()
+    total_players_scanned = 0
+    total_squads_fetched = 0
+    errors_count = 0
+
+    for i, club in enumerate(clubs_to_scan, 1):
+        # Fetch le roster du club
+        rate_limiter.wait()
+        squad_url = f"https://www.transfermarkt.com/-/startseite/verein/{club['id']}"
+        try:
+            import random
+            r = requests.get(
+                squad_url,
+                headers={
+                    "User-Agent": random.choice([
+                        "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_5) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15",
+                        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+                        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+                    ]),
+                    "Accept": "text/html,application/xhtml+xml,*/*;q=0.8",
+                    "Accept-Language": "en-US,en;q=0.9",
+                    "DNT": "1",
+                },
+                timeout=20,
+            )
+        except requests.RequestException as e:
+            print(f"  [{i:>3}/{len(clubs_to_scan)}] {club['name']} : network error {e}, skip")
+            errors_count += 1
+            continue
+
+        if r.status_code in (403, 429):
+            print(f"  [{i:>3}/{len(clubs_to_scan)}] {club['name']} : BAN {r.status_code}, pause 45s")
+            time.sleep(45)
+            continue
+        if r.status_code != 200:
+            print(f"  [{i:>3}/{len(clubs_to_scan)}] {club['name']} : HTTP {r.status_code}, skip")
+            errors_count += 1
+            continue
+
+        soup = BeautifulSoup(r.text, "html.parser")
+
+        # Extraire tous les joueurs du roster
+        squad_player_ids = []
+        for link in soup.select('a[href*="/profil/spieler/"]'):
+            href = link.get("href", "")
+            m = re.search(r"/profil/spieler/(\d+)", href)
+            if not m:
+                continue
+            tm_id = m.group(1)
+            if tm_id not in squad_player_ids:
+                squad_player_ids.append(tm_id)
+
+        total_squads_fetched += 1
+        club_candidates = 0
+        club_scanned = 0
+        club_skipped_db = 0
+
+        for tm_id in squad_player_ids:
+            # Skip si déjà en BDD ou déjà traité dans ce run
+            if tm_id in existing_ids:
+                club_skipped_db += 1
+                continue
+            if tm_id in seen_tm_ids:
+                continue
+            seen_tm_ids.add(tm_id)
+
+            # Fetch la fiche individuelle pour avoir TOUTES les nationalités.
+            # Le rate-limit est géré par TransfermarktClient._sleep_if_needed()
+            # (configuré avec le même min_delay que le rate_limiter global).
+            try:
+                details = tm_client.fetch_player_details(tm_id)
+            except Exception as exc:
+                print(f"    TM {tm_id} : erreur fetch — {exc}, skip")
+                errors_count += 1
+                continue
+
+            if not details:
+                continue
+
+            club_scanned += 1
+            total_players_scanned += 1
+
+            all_nats = details.get("nationalities", [])
+
+            # Vérification COD en n'importe quelle position de nationalité
+            if any(_is_cod_nationality(n) for n in all_nats):
+                nats = details["nationalities"]
+                other_nats = details.get("other_nationalities", [])
+                cand = {
+                    "transfermarkt_id": tm_id,
+                    "name": details["name"],
+                    "profile_url": details["profile_url"],
+                    "method": "E",
+                    "source": f"Squad scan méthode E : {club['name']} ({club['league']})",
+                    "nationalities": nats,
+                    "other_nationalities": other_nats,
+                    "is_binational": len(nats) > 1,
+                    "current_club": details.get("current_club_name"),
+                    "date_of_birth": details.get("date_of_birth"),
+                    "place_of_birth": details.get("place_of_birth"),
+                    "height_cm": details.get("height_cm"),
+                    "foot": details.get("foot"),
+                    "position": details.get("position"),
+                    "market_value_eur": details.get("market_value_eur"),
+                }
+                candidates.append(cand)
+                club_candidates += 1
+                print(f"    ✓ TROUVÉ : {details['name']} ({club['name']}) | nats={all_nats}")
+
+        status_line = (
+            f"  [{i:>3}/{len(clubs_to_scan)}] {club['name']:30} "
+            f"squad={len(squad_player_ids):>3} scannés={club_scanned:>3} "
+            f"skip_db={club_skipped_db:>3} COD={club_candidates:>2}"
+        )
+        print(status_line)
+
+    print(
+        f"\nMéthode E : {len(candidates)} candidats COD détectés "
+        f"({total_players_scanned} fiches scannées, {total_squads_fetched} clubs, "
+        f"{errors_count} erreurs)"
+    )
+    return candidates
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Insertion Supabase
 # ─────────────────────────────────────────────────────────────────────────────
 
 def build_player_row(cand: dict) -> dict:
-    """Construit le row minimal pour insérer un candidat en base."""
-    return {
+    """
+    Construit le row pour insérer un candidat en base.
+
+    La méthode E enrichit le dict candidat avec les données de la fiche
+    individuelle (nationalités, club, DOB, etc.) — on les propage ici
+    pour éviter un sync TM supplémentaire.
+    """
+    method = cand.get("method", "?")
+
+    # Nationalités : la méthode E les a déjà parsées ; les autres méthodes laissent vide.
+    nationalities = cand.get("nationalities", [])
+    other_nationalities = cand.get("other_nationalities", [])
+    is_binational = cand.get("is_binational", False)
+
+    row = {
         "name": cand["name"],
         "slug": slugify(cand["name"]) or f"tm-{cand['transfermarkt_id']}",
         "transfermarkt_id": cand["transfermarkt_id"],
         "player_category": "radar",
         "eligibility_status": "unknown",
         "eligibility_note": (
-            f"Découvert via comprehensive-discovery v2 (méthode {cand['method']}). "
+            f"Découvert via comprehensive-discovery v3 (méthode {method}). "
             f"Source : {cand.get('source', '?')}. "
             f"À vérifier : origine RDC à confirmer, éligibilité à instruire."
         ),
         "verified": False,
-        "nationalities": [],
+        "nationalities": nationalities,
+        "other_nationalities": other_nationalities,
+        "is_binational": is_binational,
         "source_urls": [cand["profile_url"]],
     }
+
+    # Champs enrichis depuis la fiche individuelle (méthode E uniquement)
+    if method == "E":
+        if cand.get("current_club"):
+            row["current_club"] = cand["current_club"]
+        if cand.get("date_of_birth"):
+            row["date_of_birth"] = cand["date_of_birth"]
+        if cand.get("place_of_birth"):
+            row["place_of_birth"] = cand["place_of_birth"]
+        if cand.get("height_cm"):
+            row["height_cm"] = cand["height_cm"]
+        if cand.get("foot"):
+            row["foot"] = cand["foot"]
+        if cand.get("position"):
+            row["position"] = cand["position"]
+        if cand.get("market_value_eur"):
+            row["market_value_eur"] = cand["market_value_eur"]
+
+    return row
 
 
 def insert_candidates(sb, candidates: list, dry_run: bool) -> int:
@@ -947,7 +1235,7 @@ def insert_candidates(sb, candidates: list, dry_run: bool) -> int:
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Léopards Radar — Discovery v2 : multi-source comprehensive"
+        description="Léopards Radar — Discovery v3 : multi-source comprehensive (méthodes A-E)"
     )
     parser.add_argument(
         "--dry-run",
@@ -957,19 +1245,39 @@ def main():
     parser.add_argument(
         "--methods",
         default="A,B,C,D",
-        help="Méthodes à exécuter, séparées par virgules : A,B,C,D (default : toutes)",
+        help="Méthodes à exécuter, séparées par virgules : A,B,C,D,E (default : A,B,C,D)",
+    )
+    parser.add_argument(
+        "--test-player",
+        default=None,
+        metavar="TM_ID",
+        help="[Méthode E] Teste le fetch d'un joueur spécifique par TM ID (ex: 1297673 = Munongo)",
+    )
+    parser.add_argument(
+        "--leagues",
+        default=None,
+        metavar="LEAGUES",
+        help="[Méthode E] Filtre sur des ligues spécifiques (ex: 'L1' ou 'L1,BEL1')",
     )
     args = parser.parse_args()
 
     methods = {m.strip().upper() for m in args.methods.split(",")}
     started_at = dt.datetime.utcnow()
 
+    leagues_filter = None
+    if args.leagues:
+        leagues_filter = {l.strip().upper() for l in args.leagues.split(",")}
+
     print("═══════════════════════════════════════════════════════")
-    print("  Léopards Radar — Discovery v2 : comprehensive")
+    print("  Léopards Radar — Discovery v3 : comprehensive")
     print("═══════════════════════════════════════════════════════")
-    print(f"  Start    : {started_at.isoformat()}Z")
-    print(f"  Méthodes : {', '.join(sorted(methods))}")
-    print(f"  Dry run  : {args.dry_run}")
+    print(f"  Start        : {started_at.isoformat()}Z")
+    print(f"  Méthodes     : {', '.join(sorted(methods))}")
+    print(f"  Dry run      : {args.dry_run}")
+    if args.test_player:
+        print(f"  Test player  : TM {args.test_player}")
+    if leagues_filter:
+        print(f"  Ligues filtre: {', '.join(sorted(leagues_filter))}")
     print("═══════════════════════════════════════════════════════")
 
     # Init Supabase (optionnel en dry-run si pas de secrets)
@@ -1044,6 +1352,23 @@ def main():
             print(f"[Méthode D] ERREUR : {e}")
             errors_by_method["D"] = str(e)
 
+    # Méthode E — Squad scan complet + fiche individuelle (multi-nats)
+    # Attrape les joueurs avec nationalité primaire FR/BE/DE et COD en secondaire.
+    if "E" in methods:
+        try:
+            cands_e = method_e_full_squad_nationality_scan(
+                clubs_list=TOP_LEAGUE_CLUBS,
+                existing_ids=existing_ids,
+                rate_limiter=rate_limiter,
+                dry_run=args.dry_run,
+                test_player_id=args.test_player,
+                leagues_filter=leagues_filter,
+            )
+            all_candidates.extend(cands_e)
+        except Exception as e:
+            print(f"[Méthode E] ERREUR : {e}")
+            errors_by_method["E"] = str(e)
+
     # Résultats par méthode
     print("\n══════════════════════════")
     print("  Résumé par méthode")
@@ -1086,6 +1411,7 @@ def main():
                     "method_b": sum(1 for c in all_candidates if c.get("method") == "B"),
                     "method_c": sum(1 for c in all_candidates if c.get("method") == "C"),
                     "method_d": sum(1 for c in all_candidates if c.get("method") == "D"),
+                    "method_e": sum(1 for c in all_candidates if c.get("method") == "E"),
                     "munongo_found": munongo_found,
                 }}],
                 "started_at": started_at.isoformat() + "Z",

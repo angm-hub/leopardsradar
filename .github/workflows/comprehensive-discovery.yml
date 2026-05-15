@@ -1,9 +1,17 @@
-name: Comprehensive discovery v2 (multi-source)
+name: Comprehensive discovery v3 (multi-source + squad nationality scan)
 
-# Discovery v2 : couvre les gaps laissés par les 3 scripts existants.
+# Discovery v3 : couvre les gaps laissés par les 3 scripts existants.
 # Déclencheur : samedi 01h UTC (hors des autres crons) + workflow_dispatch.
-# Cas Munongo : Lorient Ligue 1, binational non déclaré RDC, patronyme "Munongo"
-# présent dans la whitelist mais club non scanné par discover_by_surname → gap comblé ici.
+#
+# Méthodes disponibles :
+#   A — Scan clubs pros (filtre patronyme bantu)
+#   B — Wikipedia categories scraping
+#   C — Wikidata SPARQL étendu (P22/P25 parents)
+#   D — Patronymes étendus × TM search
+#   E — Squad scan complet + fiche individuelle (multi-nats)
+#       Attrape les binationaux avec nationalité primaire FR/BE/DE et RDC en secondaire.
+#       Coût : ~1.5s/joueur. Ligue 1 seule ≈ 15 min. Toutes ligues ≈ 6-8h.
+#       Activer avec méthodes=A,B,C,D,E + timeout-minutes=240
 
 on:
   schedule:
@@ -17,9 +25,14 @@ on:
         default: 'false'
         type: boolean
       methods:
-        description: 'Méthodes à exécuter (virgule-séparées : A,B,C,D)'
+        description: 'Méthodes à exécuter (virgule-séparées : A,B,C,D,E)'
         required: false
         default: 'A,B,C,D'
+        type: string
+      leagues:
+        description: '[Méthode E] Ligues à scanner (ex: L1 ou L1,BEL1 — vide = toutes)'
+        required: false
+        default: ''
         type: string
 
 permissions:
@@ -28,7 +41,8 @@ permissions:
 jobs:
   comprehensive-discovery:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    # Timeout adapté : 60 min pour A-D, 240 min si méthode E activée (toutes ligues)
+    timeout-minutes: 240
     concurrency:
       group: comprehensive-discovery
       cancel-in-progress: false
@@ -63,4 +77,8 @@ jobs:
           if [ -z "$METHODS" ]; then
             METHODS="A,B,C,D"
           fi
-          python comprehensive_discovery.py $DRY_FLAG --methods "$METHODS"
+          LEAGUES_FLAG=""
+          if [ -n "${{ inputs.leagues }}" ]; then
+            LEAGUES_FLAG="--leagues ${{ inputs.leagues }}"
+          fi
+          python comprehensive_discovery.py $DRY_FLAG --methods "$METHODS" $LEAGUES_FLAG

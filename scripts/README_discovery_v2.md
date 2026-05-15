@@ -1,21 +1,25 @@
-# Discovery v2 — Guide technique
+# Discovery v3 — Guide technique
 
-## Contexte : pourquoi cette v2 ?
+## Contexte : pourquoi cette v3 ?
 
-**Cas déclencheur** : Believe Munongo (TM ID 1297673), attaquant de Lorient en Ligue 1,
-n'était pas dans la BDD Léopards Radar malgré son patronyme bantou clairement congolais.
+**Cas déclencheur** : Believe Munongo (TM ID 1297673), milieu de FC Metz en Ligue 2,
+n'était pas dans la BDD Léopards Radar car sa nationalité **primaire** sur Transfermarkt
+est France — RDC n'apparaît qu'en **secondaire**.
 
 **Pourquoi les scripts existants ne l'ont pas capturé** :
 
 | Script | Méthode | Pourquoi Munongo est passé entre les mailles |
 |--------|---------|----------------------------------------------|
-| `discover_candidates.py` | Filtre TM `land_id=193` (nationalité RDC déclarée) | Munongo est binational, pas encore international RDC, nationalité FR déclarée sur TM |
-| `discover_by_surname.py` | Crawl sélections jeunes EU + quelques académies | Lorient (ID 432) **n'est pas** dans la liste des équipes scannées |
-| `discover_wikidata.py` | P19=RDC ou P27=RDC | Munongo né en France/Belgique, pas de citizenship RDC sur Wikidata |
+| `discover_candidates.py` | Filtre TM `land_id=193` (nationalité RDC primary) | Munongo a nationalité France primary → invisible |
+| `discover_by_surname.py` | Crawl sélections jeunes EU + quelques académies | Lorient (ID 432, Metz ID 391 dans la v2) non scannés |
+| `discover_wikidata.py` | P19=RDC ou P27=RDC | Né à Metz, pas de citizenship RDC sur Wikidata |
+
+**Gap quantifié** : 684 joueurs en BDD ont 2+ nationalités mais `other_nationalities`
+est vide pour tous (0/1068). La méthode E comble ce gap structurel.
 
 ---
 
-## Les 4 méthodes de `comprehensive_discovery.py`
+## Les 5 méthodes de `comprehensive_discovery.py`
 
 ### Méthode A — Scan clubs pros top ligues
 
@@ -74,7 +78,45 @@ joueurs → filtre pas-en-BDD = candidat.
 
 **Limitation** : les noms très courants (Bamba, Kanda) peuvent générer des
 faux positifs de pays différents. Le champ `eligibility_status = 'unknown'`
-signal que la vérification manuelle est obligatoire.
+signale que la vérification manuelle est obligatoire.
+
+---
+
+### Méthode E — Squad scan complet + fiche individuelle (multi-nats) ⭐ NOUVEAU
+
+**Problème résolu** : un joueur avec nationalité primaire française/belge/allemande
+et RD Congo en secondaire est **invisible** pour toutes les méthodes A-D (sauf D si
+le patronyme est dans la whitelist). La méthode E scanne CHAQUE joueur de CHAQUE
+club ciblé sans filtre patronyme.
+
+**Logique** :
+1. Pour chaque club de la liste `TOP_LEAGUE_CLUBS` : fetch le roster complet via TM
+2. Pour chaque joueur inconnu en BDD : fetch sa fiche individuelle TM
+3. Si COD apparaît dans **n'importe quelle** nationalité → candidat, avec toutes les
+   données enrichies (DOB, position, valeur marchande, etc.)
+
+**Variantes COD reconnues** : `DR Congo`, `RD Congo`, `Democratic Republic of Congo`,
+`Belgian Congo`, `Congo DR`, etc. (12 variantes + filet sécurité sur "congo" + "democrat/rd/rdc/dr")
+
+**Données enrichies** : la méthode E pré-remplit `nationalities`, `other_nationalities`,
+`is_binational`, `current_club`, `date_of_birth`, `place_of_birth`, `height_cm`,
+`position`, `market_value_eur` — pas besoin d'un sync TM supplémentaire.
+
+**Coût** :
+- Ligue 1 France (20 clubs, ~30 joueurs/club) ≈ 15 min
+- Toutes les ligues (~100 clubs × ~30 joueurs) ≈ 6-8h
+- Rate limit : 1.5s/fiche individuelle
+
+**Test unitaire** : `--test-player 1297673` vérifie Munongo en 3 secondes.
+
+**Exemple dry-run L1** (15 mai 2026) :
+- 20 clubs scannés (Ligue 1 + quelques clubs L2/BEL doublons)
+- ~600 fiches individuelles parsées
+- Résultats à compléter après run complet
+
+**Limitation** : coûteux en temps. Prévoir timeout 240 min en GH Actions.
+Ne pas activer en cron hebdomadaire (trop lent) — déclencher manuellement
+via `workflow_dispatch` avec `methods=A,B,C,D,E`.
 
 ---
 
@@ -85,10 +127,10 @@ signal que la vérification manuelle est obligatoire.
    - `transfermarkt_id` (str)
    - `name` (str)
    - `profile_url` (str)
-   - `method` (str, ex. "E")
+   - `method` (str, ex. "F")
    - `source` (str, description lisible)
 3. Appeler la fonction dans `main()` dans le bloc `if "X" in methods`
-4. Ajouter `X` à l'input `methods` du workflow
+4. Ajouter `X` à l'input `methods` du workflow et au `README_discovery_v2.md`
 
 ---
 
@@ -110,7 +152,7 @@ patronymes. Pour l'enrichir :
 
 | Joueur | TM ID | Club | Pourquoi manquait | Méthode qui le trouve |
 |--------|-------|------|--------------------|-----------------------|
-| Believe Munongo | 1297673 | FC Lorient (L1) | Lorient non scanné par discover_by_surname, nationalité FR sur TM | A (club scan Lorient) + D (patronyme "Munongo") |
+| Believe Munongo | 1297673 | FC Metz (L2, ancien Lorient) | Nationalité primaire France sur TM, RDC en secondaire | E (squad scan + fiche individuelle) + D (patronyme "Munongo") |
 
 ---
 
@@ -118,27 +160,52 @@ patronymes. Pour l'enrichir :
 
 | Cas | Raison | Workaround possible |
 |-----|--------|---------------------|
-| Joueur avec patronyme entièrement européen (prénom congolais seulement) | Les 4 méthodes filtrent sur le nom de famille | Recherche par prénom bantu (P735 Wikidata) — trop de faux positifs |
-| Joueur très récent (U15/U16) sans page TM ni Wikidata | TM ne profile pas les -16 ans | Scan FECOFA (manuel) ou sites diaspora |
-| Joueur avec double nationalité non déclarée sur TM | TM ne montre que la nationalité "principale" | Accès FECOFA officiel ou sélection RDC pour vérification |
+| Joueur avec patronyme entièrement européen (prénom congolais seulement) | Les 5 méthodes filtrent majoritairement sur le nom de famille | Recherche par prénom bantu (P735 Wikidata) — trop de faux positifs |
+| Joueur très récent (U15/U16) sans page TM ni Wikidata | TM ne profile pas les -16 ans systématiquement | Scan FECOFA (manuel) ou sites diaspora |
+| Joueur avec double nationalité non déclarée sur TM | TM peut ne pas afficher la nationalité RDC si jamais sélectionné | Méthode E ne peut pas détecter ce qui n'est pas déclaré sur TM |
+| Clubs hors du périmètre `TOP_LEAGUE_CLUBS` | La méthode E ne scanne que ~100 clubs définis | Étendre la liste `TOP_LEAGUE_CLUBS` avec d'autres championnats |
 
 ---
 
 ## Exécution manuelle
 
 ```bash
-# Dry run — méthode A seulement (rapide, prouve que Munongo est trouvé)
 cd scripts
+
+# Test unitaire Munongo (3 secondes, confirme que COD est détecté)
+python comprehensive_discovery.py --dry-run --methods E --test-player 1297673
+
+# Dry run méthode E — Ligue 1 uniquement (~15 min)
+python comprehensive_discovery.py --dry-run --methods E --leagues L1
+
+# Dry run méthode E — Belgique uniquement (~10 min)
+python comprehensive_discovery.py --dry-run --methods E --leagues BEL1
+
+# Dry run — méthode A seulement (rapide, patronyme bantu)
 python comprehensive_discovery.py --dry-run --methods A
 
-# Dry run — toutes les méthodes
+# Dry run — toutes les méthodes A-D
 python comprehensive_discovery.py --dry-run
 
-# Exécution réelle (nécessite SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY)
+# Exécution réelle méthode E Ligue 1 (LIVE, ~15 min)
 SUPABASE_URL=https://xxxx.supabase.co \
 SUPABASE_SERVICE_ROLE_KEY=eyJ... \
-python comprehensive_discovery.py --methods A,B,C,D
+python comprehensive_discovery.py --methods E --leagues L1
+
+# Exécution réelle — toutes méthodes (LIVE, 6-8h pour E complète)
+SUPABASE_URL=https://xxxx.supabase.co \
+SUPABASE_SERVICE_ROLE_KEY=eyJ... \
+python comprehensive_discovery.py --methods A,B,C,D,E
 ```
+
+## Activer la méthode E via GitHub Actions
+
+Sur le repo GitHub Actions (`comprehensive-discovery.yml`), déclencher manuellement :
+- `methods` : `A,B,C,D,E`
+- `leagues` : laisser vide pour tout scanner (6-8h) ou `L1` pour Ligue 1 seulement (15 min)
+- `dry_run` : `true` pour tester sans insérer
+
+Le timeout du job est 240 min (4h) pour couvrir un run E complet sur toutes les ligues.
 
 ## Variables d'environnement
 
