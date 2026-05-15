@@ -1,0 +1,53 @@
+name: Compute Léopards scores
+
+# ──────────────────────────────────────────────────────────────────────
+# Sprint 4 du brief Léopards Radar v3 (2026-05-15) — scoring hexagonal.
+#
+# Recalcule les Léopards Scores hexagonaux pour tous les joueurs scoreables
+# via la RPC SQL public.compute_leopards_scores_all().
+#
+# Cron : dimanche 10h UTC, après :
+#   - sync-transfermarkt (02h) → fresh market_value, season_minutes
+#   - refresh-levels (03h) → fresh legacy level_band
+#   - sync-fbref (04h) → fresh stats avancées (axes positionnels v2)
+#   - sync-matches (06h) → fresh caps RDC
+#
+# Donc les scores de la newsletter du dimanche soir reflètent les données
+# les plus fraîches.
+# ──────────────────────────────────────────────────────────────────────
+
+on:
+  schedule:
+    - cron: '0 10 * * 0'   # Dimanche 10h UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compute:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    concurrency:
+      group: compute-scores
+      cancel-in-progress: false
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: scripts/requirements.txt
+
+      - run: pip install -r scripts/requirements.txt
+
+      - name: Compute Léopards scores
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        working-directory: scripts
+        run: python compute_scores.py

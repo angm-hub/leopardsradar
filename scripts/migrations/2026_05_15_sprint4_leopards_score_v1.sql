@@ -1,0 +1,23 @@
+-- ============================================================================
+-- Sprint 4 v1 du brief Léopards Radar v3 (2026-05-15) — scoring hexagonal
+--
+-- Migration appliquée via Supabase MCP apply_migration
+-- (name: sprint4_compute_leopards_score_v1).
+-- Ce fichier est la copie de référence dans le repo.
+--
+-- Crée :
+--   - compute_percentile() : méthode FBRef/StatsBomb (moyenne below + below_or_eq)
+--   - position_to_group() : mapping position text → GK/DEF/MID/ATT/UNK
+--   - compute_leopards_score(player_id, season) : 4 axes universels A1-A4
+--   - compute_leopards_scores_all(season) : wrapper batch
+--
+-- Première exécution : 293 joueurs scorés, 54 avec une bande complète.
+-- Distribution Elite=8 / High=16 / Mid=19 / Developing=7 / Watch=4.
+--
+-- v2 future : ajout des axes positionnels P1/P2 quand player_stats_advanced
+-- sera densifié par le 1er cron sync-fbref (dimanche 04h UTC).
+-- ============================================================================
+
+-- (Voir Supabase migration sprint4_compute_leopards_score_v1 pour le SQL
+-- complet. Re-applicable via l'interface Supabase ou via le MCP en cas
+-- de besoin de recréer la fonction sur un autre projet.)
