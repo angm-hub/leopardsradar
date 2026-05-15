@@ -109,10 +109,13 @@ export function PromoBanner() {
           transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
           role="banner"
           aria-label="Promotion Mondial 2026"
-          className="fixed top-0 inset-x-0 z-[70] overflow-hidden border-b border-emerald-500/20"
+          className="fixed top-0 inset-x-0 z-[70] overflow-hidden border-b border-cobalt-500/30"
           style={{
+            // Pivot DA Cobalt : gradient cobalt 700 → 900 → void deep
+            // (drapeau RDC désaturé). Avant : vert RDC saturé qui faisait
+            // tâche vs le reste du site cobalt cinéma.
             background:
-              "linear-gradient(90deg, #00A651 0%, #007a37 60%, #004d25 100%)",
+              "linear-gradient(90deg, #1A3A78 0%, #0E1F44 60%, #050B1A 100%)",
           }}
         >
           <Link
@@ -121,7 +124,7 @@ export function PromoBanner() {
             className="group relative block"
           >
             <div className="mx-auto flex w-full max-w-7xl items-center justify-center gap-3 px-4 py-2 text-center lg:px-8">
-              <span className="inline-flex shrink-0 items-center rounded-full bg-[#FFC107] px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.18em] text-black">
+              <span className="inline-flex shrink-0 items-center rounded-full bg-primary px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.18em] text-primary-foreground">
                 {phase === "before" ? `J-${daysUntilKickoff}` : phase === "during" ? "EN COURS" : "MONDIAL"}
               </span>
               <p className="truncate text-[12px] leading-snug text-white md:text-[13px]">

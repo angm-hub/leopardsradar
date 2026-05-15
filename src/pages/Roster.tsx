@@ -259,7 +259,7 @@ const Roster = () => {
             <span className="mx-2 text-muted/60">/</span>
             <span className="text-foreground/80">Roster</span>
           </nav>
-          <h1 className="mt-4 font-serif text-5xl md:text-6xl font-semibold text-foreground tracking-tight">
+          <h1 className="mt-4 display-heading text-5xl md:text-6xl text-foreground">
             Roster Léopards
           </h1>
           <p className="mt-3 text-lg text-muted-light">
@@ -341,7 +341,7 @@ const Roster = () => {
               <Search className="h-10 w-10 text-foreground/30" />
               {players.length === 0 ? (
                 <>
-                  <p className="font-serif text-xl text-foreground">
+                  <p className="display-heading text-xl text-foreground">
                     Le roster est encore vide.
                   </p>
                   <p className="text-sm text-muted-light">
@@ -351,7 +351,7 @@ const Roster = () => {
                 </>
               ) : (
                 <>
-                  <p className="font-serif text-xl text-foreground">
+                  <p className="display-heading text-xl text-foreground">
                     Aucun Léopard avec ces filtres.
                   </p>
                   <p className="text-sm text-muted-light">

@@ -101,7 +101,7 @@ function RadarCard({ player }: { player: DBPlayer }) {
         {player.current_club ? (
           <p className="text-sm text-foreground/70 truncate">{player.current_club}</p>
         ) : null}
-        <h3 className="mt-1 font-serif text-xl font-semibold text-foreground tracking-tight truncate">
+        <h3 className="mt-1 display-heading text-xl text-foreground truncate">
           {player.name}
         </h3>
         <div className="mt-1 flex items-center justify-between gap-2 text-xs">
@@ -213,7 +213,7 @@ export default function Radar() {
             <span className="mx-2 text-muted/60">/</span>
             <span className="text-foreground/80">Radar</span>
           </nav>
-          <h1 className="mt-4 font-serif text-5xl md:text-6xl font-semibold text-foreground tracking-tight">
+          <h1 className="mt-4 display-heading text-5xl md:text-6xl text-foreground">
             Le Radar.
           </h1>
           <p className="mt-3 max-w-2xl text-lg text-muted-light">
@@ -293,7 +293,7 @@ export default function Radar() {
               <Search className="h-10 w-10 text-foreground/30" />
               {players.length === 0 ? (
                 <>
-                  <p className="font-serif text-xl text-foreground">
+                  <p className="display-heading text-xl text-foreground">
                     Le Radar se construit.
                   </p>
                   <p className="text-sm text-muted-light">
@@ -304,7 +304,7 @@ export default function Radar() {
                 </>
               ) : (
                 <>
-                  <p className="font-serif text-xl text-foreground">
+                  <p className="display-heading text-xl text-foreground">
                     Aucun talent ne matche.
                   </p>
                   <p className="text-sm text-muted-light">

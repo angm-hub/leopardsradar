@@ -72,7 +72,7 @@ function NotFound() {
         <p className="text-xs uppercase tracking-[0.2em] text-primary mb-4">
           404 · Profil introuvable
         </p>
-        <h1 className="font-serif text-5xl text-foreground">Joueur introuvable.</h1>
+        <h1 className="display-heading text-5xl text-foreground">Joueur introuvable.</h1>
         <p className="mt-4 max-w-md text-muted">
           Ce profil n'existe pas (encore) dans notre radar. Si tu cherchais un
           binational récemment dévoilé, on l'ajoute peut-être bientôt — propose-le.
@@ -303,7 +303,7 @@ export default function PlayerPage() {
                 <p className="text-[10px] uppercase tracking-[0.3em] text-primary/85 font-mono">
                   {categoryKicker}
                 </p>
-                <h1 className="-mt-3 font-serif text-5xl md:text-7xl font-semibold leading-[1.05] text-balance text-foreground">
+                <h1 className="-mt-3 display-heading text-5xl md:text-7xl text-balance text-foreground">
                   {player.name}
                 </h1>
 
@@ -559,7 +559,7 @@ export default function PlayerPage() {
               <p className="text-xs uppercase tracking-[0.2em] text-primary mb-3">
                 Profil en cours d'enrichissement
               </p>
-              <h2 className="font-serif text-2xl md:text-3xl text-foreground leading-tight mb-4">
+              <h2 className="display-heading text-2xl md:text-3xl text-foreground mb-4">
                 {player.name} vient d'entrer dans notre radar.
               </h2>
               <p className="text-muted-light leading-relaxed max-w-2xl">
@@ -585,7 +585,7 @@ export default function PlayerPage() {
           </section>
         ) : (
           <section id="identite" className="container-site py-12 border-t border-border scroll-mt-24">
-            <h2 className="font-serif text-3xl text-foreground mb-6">Identité.</h2>
+            <h2 className="display-heading text-3xl text-foreground mb-6">Identité.</h2>
             <PlayerIdentityCards
               dateOfBirth={player.date_of_birth}
               placeOfBirth={player.place_of_birth}
@@ -633,7 +633,7 @@ export default function PlayerPage() {
             (déjà couverte par le bloc éditorial plus haut). */}
         {!isProfileSparse && (
         <section id="saison" className="container-site py-12 border-t border-border scroll-mt-24">
-          <h2 className="font-serif text-3xl text-foreground">
+          <h2 className="display-heading text-3xl text-foreground">
             Saison 2025/26 — Club.
           </h2>
           {seasonEmpty ? (
