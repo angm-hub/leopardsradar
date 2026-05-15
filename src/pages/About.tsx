@@ -7,6 +7,7 @@ import {
   IndependanceVisual,
   EditeurVisual,
 } from "@/components/about/AboutSectionVisuals";
+import { HeritageSection } from "@/components/about/HeritageSection";
 
 export default function About() {
   useDocumentMeta({
@@ -17,8 +18,8 @@ export default function About() {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
-      <main className="flex-1 container-site pt-32 pb-24">
-        <div className="mx-auto max-w-3xl">
+      <main className="flex-1 pt-32 pb-24">
+        <div className="container-site mx-auto max-w-3xl">
           <nav aria-label="breadcrumb" className="text-sm text-muted">
             <a href="/" className="hover:text-foreground transition-colors">Home</a>
             <span className="mx-2 text-muted/60">/</span>
@@ -164,6 +165,14 @@ export default function About() {
               </p>
             </div>
           </section>
+        </div>
+
+        {/* Heritage section — full-bleed (rompt le max-w-3xl). Tribut 1974
+            Zaïre + manifeste éditorial Okapi. Brand book Premium v2 :
+            la posture éditoriale s'incarne en visuel cinéma plutôt qu'en
+            texte explicatif. Cette section ferme la page sur l'ADN. */}
+        <div className="mt-16 md:mt-24">
+          <HeritageSection />
         </div>
       </main>
       <Footer />
