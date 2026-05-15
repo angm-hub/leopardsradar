@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { Activity, Feather, Sparkles, ArrowRight } from "lucide-react";
-import { StrongGradient } from "@/components/ui/GradientBackgrounds";
 import { NewsletterForm } from "@/components/newsletter/NewsletterForm";
 
 /**
@@ -11,20 +10,44 @@ import { NewsletterForm } from "@/components/newsletter/NewsletterForm";
  * (cron pg_cron sur Supabase tourne le dimanche soir UTC) et donne au
  * lecteur une raison précise de s'abonner ("le récap du week-end").
  *
- * Le compteur d'abonnés est intentionnellement absent : avec 0 abonnés,
- * l'afficher est anti-conversion. Le proof se fait via le teaser "Aperçu
- * d'une édition" qui renvoie vers Histoires (contenu déjà publié).
+ * Polish DA Cobalt 2026-05-15 : remplace StrongGradient (legacy) par
+ * atmos-torch + grain — moment cinématique de clôture, jaune dimanche
+ * soir cohérent avec la promesse "récap du week-end". L'eyebrow passe à
+ * label-mono text-torch (heritage palette) et le H2 à display-heading.
  */
 export function NewsletterSection() {
   return (
     <section
       id="newsletter"
-      className="relative py-16 md:py-20 bg-card overflow-hidden scroll-mt-24"
+      className="relative py-16 md:py-20 overflow-hidden scroll-mt-24"
     >
-      <StrongGradient intensity={0.95} position="flow" />
+      {/* Atmos-torch : jaune dimanche soir + cobalt deep — cinéma. */}
+      <div aria-hidden className="absolute inset-0 atmos-torch opacity-90" />
+
+      {/* Grain texture — cohérent avec hero + Heritage */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none mix-blend-overlay opacity-[0.22]"
+        style={{
+          backgroundImage:
+            "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1, 0 0 0 0 1, 0 0 0 0 1, 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E\")",
+        }}
+      />
+
+      {/* Vignette pour focaliser le formulaire au centre */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse 70% 90% at 50% 50%, transparent 30%, rgba(5,11,26,0.55) 100%)",
+        }}
+      />
+
+      {/* Grid pattern subtil au-dessus de l'atmosphère — texture éditoriale */}
       <svg
         aria-hidden
-        className="absolute inset-0 h-full w-full opacity-[0.03] text-foreground"
+        className="absolute inset-0 h-full w-full opacity-[0.04] text-foreground"
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
@@ -35,17 +58,17 @@ export function NewsletterSection() {
         <rect width="100%" height="100%" fill="url(#grid)" />
       </svg>
 
-      <div className="container-site relative">
+      <div className="container-site relative z-10">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="text-xs uppercase tracking-[0.2em] text-primary">
+          <span className="label-mono text-torch">
             Le Récap Léopards
           </span>
-          <h2 className="mt-4 font-serif text-4xl md:text-5xl font-semibold text-foreground tracking-tight text-balance">
+          <h2 className="mt-4 display-heading text-4xl md:text-5xl text-foreground text-balance">
             Le récap du dimanche soir.
           </h2>
-          <p className="mt-5 text-muted-light text-lg max-w-xl mx-auto leading-relaxed">
+          <p className="mt-5 text-foreground/75 text-lg max-w-xl mx-auto leading-relaxed">
             Performances du week-end, un talent surveillé, l'analyse de la
-            semaine. <span className="text-foreground/85">6 minutes de
+            semaine. <span className="text-foreground">6 minutes de
             lecture, livrées le dimanche à 21 h.</span> Gratuit.
           </p>
 

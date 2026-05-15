@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { LRWordmark } from "@/components/ui/Wordmark";
 
 const NAV_LINKS = [
   { label: "Roster", href: "/roster" },
@@ -51,17 +52,19 @@ export function Footer() {
     <footer className="border-t border-border bg-background py-16 md:py-20">
       <div className="container-site">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-12">
-          {/* Col 1 — brand + last update signal (lg:col-span-2) */}
+          {/* Col 1 — brand + last update signal (lg:col-span-2).
+              Polish DA Cobalt 2026-05-15 : wordmark texte remplacé par
+              le LRWordmark canonique (cohérent avec Navbar). Le live dot
+              passe de bg-success à bg-cobalt-mist (DA brand vs success
+              fonctionnel réservé aux deltas). */}
           <div className="lg:col-span-2 flex flex-col gap-5">
-            <span className="font-serif uppercase text-lg tracking-[0.08em] text-foreground">
-              Léopards Radar
-            </span>
+            <LRWordmark size={18} color="currentColor" />
             <p className="text-sm text-muted-light max-w-xs leading-relaxed">
               Toute la data du football congolais. Roster RDC, diaspora éligible,
               statut FIFA — sourcé, mis à jour chaque dimanche.
             </p>
-            <div className="mt-2 flex items-center gap-2.5 text-[11px] font-mono uppercase tracking-[0.18em] text-muted">
-              <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
+            <div className="mt-2 flex items-center gap-2.5 label-mono-sm text-muted">
+              <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-cobalt-mist animate-pulse" />
               <span>Dernière mise à jour · {lastUpdated}</span>
             </div>
           </div>

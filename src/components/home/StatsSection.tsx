@@ -75,10 +75,10 @@ export function StatsSection() {
           {...fadeUp(0)}
           className="flex flex-col gap-4 mb-16 md:mb-20 max-w-2xl"
         >
-          <span className="text-xs uppercase tracking-[0.2em] text-success font-mono">
+          <span className="label-mono text-cobalt-mist">
             Vue d'ensemble
           </span>
-          <h2 className="font-serif text-4xl md:text-6xl font-semibold text-foreground tracking-tight text-balance leading-[1.05]">
+          <h2 className="display-heading text-4xl md:text-6xl text-foreground text-balance">
             Les Léopards en chiffres.
           </h2>
           <p className="text-muted-light text-base md:text-lg leading-relaxed max-w-xl">
@@ -93,28 +93,29 @@ export function StatsSection() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           {/* COLONNE GAUCHE — chiffre dominant : valeur marchande cumulée */}
           <motion.div {...fadeUp(0.1)} className="lg:col-span-7">
-            <p className="text-[11px] uppercase tracking-[0.25em] text-muted font-mono mb-4">
+            <p className="label-mono-sm text-muted mb-4">
               Valeur marchande cumulée
             </p>
             <div
-              className={`font-serif font-semibold leading-[0.9] tracking-tight ${
+              className={`display-heading ${
                 hasMarketValue
                   ? "text-7xl md:text-9xl text-foreground"
                   : "text-5xl md:text-7xl text-muted"
               }`}
+              style={{ lineHeight: 0.9 }}
             >
               {totalValueLabel}
             </div>
-            <p className="mt-6 max-w-md font-serif italic text-lg md:text-xl text-foreground/75 leading-snug">
+            <p className="mt-6 max-w-md italic text-lg md:text-xl text-foreground/75 leading-snug">
               {tier1Ratio !== null
                 ? `${tier1Ratio}% du roster joue dans un top 5 européen.`
                 : "Roster réparti entre clubs européens et africains."}
             </p>
 
-            {/* Barre de progression Tier 1 — gardée car elle matérialise le
-                ratio, mais en version épurée (h-1, sans card). */}
+            {/* Barre de progression Tier 1 — gradient cobalt 500 → Star
+                (drapeau RDC) au lieu de success → primary. Cohérence DA Cobalt. */}
             <div className="mt-6 max-w-sm">
-              <div className="flex items-center justify-between text-[11px] uppercase tracking-[0.18em] text-muted font-mono mb-2">
+              <div className="flex items-center justify-between label-mono-sm text-muted mb-2">
                 <span>Top 5 européen</span>
                 <span className="text-foreground/70">
                   {tier1Ratio !== null ? `${tier1Ratio}%` : statFallback}
@@ -127,13 +128,13 @@ export function StatsSection() {
                   whileInView={reduced ? undefined : { width: `${tier1Ratio ?? 0}%` }}
                   viewport={reduced ? undefined : { once: true }}
                   transition={{ duration: reduced ? 0 : 1.2, ease: "easeOut", delay: reduced ? 0 : 0.3 }}
-                  className="h-full rounded-full bg-gradient-to-r from-success to-primary"
+                  className="h-full rounded-full bg-gradient-to-r from-cobalt-500 to-primary"
                 />
               </div>
             </div>
 
             <div className="mt-8 flex flex-wrap gap-2">
-              <Pill dot dotColor="bg-success">Mondial 2026</Pill>
+              <Pill dot dotColor="bg-cobalt-mist">Mondial 2026</Pill>
               <Pill icon={Trophy}>Play-offs conquis</Pill>
               <Pill icon={Globe}>Diaspora mondiale</Pill>
             </div>
@@ -146,13 +147,13 @@ export function StatsSection() {
           >
             {/* Roster actif */}
             <div>
-              <dt className="text-[11px] uppercase tracking-[0.25em] text-muted font-mono">
+              <dt className="label-mono-sm text-muted">
                 Roster actif
               </dt>
               <dd className="mt-2 flex items-baseline gap-3">
                 <StatNumber
                   value={rosterCount}
-                  className="font-serif text-5xl md:text-6xl font-semibold text-foreground leading-none"
+                  className="display-heading text-5xl md:text-6xl text-foreground"
                   width="w-[2ch]"
                 />
                 <span className="text-sm text-muted-light">
@@ -163,13 +164,13 @@ export function StatsSection() {
 
             {/* Pays */}
             <div className="border-t border-border/40 pt-10">
-              <dt className="text-[11px] uppercase tracking-[0.25em] text-muted font-mono">
+              <dt className="label-mono-sm text-muted">
                 Pays d'évolution
               </dt>
               <dd className="mt-2 flex items-baseline gap-3">
                 <StatNumber
                   value={totalCountries}
-                  className="font-serif text-5xl md:text-6xl font-semibold text-foreground leading-none"
+                  className="display-heading text-5xl md:text-6xl text-foreground"
                   width="w-[2ch]"
                 />
                 <span className="text-sm text-muted-light">
@@ -181,11 +182,11 @@ export function StatsSection() {
             {/* Diaspora — phrase édito sans chiffre car elle n'a pas de stat
                 quanti propre, juste un mini visuel diaspora */}
             <div className="border-t border-border/40 pt-10">
-              <dt className="text-[11px] uppercase tracking-[0.25em] text-muted font-mono mb-3 inline-flex items-center gap-2">
-                <MapPin className="h-3 w-3 text-success" /> Diaspora
+              <dt className="label-mono-sm text-muted mb-3 inline-flex items-center gap-2">
+                <MapPin className="h-3 w-3 text-cobalt-mist" /> Diaspora
               </dt>
               <dd>
-                <p className="font-serif italic text-xl text-foreground/85 leading-snug">
+                <p className="italic text-xl text-foreground/85 leading-snug">
                   Une diaspora, 3 continents, 22 pays.
                 </p>
                 <div className="mt-4 h-20 relative">
@@ -243,8 +244,8 @@ function MiniWorldMap() {
       {/* Dots diaspora — un par continent + Europe densifiée. */}
       {dots.map((d, i) => (
         <g key={i}>
-          <circle cx={d.x} cy={d.y} r="2.4" fill="#FCD116" opacity="0.25" />
-          <circle cx={d.x} cy={d.y} r="0.9" fill="#FCD116" />
+          <circle cx={d.x} cy={d.y} r="2.4" fill="#F5C518" opacity="0.25" />
+          <circle cx={d.x} cy={d.y} r="0.9" fill="#F5C518" />
         </g>
       ))}
     </svg>
