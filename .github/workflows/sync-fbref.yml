@@ -6,15 +6,21 @@ name: Sync FBRef stats
 # Scrape les stats StatsBomb publiques de FBRef pour les ~355 joueurs
 # ayant un fbref_id (renseigné via Wikidata SPARQL au Sprint 3.1).
 #
+# IMPORTANT : FBRef est passé sur Cloudflare avec protection bot avancée
+# en 2024. requests / cloudscraper / curl_cffi sont tous bloqués 403.
+# Seul Playwright (vrai Chromium headless) passe le challenge — d'où
+# l'install de chromium dans le step ci-dessous.
+#
 # Cron : dimanche 04h UTC (hebdomadaire) — après sync-transfermarkt (02h)
 # et avant compute-scores (10h, Sprint 4) + refresh-insights (14h).
 #
-# Rate limit FBRef : 4 sec / requête → ~24 min pour 355 joueurs. Marge
-# largement dans les 360 min mensuelles GH Actions free.
+# Rate limit FBRef : 4 sec / requête + ~8 sec attente Cloudflare =
+# ~12 sec / joueur. ~355 joueurs × 12 sec = ~70 min. Marge dans les
+# 360 min/mois GH Actions free.
 #
-# Stats récupérées (1ère version) : matches, minutes, goals, assists, xG,
-# xAG par competition × season. Les stats avancées (passes, défense,
-# pressing) viennent dans une 2ème vague une fois le pipeline validé.
+# Stats récupérées (v1) : matches, minutes, goals, assists, xG, xAG par
+# competition × season depuis stats_standard_dom_lg. Stats avancées
+# (passes, défense, pressing) viennent en v2.
 # ──────────────────────────────────────────────────────────────────────
 
 on:
@@ -33,7 +39,7 @@ on:
       dry_run:
         description: 'Dry run — pas d''écriture en BDD'
         required: false
-        default: 'false'
+        default: false
         type: boolean
 
 permissions:
@@ -42,7 +48,7 @@ permissions:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 90       # Playwright + Cloudflare wait + 355 joueurs
 
     concurrency:
       group: sync-fbref
@@ -58,6 +64,12 @@ jobs:
           cache-dependency-path: scripts/requirements.txt
 
       - run: pip install -r scripts/requirements.txt
+
+      # Install Chromium pour Playwright (~150 MB, ~30 sec). Skip firefox/webkit.
+      # Cache géré par Playwright lui-même via ~/.cache/ms-playwright (réutilisé
+      # entre runs grâce au cache: 'pip' qui sauve aussi ~/.cache via setup-python).
+      - name: Install Playwright Chromium
+        run: python -m playwright install --with-deps chromium
 
       - name: Sync FBRef stats
         env:
