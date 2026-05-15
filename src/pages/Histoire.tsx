@@ -100,10 +100,10 @@ export default function Histoire() {
               Texte signé <span className="text-foreground">{article.author}</span>.
               Une donnée à corriger ?{" "}
               <a
-                href="mailto:contact@leopardsradar.com"
+                href="mailto:alexandre@withkaira.com"
                 className="text-primary hover:underline"
               >
-                contact@leopardsradar.com
+                alexandre@withkaira.com
               </a>
               .
             </p>

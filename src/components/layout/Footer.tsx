@@ -102,7 +102,7 @@ export function Footer() {
               ))}
               <li>
                 <a
-                  href="mailto:contact@leopardsradar.com?subject=Donnée à corriger"
+                  href="mailto:alexandre@withkaira.com?subject=Donnée à corriger"
                   className="text-sm text-muted-light hover:text-foreground transition-colors"
                 >
                   Signaler une erreur
@@ -110,7 +110,7 @@ export function Footer() {
               </li>
               <li>
                 <a
-                  href="mailto:contact@leopardsradar.com?subject=Source / piste"
+                  href="mailto:alexandre@withkaira.com?subject=Source / piste"
                   className="text-sm text-muted-light hover:text-foreground transition-colors"
                 >
                   Proposer une source
@@ -135,10 +135,10 @@ export function Footer() {
               ))}
             </ul>
             <a
-              href="mailto:contact@leopardsradar.com"
+              href="mailto:alexandre@withkaira.com"
               className="mt-3 text-sm text-foreground hover:text-primary transition-colors break-all"
             >
-              contact@leopardsradar.com
+              alexandre@withkaira.com
             </a>
           </div>
         </div>

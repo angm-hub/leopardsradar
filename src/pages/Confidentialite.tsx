@@ -119,10 +119,10 @@ export default function Confidentialite() {
         <p className="mt-4">
           Pour exercer ces droits, écris à{" "}
           <a
-            href="mailto:contact@leopardsradar.com"
+            href="mailto:alexandre@withkaira.com"
             className="text-primary hover:underline"
           >
-            contact@leopardsradar.com
+            alexandre@withkaira.com
           </a>
           . Réponse sous 30 jours maximum.
         </p>

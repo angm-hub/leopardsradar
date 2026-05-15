@@ -1,32 +1,48 @@
 import LegalLayout from "@/components/layout/LegalLayout";
 
+/**
+ * MentionsLegales — version 2026-05-15.
+ *
+ * Sprint 1.2 du brief Léopards Radar v3 : nettoyage des placeholders dev-mode
+ * "[à compléter]". Disclosure honnête : éditeur en nom propre via la marque
+ * Cobalt Sports & Entertainment, structure non encore immatriculée.
+ *
+ * Conformité LCEN (loi pour la confiance dans l'économie numérique) : pour un
+ * éditeur non professionnel et personne physique, l'identité complète peut
+ * rester anonyme dans les mentions PUBLIQUES si elle est communiquée à
+ * l'hébergeur (GitHub) — mais on choisit ici la transparence (Alexandre Ngomo
+ * est déjà identifié dans toute la communication publique du projet, sur
+ * About et dans la presse).
+ *
+ * À mettre à jour quand :
+ *   - La structure juridique est officiellement enregistrée (SIREN attribué)
+ *   - Une boîte mail alexandre@withkaira.com est opérationnelle
+ *   - L'adresse postale officielle est définie
+ */
 export default function MentionsLegales() {
   return (
-    <LegalLayout title="Mentions légales" updatedAt="1er mai 2026">
+    <LegalLayout title="Mentions légales" updatedAt="15 mai 2026">
       <section className="space-y-3 mb-10">
         <h2 className="font-serif text-2xl text-foreground mt-0 mb-4">
           Éditeur du site
         </h2>
         <p>
           Le site <strong>Léopards Radar</strong> (ci-après « le Site ») est
-          édité sous l'enseigne <strong>kAIra</strong>.
+          édité par <strong>Alexandre Ngomo</strong>, personne physique, sous
+          la marque <strong>Cobalt Sports &amp; Entertainment</strong>.
         </p>
-        <p>
-          <span className="text-muted-light">
-            Adresse : [adresse à compléter]
-            <br />
-            Statut juridique : [statut à compléter]
-            <br />
-            SIREN : [numéro à compléter]
-          </span>
+        <p className="text-muted-light">
+          Structure éditoriale indépendante basée à Paris (France).
+          Immatriculation officielle en cours — toute mise à jour figurera
+          dans cette page sous la rubrique « Dernière mise à jour ».
         </p>
         <p>
           Contact :{" "}
           <a
-            href="mailto:contact@leopardsradar.com"
+            href="mailto:alexandre@withkaira.com"
             className="text-primary hover:underline"
           >
-            contact@leopardsradar.com
+            alexandre@withkaira.com
           </a>
         </p>
       </section>
@@ -36,9 +52,8 @@ export default function MentionsLegales() {
           Directeur de la publication
         </h2>
         <p>
-          <span className="text-muted-light">
-            [identité à compléter — obligation LCEN]
-          </span>
+          <strong>Alexandre Ngomo</strong> — joignable à l'adresse électronique
+          de contact ci-dessus.
         </p>
       </section>
 
@@ -47,11 +62,22 @@ export default function MentionsLegales() {
           Hébergement
         </h2>
         <p>
-          Le Site est hébergé par <strong>Lovable</strong> (lovable.dev) pour le
-          front-end et par <strong>Supabase Inc.</strong> (970 Toa Payoh North,
-          Singapore 318992) pour la base de données et les services associés. Les
-          données sont stockées dans la région Europe (eu-central-1) ou
-          équivalent.
+          Le front-end du Site est hébergé par <strong>GitHub, Inc.</strong>{" "}
+          (88 Colin P. Kelly Jr St, San Francisco, CA 94107, USA) via le service
+          GitHub Pages. Le code source est publié à l'adresse{" "}
+          <a
+            href="https://github.com/angm-hub/leopardsradar"
+            className="text-primary hover:underline"
+            rel="noopener"
+          >
+            github.com/angm-hub/leopardsradar
+          </a>
+          .
+        </p>
+        <p>
+          La base de données et les services associés sont hébergés par{" "}
+          <strong>Supabase Inc.</strong> (970 Toa Payoh North, Singapore 318992)
+          dans la région Europe Ouest (eu-west-1).
         </p>
       </section>
 
@@ -66,9 +92,9 @@ export default function MentionsLegales() {
           modification ou exploitation sans autorisation écrite est interdite.
         </p>
         <p>
-          Les données joueurs sont agrégées à partir de sources publiques (clubs,
-          fédérations, presse spécialisée, Transfermarkt). Chaque profil cite ses
-          sources lorsqu'elles sont publiques.
+          Les données joueurs sont agrégées à partir de sources publiques
+          (clubs, fédérations, presse spécialisée, Transfermarkt, FBRef,
+          Wikidata). Chaque profil cite ses sources lorsqu'elles sont publiques.
         </p>
         <p>
           Les noms, logos et marques cités sur le Site appartiennent à leurs
@@ -86,10 +112,10 @@ export default function MentionsLegales() {
           respectifs. Elles sont utilisées dans un cadre éditorial et
           informationnel. Pour toute demande de retrait, contacter{" "}
           <a
-            href="mailto:contact@leopardsradar.com"
+            href="mailto:alexandre@withkaira.com"
             className="text-primary hover:underline"
           >
-            contact@leopardsradar.com
+            alexandre@withkaira.com
           </a>
           .
         </p>

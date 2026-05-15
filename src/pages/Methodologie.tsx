@@ -469,7 +469,7 @@ export default function Methodologie() {
               </p>
               <div className="not-prose mt-6 flex flex-wrap gap-3">
                 <a
-                  href="mailto:contact@leopardsradar.com?subject=Correction%20de%20donn%C3%A9e"
+                  href="mailto:alexandre@withkaira.com?subject=Correction%20de%20donn%C3%A9e"
                   className="inline-flex items-center gap-2 rounded-button bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover"
                 >
                   <Mail className="h-4 w-4" />
@@ -516,10 +516,10 @@ export default function Methodologie() {
                 Pour signaler une erreur, proposer une source ou suggérer un
                 joueur :{" "}
                 <a
-                  href="mailto:contact@leopardsradar.com"
+                  href="mailto:alexandre@withkaira.com"
                   className="text-primary hover:text-primary-hover underline underline-offset-4"
                 >
-                  contact@leopardsradar.com
+                  alexandre@withkaira.com
                 </a>
                 .
               </p>

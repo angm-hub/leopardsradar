@@ -13,7 +13,15 @@ export default function Cgu() {
         <p>
           Les présentes conditions générales (« CGU ») régissent l'accès et
           l'utilisation du site <strong>Léopards Radar</strong> (« le Site »),
-          accessible à l'adresse leopardsradar.com et ses sous-domaines.
+          accessible à l'adresse{" "}
+          <a
+            href="https://angm-hub.github.io/leopardsradar/"
+            className="text-primary hover:underline"
+            rel="noopener"
+          >
+            angm-hub.github.io/leopardsradar
+          </a>{" "}
+          et ses sous-chemins éventuels.
         </p>
         <p>
           En accédant au Site, tu reconnais avoir lu et accepté ces conditions.
@@ -93,10 +101,10 @@ export default function Cgu() {
           aucune garantie absolue d'exactitude ou d'exhaustivité n'est donnée.
           Pour toute correction, écrire à{" "}
           <a
-            href="mailto:contact@leopardsradar.com"
+            href="mailto:alexandre@withkaira.com"
             className="text-primary hover:underline"
           >
-            contact@leopardsradar.com
+            alexandre@withkaira.com
           </a>
           .
         </p>

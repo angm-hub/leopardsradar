@@ -123,10 +123,10 @@ export default function About() {
               <p>
                 <strong className="text-foreground">Contact :</strong>{" "}
                 <a
-                  href="mailto:contact@leopardsradar.com"
+                  href="mailto:alexandre@withkaira.com"
                   className="text-primary hover:text-primary-hover underline underline-offset-4"
                 >
-                  contact@leopardsradar.com
+                  alexandre@withkaira.com
                 </a>
                 .
               </p>
@@ -160,10 +160,10 @@ export default function About() {
               <p className="text-base text-muted-light">
                 Pour toute question éditoriale, partenariat presse ou
                 proposition de source : <a
-                  href="mailto:contact@leopardsradar.com"
+                  href="mailto:alexandre@withkaira.com"
                   className="text-primary hover:text-primary-hover underline underline-offset-4"
                 >
-                  contact@leopardsradar.com
+                  alexandre@withkaira.com
                 </a>.
               </p>
             </div>

@@ -91,7 +91,7 @@ function NotFound() {
             Explorer le Radar
           </Link>
           <a
-            href="mailto:contact@leopardsradar.com?subject=Joueur à ajouter"
+            href="mailto:alexandre@withkaira.com?subject=Joueur à ajouter"
             className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-background hover:bg-primary-hover transition-colors"
           >
             Proposer un joueur
@@ -575,7 +575,7 @@ export default function PlayerPage() {
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <a
-                  href={`mailto:contact@leopardsradar.com?subject=Compl%C3%A9ter le profil de ${encodeURIComponent(player.name)}`}
+                  href={`mailto:alexandre@withkaira.com?subject=Compl%C3%A9ter le profil de ${encodeURIComponent(player.name)}`}
                   className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-4 py-2 text-sm text-foreground hover:bg-card-hover transition-colors"
                 >
                   Proposer une source pour ce profil

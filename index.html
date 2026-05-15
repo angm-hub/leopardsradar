@@ -46,6 +46,32 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./fonts.css">
+
+    <!-- ====================================================================
+         SPA fallback decoder pour GitHub Pages — hack rafgraph.
+         Sprint 1.1 du brief Léopards Radar v3 (2026-05-15).
+
+         Quand un deep-link arrive : public/404.html encode l'URL dans le
+         query string ('?/roster?foo=bar') et redirige sur cette page.
+         Le script ci-dessous décode ce query string et restaure l'URL
+         d'origine via history.replaceState — avant que React Router ne
+         s'initialise. Le user voit /roster correctement, le bot reçoit
+         un HTTP 200, le partage de lien fonctionne.
+
+         Source : https://github.com/rafgraph/spa-github-pages
+         ==================================================================== -->
+    <script type="text/javascript">
+      (function (l) {
+        if (l.search[1] === '/') {
+          var decoded = l.search.slice(1).split('&').map(function (s) {
+            return s.replace(/~and~/g, '&');
+          }).join('?');
+          window.history.replaceState(null, null,
+            l.pathname.slice(0, -1) + decoded + l.hash
+          );
+        }
+      })(window.location);
+    </script>
 </head>
 
   <body>
