@@ -21,12 +21,16 @@ import { GrainGradient } from "@paper-design/shaders-react";
 import { useReducedMotion } from "framer-motion";
 import { RDCConstellation } from "@/components/ui/RDCConstellation";
 
-// ─── Palette RDC ──────────────────────────────────────────────────────────────
+// ─── Palette RDC — Premium DA Cobalt (2026-05-15) ────────────────────────────
+// Pivot du brand book "Premium v2" : drapeau RDC désaturé 15-20% pour rester
+// éditorial. Cobalt 500 (DRC blue premium-tuned) + Star (jaune drapeau) +
+// Cobalt 700 (transition douce). Avant : vert dominant #00A651.
 // Couleurs au format CSS hex — Paper Shaders les convertit en vec4 GLSL.
-const RDC_GREEN = "#00A651";
-const RDC_GREEN_DEEP = "#005A2D";
-const RDC_YELLOW = "#FCD116";
-const BG_DEEP = "#0A0A0B";
+const COBALT_500 = "#2563B8";   // DRC blue, signature atmosphère
+const COBALT_700 = "#1A3A78";   // Transition profonde
+const BG_DEEP = "#050B1A";      // Void
+// Note : pas de jaune dans la palette du shader — il crée un mix verdâtre
+// quand il blend avec le bleu. L'accent Star vient via atmos-jade statique.
 
 interface LeopardsGrainBackgroundProps {
   /**
@@ -39,7 +43,7 @@ interface LeopardsGrainBackgroundProps {
 }
 
 export function LeopardsGrainBackground({
-  opacity = 0.55,
+  opacity = 0.42,
   className,
 }: LeopardsGrainBackgroundProps) {
   const reducedMotion = useReducedMotion();
@@ -61,12 +65,12 @@ export function LeopardsGrainBackground({
       style={{ opacity, position: "absolute", inset: 0 }}
     >
       <GrainGradient
-        // Fond noir profond — laisse la couleur RDC ressortir
+        // Fond Void cobalt — laisse les blobs ressortir sur cobalt deep
         colorBack={BG_DEEP}
-        // 3 couleurs : vert primaire (signature), jaune drapeau (accent),
-        // vert foncé (transition douce). Pas de blanc — ça casserait la
-        // teinte territoriale.
-        colors={[RDC_GREEN, RDC_YELLOW, RDC_GREEN_DEEP]}
+        // 2 couleurs cobalt uniquement — pas de jaune dans le shader (ça
+        // crée un mix verdâtre quand le blob blend yellow+blue). L'accent
+        // Star vient en-dessous via le gradient atmos-jade statique.
+        colors={[COBALT_500, COBALT_700]}
         // shape 6 = blob organique. Évite le côté "wave" (shape 1) qui rappelle
         // les hero SaaS startup, et le "dots" (2) qui ferait pattern grid.
         shape="blob"

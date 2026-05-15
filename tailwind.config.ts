@@ -1,5 +1,22 @@
 import type { Config } from "tailwindcss";
 
+/**
+ * Léopards Radar — Premium DA (Cobalt)
+ *
+ * Palette pivotée le 2026-05-15 vers la direction "Premium v2" du brand book :
+ *   Void · Cobalt · Bone · Star · Blood — drapeau RDC désaturé 15-20% pour
+ *   rester éditorial (pas drapeau brut, pas stade). Avant : vert-dominant
+ *   #00A651 + foreground cool #F4F4F1 + Fraunces/DM Sans/Space Mono.
+ *
+ * Sémiologie héritage 3 couches :
+ *   Radar (instrument · futur) · Léopard (nom · 1968) · Okapi (endémique · signature)
+ *
+ * Typo : Geist partout (display tracking -4.5%, body -1%, "mono" 500 caps +18%).
+ * Référence : tokens-premium.css du brand book (Anthropic Design handoff bundle).
+ *
+ * Position colors (pos.gk/def/mid/att) restent inchangées — fonctionnel
+ * player UI, pas brand. Le success vert reste pour les deltas positifs.
+ */
 const config: Config = {
   darkMode: "class",
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
@@ -11,21 +28,63 @@ const config: Config = {
     },
     extend: {
       colors: {
-        background: "#0A0A0B",
-        card: "#131316",
-        "card-hover": "#16161A",
-        border: "#1F1F24",
-        "border-hover": "#2A2A30",
-        foreground: "#F4F4F1",
-        muted: "#6B6B73",
-        "muted-light": "#9999A3",
-        primary: {
-          DEFAULT: "#FCD116",
-          hover: "#E6BD14",
-          foreground: "#0A0A0B",
+        // ── Semantic core ─────────────────────────────────────────
+        background: "#050B1A",            // Void — page floor
+        card: "#0E1F44",                  // Cobalt 900 — raised surface
+        "card-hover": "#11203F",
+        border: "#1A2B4A",
+        "border-hover": "#2A3D64",
+        foreground: "#ECE8DD",            // Bone — warm cream (vs cool #F4F4F1)
+        muted: "#5C6E8C",
+        "muted-light": "#8A9BBC",
+
+        // ── Cobalt scale (atmosphère principale) ──────────────────
+        cobalt: {
+          deep: "#050B1A",
+          night: "#0A1530",
+          900: "#0E1F44",
+          700: "#1A3A78",
+          500: "#2563B8",                 // DRC blue, premium-tuned
+          400: "#4A8AD8",
+          mist: "#9FB8E0",
         },
-        success: "#00A651",
-        alert: "#CE1126",
+
+        // ── Accents drapeau RDC (premium-tuned) ───────────────────
+        primary: {
+          DEFAULT: "#F5C518",             // Star — accent principal
+          hover: "#D9AC15",
+          foreground: "#050B1A",
+        },
+        star: {
+          DEFAULT: "#F5C518",
+          deep: "#C99A0E",
+          soft: "#F8D659",
+        },
+        blood: {
+          DEFAULT: "#C8202B",             // Blood — alerte / héritage
+          deep: "#8B1219",
+        },
+        bone: {
+          DEFAULT: "#ECE8DD",
+          paper: "#F5F2EA",
+          ivory: "#F5EDD6",
+        },
+
+        // ── Heritage palette (Zaïre + DRC tuning) ─────────────────
+        zaire: {
+          DEFAULT: "#0E5E3C",             // Vert Zaïre 1971-97
+          deep: "#07351F",
+        },
+        torch: {
+          DEFAULT: "#F5C518",             // Flambeau Authenticité
+          deep: "#C99A0E",
+        },
+        copper: "#B87333",                // Cuivre Katanga
+
+        // ── Functional ────────────────────────────────────────────
+        success: "#10B981",               // Deltas positifs (+N) — fonctionnel
+        alert: "#C8202B",                 // Blood (alias)
+        // Position colors — fonctionnel, ne change pas (player UI)
         pos: {
           gk: "#8B5CF6",
           def: "#10B981",
@@ -34,21 +93,40 @@ const config: Config = {
         },
       },
       fontFamily: {
-        // Editorial stack — Fraunces for display + DM Sans for body + Space Mono
-        // for tabular/UI labels. Replaces the prior Inter / JetBrains Mono pair
-        // which read too "default LLM-app" against the editorial direction.
-        serif: ['"Fraunces"', "Georgia", "serif"],
-        sans: ['"DM Sans"', "system-ui", "sans-serif"],
-        mono: ['"Space Mono"', "Menlo", "monospace"],
+        // Geist partout — direction silencieuse, cinématographique. La
+        // hiérarchie passe par le tracking et le poids, pas par le mélange
+        // serif/sans/mono. Les classes legacy (font-serif/sans/mono) restent
+        // pour compat — elles pointent toutes vers Geist. Les patterns
+        // existants `font-mono uppercase tracking-[0.18em]` produisent le
+        // label éditorial du brand book sans nouvelle classe.
+        serif: ['"Geist"', '"Inter Tight"', "system-ui", "sans-serif"],
+        sans: ['"Geist"', '"Inter Tight"', "system-ui", "sans-serif"],
+        mono: ['"Geist"', '"Inter Tight"', "system-ui", "sans-serif"],
+        display: ['"Geist"', '"Inter Tight"', "system-ui", "sans-serif"],
       },
       fontSize: {
-        "display-2xl": ["5rem", { lineHeight: "1.05", fontWeight: "600" }],
-        "display-xl": ["3.5rem", { lineHeight: "1.1", fontWeight: "600" }],
-        "display-lg": ["2.5rem", { lineHeight: "1.15", fontWeight: "600" }],
+        // Display sizes calibrés pour Geist tracking serré -4.5%
+        "display-2xl": ["5rem", { lineHeight: "0.92", letterSpacing: "-0.045em", fontWeight: "500" }],
+        "display-xl": ["3.5rem", { lineHeight: "0.95", letterSpacing: "-0.04em", fontWeight: "500" }],
+        "display-lg": ["2.5rem", { lineHeight: "1.05", letterSpacing: "-0.035em", fontWeight: "500" }],
       },
       borderRadius: {
-        card: "12px",
-        button: "8px",
+        card: "14px",                     // Cobalt cards respirent un peu plus
+        button: "999px",                  // Pill par défaut (brand book v2)
+        "button-sm": "8px",               // Fallback rectangulaire
+      },
+      backgroundImage: {
+        // Atmosphères réutilisables via bg-atmos-jade, bg-atmos-dawn, etc.
+        // Source : tokens-premium.css. Valeurs en clair pour permettre à
+        // Tailwind JIT de les emit sans expansion CSS variables.
+        "atmos-jade":
+          "radial-gradient(ellipse 80% 60% at 25% 30%, rgba(74,138,216,0.5) 0%, transparent 55%), radial-gradient(ellipse 60% 80% at 80% 70%, rgba(26,58,120,0.7) 0%, transparent 60%), linear-gradient(135deg, #1A3A78 0%, #0E1F44 40%, #050B1A 80%)",
+        "atmos-dawn":
+          "radial-gradient(ellipse 70% 50% at 30% 20%, rgba(245,197,24,0.22) 0%, transparent 55%), radial-gradient(ellipse 90% 60% at 70% 80%, rgba(26,58,120,0.8) 0%, transparent 60%), linear-gradient(160deg, #2D5BA8 0%, #0E1F44 45%, #050B1A 90%)",
+        "atmos-zaire":
+          "radial-gradient(ellipse 80% 60% at 20% 30%, rgba(37,99,184,0.75) 0%, transparent 55%), radial-gradient(ellipse 70% 50% at 80% 70%, rgba(245,197,24,0.25) 0%, transparent 60%), linear-gradient(170deg, #1A3A78 0%, #0E1F44 50%, #050B1A 90%)",
+        "atmos-torch":
+          "radial-gradient(ellipse 70% 60% at 30% 35%, rgba(245,197,24,0.5) 0%, transparent 55%), radial-gradient(ellipse 80% 70% at 75% 80%, rgba(200,32,43,0.4) 0%, transparent 60%), linear-gradient(155deg, #C99A0E 0%, #5C1A12 50%, #0A1530 95%)",
       },
       animation: {
         "fade-in": "fadeIn 0.6s ease-out forwards",

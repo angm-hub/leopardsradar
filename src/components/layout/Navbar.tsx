@@ -3,6 +3,7 @@ import { Link, NavLink } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/ButtonPrimitive";
 import { CommandPalette } from "@/components/ui/CommandPalette";
+import { LRWordmark, LRMark } from "@/components/ui/Wordmark";
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS: Array<{ label: string; href: string; badge?: string }> = [
@@ -61,9 +62,16 @@ export function Navbar() {
       <div className="container-site flex h-16 items-center justify-between">
         <Link
           to="/"
-          className="font-serif uppercase text-lg tracking-[0.08em] text-foreground"
+          aria-label="Léopards Radar — Accueil"
+          className="text-foreground transition-opacity hover:opacity-90"
         >
-          Léopards Radar
+          {/* Mobile : mark seul (gain horizontal). Desktop : lockup complet. */}
+          <span className="sm:hidden">
+            <LRMark size={28} color="currentColor" ariaLabel="Léopards Radar" />
+          </span>
+          <span className="hidden sm:inline-flex">
+            <LRWordmark size={20} color="currentColor" />
+          </span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-8">
@@ -135,9 +143,7 @@ export function Navbar() {
           )}
         >
           <div className="flex items-center justify-between">
-            <span className="font-serif uppercase text-base tracking-[0.08em] text-foreground">
-              Menu
-            </span>
+            <LRWordmark size={16} color="currentColor" />
             <button
               type="button"
               aria-label="Fermer le menu"

@@ -2,49 +2,65 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ──────────────────────────────────────────────────────────────────────────
+   Léopards Radar — Premium DA Cobalt (2026-05-15)
+   Foundation pivotée du brand book "Premium v2" :
+   - Surfaces cobalt (au lieu de warm-black)
+   - Grain SVG en overlay (cinématique vs flat)
+   - Okapi stripes en pattern signature
+   - Atmosphères radiales prêtes à appliquer
+   - Glass surfaces sobres pour les cards "phare"
+   Source : tokens-premium.css du handoff bundle Anthropic Design.
+   ────────────────────────────────────────────────────────────────────── */
+
 @layer base {
   :root {
     color-scheme: dark;
-    /* Hairline retina : 0.5px sur écrans haute densité, 1px sinon.
-       C'est la première micro-attention qui sépare un site IA-tooled
-       d'un site OS-grade. Tailwind ne le fait pas seul. */
-    --hairline-color: rgba(255, 255, 255, 0.07);
-    --hairline-strong: rgba(255, 255, 255, 0.12);
-    /* Surface system : material doux verticalement gradué. */
-    --surface-1: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0) 60%), #131316;
-    --surface-2: linear-gradient(180deg, rgba(255,255,255,0.04),  rgba(255,255,255,0) 60%), #16161A;
-    /* Stack de shadows façon Apple : focal contact + ambient soft. */
-    --shadow-card: 0 1px 0 rgba(255,255,255,0.04) inset,
-                   0 1px 2px rgba(0,0,0,0.4),
-                   0 8px 24px rgba(0,0,0,0.3);
+
+    /* Hairline retina cobalt-tinted — 0.5px sur écrans haute densité.
+       Première micro-attention qui sépare un site IA-tooled d'un site OS-grade. */
+    --hairline-color: rgba(159, 184, 224, 0.08);   /* cobalt mist 8% */
+    --hairline-strong: rgba(159, 184, 224, 0.14);
+
+    /* Surface system : cobalt graduated material. Avant : warm black flat. */
+    --surface-1: linear-gradient(180deg, rgba(159,184,224,0.04), rgba(159,184,224,0) 60%), #0E1F44;
+    --surface-2: linear-gradient(180deg, rgba(159,184,224,0.06), rgba(159,184,224,0) 60%), #11203F;
+
+    /* Stack de shadows cinématique — focal contact + ambient cobalt soft. */
+    --shadow-card: 0 1px 0 rgba(159,184,224,0.05) inset,
+                   0 1px 2px rgba(5,11,26,0.6),
+                   0 8px 24px rgba(5,11,26,0.45);
     --shadow-cta:  0 1px 0 rgba(255,255,255,0.18) inset,
                    0 1px 2px rgba(0,0,0,0.3),
-                   0 4px 12px rgba(252, 209, 22, 0.25);
+                   0 4px 12px rgba(245, 197, 24, 0.28);
+    --shadow-cobalt: 0 0 0 0.5px rgba(159,184,224,0.18),
+                     0 1px 0 rgba(255,255,255,0.04) inset,
+                     0 1px 2px rgba(5,11,26,0.5),
+                     0 16px 40px rgba(74,138,216,0.10);
   }
   html {
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* Touch flash iOS — par défaut Safari met un rectangle gris. */
     -webkit-tap-highlight-color: transparent;
   }
   body {
     @apply bg-background text-foreground font-sans;
-    /* ss01 + cv11 : alternates Fraunces déjà actifs. On ajoute opsz
-       pour que les fonts variables font Optical Sizing automatiquement. */
-    font-feature-settings: "ss01", "cv11";
+    /* Geist tracking par défaut — corps -1%, le display tightera plus via
+       les classes display-xl / display-2xl qui tracent à -4.5%. */
+    letter-spacing: -0.01em;
+    font-feature-settings: "ss01", "cv11", "tnum";
     font-optical-sizing: auto;
     text-rendering: optimizeLegibility;
   }
 
-  /* Selection — couleur signature au lieu du bleu OS. */
+  /* Selection — couleur signature Star (jaune drapeau). */
   ::selection {
-    background: rgba(252, 209, 22, 0.35);
-    color: #0a0a0b;
+    background: rgba(245, 197, 24, 0.32);
+    color: #050B1A;
   }
 
-  /* Scrollbar custom — discret mais soigné. macOS l'affiche déjà bien,
-     Windows/Linux ont un défaut hideux qu'on remplace. */
+  /* Scrollbar custom — discret cobalt. */
   ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
@@ -53,19 +69,19 @@
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(159, 184, 224, 0.10);
     border-radius: 8px;
     border: 2px solid transparent;
     background-clip: padding-box;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.14);
+    background: rgba(159, 184, 224, 0.18);
     background-clip: padding-box;
   }
 
-  /* Focus visible — anneau custom au lieu du bleu OS chromé. */
+  /* Focus visible — anneau Star (drapeau RDC). */
   *:focus-visible {
-    outline: 2px solid rgba(252, 209, 22, 0.7);
+    outline: 2px solid rgba(245, 197, 24, 0.7);
     outline-offset: 2px;
     border-radius: 4px;
   }
@@ -73,10 +89,9 @@
 
 @layer components {
   /* ===================================================================
-     Surface system — alternative à `border border-border bg-card`.
-     Pourquoi : un border 1px solid uniforme partout est un tell IA. Ces
-     classes appliquent un material gradué + hairline retina + shadow
-     stack façon iOS/macOS. Drop-in sur les cards principales.
+     Surface system — cobalt material gradué + hairline retina.
+     Drop-in sur les cards principales, équivalent "border border-border
+     bg-card" mais avec la matière du brand book Premium v2.
      =================================================================== */
   .surface-1 {
     background: var(--surface-1);
@@ -90,18 +105,14 @@
                 var(--shadow-card);
     border-radius: 14px;
   }
-  /* Un material plus chaud pour les modules "phare" (CTA, hero card). */
+  /* Material "phare" — CTA, hero card, modules signature. Halo Star + cobalt. */
   .surface-glow {
     background: var(--surface-2);
-    box-shadow: 0 0 0 0.5px rgba(252, 209, 22, 0.18),
-                0 1px 0 rgba(255, 255, 255, 0.06) inset,
-                0 1px 2px rgba(0, 0, 0, 0.4),
-                0 16px 40px rgba(252, 209, 22, 0.08);
+    box-shadow: var(--shadow-cobalt);
     border-radius: 16px;
   }
 
-  /* Hairline horizontal — séparateur 0.5px retina, fade out aux bords.
-     Remplace les `border-t border-border` qui font opaques. */
+  /* Hairline horizontal — séparateur 0.5px retina, fade aux bords cobalt. */
   .hairline-x {
     height: 0.5px;
     background: linear-gradient(90deg, transparent, var(--hairline-color) 12%, var(--hairline-color) 88%, transparent);
@@ -115,6 +126,128 @@
   .text-balance {
     text-wrap: balance;
   }
+
+  /* ─── Editorial label — pattern brand book v2 ──────────────────────
+     Geist 500 uppercase tracking 0.18em — remplace l'ancien Space Mono.
+     Utilisé pour kickers, eyebrows, statuts de match, timestamps. Le
+     comportement existant `font-mono uppercase tracking-[0.18em]` reste
+     valide ; cette classe est juste un raccourci propre. */
+  .label-mono {
+    @apply font-mono uppercase text-[11px] font-medium tracking-[0.18em];
+  }
+  .label-mono-sm {
+    @apply font-mono uppercase text-[10px] font-medium tracking-[0.16em];
+  }
+
+  /* ─── Display heading — Geist tracking serré -4.5% ─────────────────
+     Pour les titres-affiche du brand book ("Les Léopards.", "1974.",
+     "Three symbols. One gaze."). Lin- height 0.92, weight 500. */
+  .display-heading {
+    font-family: "Geist", "Inter Tight", system-ui, sans-serif;
+    font-weight: 500;
+    letter-spacing: -0.045em;
+    line-height: 0.92;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   Atmosphères cinématographiques (Cobalt / Dawn / Zaïre / Torch / Sky)
+   ────────────────────────────────────────────────────────────────────── */
+@layer utilities {
+  .atmos-jade {
+    background:
+      radial-gradient(ellipse 80% 60% at 25% 30%, rgba(74,138,216,0.5) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 80% at 80% 70%, rgba(26,58,120,0.7) 0%, transparent 60%),
+      radial-gradient(ellipse 120% 70% at 50% 100%, rgba(5,11,26,1) 0%, rgba(14,31,68,0.9) 50%, transparent 80%),
+      linear-gradient(135deg, #1A3A78 0%, #0E1F44 40%, #050B1A 80%);
+  }
+  .atmos-dawn {
+    background:
+      radial-gradient(ellipse 70% 50% at 30% 20%, rgba(245,197,24,0.22) 0%, transparent 55%),
+      radial-gradient(ellipse 90% 60% at 70% 80%, rgba(26,58,120,0.8) 0%, transparent 60%),
+      linear-gradient(160deg, #2D5BA8 0%, #0E1F44 45%, #050B1A 90%);
+  }
+  .atmos-zaire {
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 30%, rgba(37,99,184,0.75) 0%, transparent 55%),
+      radial-gradient(ellipse 70% 50% at 80% 70%, rgba(245,197,24,0.25) 0%, transparent 60%),
+      linear-gradient(170deg, #1A3A78 0%, #0E1F44 50%, #050B1A 90%);
+  }
+  .atmos-torch {
+    background:
+      radial-gradient(ellipse 70% 60% at 30% 35%, rgba(245,197,24,0.5) 0%, transparent 55%),
+      radial-gradient(ellipse 80% 70% at 75% 80%, rgba(200,32,43,0.4) 0%, transparent 60%),
+      linear-gradient(155deg, #C99A0E 0%, #5C1A12 50%, #0A1530 95%);
+  }
+  .atmos-sky {
+    background:
+      radial-gradient(ellipse 70% 50% at 30% 25%, rgba(74,138,216,0.6) 0%, transparent 55%),
+      radial-gradient(ellipse 80% 60% at 75% 80%, rgba(14,31,68,0.7) 0%, transparent 65%),
+      linear-gradient(165deg, #2563B8 0%, #0E1F44 45%, #050B1A 90%);
+  }
+  .atmos-bone {
+    background:
+      radial-gradient(ellipse 60% 70% at 70% 30%, rgba(159,184,224,0.45) 0%, transparent 60%),
+      radial-gradient(ellipse 80% 60% at 20% 80%, rgba(245,197,24,0.18) 0%, transparent 65%),
+      linear-gradient(180deg, #F5F2EA 0%, #ECE8DD 100%);
+  }
+
+  /* Vignette radiale cinéma — superposition assombrie aux bords. */
+  .atmos-vignette::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 100% 100% at 50% 50%, transparent 30%, rgba(5,11,26,0.55) 90%);
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   Grain texture — SVG noise overlay, mix-blend-mode: overlay.
+   ────────────────────────────────────────────────────────────────────── */
+.grain {
+  position: relative;
+}
+.grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1, 0 0 0 0 1, 0 0 0 0 1, 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 2;
+}
+.grain-soft::after { opacity: 0.18; }
+.grain-heavy::after { opacity: 0.5; }
+
+/* ──────────────────────────────────────────────────────────────────────
+   Okapi stripes — pattern signature (rayures verticales irrégulières).
+   La signature visuelle du brand book : "le léopard chasse, l'okapi observe".
+   ────────────────────────────────────────────────────────────────────── */
+.pattern-okapi {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cg fill='%23F5EDD6' fill-opacity='0.95'%3E%3Crect x='12' y='10' width='8' height='38' rx='1'/%3E%3Crect x='28' y='14' width='6' height='32' rx='1'/%3E%3Crect x='42' y='8' width='9' height='44' rx='1'/%3E%3Crect x='58' y='16' width='5' height='28' rx='1'/%3E%3Crect x='72' y='12' width='8' height='36' rx='1'/%3E%3Crect x='90' y='10' width='7' height='40' rx='1'/%3E%3Crect x='106' y='16' width='6' height='30' rx='1'/%3E%3Crect x='120' y='8' width='9' height='42' rx='1'/%3E%3Crect x='138' y='14' width='6' height='32' rx='1'/%3E%3Crect x='154' y='10' width='8' height='38' rx='1'/%3E%3Crect x='18' y='128' width='7' height='38' rx='1'/%3E%3Crect x='34' y='132' width='9' height='32' rx='1'/%3E%3Crect x='52' y='126' width='6' height='42' rx='1'/%3E%3Crect x='68' y='134' width='8' height='30' rx='1'/%3E%3Crect x='86' y='128' width='5' height='38' rx='1'/%3E%3Crect x='100' y='130' width='9' height='34' rx='1'/%3E%3Crect x='118' y='126' width='7' height='42' rx='1'/%3E%3Crect x='134' y='134' width='6' height='30' rx='1'/%3E%3Crect x='150' y='128' width='8' height='38' rx='1'/%3E%3C/g%3E%3C/svg%3E");
+}
+.pattern-okapi-dense {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='180' viewBox='0 0 90 180'%3E%3Cg fill='%23F5EDD6'%3E%3Crect x='4' y='0' width='6' height='180'/%3E%3Crect x='16' y='0' width='4' height='180'/%3E%3Crect x='26' y='0' width='7' height='180'/%3E%3Crect x='40' y='0' width='5' height='180'/%3E%3Crect x='52' y='0' width='8' height='180'/%3E%3Crect x='66' y='0' width='5' height='180'/%3E%3Crect x='78' y='0' width='6' height='180'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   Glass surfaces — subtiles, pour les cards stat / "Top form" / next match.
+   Backdrop blur + cobalt mist en surfacing.
+   ────────────────────────────────────────────────────────────────────── */
+.glass {
+  background: rgba(159, 184, 224, 0.04);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid rgba(159, 184, 224, 0.10);
+}
+.glass-light {
+  background: rgba(159, 184, 224, 0.06);
+  backdrop-filter: blur(28px) saturate(150%);
+  -webkit-backdrop-filter: blur(28px) saturate(150%);
+  border: 1px solid rgba(159, 184, 224, 0.14);
 }
 
 @media (max-width: 768px) {
