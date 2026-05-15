@@ -34,6 +34,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import json
 import os
 import re
 import sys
@@ -1259,6 +1260,12 @@ def main():
         metavar="LEAGUES",
         help="[Méthode E] Filtre sur des ligues spécifiques (ex: 'L1' ou 'L1,BEL1')",
     )
+    parser.add_argument(
+        "--output-json",
+        default=None,
+        metavar="PATH",
+        help="Chemin du fichier JSON de sortie pour la liste des candidats détectés",
+    )
     args = parser.parse_args()
 
     methods = {m.strip().upper() for m in args.methods.split(",")}
@@ -1421,6 +1428,46 @@ def main():
             })
         except Exception as e:
             print(f"[sync_logs] Erreur d'écriture : {e}")
+
+    # ── Écriture du fichier JSON de sortie ──────────────────────────────────
+    if args.output_json:
+        # Dédup sur transfermarkt_id avant l'écriture
+        seen_ids_output: set = set()
+        deduped_output = []
+        for c in all_candidates:
+            if c["transfermarkt_id"] not in seen_ids_output:
+                seen_ids_output.add(c["transfermarkt_id"])
+                deduped_output.append(c)
+
+        json_records = []
+        for c in deduped_output:
+            record = {
+                "transfermarkt_id": c.get("transfermarkt_id"),
+                "name": c.get("name"),
+                "current_club": c.get("current_club"),
+                "current_club_id": None,  # pas disponible directement sur candidat méthode E
+                "date_of_birth": c.get("date_of_birth"),
+                "place_of_birth": c.get("place_of_birth"),
+                "country_of_birth": c.get("country_of_birth"),
+                "height_cm": c.get("height_cm"),
+                "position": c.get("position"),
+                "foot": c.get("foot"),
+                "nationalities": c.get("nationalities", []),
+                "other_nationalities": c.get("other_nationalities", []),
+                "is_binational": c.get("is_binational", False),
+                "market_value_eur": c.get("market_value_eur"),
+                "source_urls": [c.get("profile_url")] if c.get("profile_url") else [],
+                "discovered_via": f"method_{c.get('method', '?')}",
+                "discovered_at": finished_at.isoformat() + "Z",
+                "source": c.get("source"),
+            }
+            json_records.append(record)
+
+        output_path = Path(args.output_json)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(output_path, "w", encoding="utf-8") as f:
+            json.dump(json_records, f, ensure_ascii=False, indent=2)
+        print(f"\n→ JSON écrit : {output_path} ({len(json_records)} candidats, {output_path.stat().st_size} bytes)")
 
     print("\n══════════════════════════════════════════════")
     print("  RÉCAP FINAL")
