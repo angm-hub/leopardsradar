@@ -1,0 +1,45 @@
+name: Bulk Validate Academy Candidates
+
+# Réutilisable : prend une CSV de TM IDs et marque verified=true sur ces
+# candidats academy_scan_2026. Idempotent (skip déjà verified).
+#
+# Utilisé pour valider en batch les pépites détectées par discover-academies.
+
+on:
+  workflow_dispatch:
+    inputs:
+      tm_ids:
+        description: "CSV des transfermarkt_id à valider (ex: 1464685,1379191,1232104)"
+        required: true
+        type: string
+      dry_run:
+        description: "Dry run — log seulement"
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: scripts/requirements.txt
+      - run: pip install -r scripts/requirements.txt
+      - name: Validate
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        working-directory: scripts
+        run: |
+          ARGS=""
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then ARGS="--dry-run"; fi
+          python bulk_validate_academy.py --tm-ids "${{ github.event.inputs.tm_ids }}" $ARGS

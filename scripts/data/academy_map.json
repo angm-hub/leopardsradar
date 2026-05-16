@@ -1,46 +1,4 @@
 {
-  "Paris Saint-Germain": {
-    "league": "L1",
-    "pro_id": "583",
-    "pro_name": "Paris Saint-Germain",
-    "academies": [
-      {
-        "id": "41587",
-        "name": "Paris Saint-Germain UEFA U19",
-        "level": "U19"
-      },
-      {
-        "id": "6326",
-        "name": "Paris Saint-Germain U19",
-        "level": "U19"
-      },
-      {
-        "id": "54295",
-        "name": "FC Paris Saint-Germain U17",
-        "level": "U17"
-      },
-      {
-        "id": "8512",
-        "name": "Paris Saint-Germain B",
-        "level": "B"
-      },
-      {
-        "id": "120098",
-        "name": "Paris Saint-Germain Academy",
-        "level": "Youth"
-      },
-      {
-        "id": "82891",
-        "name": "FC Paris Saint-Germain Youth",
-        "level": "Youth"
-      },
-      {
-        "id": "135825",
-        "name": "Paris Saint-Germain U18",
-        "level": "U18"
-      }
-    ]
-  },
   "Olympique de Marseille": {
     "league": "L1",
     "pro_id": "244",
@@ -50,80 +8,6 @@
         "id": "8524",
         "name": "Olympique de Marseille B",
         "level": "B"
-      }
-    ]
-  },
-  "AS Monaco": {
-    "league": "L1",
-    "pro_id": "162",
-    "pro_name": "AS Monaco",
-    "academies": [
-      {
-        "id": "45508",
-        "name": "AS Monaco UEFA U19",
-        "level": "U19"
-      },
-      {
-        "id": "9668",
-        "name": "AS Monaco U21",
-        "level": "U21"
-      },
-      {
-        "id": "9669",
-        "name": "AS Monaco U19",
-        "level": "U19"
-      },
-      {
-        "id": "107690",
-        "name": "AS Monaco U17",
-        "level": "U17"
-      },
-      {
-        "id": "82297",
-        "name": "AS Monaco B",
-        "level": "B"
-      },
-      {
-        "id": "45617",
-        "name": "AS Monaco Youth",
-        "level": "Youth"
-      },
-      {
-        "id": "129777",
-        "name": "AS Monaco U18",
-        "level": "U18"
-      }
-    ]
-  },
-  "LOSC Lille": {
-    "league": "L1",
-    "pro_id": "1082",
-    "pro_name": "LOSC Lille",
-    "academies": [
-      {
-        "id": "12765",
-        "name": "LOSC Lille B",
-        "level": "B"
-      },
-      {
-        "id": "7875",
-        "name": "LOSC Lille U19",
-        "level": "U19"
-      },
-      {
-        "id": "107691",
-        "name": "LOSC Lille U17",
-        "level": "U17"
-      },
-      {
-        "id": "59856",
-        "name": "LOSC Lille Youth",
-        "level": "Youth"
-      },
-      {
-        "id": "76577",
-        "name": "LOSC Lille UEFA U19",
-        "level": "U19"
       }
     ]
   },
@@ -156,43 +40,6 @@
         "id": "99634",
         "name": "Stade Rennais FC Jugend",
         "level": "Youth"
-      }
-    ]
-  },
-  "RC Lens": {
-    "league": "L1",
-    "pro_id": "826",
-    "pro_name": "RC Lens",
-    "academies": [
-      {
-        "id": "88222",
-        "name": "RC Lens U17",
-        "level": "U17"
-      },
-      {
-        "id": "134032",
-        "name": "RC Lens U18",
-        "level": "U18"
-      },
-      {
-        "id": "8152",
-        "name": "RC Lens B",
-        "level": "B"
-      },
-      {
-        "id": "10824",
-        "name": "RC Lens U19",
-        "level": "U19"
-      },
-      {
-        "id": "100154",
-        "name": "RC Lens Youth",
-        "level": "Youth"
-      },
-      {
-        "id": "112369",
-        "name": "RC Lens UEFA U19",
-        "level": "U19"
       }
     ]
   },
@@ -321,11 +168,67 @@
       }
     ]
   },
+  "Montpellier HSC": {
+    "league": "L1",
+    "pro_id": "969",
+    "pro_name": "Montpellier HSC",
+    "academies": [
+      {
+        "id": "6572",
+        "name": "Montpellier HSC B",
+        "level": "B"
+      },
+      {
+        "id": "10852",
+        "name": "Montpellier HSC U19",
+        "level": "U19"
+      },
+      {
+        "id": "107729",
+        "name": "Montpellier HSC U17",
+        "level": "U17"
+      },
+      {
+        "id": "69405",
+        "name": "Montpellier HSC UEFA U19",
+        "level": "U19"
+      }
+    ]
+  },
   "Stade Brestois 29": {
     "league": "L1",
     "pro_id": "3911",
     "pro_name": "Stade Brestois 29",
     "academies": []
+  },
+  "RC Strasbourg": {
+    "league": "L1",
+    "pro_id": "667",
+    "pro_name": "RC Strasbourg Alsace",
+    "academies": [
+      {
+        "id": "133949",
+        "name": "RC Strasbourg Alsace U18",
+        "level": "U18"
+      }
+    ]
+  },
+  "Girondins de Bordeaux": {
+    "league": "L1",
+    "pro_id": "40",
+    "pro_name": "FC Girondins Bordeaux",
+    "academies": [
+      {
+        "id": "62343",
+        "name": "FC Girondins Bordeaux Youth",
+        "level": "Youth"
+      },
+      {
+        "id": "62344",
+        "name": "FC Girondins Bordeaux U17",
+        "level": "U17"
+      }
+    ]
   },
   "FC Lorient": {
     "league": "L1",
@@ -388,33 +291,6 @@
         "id": "26917",
         "name": "FC Metz Devant Les Ponts U17",
         "level": "U17"
-      }
-    ]
-  },
-  "Clermont Foot": {
-    "league": "L1",
-    "pro_id": "3524",
-    "pro_name": "Clermont Foot 63",
-    "academies": [
-      {
-        "id": "16654",
-        "name": "Clermont Foot 63 B",
-        "level": "B"
-      },
-      {
-        "id": "12747",
-        "name": "Clermont Foot 63 U19",
-        "level": "U19"
-      },
-      {
-        "id": "107755",
-        "name": "Clermont Foot 63 U17",
-        "level": "U17"
-      },
-      {
-        "id": "128766",
-        "name": "Clermont Foot 63 U18",
-        "level": "U18"
       }
     ]
   },
@@ -532,6 +408,12 @@
       }
     ]
   },
+  "Stade Lavallois": {
+    "league": "L2",
+    "pro_id": "1080",
+    "pro_name": "Stade Lavallois",
+    "academies": []
+  },
   "SM Caen": {
     "league": "L2",
     "pro_id": "1162",
@@ -556,6 +438,38 @@
         "id": "107820",
         "name": "SM Caen Jugend",
         "level": "Youth"
+      }
+    ]
+  },
+  "Pau FC": {
+    "league": "L2",
+    "pro_id": "3166",
+    "pro_name": "Pau FC",
+    "academies": [
+      {
+        "id": "56695",
+        "name": "Pau FC B",
+        "level": "B"
+      },
+      {
+        "id": "81970",
+        "name": "Pau FC U19",
+        "level": "U19"
+      },
+      {
+        "id": "108022",
+        "name": "Pau FC U17",
+        "level": "U17"
+      },
+      {
+        "id": "108023",
+        "name": "Pau FC Jugend",
+        "level": "Youth"
+      },
+      {
+        "id": "130184",
+        "name": "Pau FC U18",
+        "level": "U18"
       }
     ]
   },
@@ -645,6 +559,28 @@
       }
     ]
   },
+  "Dijon FCO": {
+    "league": "L2",
+    "pro_id": "2969",
+    "pro_name": "Dijon FCO",
+    "academies": [
+      {
+        "id": "16664",
+        "name": "Dijon FCO B",
+        "level": "B"
+      },
+      {
+        "id": "107844",
+        "name": "Dijon FCO U17",
+        "level": "U17"
+      },
+      {
+        "id": "107847",
+        "name": "Dijon FCO Jugend",
+        "level": "Youth"
+      }
+    ]
+  },
   "Paris FC": {
     "league": "L2",
     "pro_id": "10004",
@@ -728,134 +664,6 @@
         "id": "112862",
         "name": "FC Annecy U18",
         "level": "U18"
-      }
-    ]
-  },
-  "RSC Anderlecht": {
-    "league": "BEL1",
-    "pro_id": "58",
-    "pro_name": "RSC Anderlecht",
-    "academies": [
-      {
-        "id": "66529",
-        "name": "RSC Anderlecht U18",
-        "level": "U18"
-      },
-      {
-        "id": "25005",
-        "name": "RSC Anderlecht Youth",
-        "level": "Youth"
-      },
-      {
-        "id": "3038",
-        "name": "RSC Anderlecht U19",
-        "level": "U19"
-      },
-      {
-        "id": "41597",
-        "name": "RSC Anderlecht UEFA U19",
-        "level": "U19"
-      },
-      {
-        "id": "49390",
-        "name": "RSC Anderlecht U17",
-        "level": "U17"
-      }
-    ]
-  },
-  "Club Brugge": {
-    "league": "BEL1",
-    "pro_id": "2282",
-    "pro_name": "Club Brugge KV",
-    "academies": [
-      {
-        "id": "55837",
-        "name": "Club Brugge UEFA U19",
-        "level": "U19"
-      },
-      {
-        "id": "66530",
-        "name": "Club Brugge U18",
-        "level": "U18"
-      },
-      {
-        "id": "25003",
-        "name": "Club Brugge Youth",
-        "level": "Youth"
-      }
-    ]
-  },
-  "Union Saint-Gilloise": {
-    "league": "BEL1",
-    "pro_id": "3948",
-    "pro_name": "Union Saint-Gilloise",
-    "academies": [
-      {
-        "id": "10666",
-        "name": "Union Saint-Gilloise U23",
-        "level": "U23"
-      },
-      {
-        "id": "134070",
-        "name": "Union Saint-Gilloise UEFA U19",
-        "level": "U19"
-      },
-      {
-        "id": "66552",
-        "name": "Union Saint-Gilloise U18",
-        "level": "U18"
-      },
-      {
-        "id": "66553",
-        "name": "Union Saint-Gilloise Youth",
-        "level": "Youth"
-      },
-      {
-        "id": "15690",
-        "name": "Union Saint-Gilloise U19",
-        "level": "U19"
-      },
-      {
-        "id": "66515",
-        "name": "Union Saint-Gilloise U17",
-        "level": "U17"
-      },
-      {
-        "id": "122321",
-        "name": "Union Saint-Gilloise U21",
-        "level": "U21"
-      }
-    ]
-  },
-  "KRC Genk": {
-    "league": "BEL1",
-    "pro_id": "1184",
-    "pro_name": "KRC Genk",
-    "academies": [
-      {
-        "id": "76579",
-        "name": "KRC Genk UEFA U19",
-        "level": "U19"
-      },
-      {
-        "id": "66531",
-        "name": "KRC Genk U18",
-        "level": "U18"
-      },
-      {
-        "id": "34282",
-        "name": "KRC Genk Youth",
-        "level": "Youth"
-      },
-      {
-        "id": "49393",
-        "name": "KRC Genk U17",
-        "level": "U17"
-      },
-      {
-        "id": "3494",
-        "name": "KRC Genk U19",
-        "level": "U19"
       }
     ]
   },
@@ -957,38 +765,6 @@
       }
     ]
   },
-  "KVC Westerlo": {
-    "league": "BEL1",
-    "pro_id": "968",
-    "pro_name": "KVC Westerlo",
-    "academies": [
-      {
-        "id": "122322",
-        "name": "KVC Westerlo U21",
-        "level": "U21"
-      },
-      {
-        "id": "66554",
-        "name": "KVC Westerlo U18",
-        "level": "U18"
-      },
-      {
-        "id": "64250",
-        "name": "KVC Westerlo Youth",
-        "level": "Youth"
-      },
-      {
-        "id": "9631",
-        "name": "KVC Westerlo U19",
-        "level": "U19"
-      },
-      {
-        "id": "49405",
-        "name": "KVC Westerlo U17",
-        "level": "U17"
-      }
-    ]
-  },
   "KV Kortrijk": {
     "league": "BEL1",
     "pro_id": "601",
@@ -1021,38 +797,6 @@
       }
     ]
   },
-  "Royal Antwerp": {
-    "league": "BEL1",
-    "pro_id": "1096",
-    "pro_name": "Royal Antwerp FC",
-    "academies": [
-      {
-        "id": "66538",
-        "name": "Royal Antwerp FC U18",
-        "level": "U18"
-      },
-      {
-        "id": "64252",
-        "name": "Royal Antwerp FC Youth",
-        "level": "Youth"
-      },
-      {
-        "id": "9612",
-        "name": "Royal Antwerp FC U19",
-        "level": "U19"
-      },
-      {
-        "id": "64251",
-        "name": "Royal Antwerpen FC U17",
-        "level": "U17"
-      },
-      {
-        "id": "112580",
-        "name": "Royal Antwerpen FC UEFA U19",
-        "level": "U19"
-      }
-    ]
-  },
   "Beerschot VA": {
     "league": "BEL1",
     "pro_id": "41274",
@@ -1081,6 +825,18 @@
       {
         "id": "66547",
         "name": "KFCO Beerschot Wilrijk U19",
+        "level": "U19"
+      }
+    ]
+  },
+  "RWD Molenbeek": {
+    "league": "BEL1",
+    "pro_id": "2973",
+    "pro_name": "RWD Molenbeek (- 2002)",
+    "academies": [
+      {
+        "id": "10938",
+        "name": "RWD Molenbeek U19",
         "level": "U19"
       }
     ]
@@ -1154,6 +910,18 @@
       }
     ]
   },
+  "Feyenoord Rotterdam": {
+    "league": "NL1",
+    "pro_id": "234",
+    "pro_name": "Feyenoord Rotterdam",
+    "academies": [
+      {
+        "id": "62101",
+        "name": "Feyenoord Rotterdam UEFA U19",
+        "level": "U19"
+      }
+    ]
+  },
   "AZ Alkmaar": {
     "league": "NL1",
     "pro_id": "1090",
@@ -1187,38 +955,6 @@
       {
         "id": "81349",
         "name": "AZ Alkmaar U18",
-        "level": "U18"
-      }
-    ]
-  },
-  "FC Utrecht": {
-    "league": "NL1",
-    "pro_id": "200",
-    "pro_name": "FC Utrecht",
-    "academies": [
-      {
-        "id": "17596",
-        "name": "FC Utrecht U21",
-        "level": "U21"
-      },
-      {
-        "id": "51705",
-        "name": "FC Utrecht U17",
-        "level": "U17"
-      },
-      {
-        "id": "4694",
-        "name": "FC Utrecht U19",
-        "level": "U19"
-      },
-      {
-        "id": "32797",
-        "name": "FC Utrecht Youth",
-        "level": "Youth"
-      },
-      {
-        "id": "81339",
-        "name": "FC Utrecht U18",
         "level": "U18"
       }
     ]
@@ -1328,53 +1064,6 @@
         "id": "32805",
         "name": "Vitesse Arnhem Youth",
         "level": "Youth"
-      }
-    ]
-  },
-  "NEC Nijmegen": {
-    "league": "NL1",
-    "pro_id": "467",
-    "pro_name": "NEC Nijmegen",
-    "academies": [
-      {
-        "id": "7463",
-        "name": "NEC Nijmegen U19",
-        "level": "U19"
-      },
-      {
-        "id": "11154",
-        "name": "NEC Nijmegen U21",
-        "level": "U21"
-      },
-      {
-        "id": "43843",
-        "name": "NEC Nijmegen U17",
-        "level": "U17"
-      },
-      {
-        "id": "32800",
-        "name": "NEC Nijmegen Youth",
-        "level": "Youth"
-      },
-      {
-        "id": "20330",
-        "name": "NEC Nijmegen Amateurs",
-        "level": "Reserves"
-      },
-      {
-        "id": "59433",
-        "name": "NEC Nijmegen Amateure U19",
-        "level": "U19"
-      },
-      {
-        "id": "79121",
-        "name": "NEC Nijmegen Amateurs Youth",
-        "level": "Reserves"
-      },
-      {
-        "id": "79122",
-        "name": "NEC Nijmegen U18",
-        "level": "U18"
       }
     ]
   },
@@ -1629,6 +1318,38 @@
       }
     ]
   },
+  "RB Leipzig": {
+    "league": "GER1",
+    "pro_id": "23826",
+    "pro_name": "RB Leipzig",
+    "academies": [
+      {
+        "id": "26621",
+        "name": "RB Leipzig U19",
+        "level": "U19"
+      },
+      {
+        "id": "32942",
+        "name": "RB Leipzig U17",
+        "level": "U17"
+      },
+      {
+        "id": "39962",
+        "name": "RB Leipzig Youth",
+        "level": "Youth"
+      },
+      {
+        "id": "24293",
+        "name": "RB Leipzig II (- 2017)",
+        "level": "B"
+      },
+      {
+        "id": "62103",
+        "name": "RB Leipzig UEFA U19",
+        "level": "U19"
+      }
+    ]
+  },
   "Bayer 04 Leverkusen": {
     "league": "GER1",
     "pro_id": "15",
@@ -1730,30 +1451,35 @@
       }
     ]
   },
-  "SC Freiburg": {
+  "Borussia Mönchengladbach": {
     "league": "GER1",
-    "pro_id": "60",
-    "pro_name": "SC Freiburg",
+    "pro_id": "18",
+    "pro_name": "Borussia Mönchengladbach",
     "academies": [
       {
-        "id": "245",
-        "name": "SC Freiburg II",
+        "id": "1006",
+        "name": "Borussia Mönchengladbach II",
         "level": "B"
       },
       {
-        "id": "4042",
-        "name": "SC Freiburg U19",
+        "id": "4121",
+        "name": "Borussia Mönchengladbach U19",
         "level": "U19"
       },
       {
-        "id": "21075",
-        "name": "SC Freiburg U17",
+        "id": "21056",
+        "name": "Borussia Mönchengladbach U17",
         "level": "U17"
       },
       {
-        "id": "18042",
-        "name": "SC Freiburg Youth",
+        "id": "11845",
+        "name": "Borussia Mönchengladbach Youth",
         "level": "Youth"
+      },
+      {
+        "id": "50629",
+        "name": "Borussia Mönchengladbach UEFA U19",
+        "level": "U19"
       }
     ]
   },
@@ -1822,6 +1548,65 @@
       }
     ]
   },
+  "VfL Bochum": {
+    "league": "GER1",
+    "pro_id": "80",
+    "pro_name": "VfL Bochum",
+    "academies": [
+      {
+        "id": "446",
+        "name": "VfL Bochum II",
+        "level": "B"
+      },
+      {
+        "id": "3862",
+        "name": "VfL Bochum U19",
+        "level": "U19"
+      },
+      {
+        "id": "21085",
+        "name": "VfL Bochum U17",
+        "level": "U17"
+      },
+      {
+        "id": "11894",
+        "name": "VfL Bochum Youth",
+        "level": "Youth"
+      }
+    ]
+  },
+  "Holstein Kiel": {
+    "league": "GER1",
+    "pro_id": "269",
+    "pro_name": "Holstein Kiel",
+    "academies": [
+      {
+        "id": "1171",
+        "name": "Holstein Kiel II",
+        "level": "B"
+      },
+      {
+        "id": "6869",
+        "name": "Holstein Kiel U19",
+        "level": "U19"
+      },
+      {
+        "id": "21067",
+        "name": "Holstein Kiel U17",
+        "level": "U17"
+      },
+      {
+        "id": "36446",
+        "name": "Holstein Kiel Youth",
+        "level": "Youth"
+      },
+      {
+        "id": "23078",
+        "name": "Holstein Kiel U18",
+        "level": "U18"
+      }
+    ]
+  },
   "1. FC Kaiserslautern": {
     "league": "GER2",
     "pro_id": "2",
@@ -1855,38 +1640,6 @@
       }
     ]
   },
-  "Hamburger SV": {
-    "league": "GER2",
-    "pro_id": "41",
-    "pro_name": "Hamburger SV",
-    "academies": [
-      {
-        "id": "389",
-        "name": "Hamburger SV II",
-        "level": "B"
-      },
-      {
-        "id": "2509",
-        "name": "Hamburger SV U19",
-        "level": "U19"
-      },
-      {
-        "id": "21063",
-        "name": "Hamburger SV U17",
-        "level": "U17"
-      },
-      {
-        "id": "12786",
-        "name": "Hamburger SV Youth",
-        "level": "Youth"
-      },
-      {
-        "id": "29741",
-        "name": "Hamburger SV U18",
-        "level": "U18"
-      }
-    ]
-  },
   "Hannover 96": {
     "league": "GER2",
     "pro_id": "42",
@@ -1914,66 +1667,34 @@
       }
     ]
   },
-  "Fortuna Düsseldorf": {
+  "FC Schalke 04": {
     "league": "GER2",
-    "pro_id": "38",
-    "pro_name": "Fortuna Düsseldorf",
+    "pro_id": "33",
+    "pro_name": "FC Schalke 04",
     "academies": [
       {
-        "id": "4690",
-        "name": "Fortuna Düsseldorf II",
+        "id": "34",
+        "name": "FC Schalke 04 II",
         "level": "B"
       },
       {
-        "id": "6675",
-        "name": "Fortuna Düsseldorf U19",
+        "id": "1463",
+        "name": "FC Schalke 04 U19",
         "level": "U19"
       },
       {
-        "id": "23005",
-        "name": "Fortuna Düsseldorf U17",
+        "id": "21061",
+        "name": "FC Schalke 04 U17",
         "level": "U17"
       },
       {
-        "id": "11955",
-        "name": "Fortuna Düsseldorf Youth",
+        "id": "11884",
+        "name": "FC Schalke 04 Youth",
         "level": "Youth"
       },
       {
-        "id": "28105",
-        "name": "Fortuna Düsseldorf U18",
-        "level": "U18"
-      }
-    ]
-  },
-  "Hertha BSC": {
-    "league": "GER2",
-    "pro_id": "44",
-    "pro_name": "Hertha BSC",
-    "academies": [
-      {
-        "id": "45",
-        "name": "Hertha BSC II",
-        "level": "B"
-      },
-      {
-        "id": "2827",
-        "name": "Hertha BSC U19",
-        "level": "U19"
-      },
-      {
-        "id": "21066",
-        "name": "Hertha BSC U17",
-        "level": "U17"
-      },
-      {
-        "id": "11844",
-        "name": "Hertha BSC Youth",
-        "level": "Youth"
-      },
-      {
-        "id": "69413",
-        "name": "Hertha BSC UEFA U19",
+        "id": "41574",
+        "name": "FC Schalke 04 UEFA U19",
         "level": "U19"
       }
     ]
@@ -2011,29 +1732,34 @@
     "pro_name": "1.FC Magdeburg",
     "academies": []
   },
-  "SV Darmstadt 98": {
-    "league": "GER2",
-    "pro_id": "105",
-    "pro_name": "SV Darmstadt 98",
+  "Manchester City": {
+    "league": "ENG1",
+    "pro_id": "281",
+    "pro_name": "Manchester City",
     "academies": [
       {
-        "id": "4929",
-        "name": "SV Darmstadt 98 II",
-        "level": "B"
+        "id": "9265",
+        "name": "Manchester City U21",
+        "level": "U21"
       },
       {
-        "id": "7647",
-        "name": "SV Darmstadt 98 U19",
+        "id": "41593",
+        "name": "Manchester City UEFA U19",
         "level": "U19"
       },
       {
-        "id": "22589",
-        "name": "SV Darmstadt 98 U17",
-        "level": "U17"
+        "id": "6930",
+        "name": "Manchester City U18",
+        "level": "U18"
       },
       {
-        "id": "33469",
-        "name": "SV Darmstadt 98 Youth",
+        "id": "50678",
+        "name": "Manchester City Youth",
+        "level": "Youth"
+      },
+      {
+        "id": "131592",
+        "name": "Manchester City Academy Dubai",
         "level": "Youth"
       }
     ]
@@ -2070,57 +1796,40 @@
       }
     ]
   },
-  "Manchester United": {
+  "Liverpool FC": {
     "league": "ENG1",
-    "pro_id": "985",
-    "pro_name": "Manchester United",
+    "pro_id": "31",
+    "pro_name": "Liverpool FC",
     "academies": [
       {
-        "id": "9251",
-        "name": "Manchester United U21",
-        "level": "U21"
-      },
-      {
-        "id": "5242",
-        "name": "Manchester United U18",
-        "level": "U18"
-      },
-      {
-        "id": "50672",
-        "name": "Manchester United Youth",
-        "level": "Youth"
-      },
-      {
-        "id": "41575",
-        "name": "Manchester United UEFA U19",
-        "level": "U19"
-      }
-    ]
-  },
-  "Chelsea FC": {
-    "league": "ENG1",
-    "pro_id": "631",
-    "pro_name": "Chelsea FC",
-    "academies": [
-      {
-        "id": "9250",
-        "name": "Chelsea FC U21",
-        "level": "U21"
-      },
-      {
-        "id": "41573",
-        "name": "Chelsea FC UEFA U19",
+        "id": "45333",
+        "name": "Liverpool FC UEFA U19",
         "level": "U19"
       },
       {
-        "id": "6918",
-        "name": "Chelsea FC U18",
+        "id": "9252",
+        "name": "Liverpool FC U21",
+        "level": "U21"
+      },
+      {
+        "id": "101175",
+        "name": "Liverpool FC Montevideo B",
+        "level": "B"
+      },
+      {
+        "id": "6922",
+        "name": "Liverpool FC U18",
         "level": "U18"
       },
       {
-        "id": "50677",
-        "name": "Chelsea FC Youth",
+        "id": "50906",
+        "name": "Liverpool FC Youth",
         "level": "Youth"
+      },
+      {
+        "id": "20354",
+        "name": "Liverpool FC Montevideo U19",
+        "level": "U19"
       }
     ]
   },
@@ -2185,6 +1894,33 @@
         "id": "140965",
         "name": "Newcastle United Jets U18",
         "level": "U18"
+      }
+    ]
+  },
+  "Aston Villa": {
+    "league": "ENG1",
+    "pro_id": "405",
+    "pro_name": "Aston Villa",
+    "academies": [
+      {
+        "id": "12124",
+        "name": "Aston Villa U21",
+        "level": "U21"
+      },
+      {
+        "id": "120034",
+        "name": "Aston Villa UEFA U19",
+        "level": "U19"
+      },
+      {
+        "id": "6933",
+        "name": "Aston Villa U18",
+        "level": "U18"
+      },
+      {
+        "id": "53183",
+        "name": "Aston Villa Youth",
+        "level": "Youth"
       }
     ]
   },
@@ -2320,6 +2056,33 @@
       }
     ]
   },
+  "Brentford FC": {
+    "league": "ENG1",
+    "pro_id": "1148",
+    "pro_name": "Brentford FC",
+    "academies": [
+      {
+        "id": "14997",
+        "name": "FC Brentford U18",
+        "level": "U18"
+      },
+      {
+        "id": "54704",
+        "name": "Brentford FC B",
+        "level": "B"
+      },
+      {
+        "id": "46959",
+        "name": "FC Brentford U21",
+        "level": "U21"
+      },
+      {
+        "id": "54705",
+        "name": "FC Brentford Youth",
+        "level": "Youth"
+      }
+    ]
+  },
   "Nottingham Forest": {
     "league": "ENG1",
     "pro_id": "703",
@@ -2338,6 +2101,28 @@
       {
         "id": "53108",
         "name": "Nottingham Forest Youth",
+        "level": "Youth"
+      }
+    ]
+  },
+  "AFC Bournemouth": {
+    "league": "ENG1",
+    "pro_id": "989",
+    "pro_name": "AFC Bournemouth",
+    "academies": [
+      {
+        "id": "38967",
+        "name": "AFC Bournemouth U21",
+        "level": "U21"
+      },
+      {
+        "id": "14648",
+        "name": "AFC Bournemouth U18",
+        "level": "U18"
+      },
+      {
+        "id": "83582",
+        "name": "AFC Bournemouth Jugend",
         "level": "Youth"
       }
     ]
@@ -2413,28 +2198,6 @@
       }
     ]
   },
-  "Leeds United": {
-    "league": "ENG2",
-    "pro_id": "399",
-    "pro_name": "Leeds United",
-    "academies": [
-      {
-        "id": "20116",
-        "name": "Leeds United U21",
-        "level": "U21"
-      },
-      {
-        "id": "10161",
-        "name": "Leeds United U18",
-        "level": "U18"
-      },
-      {
-        "id": "84125",
-        "name": "Leeds United Youth",
-        "level": "Youth"
-      }
-    ]
-  },
   "Middlesbrough FC": {
     "league": "ENG2",
     "pro_id": "641",
@@ -2470,28 +2233,6 @@
       {
         "id": "58235",
         "name": "AFC Sunderland Youth",
-        "level": "Youth"
-      }
-    ]
-  },
-  "Sheffield United": {
-    "league": "ENG2",
-    "pro_id": "350",
-    "pro_name": "Sheffield United",
-    "academies": [
-      {
-        "id": "8824",
-        "name": "Sheffield United U21",
-        "level": "U21"
-      },
-      {
-        "id": "12806",
-        "name": "Sheffield United U18",
-        "level": "U18"
-      },
-      {
-        "id": "109945",
-        "name": "Sheffield United Jugend",
         "level": "Youth"
       }
     ]
@@ -2563,6 +2304,28 @@
       {
         "id": "73627",
         "name": "FC Millwall Youth",
+        "level": "Youth"
+      }
+    ]
+  },
+  "Coventry City": {
+    "league": "ENG2",
+    "pro_id": "990",
+    "pro_name": "Coventry City",
+    "academies": [
+      {
+        "id": "12803",
+        "name": "Coventry City U18",
+        "level": "U18"
+      },
+      {
+        "id": "32636",
+        "name": "Coventry City U21",
+        "level": "U21"
+      },
+      {
+        "id": "52908",
+        "name": "Coventry City Youth",
         "level": "Youth"
       }
     ]
@@ -2669,6 +2432,1302 @@
         "id": "10732",
         "name": "Watford FC U18",
         "level": "U18"
+      }
+    ]
+  },
+  "Norwich City": {
+    "league": "ENG2",
+    "pro_id": "1123",
+    "pro_name": "Norwich City",
+    "academies": [
+      {
+        "id": "33614",
+        "name": "Norwich City U21",
+        "level": "U21"
+      },
+      {
+        "id": "6898",
+        "name": "Norwich City U18",
+        "level": "U18"
+      },
+      {
+        "id": "53101",
+        "name": "Norwich City Youth",
+        "level": "Youth"
+      }
+    ]
+  },
+  "SL Benfica": {
+    "league": "POR1",
+    "pro_id": "294",
+    "pro_name": "SL Benfica",
+    "academies": [
+      {
+        "id": "10330",
+        "name": "SL Benfica B",
+        "level": "B"
+      },
+      {
+        "id": "41582",
+        "name": "SL Benfica UEFA U19",
+        "level": "U19"
+      },
+      {
+        "id": "68780",
+        "name": "SL Benfica U23",
+        "level": "U23"
+      },
+      {
+        "id": "45618",
+        "name": "SL Benfica U17",
+        "level": "U17"
+      },
+      {
+        "id": "8889",
+        "name": "SL Benfica U19",
+        "level": "U19"
+      },
+      {
+        "id": "53954",
+        "name": "SL Benfica U15",
+        "level": "U15"
+      },
+      {
+        "id": "53955",
+        "name": "SL Benfica Youth",
+        "level": "Youth"
+      }
+    ]
+  },
+  "FC Porto": {
+    "league": "POR1",
+    "pro_id": "720",
+    "pro_name": "FC Porto",
+    "academies": [
+      {
+        "id": "10331",
+        "name": "FC Porto B",
+        "level": "B"
+      },
+      {
+        "id": "41588",
+        "name": "FC Porto Youth League",
+        "level": "Youth"
+      },
+      {
+        "id": "9844",
+        "name": "FC Porto U19",
+        "level": "U19"
+      },
+      {
+        "id": "47962",
+        "name": "FC Porto U17",
+        "level": "U17"
+      },
+      {
+        "id": "56765",
+        "name": "FC Porto U15",
+        "level": "U15"
+      }
+    ]
+  },
+  "Sporting CP": {
+    "league": "POR1",
+    "pro_id": "336",
+    "pro_name": "Sporting CP",
+    "academies": [
+      {
+        "id": "10949",
+        "name": "Sporting CP B",
+        "level": "B"
+      },
+      {
+        "id": "45510",
+        "name": "Sporting Lissabon UEFA U19",
+        "level": "U19"
+      },
+      {
+        "id": "67909",
+        "name": "Sporting CP U23",
+        "level": "U23"
+      },
+      {
+        "id": "10283",
+        "name": "Sporting CP U19",
+        "level": "U19"
+      },
+      {
+        "id": "48365",
+        "name": "Sporting CP U17",
+        "level": "U17"
+      },
+      {
+        "id": "53957",
+        "name": "Sporting CP Youth",
+        "level": "Youth"
+      }
+    ]
+  },
+  "SC Braga": {
+    "league": "POR1",
+    "pro_id": "1075",
+    "pro_name": "SC Braga",
+    "academies": [
+      {
+        "id": "10789",
+        "name": "SC Braga B",
+        "level": "B"
+      },
+      {
+        "id": "68077",
+        "name": "SC Braga U23",
+        "level": "U23"
+      },
+      {
+        "id": "12964",
+        "name": "SC Braga U19",
+        "level": "U19"
+      },
+      {
+        "id": "48758",
+        "name": "SC Braga U17",
+        "level": "U17"
+      },
+      {
+        "id": "53958",
+        "name": "SC Braga U15",
+        "level": "U15"
+      },
+      {
+        "id": "53959",
+        "name": "SC Braga Youth",
+        "level": "Youth"
+      },
+      {
+        "id": "112566",
+        "name": "SC Braga UEFA U19",
+        "level": "U19"
+      }
+    ]
+  },
+  "Vitória SC": {
+    "league": "POR1",
+    "pro_id": "2420",
+    "pro_name": "Vitória Guimarães SC",
+    "academies": [
+      {
+        "id": "15136",
+        "name": "Vitória Guimarães SC B",
+        "level": "B"
+      },
+      {
+        "id": "15581",
+        "name": "Vitória Guimarães SC U19",
+        "level": "U19"
+      },
+      {
+        "id": "47988",
+        "name": "Vitória de Guimarães SC U17",
+        "level": "U17"
+      },
+      {
+        "id": "54529",
+        "name": "Vitória de Guimarães SC U15",
+        "level": "U15"
+      },
+      {
+        "id": "54530",
+        "name": "Vitória de Guimarães SC Youth",
+        "level": "Youth"
+      },
+      {
+        "id": "68188",
+        "name": "Vitória de Guimarães SC U23 (- 2022)",
+        "level": "U23"
+      }
+    ]
+  },
+  "Moreirense FC": {
+    "league": "POR1",
+    "pro_id": "979",
+    "pro_name": "Moreirense FC",
+    "academies": [
+      {
+        "id": "15570",
+        "name": "Moreirense FC U19",
+        "level": "U19"
+      },
+      {
+        "id": "57921",
+        "name": "Moreirense FC Youth",
+        "level": "Youth"
+      }
+    ]
+  },
+  "FC Famalicão": {
+    "league": "POR1",
+    "pro_id": "3329",
+    "pro_name": "FC Famalicão",
+    "academies": [
+      {
+        "id": "75337",
+        "name": "FC Famalicão U23",
+        "level": "U23"
+      },
+      {
+        "id": "20728",
+        "name": "FC Famalicão U19",
+        "level": "U19"
+      },
+      {
+        "id": "58402",
+        "name": "FC Famalicão Youth",
+        "level": "Youth"
+      },
+      {
+        "id": "112370",
+        "name": "FC Famalicão UEFA U19",
+        "level": "U19"
+      }
+    ]
+  },
+  "Gil Vicente FC": {
+    "league": "POR1",
+    "pro_id": "2424",
+    "pro_name": "Gil Vicente FC",
+    "academies": [
+      {
+        "id": "99764",
+        "name": "Gil Vicente U23",
+        "level": "U23"
+      },
+      {
+        "id": "15567",
+        "name": "Gil Vicente FC U19",
+        "level": "U19"
+      },
+      {
+        "id": "76822",
+        "name": "Gil Vicente FC U17",
+        "level": "U17"
+      },
+      {
+        "id": "19328",
+        "name": "Gil Vicente FC B",
+        "level": "B"
+      },
+      {
+        "id": "76823",
+        "name": "Gil Vicente FC U15",
+        "level": "U15"
+      }
+    ]
+  },
+  "Casa Pia AC": {
+    "league": "POR1",
+    "pro_id": "3268",
+    "pro_name": "Casa Pia AC",
+    "academies": [
+      {
+        "id": "20205",
+        "name": "Casa Pia AC U19",
+        "level": "U19"
+      },
+      {
+        "id": "74385",
+        "name": "Casa Pia AC U17",
+        "level": "U17"
+      },
+      {
+        "id": "129201",
+        "name": "Casa Pia AC B",
+        "level": "B"
+      },
+      {
+        "id": "74387",
+        "name": "Casa Pia AC Jugend",
+        "level": "Youth"
+      },
+      {
+        "id": "74386",
+        "name": "Casa Pia AC U15",
+        "level": "U15"
+      }
+    ]
+  },
+  "Rio Ave FC": {
+    "league": "POR1",
+    "pro_id": "2425",
+    "pro_name": "Rio Ave FC",
+    "academies": [
+      {
+        "id": "68110",
+        "name": "Rio Ave FC U23",
+        "level": "U23"
+      },
+      {
+        "id": "8105",
+        "name": "Rio Ave FC U19",
+        "level": "U19"
+      },
+      {
+        "id": "51637",
+        "name": "Rio Ave FC U17",
+        "level": "U17"
+      },
+      {
+        "id": "57923",
+        "name": "Rio Ave FC Youth",
+        "level": "Youth"
+      },
+      {
+        "id": "61163",
+        "name": "Rio Ave FC B",
+        "level": "B"
+      }
+    ]
+  },
+  "FC Basel": {
+    "league": "SUI1",
+    "pro_id": "26",
+    "pro_name": "FC Basel 1893",
+    "academies": [
+      {
+        "id": "5299",
+        "name": "FC Basel 1893 U21",
+        "level": "U21"
+      },
+      {
+        "id": "32337",
+        "name": "FC Basel 1893 U17",
+        "level": "U17"
+      },
+      {
+        "id": "110149",
+        "name": "FC Basel 1893 U19",
+        "level": "U19"
+      },
+      {
+        "id": "32336",
+        "name": "FC Basel 1893 U16",
+        "level": "U16"
+      },
+      {
+        "id": "14322",
+        "name": "FC Basel 1893 U18",
+        "level": "U18"
+      },
+      {
+        "id": "41572",
+        "name": "FC Basel 1893 UEFA U19",
+        "level": "U19"
+      },
+      {
+        "id": "42366",
+        "name": "FC Basel 1893 Youth",
+        "level": "Youth"
+      }
+    ]
+  },
+  "Young Boys": {
+    "league": "SUI1",
+    "pro_id": "452",
+    "pro_name": "BSC Young Boys",
+    "academies": [
+      {
+        "id": "5508",
+        "name": "BSC Young Boys U21",
+        "level": "U21"
+      },
+      {
+        "id": "32283",
+        "name": "BSC Young Boys U17",
+        "level": "U17"
+      },
+      {
+        "id": "110606",
+        "name": "BSC Young Boys U19",
+        "level": "U19"
+      },
+      {
+        "id": "32282",
+        "name": "BSC Young Boys U16",
+        "level": "U16"
+      }
+    ]
+  },
+  "Servette FC": {
+    "league": "SUI1",
+    "pro_id": "61",
+    "pro_name": "Servette FC",
+    "academies": [
+      {
+        "id": "25526",
+        "name": "Servette FC U21",
+        "level": "U21"
+      },
+      {
+        "id": "110601",
+        "name": "Servette FC U19",
+        "level": "U19"
+      },
+      {
+        "id": "78008",
+        "name": "Servette FC U16",
+        "level": "U16"
+      },
+      {
+        "id": "70702",
+        "name": "Servette FC Youth",
+        "level": "Youth"
+      },
+      {
+        "id": "5506",
+        "name": "Servette FC U18",
+        "level": "U18"
+      },
+      {
+        "id": "50916",
+        "name": "Servette FC UEFA U19",
+        "level": "U19"
+      }
+    ]
+  },
+  "Grasshopper Club Zürich": {
+    "league": "SUI1",
+    "pro_id": "5502",
+    "pro_name": "Grasshopper Club Zürich U21",
+    "academies": [
+      {
+        "id": "110600",
+        "name": "Grasshopper Club Zürich U19",
+        "level": "U19"
+      },
+      {
+        "id": "59526",
+        "name": "Grasshopper Club Zürich U17",
+        "level": "U17"
+      },
+      {
+        "id": "32339",
+        "name": "Grasshopper Club Zürich U16",
+        "level": "U16"
+      },
+      {
+        "id": "56541",
+        "name": "Grasshopper Club Zürich U15",
+        "level": "U15"
+      },
+      {
+        "id": "59552",
+        "name": "Grasshopper Club Zürich Youth",
+        "level": "Youth"
+      },
+      {
+        "id": "14543",
+        "name": "Grasshopper Club Zürich U18",
+        "level": "U18"
+      }
+    ]
+  },
+  "FC Lugano": {
+    "league": "SUI1",
+    "pro_id": "2790",
+    "pro_name": "FC Lugano",
+    "academies": [
+      {
+        "id": "18051",
+        "name": "FC Lugano II",
+        "level": "B"
+      },
+      {
+        "id": "60201",
+        "name": "FC Lugano Youth",
+        "level": "Youth"
+      }
+    ]
+  },
+  "FC Sion": {
+    "league": "SUI1",
+    "pro_id": "321",
+    "pro_name": "FC Sion",
+    "academies": [
+      {
+        "id": "8508",
+        "name": "FC Sion U21",
+        "level": "U21"
+      },
+      {
+        "id": "110613",
+        "name": "FC Sion U17",
+        "level": "U17"
+      },
+      {
+        "id": "110604",
+        "name": "FC Sion U19",
+        "level": "U19"
+      },
+      {
+        "id": "84407",
+        "name": "FC Sion U16",
+        "level": "U16"
+      },
+      {
+        "id": "42250",
+        "name": "FC Sion Youth",
+        "level": "Youth"
+      },
+      {
+        "id": "14211",
+        "name": "FC Sion U18",
+        "level": "U18"
+      },
+      {
+        "id": "84408",
+        "name": "FC Sion U15",
+        "level": "U15"
+      }
+    ]
+  },
+  "FC Luzern": {
+    "league": "SUI1",
+    "pro_id": "434",
+    "pro_name": "FC Luzern",
+    "academies": [
+      {
+        "id": "5494",
+        "name": "FC Luzern U21",
+        "level": "U21"
+      },
+      {
+        "id": "25022",
+        "name": "FC Luzern U17",
+        "level": "U17"
+      },
+      {
+        "id": "110603",
+        "name": "FC Luzern U19",
+        "level": "U19"
+      },
+      {
+        "id": "14332",
+        "name": "Team FC Luzern-SC Kriens U18",
+        "level": "U18"
+      },
+      {
+        "id": "74948",
+        "name": "FC Luzern U16",
+        "level": "U16"
+      },
+      {
+        "id": "42249",
+        "name": "FC Luzern Youth",
+        "level": "Youth"
+      }
+    ]
+  },
+  "FC St. Gallen": {
+    "league": "SUI1",
+    "pro_id": "257",
+    "pro_name": "FC St. Gallen 1879",
+    "academies": [
+      {
+        "id": "9178",
+        "name": "FC St. Gallen 1879 U21",
+        "level": "U21"
+      },
+      {
+        "id": "42251",
+        "name": "FC St. Gallen 1879 Jugend",
+        "level": "Youth"
+      },
+      {
+        "id": "70628",
+        "name": "FC St. Gallen 1879 U15",
+        "level": "U15"
+      }
+    ]
+  },
+  "Trabzonspor": {
+    "league": "TUR1",
+    "pro_id": "449",
+    "pro_name": "Trabzonspor",
+    "academies": [
+      {
+        "id": "41798",
+        "name": "Trabzonspor U19",
+        "level": "U19"
+      },
+      {
+        "id": "92277",
+        "name": "Trabzonspor UEFA U19",
+        "level": "U19"
+      },
+      {
+        "id": "39992",
+        "name": "Trabzonspor U16",
+        "level": "U16"
+      },
+      {
+        "id": "39993",
+        "name": "Trabzonspor U17",
+        "level": "U17"
+      },
+      {
+        "id": "42698",
+        "name": "Trabzonspor Youth",
+        "level": "Youth"
+      },
+      {
+        "id": "43363",
+        "name": "Istanbul Trabzonspor Youth",
+        "level": "Youth"
+      }
+    ]
+  },
+  "Konyaspor": {
+    "league": "TUR1",
+    "pro_id": "2293",
+    "pro_name": "Konyaspor",
+    "academies": [
+      {
+        "id": "73906",
+        "name": "Konyaspor U19",
+        "level": "U19"
+      },
+      {
+        "id": "43442",
+        "name": "Konyaspor Youth",
+        "level": "Youth"
+      },
+      {
+        "id": "15025",
+        "name": "Konyaspor U21",
+        "level": "U21"
+      },
+      {
+        "id": "31652",
+        "name": "1922 Konyaspor U21",
+        "level": "U21"
+      },
+      {
+        "id": "45144",
+        "name": "1922 Konyaspor Youth",
+        "level": "Youth"
+      },
+      {
+        "id": "101298",
+        "name": "Konyaspor Reserve",
+        "level": "Reserves"
+      }
+    ]
+  },
+  "Antalyaspor": {
+    "league": "TUR1",
+    "pro_id": "589",
+    "pro_name": "Antalyaspor",
+    "academies": [
+      {
+        "id": "73903",
+        "name": "Antalyaspor U19",
+        "level": "U19"
+      },
+      {
+        "id": "43437",
+        "name": "Antalyaspor Youth",
+        "level": "Youth"
+      },
+      {
+        "id": "15020",
+        "name": "Antalyaspor U21",
+        "level": "U21"
+      },
+      {
+        "id": "101294",
+        "name": "Antalyaspor Reserve",
+        "level": "Reserves"
+      },
+      {
+        "id": "130390",
+        "name": "Antalyaspor II (- 1990)",
+        "level": "B"
+      }
+    ]
+  },
+  "Red Bull Salzburg": {
+    "league": "AUT1",
+    "pro_id": "409",
+    "pro_name": "Red Bull Salzburg",
+    "academies": [
+      {
+        "id": "11263",
+        "name": "AKA Red Bull Salzburg U18",
+        "level": "U18"
+      },
+      {
+        "id": "42826",
+        "name": "AKA Red Bull Salzburg U16",
+        "level": "U16"
+      },
+      {
+        "id": "42825",
+        "name": "AKA Red Bull Salzburg U15",
+        "level": "U15"
+      },
+      {
+        "id": "20161",
+        "name": "Red Bull Salzburg Youth",
+        "level": "Youth"
+      },
+      {
+        "id": "50546",
+        "name": "Red Bull Salzburg UEFA U19",
+        "level": "U19"
+      }
+    ]
+  },
+  "SK Rapid Wien": {
+    "league": "AUT1",
+    "pro_id": "110767",
+    "pro_name": "SK Rapid Wiener Neustadt (- 1940)",
+    "academies": [
+      {
+        "id": "7001",
+        "name": "SK Rapid Wien II",
+        "level": "B"
+      },
+      {
+        "id": "20134",
+        "name": "SK Rapid Wien Youth",
+        "level": "Youth"
+      },
+      {
+        "id": "122617",
+        "name": "SK Rapid Wien UEFA U19",
+        "level": "U19"
+      }
+    ]
+  },
+  "LASK Linz": {
+    "league": "AUT1",
+    "pro_id": "33408",
+    "pro_name": "LASK Linz JKU",
+    "academies": [
+      {
+        "id": "7437",
+        "name": "LASK Linz II",
+        "level": "B"
+      }
+    ]
+  },
+  "Wolfsberger AC": {
+    "league": "AUT1",
+    "pro_id": "4441",
+    "pro_name": "Wolfsberger AC",
+    "academies": [
+      {
+        "id": "33549",
+        "name": "Wolfsberger AC II",
+        "level": "B"
+      },
+      {
+        "id": "42822",
+        "name": "AKA Wolfsberger AC U16",
+        "level": "U16"
+      },
+      {
+        "id": "4386",
+        "name": "AKA Wolfsberger AC U18",
+        "level": "U18"
+      },
+      {
+        "id": "42821",
+        "name": "AKA Wolfsberger AC U15",
+        "level": "U15"
+      },
+      {
+        "id": "27217",
+        "name": "Wolfsberger AC Youth",
+        "level": "Youth"
+      }
+    ]
+  },
+  "AC Milan": {
+    "league": "ITA1",
+    "pro_id": "5",
+    "pro_name": "AC Milan",
+    "academies": [
+      {
+        "id": "25828",
+        "name": "AC Milan Youth",
+        "level": "Youth"
+      },
+      {
+        "id": "41579",
+        "name": "AC Milan UEFA U19",
+        "level": "U19"
+      }
+    ]
+  },
+  "Juventus FC": {
+    "league": "ITA1",
+    "pro_id": "506",
+    "pro_name": "Juventus FC",
+    "academies": [
+      {
+        "id": "41592",
+        "name": "Juventus FC UEFA U19",
+        "level": "U19"
+      },
+      {
+        "id": "5232",
+        "name": "Juventus Youth",
+        "level": "Youth"
+      }
+    ]
+  },
+  "SS Lazio": {
+    "league": "ITA1",
+    "pro_id": "398",
+    "pro_name": "SS Lazio",
+    "academies": [
+      {
+        "id": "49740",
+        "name": "SS Lazio U17",
+        "level": "U17"
+      }
+    ]
+  },
+  "ACF Fiorentina": {
+    "league": "ITA1",
+    "pro_id": "430",
+    "pro_name": "ACF Fiorentina",
+    "academies": []
+  },
+  "Torino FC": {
+    "league": "ITA1",
+    "pro_id": "416",
+    "pro_name": "Torino FC",
+    "academies": [
+      {
+        "id": "29351",
+        "name": "Torino FC Youth",
+        "level": "Youth"
+      },
+      {
+        "id": "49747",
+        "name": "Torino UEFA U19",
+        "level": "U19"
+      }
+    ]
+  },
+  "Udinese Calcio": {
+    "league": "ITA1",
+    "pro_id": "410",
+    "pro_name": "Udinese Calcio",
+    "academies": []
+  },
+  "Genoa CFC": {
+    "league": "ITA1",
+    "pro_id": "252",
+    "pro_name": "Genoa CFC",
+    "academies": [
+      {
+        "id": "29349",
+        "name": "Genoa CFC Youth",
+        "level": "Youth"
+      }
+    ]
+  },
+  "Como 1907": {
+    "league": "ITA1",
+    "pro_id": "1047",
+    "pro_name": "Como 1907",
+    "academies": []
+  },
+  "Hellas Verona": {
+    "league": "ITA1",
+    "pro_id": "276",
+    "pro_name": "Hellas Verona",
+    "academies": [
+      {
+        "id": "14920",
+        "name": "Hellas Verona Youth",
+        "level": "Youth"
+      }
+    ]
+  },
+  "Real Madrid": {
+    "league": "ESP1",
+    "pro_id": "418",
+    "pro_name": "Real Madrid",
+    "academies": [
+      {
+        "id": "41596",
+        "name": "Real Madrid UEFA U19",
+        "level": "U19"
+      },
+      {
+        "id": "70321",
+        "name": "Real Madrid CF Youth",
+        "level": "Youth"
+      },
+      {
+        "id": "28870",
+        "name": "Real Madrid U19",
+        "level": "U19"
+      },
+      {
+        "id": "39822",
+        "name": "Real Madrid U18",
+        "level": "U18"
+      },
+      {
+        "id": "13711",
+        "name": "Real Madrid U17",
+        "level": "U17"
+      }
+    ]
+  },
+  "FC Barcelona": {
+    "league": "ESP1",
+    "pro_id": "131",
+    "pro_name": "FC Barcelona",
+    "academies": [
+      {
+        "id": "41584",
+        "name": "FC Barcelona UEFA U19",
+        "level": "U19"
+      },
+      {
+        "id": "2470",
+        "name": "FC Barcelona U19",
+        "level": "U19"
+      },
+      {
+        "id": "39813",
+        "name": "FC Barcelona U18",
+        "level": "U18"
+      },
+      {
+        "id": "14321",
+        "name": "FC Barcelona U16",
+        "level": "U16"
+      },
+      {
+        "id": "70295",
+        "name": "FC Barcelona Youth",
+        "level": "Youth"
+      }
+    ]
+  },
+  "Atlético Madrid": {
+    "league": "ESP1",
+    "pro_id": "13",
+    "pro_name": "Atlético de Madrid",
+    "academies": [
+      {
+        "id": "41581",
+        "name": "Atlético de Madrid UEFA U19",
+        "level": "U19"
+      },
+      {
+        "id": "31506",
+        "name": "Atlético Madrid U19",
+        "level": "U19"
+      },
+      {
+        "id": "70320",
+        "name": "Atlético Madrid Youth",
+        "level": "Youth"
+      },
+      {
+        "id": "14734",
+        "name": "Atlético de Madrid U17",
+        "level": "U17"
+      },
+      {
+        "id": "21609",
+        "name": "Atlético Madrid U18 (-2024)",
+        "level": "U18"
+      }
+    ]
+  },
+  "Sevilla FC": {
+    "league": "ESP1",
+    "pro_id": "368",
+    "pro_name": "Sevilla FC",
+    "academies": [
+      {
+        "id": "28867",
+        "name": "Sevilla FC U19",
+        "level": "U19"
+      },
+      {
+        "id": "81502",
+        "name": "Sevilla FC U18",
+        "level": "U18"
+      },
+      {
+        "id": "102209",
+        "name": "Sevilla FC U16",
+        "level": "U16"
+      },
+      {
+        "id": "14685",
+        "name": "Sevilla FC Youth",
+        "level": "Youth"
+      },
+      {
+        "id": "81503",
+        "name": "Sevilla FC U17",
+        "level": "U17"
+      }
+    ]
+  },
+  "Real Sociedad": {
+    "league": "ESP1",
+    "pro_id": "681",
+    "pro_name": "Real Sociedad",
+    "academies": [
+      {
+        "id": "9899",
+        "name": "Real Sociedad B",
+        "level": "B"
+      },
+      {
+        "id": "9900",
+        "name": "Real Sociedad U19",
+        "level": "U19"
+      },
+      {
+        "id": "94575",
+        "name": "CD Real Sociedad Reserve",
+        "level": "Reserves"
+      },
+      {
+        "id": "14967",
+        "name": "Real Sociedad Youth",
+        "level": "Youth"
+      }
+    ]
+  },
+  "Athletic Club": {
+    "league": "ESP1",
+    "pro_id": "64918",
+    "pro_name": "Athletic Club",
+    "academies": []
+  },
+  "Real Betis Sevilla": {
+    "league": "ESP1",
+    "pro_id": "122305",
+    "pro_name": "Real Betis Sevilla UEFA U19",
+    "academies": []
+  },
+  "Valencia CF": {
+    "league": "ESP1",
+    "pro_id": "1049",
+    "pro_name": "Valencia CF",
+    "academies": [
+      {
+        "id": "10200",
+        "name": "Valencia CF U19",
+        "level": "U19"
+      },
+      {
+        "id": "70397",
+        "name": "Valencia CF U18",
+        "level": "U18"
+      },
+      {
+        "id": "16200",
+        "name": "Valencia CF Youth",
+        "level": "Youth"
+      },
+      {
+        "id": "50635",
+        "name": "Valencia CF UEFA U19",
+        "level": "U19"
+      },
+      {
+        "id": "111124",
+        "name": "Busan Valencia CF Academy U15",
+        "level": "U15"
+      }
+    ]
+  },
+  "Celta de Vigo": {
+    "league": "ESP1",
+    "pro_id": "940",
+    "pro_name": "Celta de Vigo",
+    "academies": [
+      {
+        "id": "15509",
+        "name": "Celta de Vigo U19",
+        "level": "U19"
+      },
+      {
+        "id": "40419",
+        "name": "Celta Vigo Youth",
+        "level": "Youth"
+      }
+    ]
+  },
+  "RCD Espanyol Barcelona": {
+    "league": "ESP1",
+    "pro_id": "714",
+    "pro_name": "RCD Espanyol Barcelona",
+    "academies": []
+  },
+  "Getafe CF": {
+    "league": "ESP1",
+    "pro_id": "3709",
+    "pro_name": "Getafe CF",
+    "academies": [
+      {
+        "id": "8510",
+        "name": "Getafe CF B",
+        "level": "B"
+      },
+      {
+        "id": "28866",
+        "name": "Getafe CF U19",
+        "level": "U19"
+      },
+      {
+        "id": "14738",
+        "name": "Getafe CF Youth",
+        "level": "Youth"
+      }
+    ]
+  },
+  "CA Osasuna": {
+    "league": "ESP1",
+    "pro_id": "331",
+    "pro_name": "CA Osasuna",
+    "academies": [
+      {
+        "id": "13314",
+        "name": "CA Osasuna Youth",
+        "level": "Youth"
+      },
+      {
+        "id": "28861",
+        "name": "CA Osasuna U19",
+        "level": "U19"
+      }
+    ]
+  },
+  "Legia Warszawa": {
+    "league": "POL1",
+    "pro_id": "255",
+    "pro_name": "Legia Warszawa",
+    "academies": []
+  },
+  "Jagiellonia Białystok": {
+    "league": "POL1",
+    "pro_id": "51486",
+    "pro_name": "Jagiellonia Białystok Youth",
+    "academies": []
+  },
+  "Al-Hilal SFC": {
+    "league": "SAU1",
+    "pro_id": "1114",
+    "pro_name": "Al-Hilal SFC",
+    "academies": [
+      {
+        "id": "132482",
+        "name": "Al-Hilal SFC U21",
+        "level": "U21"
+      },
+      {
+        "id": "133668",
+        "name": "Al-Hilal SFC U18",
+        "level": "U18"
+      },
+      {
+        "id": "99311",
+        "name": "Al-Hilal SFC U17",
+        "level": "U17"
+      },
+      {
+        "id": "99956",
+        "name": "Al-Hilal SFC Youth",
+        "level": "Youth"
+      },
+      {
+        "id": "112790",
+        "name": "Al-Hilal SFC U19 (- 2024)",
+        "level": "U19"
+      },
+      {
+        "id": "34188",
+        "name": "Al-Hilal SFC U23 (- 2022)",
+        "level": "U23"
+      }
+    ]
+  },
+  "Al-Nassr FC": {
+    "league": "SAU1",
+    "pro_id": "18544",
+    "pro_name": "Al-Nassr FC",
+    "academies": [
+      {
+        "id": "112606",
+        "name": "Al-Nassr FC U21",
+        "level": "U21"
+      },
+      {
+        "id": "139797",
+        "name": "Al-Nassr FC U18",
+        "level": "U18"
+      },
+      {
+        "id": "107857",
+        "name": "Al-Nassr FC U17",
+        "level": "U17"
+      },
+      {
+        "id": "39500",
+        "name": "Al-Nassr FC U23 (- 2022)",
+        "level": "U23"
+      },
+      {
+        "id": "91560",
+        "name": "Al-Nassr FC U19",
+        "level": "U19"
+      },
+      {
+        "id": "130462",
+        "name": "Al-Nassr FC U15",
+        "level": "U15"
+      }
+    ]
+  },
+  "Olympiacos Piraeus": {
+    "league": "GRE1",
+    "pro_id": "683",
+    "pro_name": "Olympiacos Piraeus",
+    "academies": [
+      {
+        "id": "91868",
+        "name": "Olympiacos Piraeus B",
+        "level": "B"
+      },
+      {
+        "id": "41594",
+        "name": "Olympiacos Piraeus UEFA U19",
+        "level": "U19"
+      },
+      {
+        "id": "7661",
+        "name": "Olympiacos Piraeus U19",
+        "level": "U19"
+      },
+      {
+        "id": "62555",
+        "name": "Olympiacos Piraeus U17",
+        "level": "U17"
       }
     ]
   }

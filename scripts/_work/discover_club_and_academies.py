@@ -99,6 +99,45 @@ CLUBS = [
     ("ENG2", "Millwall FC"), ("ENG2", "Coventry City"), ("ENG2", "Cardiff City"),
     ("ENG2", "Plymouth Argyle"), ("ENG2", "Queens Park Rangers"), ("ENG2", "Bristol City"),
     ("ENG2", "Watford FC"), ("ENG2", "Norwich City"),
+    # ── PHASE 2 (2026-05-16) ── Ligues secondaires + Italie/Espagne complétées
+    # ── Liga Portugal Bwin ──
+    ("POR1", "SL Benfica"), ("POR1", "FC Porto"), ("POR1", "Sporting CP"),
+    ("POR1", "SC Braga"), ("POR1", "Vitória SC"), ("POR1", "Moreirense FC"),
+    ("POR1", "FC Famalicão"), ("POR1", "Gil Vicente FC"), ("POR1", "Boavista Porto"),
+    ("POR1", "Casa Pia AC"), ("POR1", "Estoril Praia"), ("POR1", "Rio Ave FC"),
+    # ── Suisse Super League ──
+    ("SUI1", "FC Basel"), ("SUI1", "Young Boys"), ("SUI1", "FC Zürich"),
+    ("SUI1", "Servette FC"), ("SUI1", "Grasshopper Club Zürich"), ("SUI1", "FC Lugano"),
+    ("SUI1", "FC Sion"), ("SUI1", "FC Lausanne-Sport"), ("SUI1", "FC Luzern"),
+    ("SUI1", "FC St. Gallen"),
+    # ── Turquie Süper Lig ──
+    ("TUR1", "Galatasaray"), ("TUR1", "Fenerbahçe"), ("TUR1", "Beşiktaş JK"),
+    ("TUR1", "Trabzonspor"), ("TUR1", "Başakşehir FK"), ("TUR1", "Adana Demirspor"),
+    ("TUR1", "Konyaspor"), ("TUR1", "Antalyaspor"),
+    # ── Autriche Bundesliga ──
+    ("AUT1", "Red Bull Salzburg"), ("AUT1", "SK Sturm Graz"), ("AUT1", "SK Rapid Wien"),
+    ("AUT1", "FK Austria Wien"), ("AUT1", "LASK Linz"), ("AUT1", "Wolfsberger AC"),
+    # ── Italie Serie A (au-delà du top 6 déjà couvert ailleurs) ──
+    ("ITA1", "Atalanta BC"), ("ITA1", "AC Milan"), ("ITA1", "Juventus FC"),
+    ("ITA1", "FC Internazionale"), ("ITA1", "AS Roma"), ("ITA1", "SS Lazio"),
+    ("ITA1", "Napoli SSC"), ("ITA1", "ACF Fiorentina"), ("ITA1", "Bologna FC"),
+    ("ITA1", "Torino FC"), ("ITA1", "Udinese Calcio"), ("ITA1", "Genoa CFC"),
+    ("ITA1", "Como 1907"), ("ITA1", "Hellas Verona"),
+    # ── Espagne La Liga ──
+    ("ESP1", "Real Madrid"), ("ESP1", "FC Barcelona"), ("ESP1", "Atlético Madrid"),
+    ("ESP1", "Sevilla FC"), ("ESP1", "Villarreal CF"), ("ESP1", "Real Sociedad"),
+    ("ESP1", "Athletic Club"), ("ESP1", "Real Betis Sevilla"), ("ESP1", "Valencia CF"),
+    ("ESP1", "Celta de Vigo"), ("ESP1", "RCD Espanyol Barcelona"), ("ESP1", "Getafe CF"),
+    ("ESP1", "CA Osasuna"), ("ESP1", "Rayo Vallecano"),
+    # ── Pologne Ekstraklasa ──
+    ("POL1", "Legia Warszawa"), ("POL1", "Lech Poznań"), ("POL1", "Pogoń Szczecin"),
+    ("POL1", "Jagiellonia Białystok"), ("POL1", "Wisła Płock"),
+    # ── Saudi Pro League (diaspora congolaise présente Wissa/Bakambu antérieurs) ──
+    ("SAU1", "Al-Hilal SFC"), ("SAU1", "Al-Ittihad Jeddah"), ("SAU1", "Al-Nassr FC"),
+    ("SAU1", "Al-Ahli Jeddah"),
+    # ── Grèce Super League (académies grecques captent diaspora) ──
+    ("GRE1", "Olympiacos Piraeus"), ("GRE1", "Panathinaikos Athens"),
+    ("GRE1", "AEK Athens"), ("GRE1", "PAOK Thessaloniki"),
 ]
 
 YOUTH_KEYWORDS_LEVELS = [
