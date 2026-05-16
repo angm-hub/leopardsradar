@@ -1,0 +1,51 @@
+name: Apply Migration
+
+# Workflow générique pour appliquer un fichier .sql de migration via la
+# RPC exec_admin_ddl (SECURITY DEFINER, réservée au service_role).
+# Setup unique requis : `sql_bundle_to_paste.sql` collé une fois dans
+# Supabase SQL Editor pour créer la RPC.
+#
+# Usage : Actions → Apply Migration → Run workflow → choisir le fichier.
+
+on:
+  workflow_dispatch:
+    inputs:
+      migration_file:
+        description: 'Chemin du fichier SQL (ex: scripts/migrations/2026_05_16_discovery_method.sql)'
+        required: true
+        type: string
+      split:
+        description: 'Découper en statements individuels (recommandé pour multi-statement)'
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: scripts/requirements.txt
+
+      - run: pip install -r scripts/requirements.txt
+
+      - name: Apply migration
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        working-directory: scripts
+        run: |
+          ARGS=""
+          if [ "${{ github.event.inputs.split }}" = "true" ]; then ARGS="--split"; fi
+          # Le path d'input est relatif à la racine du repo
+          python apply_migration.py "../${{ github.event.inputs.migration_file }}" $ARGS
