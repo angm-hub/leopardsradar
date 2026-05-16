@@ -93,20 +93,22 @@ const config: Config = {
         },
       },
       fontFamily: {
-        // Geist partout — direction silencieuse, cinématographique. La
-        // hiérarchie passe par le tracking et le poids, pas par le mélange
-        // serif/sans/mono. Les classes legacy (font-serif/sans/mono) restent
-        // pour compat — elles pointent toutes vers Geist. Les patterns
-        // existants `font-mono uppercase tracking-[0.18em]` produisent le
-        // label éditorial du brand book sans nouvelle classe.
-        serif: ['"Geist"', '"Inter Tight"', "system-ui", "sans-serif"],
-        sans: ['"Geist"', '"Inter Tight"', "system-ui", "sans-serif"],
-        mono: ['"Geist"', '"Inter Tight"', "system-ui", "sans-serif"],
-        display: ['"Geist"', '"Inter Tight"', "system-ui", "sans-serif"],
-        // Ma Liste v2 — DA dédiée (cf. docs/DESIGN_MA_LISTE_V2.md)
-        v2: ['"Bricolage Grotesque"', "system-ui", "sans-serif"],
-        "v2-body": ['"Inter Tight"', "system-ui", "sans-serif"],
-        "v2-mono": ['"JetBrains Mono"', "ui-monospace", "monospace"],
+        // Charte graphique Léopards Radar — fonts self-hostées dans
+        // /public/fonts/ via fonts.css. Fraunces = display éditorial
+        // (titres, hero, accents italiques). DM Sans = body, UI courante.
+        // Space Mono = labels mono uppercase + tabular nums.
+        // Cf. memory kAIra `feedback_typo-anti-claude.md` — combo voulue
+        // pour ne pas faire "trop Claude" (Cormorant/Inter/JetBrains bannis).
+        serif: ['"Fraunces"', "Georgia", "ui-serif", "serif"],
+        sans: ['"DM Sans"', "system-ui", "sans-serif"],
+        mono: ['"Space Mono"', "ui-monospace", "monospace"],
+        display: ['"Fraunces"', "Georgia", "ui-serif", "serif"],
+        // Ma Liste v2 — DA dédiée alignée sur la charte du site
+        // (cf. docs/DESIGN_MA_LISTE_V2.md). Fraunces pour les display
+        // editoriaux, DM Sans pour le body, Space Mono pour les labels.
+        v2: ['"Fraunces"', "Georgia", "ui-serif", "serif"],
+        "v2-body": ['"DM Sans"', "system-ui", "sans-serif"],
+        "v2-mono": ['"Space Mono"', "ui-monospace", "monospace"],
       },
       fontSize: {
         // Display sizes calibrés pour Geist tracking serré -4.5%

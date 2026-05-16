@@ -139,13 +139,16 @@
     @apply font-mono uppercase text-[10px] font-medium tracking-[0.16em];
   }
 
-  /* ─── Display heading — Geist tracking serré -4.5% ─────────────────
+  /* ─── Display heading — Fraunces editorial, tracking serré ─────────
      Pour les titres-affiche du brand book ("Les Léopards.", "1974.",
-     "Three symbols. One gaze."). Lin- height 0.92, weight 500. */
+     "Three symbols. One gaze."). Line-height 0.92, weight 500.
+     Fraunces apporte un caractere editorial (axes opsz + soft) qui
+     matche l identite "premium tribune" sans tomber dans le serif
+     austere. Cf. memory `feedback_typo-anti-claude.md`. */
   .display-heading {
-    font-family: "Geist", "Inter Tight", system-ui, sans-serif;
+    font-family: "Fraunces", Georgia, ui-serif, serif;
     font-weight: 500;
-    letter-spacing: -0.045em;
+    letter-spacing: -0.035em;
     line-height: 0.92;
   }
 }
