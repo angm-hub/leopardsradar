@@ -80,6 +80,16 @@ export function PlayerRow({
       {/* Nom + meta */}
       <div className="min-w-0 flex-1">
         <div className="flex items-baseline gap-2">
+          {/* Badge T/R — toujours visible, sec, sans bruit */}
+          <span
+            className={cn(
+              "font-mono text-[9px] font-bold tracking-[0.12em] shrink-0 w-3 transition-colors",
+              isStarter ? "text-primary" : "text-foreground/30",
+            )}
+            title={isStarter ? "Titulaire" : "Remplaçant"}
+          >
+            {isStarter ? "T" : "R"}
+          </span>
           <span className="font-sans text-[14px] text-foreground/55 truncate">
             {firstName}
           </span>

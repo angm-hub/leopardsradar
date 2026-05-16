@@ -46,7 +46,7 @@ export function StickyShareCTA({ onShare }: StickyShareCTAProps) {
             <span className="text-foreground/55">
               <span className={cn("font-bold", isXIComplete && "text-primary")}>{xiCount}</span>/11
             </span>
-            <span className="text-foreground/35 uppercase tracking-[0.06em] text-[10px]">XI</span>
+            <span className="text-foreground/35 uppercase tracking-[0.06em] text-[10px]">Onze</span>
           </div>
           <div className="flex items-center gap-2">
             <span className={cn("h-1.5 w-1.5 rounded-full transition-colors", isBenchComplete ? "bg-primary" : "bg-foreground/20")} />

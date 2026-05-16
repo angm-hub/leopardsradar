@@ -36,7 +36,7 @@ const POSITION_CONFIG: {
     label: "Gardiens",
     shortLabel: "GK",
     quota: { min: 2, ideal: 3, max: 3 },
-    emptyHint: "3 gardiens dans une convocation officielle.",
+    emptyHint: "3 gardiens. Standard mondial.",
   },
   {
     position: "Defender",
@@ -175,9 +175,9 @@ export default function MaListeV2() {
                 <span className="italic font-light text-foreground/70">pour les Léopards.</span>
               </h1>
               <p className="mt-6 font-sans text-[15px] text-foreground/55 leading-relaxed max-w-xl">
-                Pioche par poste. Bascule T/R d'un clic. Désigne ton capitaine.{" "}
+                Pioche par poste. Choisis ton onze, ton capitaine.{" "}
                 <span className="text-foreground/35">
-                  Sauvegarde automatique.
+                  Sauvegarde auto.
                 </span>
               </p>
             </header>

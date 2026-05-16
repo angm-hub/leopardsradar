@@ -126,7 +126,7 @@ export function Library({
       <div className="flex-1 overflow-y-auto">
         {filtered.length === 0 ? (
           <div className="py-12 text-center font-sans text-[13px] text-foreground/45">
-            Rien ne match.
+            Aucun résultat.
           </div>
         ) : (
           <ul>

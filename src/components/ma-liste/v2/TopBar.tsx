@@ -31,7 +31,7 @@ export function TopBar() {
     if (!hasPicks) return;
     if (
       window.confirm(
-        "Tout effacer ? Tu peux toujours ré-importer une liste partagée via son lien.",
+        "Tout effacer ? Un lien partagé peut être réimporté plus tard.",
       )
     ) {
       reset();

@@ -23,8 +23,8 @@ export function ShareModalV2({ open, onClose }: ShareModalV2Props) {
   const [copied, setCopied] = useState(false);
   // Pas besoin du formation/xi/bench ici : le hash est déjà sync en URL par le store
   const permalink = typeof window !== "undefined" ? window.location.href : "";
-  const pseudoLabel = pseudo.trim() ? ` par ${pseudo.trim()}` : "";
-  const text = `Voilà ma sélection des 26 pour les Léopards au Mondial 2026${pseudoLabel}.`;
+  const pseudoLabel = pseudo.trim() ? ` — par ${pseudo.trim()}` : "";
+  const text = `Mes 26 pour les Léopards au Mondial 2026${pseudoLabel}.`;
 
   const copy = () => {
     navigator.clipboard.writeText(permalink);
@@ -88,7 +88,7 @@ export function ShareModalV2({ open, onClose }: ShareModalV2Props) {
             </div>
 
             <p className="mt-3 font-sans text-[13px] text-foreground/60 leading-relaxed">
-              Ton lien marche partout. Tu peux ajouter ton pseudo si tu veux qu'on sache que c'est toi.
+              Ton lien marche partout. Ajoute un pseudo si tu veux signer.
             </p>
 
             <div className="mt-5">
