@@ -96,8 +96,9 @@ const App = () => (
             />
             <Route path="/auth" element={<Auth />} />
             <Route path="/admin/photos" element={<AdminPhotos />} />
-            <Route path="/ma-liste" element={<MaListe />} />
+            <Route path="/ma-liste" element={<MaListeV2 />} />
             <Route path="/ma-liste-v2" element={<MaListeV2 />} />
+            <Route path="/ma-liste-v1" element={<MaListe />} />
             <Route path="/ma-liste/:slug" element={<MaListePublic />} />
             <Route path="/mentions-legales" element={<MentionsLegales />} />
             <Route path="/confidentialite" element={<Confidentialite />} />
