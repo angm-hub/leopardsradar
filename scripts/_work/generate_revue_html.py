@@ -27,30 +27,95 @@ ROOT = Path(__file__).parent.parent  # scripts/
 DATA = ROOT / "data"
 
 
-def fetch_players_in_league(url, key, league_code, acad_map):
-    """Récupère via REST anon les joueurs dont current_club_id correspond aux
-    pro_id + academies du championnat demandé."""
-    club_ids = set()
-    for club_name, info in acad_map.items():
-        if info.get("league") != league_code:
-            continue
-        club_ids.add(str(info["pro_id"]))
-        for ac in info["academies"]:
-            club_ids.add(str(ac["id"]))
-    if not club_ids:
-        return []
-    # PostgREST in.() syntax for current_club_id
-    in_list = "(" + ",".join(club_ids) + ")"
+EU_CLUB_PATTERNS = {
+    "L1": ["monaco","lyon","marseille","psg","paris saint","olympique","st-etienne",
+           "saint-etienne","saint étienne","lille","losc","rennes","nantes","reims","metz",
+           "lens","nice","brest","strasbourg","toulouse","montpellier","angers","auxerre",
+           "clermont","le havre","bordeaux","lorient","red star","sm caen"],
+    "L2": ["valenciennes","sochaux","amiens","laval","pau fc","grenoble","ajaccio","guingamp",
+           "dijon","paris fc","troyes","annecy","quevilly","dunkerque","rodez","niort",
+           "châteauroux","chateauroux","bastia","rouen","martigues"],
+    "BEL1": ["anderlecht","club brugge","union saint-gilloise","genk","gent","standard liège",
+             "standard liege","charleroi","cercle brugge","oh leuven","mechelen","sint-truiden",
+             "westerlo","kortrijk","antwerp","beerschot","rwdm","molenbeek","royal léopold",
+             "léopold fc","saint-gilles","rfc seraing","beveren"],
+    "NL1": ["ajax amsterdam","psv","feyenoord","az alkmaar","utrecht","twente","sparta rotterdam",
+            "rkc","vitesse","nec","heracles","almere city","go ahead","fortuna sittard","groningen",
+            "pec zwolle","heerenveen","willem ii","volendam","excelsior"],
+    "GER1": ["bayern münchen","bayern munich","dortmund","rb leipzig","leverkusen","eintracht",
+             "vfb stuttgart","mönchengladbach","wolfsburg","freiburg","hoffenheim","werder",
+             "augsburg","heidenheim","union berlin","st. pauli","st pauli","bochum","mainz",
+             "holstein kiel"],
+    "GER2": ["kaiserslautern","karlsruher","hamburger","hannover","fortuna düsseldorf","schalke",
+             "hertha bsc","paderborn","nürnberg","magdeburg","darmstadt","greuther fürth"],
+    "ENG1": ["manchester city","arsenal","liverpool","manchester united","chelsea","tottenham",
+             "newcastle","aston villa","brighton","west ham","crystal palace","fulham","wolves",
+             "wolverhampton","everton","brentford","nottingham","bournemouth","southampton",
+             "leicester","ipswich","luton","sheffield united"],
+    "ENG2": ["leeds","middlesbrough","sunderland","preston","west brom","millwall","coventry",
+             "derby","cardiff","plymouth","qpr","queens park","bristol city","watford","norwich",
+             "huddersfield","hull city","swansea","stoke","blackburn","birmingham city","rotherham",
+             "reading","dagenham","crawley","cambridge united","peterborough"],
+    "ITA1": ["ac milan","juventus","inter milan","internazionale","atalanta","as roma","ss lazio",
+             "napoli","fiorentina","bologna","torino","udinese","genoa","como","hellas verona",
+             "sassuolo","empoli","lecce","salernitana","venezia","monza","cagliari"],
+    "ESP1": ["real madrid","barcelona","atlético madrid","atletico","sevilla","villarreal",
+             "real sociedad","athletic club","real betis","valencia","celta de vigo","espanyol",
+             "getafe","osasuna","rayo vallecano","mallorca","las palmas","leganés","girona","alavés"],
+    "POR1": ["benfica","fc porto","sporting cp","sc braga","vitória","vitoria sc","moreirense",
+             "famalicão","gil vicente","boavista","casa pia","estoril","rio ave"],
+    "SUI1": ["fc basel","young boys","fc zürich","fc zurich","servette","grasshopper","fc lugano",
+             "fc sion","lausanne","luzern","st. gallen","st gallen","yverdon","winterthur"],
+    "TUR1": ["galatasaray","fenerbahçe","fenerbahce","beşiktaş","besiktas","trabzonspor",
+             "başakşehir","konyaspor","antalyaspor","adana demirspor"],
+    "AUT1": ["salzburg","sturm graz","rapid wien","austria wien","lask","wolfsberger"],
+    "POL1": ["legia warszawa","lech poznań","pogoń szczecin","jagiellonia","wisła płock"],
+    "SAU1": ["al-hilal","al-ittihad","al-nassr","al-ahli"],
+    "GRE1": ["olympiacos","panathinaikos","aek athens","paok"],
+    "Linafoot RDC": ["kinshasa","mazembe","vita club","daring","renaissance kin","sanga balende",
+                     "lubumbashi","dcmp","as v.club","as v club","don bosco","lupopo","virunga",
+                     "tshinkunku","linafoot","mwana","as kinshasa","fc msc","tp mazembe","tp molunge",
+                     "ofima","saint éloi","bukavu dawa","celtic kasumbalesa","jsk","jeunesse sportive",
+                     "rcd kin","muungano","vita kabasha","fc bilima","st michel","fc renaissance",
+                     "fc rojolu","cs don bosco","as nika"],
+    "Afrique": [
+        # Égypte
+        "al ahly","zamalek","pyramids","ittihad alex","ismaily","masry","wadi degla","al masry",
+        "future fc","el gouna","ceramica cleopatra","aswan","modern sport","el dakhleya","enppi",
+        # Maroc / Algérie / Tunisie
+        "raja casa","wydad ac","wydad casa","fus rabat","fath us","far rabat","as far","moghreb","kac",
+        "rs berkane","cr belouizdad","mc alger","mca","jsk kabyl","jsk","usm alger","es setif","es sétif",
+        "es tunis","esperance","club africain","etoile sahel","cs sfaxien","cab","cs hammam",
+        # Afrique du Sud
+        "kaizer chiefs","orlando pirates","mamelodi sundowns","supersport","stellenbosch","royal am",
+        "sekhukhune","chippa","richards bay","amazulu","golden arrows","cape town city","polokwane",
+        # Angola
+        "petro luanda","kabuscorp","interclube","sagrada","primeiro agosto","1º agosto","sporting cabinda",
+        "recreativo libolo","atletico petroleos",
+        # Nigeria / Ghana / Sénégal / Côte d'Ivoire / autres ouest
+        "enyimba","akwa united","kano pillars","rivers united","plateau united","remo stars",
+        "asec mimosas","africa sports","asecmimosas","stade abidjan","san pedro","sewe sport",
+        "asante kotoko","hearts of oak","accra hearts","aduana stars","medeama","dreams fc",
+        "casa sports","jaraaf","génération foot","generation foot","diambars","teungueth",
+        # Congo Brazza
+        "fc cara","cara brazzaville","etoile congo","diables noirs","ac léopards",
+        # Cameroun (diaspora CM⇆RDC frontière)
+        "coton sport","canon yaoundé","pwd bamenda","union douala","stade union","yoshep",
+    ],
+}
+
+
+def fetch_all_players_with_club(url, key):
     headers = {"apikey": key, "Authorization": f"Bearer {key}"}
-    out = []
+    all_players = []
     offset = 0
     while True:
         endpoint = (
             f"{url}/rest/v1/players"
-            f"?current_club_id=in.{in_list}"
-            "&select=id,name,transfermarkt_id,date_of_birth,position,current_club,"
+            "?current_club=not.is.null"
+            "&select=id,name,transfermarkt_id,date_of_birth,position,current_club,current_club_id,"
             "country_of_birth,nationalities,other_nationalities,image_url,market_value_eur,"
-            "discovery_method,verified,eligibility_status,caps_rdc,archived,editorial_note"
+            "discovery_method,verified,eligibility_status,caps_rdc,caps_other_count,caps_other_country"
             f"&limit=1000&offset={offset}"
         )
         r = requests.get(endpoint, headers=headers, timeout=20)
@@ -58,16 +123,87 @@ def fetch_players_in_league(url, key, league_code, acad_map):
             print(f"ERROR fetching: {r.status_code} {r.text[:200]}", file=sys.stderr)
             sys.exit(1)
         rows = r.json()
-        out.extend(rows)
+        all_players.extend(rows)
         if len(rows) < 1000:
             break
         offset += 1000
+    return all_players
+
+
+def player_in_league(p, league_code, acad_map):
+    """Test si un joueur appartient à un championnat donné."""
+    club_ids = set()
+    for cn, info in acad_map.items():
+        if info.get("league") != league_code:
+            continue
+        club_ids.add(str(info["pro_id"]))
+        for ac in info["academies"]:
+            club_ids.add(str(ac["id"]))
+    cid = p.get("current_club_id")
+    if cid and str(cid) in club_ids:
+        return True
+    keywords = EU_CLUB_PATTERNS.get(league_code, [])
+    name = (p.get("current_club") or "").lower()
+    return any(k in name for k in keywords)
+
+
+def fetch_players_in_league(url, key, league_code, acad_map):
+    """Charge tous les joueurs avec club connu + filtre côté Python par championnat."""
+    all_players = fetch_all_players_with_club(url, key)
+    return [p for p in all_players if player_in_league(p, league_code, acad_map)]
+
+
+def fetch_players_other_europe(url, key, acad_map):
+    """Charge les joueurs avec un club mais qui ne matchent AUCUN des 17 championnats
+    déjà couverts. Couvre les ligues secondaires Europe (Belgique D2, Croatie, Suède,
+    Norvège, Pays-Bas Eerste, Espagne Segunda, etc.) + MLS USA + Hors UE."""
+    all_players = fetch_all_players_with_club(url, key)
+    KNOWN_LEAGUES = set(EU_CLUB_PATTERNS.keys())
+    out = []
+    for p in all_players:
+        matched = any(player_in_league(p, lg, acad_map) for lg in KNOWN_LEAGUES)
+        if not matched:
+            # Skip aussi "Hors club" / "Without Club" / career break
+            name = (p.get("current_club") or "").lower()
+            if any(k in name for k in ["without club", "career break", "retired", "no club", "free agent"]):
+                continue
+            out.append(p)
     return out
+
+
+def classify_auto(players):
+    """Sépare les joueurs en 3 groupes :
+       - auto_confirm : caps_rdc > 0 (Léopards A existants ou passés)
+       - auto_locked  : caps_other_count > 3 (FIFA Art 9 — verrouillés autre nation)
+       - to_review    : reste (à arbitrer manuellement)
+    """
+    auto_confirm = []
+    auto_locked = []
+    to_review = []
+    for p in players:
+        caps_rdc = p.get("caps_rdc") or 0
+        caps_other = p.get("caps_other_count") or 0
+        if caps_rdc > 0:
+            auto_confirm.append(p)
+        elif caps_other > 3:
+            auto_locked.append(p)
+        else:
+            to_review.append(p)
+    return auto_confirm, auto_locked, to_review
 
 
 def render(players, league_label, output):
     REPO_URL = "https://github.com/angm-hub/leopardsradar"
     DISPATCH_URL = f"{REPO_URL}/actions/workflows/bulk-action-players.yml"
+
+    auto_confirm, auto_locked, to_review = classify_auto(players)
+    confirm_ids = ",".join(p["transfermarkt_id"] for p in auto_confirm)
+    locked_ids = ",".join(p["transfermarkt_id"] for p in auto_locked)
+    confirm_names = " · ".join(p["name"] for p in auto_confirm)
+    locked_names = " · ".join(
+        f"{p['name']} ({p.get('caps_other_country') or '?'}, {p.get('caps_other_count') or 0} caps)"
+        for p in auto_locked
+    )
 
     def card(p):
         img = p.get("image_url") or ""
@@ -128,7 +264,7 @@ def render(players, league_label, output):
   </div>
 </article>'''
 
-    cards_html = "\n".join(card(p) for p in players)
+    cards_html = "\n".join(card(p) for p in to_review)
 
     out = f'''<!doctype html>
 <html lang="fr"><head>
@@ -205,11 +341,35 @@ def render(players, league_label, output):
   .modal textarea{{width:100%;font-family:'DM Sans';font-size:13px;padding:10px;background:var(--bg);border:1px solid var(--line);color:var(--ink);min-height:80px;margin-bottom:12px}}
   .modal pre{{background:var(--bg);border:1px solid var(--line);padding:12px;font-family:'Space Mono';font-size:11px;overflow-x:auto;max-height:200px;color:var(--accent);margin-bottom:16px;word-break:break-all;white-space:pre-wrap}}
   .modal .mb{{display:flex;gap:8px;justify-content:flex-end}}
+  .auto-banner{{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px}}
+  .ab-block{{background:var(--surf);border:1px solid var(--line);border-left:4px solid var(--confirm);padding:18px}}
+  .ab-block.reject{{border-left-color:var(--reject)}}
+  .ab-title{{font-family:Fraunces;font-weight:600;font-size:15px;margin-bottom:10px}}
+  .ab-names{{font-size:11px;color:var(--muted);line-height:1.5;max-height:90px;overflow-y:auto;margin-bottom:12px;font-family:'Space Mono';padding-right:6px}}
+  .ab-actions .btn:disabled{{opacity:.3;cursor:not-allowed}}
+  @media (max-width:760px){{.auto-banner{{grid-template-columns:1fr}}}}
 </style>
 </head><body>
 <div class="container">
 <h1>Revue éditoriale — {html.escape(league_label)}</h1>
-<p class="sub">{len(players)} joueurs. Pour chaque profil : <strong>Confirmé</strong> (Léopard valide → verified+eligible), <strong>À creuser</strong> (statut incertain), <strong>Pas Léopard</strong> (ineligible, masqué du front), <strong>Archiver</strong> (soft delete). Quand tu as fini → bouton <strong>Publier</strong> en haut, je te génère les 4 commandes à coller dans le workflow GH.</p>
+<p class="sub">{len(players)} joueurs détectés dans ce championnat · {len(auto_confirm)} auto-confirmés (Léopards A) · {len(auto_locked)} auto-rejetés (verrouillés autre nation, FIFA Art 9) · <strong>{len(to_review)} à arbitrer ci-dessous</strong>. Pour chaque profil : <strong>Confirmé</strong> / <strong>À creuser</strong> / <strong>Pas Léopard</strong> / <strong>Archiver</strong>.</p>
+
+<div class="auto-banner">
+  <div class="ab-block">
+    <div class="ab-title">✓ Auto-confirmer {len(auto_confirm)} Léopards A (caps RDC &gt; 0)</div>
+    <div class="ab-names">{html.escape(confirm_names) if confirm_names else "(aucun)"}</div>
+    <div class="ab-actions">
+      <button class="btn confirm" onclick="copyAuto('confirm','{confirm_ids}','Auto-confirm Léopards A {html.escape(league_label)}')" {"disabled" if not confirm_ids else ""}>Copier commande GH</button>
+    </div>
+  </div>
+  <div class="ab-block reject">
+    <div class="ab-title">✗ Auto-rejeter {len(auto_locked)} verrouillés (caps autre nation &gt; 3)</div>
+    <div class="ab-names">{html.escape(locked_names) if locked_names else "(aucun)"}</div>
+    <div class="ab-actions">
+      <button class="btn reject" onclick="copyAuto('reject','{locked_ids}','FIFA Art 9 verrouille autre nation > 3 caps')" {"disabled" if not locked_ids else ""}>Copier commande GH</button>
+    </div>
+  </div>
+</div>
 
 <div class="toolbar">
   <input type="text" id="search" placeholder="Filtrer par nom, club, nat..." oninput="applyFilter()">
@@ -301,6 +461,15 @@ function openPublish() {{
 function closeModal() {{
   document.getElementById('modal').classList.remove('show');
 }}
+
+function copyAuto(action, ids, note) {{
+  if (!ids) {{ alert('Aucun joueur dans ce bucket'); return; }}
+  const txt = `action: ${{action}}\\ntm_ids: ${{ids}}\\nnote: ${{note}}`;
+  navigator.clipboard.writeText(txt).then(() => {{
+    const n = ids.split(',').length;
+    alert(`${{n}} TM IDs (${{action}}) copiés.\\n\\nOuvre le workflow bulk-action-players → Run workflow → colle les 3 lignes dans les inputs correspondants → Run.`);
+  }});
+}}
 document.getElementById('modal').addEventListener('click', e => {{
   if (e.target.id === 'modal') closeModal();
 }});
@@ -340,10 +509,12 @@ def main():
             f"{url}/rest/v1/players?transfermarkt_id=in.{in_list}"
             "&select=id,name,transfermarkt_id,date_of_birth,position,current_club,"
             "country_of_birth,nationalities,other_nationalities,image_url,market_value_eur,"
-            "discovery_method,verified,eligibility_status,caps_rdc,archived,editorial_note"
+            "discovery_method,verified,eligibility_status,caps_rdc,caps_other_count,caps_other_country"
         )
         r = requests.get(endpoint, headers={"apikey": key, "Authorization": f"Bearer {key}"}, timeout=20)
         players = r.json()
+    elif args.league == "OTHER-EUROPE":
+        players = fetch_players_other_europe(url, key, acad_map)
     else:
         players = fetch_players_in_league(url, key, args.league, acad_map)
 

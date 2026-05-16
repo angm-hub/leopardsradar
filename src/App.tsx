@@ -30,6 +30,7 @@ const Auth = lazy(() => import("./pages/Auth.tsx"));
 const AdminPhotos = lazy(() => import("./pages/AdminPhotos.tsx"));
 const MaListe = lazy(() => import("./pages/MaListe.tsx"));
 const MaListePublic = lazy(() => import("./pages/MaListePublic.tsx"));
+const MaListeV2 = lazy(() => import("./pages/MaListeV2.tsx"));
 const MentionsLegales = lazy(() => import("./pages/MentionsLegales.tsx"));
 const Confidentialite = lazy(() => import("./pages/Confidentialite.tsx"));
 const Cgu = lazy(() => import("./pages/Cgu.tsx"));
@@ -96,6 +97,7 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/admin/photos" element={<AdminPhotos />} />
             <Route path="/ma-liste" element={<MaListe />} />
+            <Route path="/ma-liste-v2" element={<MaListeV2 />} />
             <Route path="/ma-liste/:slug" element={<MaListePublic />} />
             <Route path="/mentions-legales" element={<MentionsLegales />} />
             <Route path="/confidentialite" element={<Confidentialite />} />

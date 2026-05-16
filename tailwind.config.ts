@@ -103,6 +103,10 @@ const config: Config = {
         sans: ['"Geist"', '"Inter Tight"', "system-ui", "sans-serif"],
         mono: ['"Geist"', '"Inter Tight"', "system-ui", "sans-serif"],
         display: ['"Geist"', '"Inter Tight"', "system-ui", "sans-serif"],
+        // Ma Liste v2 — DA dédiée (cf. docs/DESIGN_MA_LISTE_V2.md)
+        v2: ['"Bricolage Grotesque"', "system-ui", "sans-serif"],
+        "v2-body": ['"Inter Tight"', "system-ui", "sans-serif"],
+        "v2-mono": ['"JetBrains Mono"', "ui-monospace", "monospace"],
       },
       fontSize: {
         // Display sizes calibrés pour Geist tracking serré -4.5%
@@ -136,11 +140,21 @@ const config: Config = {
         shimmer: "shimmer 2s linear infinite",
         "gradient-drift-1": "gradient-drift-1 22s ease-in-out infinite",
         "gradient-drift-2": "gradient-drift-2 32s ease-in-out infinite",
+        // Ma Liste v2
+        shake: "shake 200ms cubic-bezier(.36,.07,.19,.97)",
+      },
+      gridTemplateColumns: {
+        "15": "repeat(15, minmax(0, 1fr))",
       },
       keyframes: {
         fadeIn: {
           from: { opacity: "0", transform: "translateY(20px)" },
           to: { opacity: "1", transform: "translateY(0)" },
+        },
+        shake: {
+          "0%, 100%": { transform: "translateX(0)" },
+          "20%, 60%": { transform: "translateX(-3px)" },
+          "40%, 80%": { transform: "translateX(3px)" },
         },
         pulseSubtle: {
           "0%, 100%": { opacity: "0.6" },
