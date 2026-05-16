@@ -1,72 +1,95 @@
 /**
- * Store Ma Liste v2 — version anti-friction.
+ * Store Ma Liste v2 — modèle simple "convocation des 26".
  *
- * Différences vs maListeStore (v1) :
- * - Aucun step / wizard — la page est unique
- * - URL hash sync à chaque mutation (mode remix gratuit)
- * - Auto-save indicator (timestamp dernière sauvegarde locale)
- * - persist localStorage (clé v2 distincte)
+ * Pivot 2026-05-16 : abandonne le wizard formation/slots positionnels.
+ * Modèle = juste 2 listes (starters ≤11 + bench ≤15) + capitaine.
  *
- * Cf. docs/DESIGN_MA_LISTE_V2.md pour la DA et les principes.
+ * - Pas de wizard
+ * - URL hash sync (mode remix gratuit)
+ * - Auto-save localStorage (persist Zustand)
+ * - Pas de mapping positions sur pitch
  */
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { Formation, SlotPosition } from "@/types/maListe";
 import type { DBPlayer } from "@/types/dbPlayer";
-import { FORMATION_SLOTS } from "@/types/maListe";
-import {
-  encodeListToHash,
-  decodeHashToList,
-  syncUrlHash,
-} from "@/lib/maListeUrlState";
+
+const MAX_STARTERS = 11;
+const MAX_BENCH = 15;
 
 interface MaListeV2State {
-  // ---- State ----
   sessionId: string;
-  formation: Formation;
-  startingXI: Record<string, DBPlayer | null>;
+  starters: DBPlayer[];
   bench: DBPlayer[];
   captain: DBPlayer | null;
   lastSavedAt: number | null;
-  // Pour le mode remix : marque "déjà chargé depuis URL"
   hydratedFromUrl: boolean;
 
-  // ---- Actions ----
-  setFormation: (formation: Formation) => void;
-  placePlayerInSlot: (slot: SlotPosition, player: DBPlayer) => void;
-  removePlayerFromSlot: (slot: SlotPosition) => void;
-  addToBench: (player: DBPlayer) => void;
-  removeFromBench: (slug: string) => void;
+  // Actions
+  addToStarters: (player: DBPlayer) => boolean;
+  addToBench: (player: DBPlayer) => boolean;
+  removePlayer: (slug: string) => void;
+  toggleStatus: (slug: string) => void; // starter <-> bench
   setCaptain: (player: DBPlayer | null) => void;
   reset: () => void;
   hydrateFromUrl: (allPlayers: DBPlayer[]) => void;
 
-  // ---- Computed ----
-  getXICount: () => number;
+  // Computed
+  getAllPicked: () => DBPlayer[];
+  isPicked: (slug: string) => boolean;
+  isStarter: (slug: string) => boolean;
+  getStartersCount: () => number;
   getBenchCount: () => number;
-  isXIComplete: () => boolean;
+  isStartersComplete: () => boolean;
   isBenchComplete: () => boolean;
   isComplete: () => boolean;
   getAvailablePlayers: (allPlayers: DBPlayer[]) => DBPlayer[];
-  getPlayersInList: () => DBPlayer[];
 }
 
 const generateSessionId = () =>
   `v2-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
 
-const emptyXI = (formation: Formation): Record<string, DBPlayer | null> =>
-  FORMATION_SLOTS[formation].reduce<Record<string, DBPlayer | null>>((acc, s) => {
-    acc[s] = null;
-    return acc;
-  }, {});
+const SEP_SECT = ".";
+const SEP_PLAYER = "-";
+const CAP_PREFIX = "cap=";
 
-const DEFAULT_FORMATION: Formation = "4-3-3";
+function encodeListToHash(s: MaListeV2State): string {
+  const startersPart = s.starters.map((p) => p.id.toString(36)).join(SEP_PLAYER);
+  const benchPart = s.bench.map((p) => p.id.toString(36)).join(SEP_PLAYER);
+  const capPart = s.captain ? `${CAP_PREFIX}${s.captain.slug}` : "";
+  return [startersPart || "_", benchPart || "_", capPart].filter(Boolean).join(SEP_SECT);
+}
+
+function decodeHash(hash: string, byId: Map<number, DBPlayer>) {
+  const clean = hash.startsWith("#") ? hash.slice(1) : hash;
+  if (!clean) return null;
+  const parts = clean.split(SEP_SECT);
+  const starterIds = parts[0] === "_" || !parts[0] ? [] : parts[0].split(SEP_PLAYER);
+  const benchIds = parts[1] === "_" || !parts[1] ? [] : parts[1].split(SEP_PLAYER);
+  const capPart = parts.find((p) => p.startsWith(CAP_PREFIX));
+  const captainSlug = capPart ? capPart.slice(CAP_PREFIX.length) : null;
+
+  const starters = starterIds
+    .map((s) => byId.get(parseInt(s, 36)))
+    .filter((p): p is DBPlayer => !!p)
+    .slice(0, MAX_STARTERS);
+  const bench = benchIds
+    .map((s) => byId.get(parseInt(s, 36)))
+    .filter((p): p is DBPlayer => !!p)
+    .slice(0, MAX_BENCH);
+  const all = [...starters, ...bench];
+  const captain = captainSlug ? all.find((p) => p.slug === captainSlug) : null;
+  return { starters, bench, captain: captain ?? null };
+}
+
+function syncUrl(hash: string) {
+  if (typeof window === "undefined") return;
+  const newUrl = hash ? `#${hash}` : window.location.pathname;
+  window.history.replaceState(null, "", newUrl);
+}
 
 export const useMaListeV2Store = create<MaListeV2State>()(
   persist(
     (set, get) => {
-      // Sync URL hash après chaque mutation. Debounce minimal (next tick) pour
-      // batcher si plusieurs mutations enchaînées dans le même cycle React.
       let urlSyncQueued = false;
       const queueUrlSync = () => {
         if (urlSyncQueued) return;
@@ -74,100 +97,91 @@ export const useMaListeV2Store = create<MaListeV2State>()(
         queueMicrotask(() => {
           urlSyncQueued = false;
           const s = get();
-          const hash = encodeListToHash({
-            formation: s.formation,
-            startingXI: s.startingXI,
-            bench: s.bench,
-            captain: s.captain,
-          });
-          syncUrlHash(hash);
+          syncUrl(encodeListToHash(s));
           set({ lastSavedAt: Date.now() });
         });
       };
 
       return {
         sessionId: generateSessionId(),
-        formation: DEFAULT_FORMATION,
-        startingXI: emptyXI(DEFAULT_FORMATION),
+        starters: [],
         bench: [],
         captain: null,
         lastSavedAt: null,
         hydratedFromUrl: false,
 
-        setFormation: (formation) => {
-          const cur = get();
-          if (cur.formation === formation) return;
-          // Préserve les joueurs sur les slots compatibles entre formations.
-          // Tente de re-placer chaque joueur de l'XI actuel sur un slot de la
-          // nouvelle formation par même nom de slot d'abord, sinon vide.
-          const newXI = emptyXI(formation);
-          const newSlots = FORMATION_SLOTS[formation];
-          const unplaced: DBPlayer[] = [];
-          for (const [oldSlot, p] of Object.entries(cur.startingXI)) {
-            if (!p) continue;
-            if (newSlots.includes(oldSlot as SlotPosition)) {
-              newXI[oldSlot] = p;
-            } else {
-              unplaced.push(p);
+        addToStarters: (player) => {
+          const s = get();
+          if (s.starters.length >= MAX_STARTERS) return false;
+          if (s.isPicked(player.slug)) {
+            // Si dans bench, le déplace vers starters
+            if (s.bench.some((b) => b.slug === player.slug)) {
+              set({
+                bench: s.bench.filter((b) => b.slug !== player.slug),
+                starters: [...s.starters, player],
+              });
+              queueUrlSync();
+              return true;
             }
+            return false;
           }
-          // Push les unplaced au banc (limite 15)
-          const newBench = [...cur.bench, ...unplaced].slice(0, 15);
-          set({ formation, startingXI: newXI, bench: newBench });
+          set({ starters: [...s.starters, player] });
           queueUrlSync();
-        },
-
-        placePlayerInSlot: (slot, player) => {
-          const cur = get();
-          // Si le joueur est déjà dans bench, le retire
-          const newBench = cur.bench.filter((b) => b.slug !== player.slug);
-          // Si le joueur est déjà dans XI à un autre slot, le retire de là
-          const newXI = { ...cur.startingXI };
-          for (const [s, p] of Object.entries(newXI)) {
-            if (p && p.slug === player.slug && s !== slot) {
-              newXI[s] = null;
-            }
-          }
-          newXI[slot] = player;
-          // Si le capitaine était l'ancien joueur du slot, le retire
-          const ousted = cur.startingXI[slot];
-          const newCaptain =
-            cur.captain && ousted && cur.captain.slug === ousted.slug ? null : cur.captain;
-          set({ startingXI: newXI, bench: newBench, captain: newCaptain });
-          queueUrlSync();
-        },
-
-        removePlayerFromSlot: (slot) => {
-          const cur = get();
-          const removed = cur.startingXI[slot];
-          const newXI = { ...cur.startingXI, [slot]: null };
-          const newCaptain =
-            cur.captain && removed && cur.captain.slug === removed.slug ? null : cur.captain;
-          set({ startingXI: newXI, captain: newCaptain });
-          queueUrlSync();
+          return true;
         },
 
         addToBench: (player) => {
-          const cur = get();
-          if (cur.bench.length >= 15) return;
-          if (cur.bench.some((b) => b.slug === player.slug)) return;
-          // Si le joueur est dans XI, le retire d'abord
-          const newXI = { ...cur.startingXI };
-          for (const [s, p] of Object.entries(newXI)) {
-            if (p && p.slug === player.slug) newXI[s] = null;
+          const s = get();
+          if (s.bench.length >= MAX_BENCH) return false;
+          if (s.isPicked(player.slug)) {
+            // Si dans starters, déplace vers bench
+            if (s.starters.some((b) => b.slug === player.slug)) {
+              set({
+                starters: s.starters.filter((b) => b.slug !== player.slug),
+                bench: [...s.bench, player],
+              });
+              queueUrlSync();
+              return true;
+            }
+            return false;
           }
-          set({ bench: [...cur.bench, player], startingXI: newXI });
+          set({ bench: [...s.bench, player] });
           queueUrlSync();
+          return true;
         },
 
-        removeFromBench: (slug) => {
-          const cur = get();
-          const newCaptain = cur.captain?.slug === slug ? null : cur.captain;
+        removePlayer: (slug) => {
+          const s = get();
+          const newCaptain = s.captain?.slug === slug ? null : s.captain;
           set({
-            bench: cur.bench.filter((b) => b.slug !== slug),
+            starters: s.starters.filter((p) => p.slug !== slug),
+            bench: s.bench.filter((p) => p.slug !== slug),
             captain: newCaptain,
           });
           queueUrlSync();
+        },
+
+        toggleStatus: (slug) => {
+          const s = get();
+          if (s.starters.some((p) => p.slug === slug)) {
+            // starter -> bench (si banc plein, no-op)
+            if (s.bench.length >= MAX_BENCH) return;
+            const p = s.starters.find((p) => p.slug === slug)!;
+            set({
+              starters: s.starters.filter((p) => p.slug !== slug),
+              bench: [...s.bench, p],
+            });
+            queueUrlSync();
+          } else if (s.bench.some((p) => p.slug === slug)) {
+            // bench -> starter (si starters plein, no-op)
+            if (s.starters.length >= MAX_STARTERS) return;
+            const p = s.bench.find((p) => p.slug === slug)!;
+            set({
+              bench: s.bench.filter((p) => p.slug !== slug),
+              starters: [...s.starters, p],
+            });
+            queueUrlSync();
+          }
         },
 
         setCaptain: (player) => {
@@ -178,14 +192,13 @@ export const useMaListeV2Store = create<MaListeV2State>()(
         reset: () => {
           set({
             sessionId: generateSessionId(),
-            formation: DEFAULT_FORMATION,
-            startingXI: emptyXI(DEFAULT_FORMATION),
+            starters: [],
             bench: [],
             captain: null,
             lastSavedAt: null,
             hydratedFromUrl: false,
           });
-          syncUrlHash("");
+          syncUrl("");
         },
 
         hydrateFromUrl: (allPlayers) => {
@@ -195,68 +208,35 @@ export const useMaListeV2Store = create<MaListeV2State>()(
             set({ hydratedFromUrl: true });
             return;
           }
-          const decoded = decodeHashToList(hash);
-          if (!decoded || !decoded.formation) {
+          const byId = new Map<number, DBPlayer>(allPlayers.map((p) => [p.id, p]));
+          const decoded = decodeHash(hash, byId);
+          if (!decoded) {
             set({ hydratedFromUrl: true });
             return;
           }
-          const byId = new Map<number, DBPlayer>();
-          for (const p of allPlayers) byId.set(p.id, p);
-          const slots = FORMATION_SLOTS[decoded.formation];
-          const newXI = emptyXI(decoded.formation);
-          decoded.xiIds.forEach((pid, i) => {
-            if (pid && slots[i]) {
-              const player = byId.get(pid);
-              if (player) newXI[slots[i]] = player;
-            }
-          });
-          const benchPlayers = decoded.benchIds
-            .map((id) => byId.get(id))
-            .filter((p): p is DBPlayer => !!p)
-            .slice(0, 15);
-          const captain =
-            (decoded.captainSlug &&
-              [...Object.values(newXI), ...benchPlayers]
-                .filter((p): p is DBPlayer => !!p)
-                .find((p) => p.slug === decoded.captainSlug)) ||
-            null;
-          set({
-            formation: decoded.formation,
-            startingXI: newXI,
-            bench: benchPlayers,
-            captain,
-            hydratedFromUrl: true,
-          });
+          set({ ...decoded, hydratedFromUrl: true });
         },
 
-        getXICount: () =>
-          Object.values(get().startingXI).filter(Boolean).length,
-        getBenchCount: () => get().bench.length,
-        isXIComplete: () => {
+        getAllPicked: () => {
           const s = get();
-          return Object.values(s.startingXI).every((p) => p !== null);
+          return [...s.starters, ...s.bench];
         },
-        isBenchComplete: () => get().bench.length === 15,
+        isPicked: (slug) => {
+          const s = get();
+          return s.starters.some((p) => p.slug === slug) || s.bench.some((p) => p.slug === slug);
+        },
+        isStarter: (slug) => get().starters.some((p) => p.slug === slug),
+        getStartersCount: () => get().starters.length,
+        getBenchCount: () => get().bench.length,
+        isStartersComplete: () => get().starters.length === MAX_STARTERS,
+        isBenchComplete: () => get().bench.length === MAX_BENCH,
         isComplete: () => {
           const s = get();
-          return s.isXIComplete() && s.isBenchComplete() && !!s.captain;
+          return s.isStartersComplete() && s.isBenchComplete() && !!s.captain;
         },
-
         getAvailablePlayers: (allPlayers) => {
-          const s = get();
-          const inXI = new Set(
-            Object.values(s.startingXI)
-              .filter((p): p is DBPlayer => !!p)
-              .map((p) => p.slug),
-          );
-          const inBench = new Set(s.bench.map((p) => p.slug));
-          return allPlayers.filter((p) => !inXI.has(p.slug) && !inBench.has(p.slug));
-        },
-
-        getPlayersInList: () => {
-          const s = get();
-          const xi = Object.values(s.startingXI).filter((p): p is DBPlayer => !!p);
-          return [...xi, ...s.bench];
+          const picked = new Set(get().getAllPicked().map((p) => p.slug));
+          return allPlayers.filter((p) => !picked.has(p.slug));
         },
       };
     },
@@ -264,8 +244,7 @@ export const useMaListeV2Store = create<MaListeV2State>()(
       name: "leopards-ma-liste-v2",
       partialize: (s) => ({
         sessionId: s.sessionId,
-        formation: s.formation,
-        startingXI: s.startingXI,
+        starters: s.starters,
         bench: s.bench,
         captain: s.captain,
         lastSavedAt: s.lastSavedAt,
@@ -273,3 +252,5 @@ export const useMaListeV2Store = create<MaListeV2State>()(
     },
   ),
 );
+
+export { MAX_STARTERS, MAX_BENCH };

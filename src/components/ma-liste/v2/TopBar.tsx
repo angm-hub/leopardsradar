@@ -1,16 +1,14 @@
 import { Link } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, RotateCcw } from "lucide-react";
 import { useState, useEffect } from "react";
-import { cn } from "@/lib/utils";
 import { useMaListeV2Store } from "@/store/maListeV2Store";
-import type { Formation } from "@/types/maListe";
-
-const FORMATIONS: Formation[] = ["4-3-3", "4-2-3-1", "3-5-2"];
 
 export function TopBar() {
-  const formation = useMaListeV2Store((s) => s.formation);
-  const setFormation = useMaListeV2Store((s) => s.setFormation);
   const lastSavedAt = useMaListeV2Store((s) => s.lastSavedAt);
+  const reset = useMaListeV2Store((s) => s.reset);
+  const hasPicks = useMaListeV2Store(
+    (s) => s.getStartersCount() + s.getBenchCount() > 0,
+  );
   const [savedLabel, setSavedLabel] = useState<string>("");
 
   useEffect(() => {
@@ -29,63 +27,71 @@ export function TopBar() {
     return () => clearInterval(t);
   }, [lastSavedAt]);
 
+  const handleReset = () => {
+    if (!hasPicks) return;
+    if (
+      window.confirm(
+        "Tout effacer ? Tu peux toujours ré-importer une liste partagée via son lien.",
+      )
+    ) {
+      reset();
+    }
+  };
+
   return (
-    <header className="sticky top-0 z-20 border-b border-border bg-background/85 backdrop-blur-md">
-      <div className="mx-auto flex h-14 max-w-[1280px] items-center gap-3 px-4 md:px-6">
-        {/* Back */}
+    <header className="sticky top-0 z-20 border-b border-border/40 bg-background/70 backdrop-blur-2xl">
+      <div aria-hidden className="h-px w-full bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+      <div className="mx-auto flex h-16 max-w-[1320px] items-center gap-4 px-4 md:px-8">
         <Link
           to="/"
-          className="flex h-9 w-9 items-center justify-center rounded-full text-foreground/55 hover:bg-card hover:text-foreground transition-colors"
+          className="flex h-10 w-10 items-center justify-center rounded-full text-foreground/55 hover:bg-card/80 hover:text-foreground transition-all duration-200 ring-1 ring-transparent hover:ring-border"
           aria-label="Retour"
         >
           <ArrowLeft className="h-4 w-4" />
         </Link>
 
-        {/* Brand */}
-        <Link
-          to="/"
-          className="font-v2 text-[15px] font-bold tracking-tight text-foreground hidden sm:block"
-        >
-          Léopards Radar
-        </Link>
-        <span className="hidden sm:inline font-v2-mono text-[10px] uppercase tracking-[0.12em] text-foreground/45">
-          / Ma Liste
-        </span>
-
-        {/* Formation toggle (centré sur desktop) */}
-        <div className="flex-1 flex justify-center">
-          <div className="inline-flex rounded-full border border-border bg-card p-0.5" role="tablist">
-            {FORMATIONS.map((f) => (
-              <button
-                key={f}
-                type="button"
-                role="tab"
-                aria-selected={formation === f}
-                onClick={() => setFormation(f)}
-                className={cn(
-                  "rounded-full px-3 py-1 font-v2-mono text-[11px] font-semibold uppercase tracking-[0.06em] transition-all",
-                  formation === f
-                    ? "bg-primary text-primary-foreground"
-                    : "text-foreground/55 hover:text-foreground",
-                )}
-              >
-                {f}
-              </button>
-            ))}
-          </div>
+        <div className="flex items-baseline gap-3">
+          <Link
+            to="/"
+            className="font-display text-[15px] font-bold tracking-tight text-foreground hidden sm:flex items-center gap-2"
+          >
+            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+            Léopards Radar
+          </Link>
+          <span className="hidden sm:inline font-mono text-[10px] uppercase tracking-[0.16em] text-foreground/40">
+            Ma Liste
+          </span>
         </div>
+
+        <div className="flex-1" />
 
         {/* Save indicator */}
-        <div className="hidden md:flex items-center gap-1.5">
-          {lastSavedAt && (
-            <>
-              <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-              <span className="font-v2-mono text-[10px] uppercase tracking-[0.06em] text-foreground/45">
-                {savedLabel}
-              </span>
-            </>
-          )}
-        </div>
+        {lastSavedAt && (
+          <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-card/60 border border-border/60">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inset-0 rounded-full bg-primary/40 animate-ping" />
+              <span className="relative h-2 w-2 rounded-full bg-primary" />
+            </span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-foreground/55">
+              {savedLabel}
+            </span>
+          </div>
+        )}
+
+        {/* Reset */}
+        <button
+          type="button"
+          onClick={handleReset}
+          disabled={!hasPicks}
+          className="flex items-center gap-1.5 h-10 px-3 rounded-full text-foreground/45 hover:text-foreground hover:bg-card/80 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+          aria-label="Tout effacer"
+          title="Tout effacer"
+        >
+          <RotateCcw className="h-3.5 w-3.5" strokeWidth={2} />
+          <span className="hidden sm:inline font-mono text-[10px] uppercase tracking-[0.08em]">
+            Reset
+          </span>
+        </button>
       </div>
     </header>
   );

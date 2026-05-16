@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Copy, Check, Twitter } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useMaListeV2Store } from "@/store/maListeV2Store";
-import { encodeListToHash } from "@/lib/maListeUrlState";
 
 interface ShareModalV2Props {
   open: boolean;
@@ -20,18 +19,10 @@ interface ShareModalV2Props {
  * Pas de "Bravo !" ni confetti — la sobriété renforce le premium (cf. DESIGN.md).
  */
 export function ShareModalV2({ open, onClose }: ShareModalV2Props) {
-  const formation = useMaListeV2Store((s) => s.formation);
-  const startingXI = useMaListeV2Store((s) => s.startingXI);
-  const bench = useMaListeV2Store((s) => s.bench);
-  const captain = useMaListeV2Store((s) => s.captain);
   const [pseudo, setPseudo] = useState("");
   const [copied, setCopied] = useState(false);
-
-  const hash = encodeListToHash({ formation, startingXI, bench, captain });
-  const permalink =
-    typeof window !== "undefined"
-      ? `${window.location.origin}${window.location.pathname}#${hash}`
-      : "";
+  // Pas besoin du formation/xi/bench ici : le hash est déjà sync en URL par le store
+  const permalink = typeof window !== "undefined" ? window.location.href : "";
   const pseudoLabel = pseudo.trim() ? ` par ${pseudo.trim()}` : "";
   const text = `Voilà ma sélection des 26 pour les Léopards au Mondial 2026${pseudoLabel}.`;
 
@@ -81,7 +72,7 @@ export function ShareModalV2({ open, onClose }: ShareModalV2Props) {
             <div className="flex items-start justify-between gap-4">
               <h2
                 id="share-title"
-                className="font-v2 italic text-2xl font-light leading-none text-foreground"
+                className="font-display italic text-2xl font-light leading-none text-foreground"
                 style={{ letterSpacing: "-0.025em" }}
               >
                 Posée. Partage.
@@ -96,12 +87,12 @@ export function ShareModalV2({ open, onClose }: ShareModalV2Props) {
               </button>
             </div>
 
-            <p className="mt-3 font-v2-body text-[13px] text-foreground/60 leading-relaxed">
+            <p className="mt-3 font-sans text-[13px] text-foreground/60 leading-relaxed">
               Ton lien marche partout. Tu peux ajouter ton pseudo si tu veux qu'on sache que c'est toi.
             </p>
 
             <div className="mt-5">
-              <label className="block font-v2-mono text-[10px] uppercase tracking-[0.08em] text-foreground/45 mb-2">
+              <label className="block font-mono text-[10px] uppercase tracking-[0.08em] text-foreground/45 mb-2">
                 Pseudo (optionnel)
               </label>
               <input
@@ -109,7 +100,7 @@ export function ShareModalV2({ open, onClose }: ShareModalV2Props) {
                 value={pseudo}
                 onChange={(e) => setPseudo(e.target.value.slice(0, 24))}
                 placeholder="ex. Alex, Kinshasa Boy…"
-                className="w-full rounded-md border border-border bg-background py-2 px-3 font-v2-body text-[13px] text-foreground placeholder:text-foreground/35 focus:border-primary focus:outline-none"
+                className="w-full rounded-md border border-border bg-background py-2 px-3 font-sans text-[13px] text-foreground placeholder:text-foreground/35 focus:border-primary focus:outline-none"
               />
             </div>
 
@@ -118,16 +109,16 @@ export function ShareModalV2({ open, onClose }: ShareModalV2Props) {
                 type="button"
                 onClick={copy}
                 className={cn(
-                  "w-full flex items-center justify-between gap-2 rounded-md border border-border bg-background px-4 py-3 font-v2-body text-[13px] transition-colors",
+                  "w-full flex items-center justify-between gap-2 rounded-md border border-border bg-background px-4 py-3 font-sans text-[13px] transition-colors",
                   "hover:border-primary",
                 )}
               >
-                <span className="truncate text-foreground/70 font-v2-mono text-[11px]">
+                <span className="truncate text-foreground/70 font-mono text-[11px]">
                   {permalink.replace(/^https?:\/\//, "")}
                 </span>
                 <span className="flex items-center gap-1.5 text-primary shrink-0">
                   {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
-                  <span className="font-v2-mono text-[10px] uppercase tracking-[0.08em]">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.08em]">
                     {copied ? "copié" : "copier"}
                   </span>
                 </span>
@@ -137,14 +128,14 @@ export function ShareModalV2({ open, onClose }: ShareModalV2Props) {
                 <button
                   type="button"
                   onClick={openTwitter}
-                  className="flex items-center justify-center gap-2 rounded-md bg-foreground text-background py-2.5 font-v2-body text-[13px] font-semibold hover:bg-foreground/90 transition-colors"
+                  className="flex items-center justify-center gap-2 rounded-md bg-foreground text-background py-2.5 font-sans text-[13px] font-semibold hover:bg-foreground/90 transition-colors"
                 >
                   <Twitter className="h-3.5 w-3.5" /> X
                 </button>
                 <button
                   type="button"
                   onClick={openWhatsApp}
-                  className="flex items-center justify-center gap-2 rounded-md bg-[#25D366] text-white py-2.5 font-v2-body text-[13px] font-semibold hover:bg-[#1ebe57] transition-colors"
+                  className="flex items-center justify-center gap-2 rounded-md bg-[#25D366] text-white py-2.5 font-sans text-[13px] font-semibold hover:bg-[#1ebe57] transition-colors"
                 >
                   WhatsApp
                 </button>
