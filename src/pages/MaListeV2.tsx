@@ -11,6 +11,7 @@
  * capitaine = 1 clic. Auto-save URL hash + localStorage. Mode remix v1.
  */
 import { useState, useEffect, useMemo } from "react";
+import { motion, MotionConfig } from "framer-motion";
 import { useMaListeV2Store, MAX_STARTERS, MAX_BENCH } from "@/store/maListeV2Store";
 import { usePlayers } from "@/hooks/usePlayers";
 import { useDocumentMeta } from "@/hooks/useDocumentMeta";
@@ -68,7 +69,7 @@ export default function MaListeV2() {
       "Ta convocation des 26 pour les Léopards au Mondial 2026. 11 titulaires, 15 remplaçants, 1 capitaine.",
   });
 
-  const { players: allPlayers, loading } = usePlayers({
+  const { players: allPlayers, loading, error } = usePlayers({
     categories: ["roster", "radar"],
     excludeEligibilityStatus: "ineligible",
     limit: 1000,
@@ -126,6 +127,7 @@ export default function MaListeV2() {
   const isStarter = (slug: string) => starterSlugs.has(slug);
 
   return (
+    <MotionConfig reducedMotion="user">
     <div className="relative min-h-screen bg-background text-foreground flex flex-col overflow-hidden">
       {/* Atmosphere */}
       <div aria-hidden className="pointer-events-none fixed inset-0 z-0 opacity-50">
@@ -184,25 +186,40 @@ export default function MaListeV2() {
 
             {/* Layout 2 cols asymétrique 65/35 */}
             <div className="grid lg:grid-cols-[1fr_380px] gap-8 lg:gap-12">
-              {/* Gauche : 4 sections par poste */}
-              <div className="space-y-10 min-w-0">
+              {/* Gauche : 4 sections par poste — stagger d'entrée */}
+              <motion.div
+                className="space-y-10 min-w-0"
+                initial="hidden"
+                animate="show"
+                variants={{
+                  hidden: {},
+                  show: { transition: { staggerChildren: 0.08, delayChildren: 0.04 } },
+                }}
+              >
                 {POSITION_CONFIG.map((cfg) => (
-                  <PositionSection
+                  <motion.div
                     key={cfg.position}
-                    label={cfg.label}
-                    shortLabel={cfg.shortLabel}
-                    position={cfg.position}
-                    quota={cfg.quota}
-                    players={playersByPosition[cfg.position]}
-                    isStarter={isStarter}
-                    captain={captain}
-                    emptyHint={cfg.emptyHint}
-                    onToggleStatus={toggleStatus}
-                    onSetCaptain={setCaptain}
-                    onRemove={removePlayer}
-                  />
+                    variants={{
+                      hidden: { opacity: 0, y: 12 },
+                      show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } },
+                    }}
+                  >
+                    <PositionSection
+                      label={cfg.label}
+                      shortLabel={cfg.shortLabel}
+                      position={cfg.position}
+                      quota={cfg.quota}
+                      players={playersByPosition[cfg.position]}
+                      isStarter={isStarter}
+                      captain={captain}
+                      emptyHint={cfg.emptyHint}
+                      onToggleStatus={toggleStatus}
+                      onSetCaptain={setCaptain}
+                      onRemove={removePlayer}
+                    />
+                  </motion.div>
                 ))}
-              </div>
+              </motion.div>
 
               {/* Droite : Library */}
               <aside
@@ -215,6 +232,8 @@ export default function MaListeV2() {
               >
                 <Library
                   allPlayers={allPlayers}
+                  loading={loading}
+                  error={error}
                   activeSlot={null}
                   onPickForSlot={handlePick}
                   onPickForBench={handlePick}
@@ -241,5 +260,6 @@ export default function MaListeV2() {
 
       <ShareModalV2 open={shareOpen} onClose={() => setShareOpen(false)} />
     </div>
+    </MotionConfig>
   );
 }

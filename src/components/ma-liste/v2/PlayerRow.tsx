@@ -130,13 +130,16 @@ export function PlayerRow({
       ) : null}
 
       {/* Actions — visible au hover desktop, toujours visibles mobile */}
-      <div className="flex items-center gap-1 shrink-0 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+      <div className="flex items-center gap-1 shrink-0 opacity-100 md:opacity-0 md:group-hover:opacity-100 md:focus-within:opacity-100 transition-opacity">
         <button
           type="button"
           onClick={onSetCaptain}
           title={isCaptain ? "Retirer capitaine" : "Désigner capitaine"}
+          aria-label={isCaptain ? `Retirer ${player.name} comme capitaine` : `Désigner ${player.name} capitaine`}
+          aria-pressed={isCaptain}
           className={cn(
             "flex h-8 w-8 items-center justify-center rounded-full transition-all",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60",
             isCaptain
               ? "bg-primary text-primary-foreground"
               : "text-foreground/45 hover:bg-card hover:text-primary",
@@ -148,7 +151,8 @@ export function PlayerRow({
           type="button"
           onClick={onToggleStatus}
           title={isStarter ? "Envoyer au banc" : "Mettre titulaire"}
-          className="flex h-8 w-8 items-center justify-center rounded-full text-foreground/45 hover:bg-card hover:text-foreground transition-all"
+          aria-label={isStarter ? `Envoyer ${player.name} au banc` : `Mettre ${player.name} titulaire`}
+          className="flex h-8 w-8 items-center justify-center rounded-full text-foreground/45 hover:bg-card hover:text-foreground transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/40"
         >
           <ArrowUpDown className="h-3.5 w-3.5" strokeWidth={2} />
         </button>
@@ -156,7 +160,8 @@ export function PlayerRow({
           type="button"
           onClick={onRemove}
           title="Retirer de la liste"
-          className="flex h-8 w-8 items-center justify-center rounded-full text-foreground/45 hover:bg-blood/15 hover:text-blood transition-all"
+          aria-label={`Retirer ${player.name} de la liste`}
+          className="flex h-8 w-8 items-center justify-center rounded-full text-foreground/45 hover:bg-blood/15 hover:text-blood transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blood/60"
         >
           <X className="h-3.5 w-3.5" strokeWidth={2.5} />
         </button>

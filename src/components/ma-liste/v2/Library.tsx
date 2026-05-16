@@ -10,6 +10,8 @@ type FilterTab = "all" | "roster" | "radar";
 
 interface LibraryProps {
   allPlayers: DBPlayer[];
+  loading?: boolean;
+  error?: string | null;
   /** Compat ascendante avec ancien layout — ignoré dans le nouveau modèle */
   activeSlot?: string | null;
   onPickForSlot: (player: DBPlayer) => void;
@@ -19,7 +21,7 @@ interface LibraryProps {
 }
 
 export function Library({
-  allPlayers, onPickForSlot, onPickForBench, onDragStart, onDragEnd,
+  allPlayers, loading, error, onPickForSlot, onDragStart, onDragEnd,
 }: LibraryProps) {
   const [search, setSearch] = useState("");
   const [tab, setTab] = useState<FilterTab>("all");
@@ -124,7 +126,28 @@ export function Library({
 
       {/* List */}
       <div className="flex-1 overflow-y-auto">
-        {filtered.length === 0 ? (
+        {loading ? (
+          <ul aria-busy="true" aria-label="Chargement des joueurs">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <li key={i} className="px-2">
+                <div className="my-0.5 flex items-center gap-3 rounded-lg px-3 py-2.5">
+                  <span className="h-11 w-11 rounded-full bg-foreground/5 animate-pulse shrink-0" />
+                  <div className="flex-1 space-y-2">
+                    <span className="block h-3 w-2/3 rounded bg-foreground/5 animate-pulse" />
+                    <span className="block h-2 w-1/2 rounded bg-foreground/5 animate-pulse" />
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : error ? (
+          <div className="py-12 px-6 text-center font-sans text-[13px] text-blood/80">
+            Connexion impossible.
+            <span className="block mt-1 text-foreground/40 text-[11px] font-mono uppercase tracking-[0.06em]">
+              Recharge la page dans un instant.
+            </span>
+          </div>
+        ) : filtered.length === 0 ? (
           <div className="py-12 text-center font-sans text-[13px] text-foreground/45">
             Aucun résultat.
           </div>
@@ -146,8 +169,10 @@ export function Library({
                     onDragEnd={onDragEnd}
                     onClick={() => handlePick(p)}
                     disabled={placed}
+                    aria-label={placed ? `${p.name} déjà dans ta liste` : `Ajouter ${p.name} à la convocation`}
                     className={cn(
                       "group relative my-0.5 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-all duration-150",
+                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:bg-background/80",
                       placed
                         ? "opacity-30 cursor-default"
                         : "hover:bg-background/80 cursor-grab active:cursor-grabbing hover:translate-x-0.5",

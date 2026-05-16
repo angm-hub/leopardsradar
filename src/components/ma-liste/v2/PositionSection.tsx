@@ -49,11 +49,14 @@ export function PositionSection({
     over: "text-blood font-semibold",
   }[status];
 
+  const headingId = `position-${shortLabel.toLowerCase()}`;
+
   return (
-    <section className="space-y-1">
+    <section className="space-y-1" aria-labelledby={headingId}>
       <header className="flex items-baseline justify-between gap-4 mb-3">
         <div className="flex items-baseline gap-3">
           <span
+            aria-hidden
             className={cn(
               "font-mono text-[10px] tracking-[0.16em] uppercase w-8 shrink-0 font-bold",
               status === "ideal" || status === "ok"
@@ -63,7 +66,10 @@ export function PositionSection({
           >
             {shortLabel}
           </span>
-          <h2 className="font-display text-[15px] tracking-[0.16em] uppercase font-bold text-foreground">
+          <h2
+            id={headingId}
+            className="font-display text-[15px] tracking-[0.16em] uppercase font-bold text-foreground"
+          >
             {label}
           </h2>
           <span className={cn("font-mono text-[11px] tabular-nums transition-colors", statusColor)}>
