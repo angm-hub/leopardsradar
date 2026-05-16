@@ -86,25 +86,26 @@ Le rouge `--blood` n'apparaît QUE sur action destructive et bande drapeau.
 
 ## Typographie
 
-### Stack final
+### Stack final (décision Alexandre 2026-05-16 : zéro coût, full Google Fonts)
 
 | Rôle | Famille | Poids | Source |
 |---|---|---|---|
-| **Display / titres principaux** | **PP Editorial New** (italic) | 200, 300 | Pangram Pangram (gratuit personal, licence pro pour Cobalt à confirmer) |
-| **Body / interface** | **GT America** | 400, 500, 700 | Grilli Type (acheté) — OU fallback `Söhne` (Klim) OU `Inter Tight` (gratuit) |
+| **Display / titres principaux** | **Bricolage Grotesque** (variable) | 200-800 | Google Fonts gratuit, distinctive expérimentale brutaliste — jamais vu sur fantasy app |
+| **Body / interface** | **Inter Tight** (variable) | 400, 500, 700 | Google Fonts gratuit — version compressée d'Inter, plus serrée, moins SaaS générique |
 | **Mono / data** | **JetBrains Mono** | 400, 600 | Gratuit OFL — pour stats, IDs, codes formation |
-| **Accent display secondaire** | **Pangram Sans Rounded** | 700, 800 | Pangram Pangram — pour numéros maillot sur le pitch |
+| **Accent numéros maillot** | **Bricolage Grotesque** weight 800 | 800 | Réutilise display, donne signature sport via weight maxi |
 
 **Justification anti-slop kAIra** (`feedback_typo-anti-claude` memory) :
 - ❌ Fraunces (trop wedding/restaurant)
-- ❌ Inter standard (trop SaaS)
+- ❌ Inter standard (trop SaaS — Inter Tight est différent, plus expressif)
 - ❌ DM Sans (trop content marketing)
 - ❌ Cormorant (trop magazine luxe wannabe)
 - ❌ Space Mono / Söhne Mono (trop "agence design")
-- ✅ PP Editorial New italic = signature éditoriale sport-mode, jamais vu sur fantasy app
-- ✅ GT America = neutre, lisible, première division
+- ✅ Bricolage Grotesque = signature distinctive expérimentale, jamais vu sur fantasy/sport app, variable
+- ✅ Inter Tight = version serrée d'Inter, lisible, plus rythmée
 - ✅ JetBrains Mono = data légitime
-- ✅ PP Sans Rounded = signature ludo-sportive sans tomber dans le FUT cliché
+
+**Trade-off acté** : on perd la signature éditoriale PP Editorial New mais on gagne 0€ de coût + distinctivité via Bricolage Grotesque qui reste rare en prod.
 
 ### Échelle (clamp fluide mobile-first)
 
@@ -392,13 +393,13 @@ Cf. `taste-skill` Tier 1 kAIra UI :
 
 ---
 
-## Non-décisions (à valider avec Alexandre avant Sprint 3)
+## Décisions actées (2026-05-16, Alexandre)
 
-1. **Pseudo input dans le builder ou après save** ? Reco : **après save uniquement**, dans la modal share. Friction réduite + permet de submit anonyme.
-2. **Mode comparaison "vs Desabre"** : v1 ou v2 ? Reco : **v2** (sélection officielle pas encore publiée).
-3. **Mode "remix" liste partagée** : v1 ou v2 ? Reco : **v1** car c'est gratuit techniquement avec URL state.
-4. **Pangram Pangram licence pro** : ok dépense ? Si non → fallback Söhne (Klim Type Foundry, payant aussi) ou Inter Tight (gratuit, moins distinctif).
-5. **Mobile gesture long-press** sur joueur placé pour ouvrir menu (capitaine / retirer) vs tap normal qui ouvre directement le menu inline ? Reco : **tap = inline menu** (1 niveau d'interaction).
+1. ✅ **Pseudo input** = après save uniquement, dans la modal share, optionnel. Submit anonyme possible.
+2. ✅ **Mode "vs Desabre"** = v2 (feature flag activé quand sélection officielle publiée en BDD)
+3. ✅ **Mode "remix" liste partagée** = v1 dès ship initial (URL state + auto-load gratuits techniquement)
+4. ✅ **Typo** = full Google Fonts gratuit (Bricolage Grotesque + Inter Tight + JetBrains Mono)
+5. ⏳ **Mobile gesture** : à trancher au Sprint 5 (tests Playwright multi-viewports). Reco : tap = inline menu (1 niveau d'interaction).
 
 ---
 
