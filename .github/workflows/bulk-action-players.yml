@@ -1,0 +1,58 @@
+name: Bulk Action Players (revue éditoriale)
+
+# Workflow réutilisé pendant la revue éditoriale par championnat.
+# Prend en input une CSV de TM IDs + une action (4 possibles) + note libre.
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "Action à appliquer aux profils"
+        required: true
+        type: choice
+        options: [confirm, investigate, reject, archive]
+        default: confirm
+      tm_ids:
+        description: "CSV des transfermarkt_id (ex: 1234,5678,9999)"
+        required: true
+        type: string
+      note:
+        description: "Note libre (stockée dans editorial_note)"
+        required: false
+        type: string
+        default: ""
+      dry_run:
+        description: "Dry run — n'écrit rien en BDD"
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: scripts/requirements.txt
+      - run: pip install -r scripts/requirements.txt
+      - name: Apply bulk action
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        working-directory: scripts
+        run: |
+          ARGS=""
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then ARGS="$ARGS --dry-run"; fi
+          python bulk_action_players.py \
+            --action "${{ github.event.inputs.action }}" \
+            --tm-ids "${{ github.event.inputs.tm_ids }}" \
+            --note "${{ github.event.inputs.note }}" \
+            $ARGS
