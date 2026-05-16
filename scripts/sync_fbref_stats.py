@@ -48,7 +48,10 @@ SUPABASE_URL = _normalize_supabase_url(os.environ.get("SUPABASE_URL", ""))
 SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
 RUN_URL = os.environ.get("GITHUB_RUN_URL", "")
 
-DELAY_SEC = 4
+DELAY_SEC = 2           # Reduit de 4 a 2 sec — Cloudflare laisse passer
+                        # tant que cf_clearance reste valide. Test 18:13 a hit
+                        # le timeout 90 min avec 4 sec/page. 2 sec donne ~25 min
+                        # de marge sur 355 joueurs.
 SEASON = "2025-2026"
 CF_WAIT_SEC = 8         # Attente initiale du challenge Cloudflare
 PAGE_TIMEOUT_MS = 45000 # Total max par page
@@ -291,13 +294,18 @@ def main() -> int:
 
             try:
                 page.goto(url, timeout=PAGE_TIMEOUT_MS, wait_until="domcontentloaded")
-                # Attendre que Cloudflare passe : le titre change de
-                # "Un instant…" / "Just a moment…" à "Player Name Stats..."
-                page.wait_for_function(
-                    "() => !document.title.toLowerCase().includes('moment') "
-                    "&& !document.title.toLowerCase().includes('instant')",
-                    timeout=30000,
-                )
+
+                # Cloudflare : si cf_clearance est valide (cas des pages 2..N
+                # de la session), le titre est déjà bon → on saute le wait.
+                # Si on est sur un challenge (1ère page de la session ou
+                # refresh CF), on attend max 30 sec.
+                title = page.title().lower()
+                if "moment" in title or "instant" in title:
+                    page.wait_for_function(
+                        "() => !document.title.toLowerCase().includes('moment') "
+                        "&& !document.title.toLowerCase().includes('instant')",
+                        timeout=30000,
+                    )
 
                 result = page.evaluate(EXTRACT_JS, SEASON)
                 rows = result.get("rows", [])

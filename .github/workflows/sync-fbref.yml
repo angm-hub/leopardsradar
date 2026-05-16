@@ -48,7 +48,10 @@ permissions:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    timeout-minutes: 90       # Playwright + Cloudflare wait + 355 joueurs
+    # Run du 2026-05-15 18:13 a hit 90 min exactement (355 joueurs × 13-15 sec).
+    # Bump à 180 min + script optimisé (DELAY 2s, skip CF wait quand titre OK).
+    # Cible : ~30-40 min wall time.
+    timeout-minutes: 180
 
     concurrency:
       group: sync-fbref
