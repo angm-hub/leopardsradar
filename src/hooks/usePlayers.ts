@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { applyPublicVisibilityFilter } from "@/lib/playerVisibility";
 import type { DBPlayer, DBCategory, DBPosition, DBTier } from "@/types/dbPlayer";
 
 interface Filters {
@@ -11,6 +12,12 @@ interface Filters {
   limit?: number;
   orderBy?: { column: keyof DBPlayer; ascending?: boolean };
   excludeEligibilityStatus?: string;
+  /**
+   * Si true (défaut), masque les candidats `discovery_method=academy_scan_2026`
+   * non encore vérifiés par Alexandre. Mettre à false dans les écrans admin
+   * où on veut voir tous les candidats pour les valider.
+   */
+  publicVisibilityOnly?: boolean;
 }
 
 function normalizeJsonbArray(value: unknown): string[] {
@@ -35,7 +42,17 @@ function normalize(row: Record<string, unknown>): DBPlayer {
 }
 
 export function usePlayers(filters: Filters = {}) {
-  const { category, categories, position, tier, search, limit, orderBy, excludeEligibilityStatus } = filters;
+  const {
+    category,
+    categories,
+    position,
+    tier,
+    search,
+    limit,
+    orderBy,
+    excludeEligibilityStatus,
+    publicVisibilityOnly = true,
+  } = filters;
   const [players, setPlayers] = useState<DBPlayer[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -56,6 +73,7 @@ export function usePlayers(filters: Filters = {}) {
       if (tier) query = query.eq("tier", tier);
       if (search) query = query.ilike("name", `%${search}%`);
       if (excludeEligibilityStatus) query = query.neq("eligibility_status", excludeEligibilityStatus);
+      if (publicVisibilityOnly) query = applyPublicVisibilityFilter(query);
       if (orderBy)
         query = query.order(orderBy.column as string, {
           ascending: orderBy.ascending ?? false,
@@ -74,7 +92,7 @@ export function usePlayers(filters: Filters = {}) {
     } finally {
       setLoading(false);
     }
-  }, [category, categoriesKey, position, tier, search, limit, orderBy?.column, orderBy?.ascending, excludeEligibilityStatus]);
+  }, [category, categoriesKey, position, tier, search, limit, orderBy?.column, orderBy?.ascending, excludeEligibilityStatus, publicVisibilityOnly]);
 
   useEffect(() => {
     fetchPlayers();

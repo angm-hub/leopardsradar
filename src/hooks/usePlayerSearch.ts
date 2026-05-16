@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { applyPublicVisibilityFilter } from "@/lib/playerVisibility";
 import type { DBPlayer } from "@/types/dbPlayer";
 
 interface UsePlayerSearchOptions {
@@ -47,11 +48,12 @@ export function usePlayerSearch({
       try {
         // ilike sur name pour matcher "wis" → "Yoane Wissa"
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const { data, error } = await (supabase as any)
+        const baseQuery = (supabase as any)
           .from("players")
           .select("*")
           .ilike("name", `%${trimmed}%`)
-          .neq("eligibility_status", "ineligible")
+          .neq("eligibility_status", "ineligible");
+        const { data, error } = await applyPublicVisibilityFilter(baseQuery)
           .order("market_value_eur", { ascending: false, nullsFirst: false })
           .limit(limit);
         if (error) throw error;

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Crosshair } from "lucide-react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { applyPublicVisibilityFilter } from "@/lib/playerVisibility";
 import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
 import { flagFor, formatMarketValue, POSITION_LABEL } from "@/lib/playerHelpers";
 import type { DBPosition } from "@/types/dbPlayer";
@@ -38,23 +39,25 @@ export function RadarPagePreview() {
   useEffect(() => {
     let cancelled = false;
     (async () => {
+      const topBase = supabase
+        .from("players")
+        .select(
+          "name, slug, current_club, position, market_value_eur, image_url, age, nationalities, other_nationalities",
+        )
+        .in("player_category", ["radar", "heritage"])
+        .eq("tier", "tier1")
+        .neq("eligibility_status", "ineligible")
+        .gt("market_value_eur", 0);
+      const countBase = supabase
+        .from("players")
+        .select("id", { count: "exact", head: true })
+        .in("player_category", ["radar", "heritage"])
+        .neq("eligibility_status", "ineligible");
       const [topRes, countRes] = await Promise.all([
-        supabase
-          .from("players")
-          .select(
-            "name, slug, current_club, position, market_value_eur, image_url, age, nationalities, other_nationalities",
-          )
-          .in("player_category", ["radar", "heritage"])
-          .eq("tier", "tier1")
-          .neq("eligibility_status", "ineligible")
-          .gt("market_value_eur", 0)
+        applyPublicVisibilityFilter(topBase)
           .order("market_value_eur", { ascending: false, nullsFirst: false })
           .limit(3),
-        supabase
-          .from("players")
-          .select("id", { count: "exact", head: true })
-          .in("player_category", ["radar", "heritage"])
-          .neq("eligibility_status", "ineligible"),
+        applyPublicVisibilityFilter(countBase),
       ]);
 
       if (cancelled) return;
