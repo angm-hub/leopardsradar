@@ -71,11 +71,54 @@ class TransfermarktClient:
         player = client.fetch_player_profile("618472")  # Castello Lukeba TM ID
     """
 
-    def __init__(self, rate_limit_seconds: float = 3.0, timeout: int = 20):
+    def __init__(self, rate_limit_seconds: float = 3.0, timeout: int = 20,
+                 use_playwright: bool = False):
+        """
+        :param use_playwright: si True, utilise Chromium headless via Playwright
+            pour bypasser les Cloudflare checks (anti-bot 403). Plus lent
+            (~5-10s/page avec wait CF) mais robuste face au ban requests.
+            Nécessite `playwright` installé + `playwright install chromium`.
+        """
         self.rate_limit = rate_limit_seconds
         self.timeout = timeout
-        self.session = requests.Session()
+        self.use_playwright = use_playwright
         self._last_request_at = 0.0
+        # HTTP mode
+        self.session = requests.Session()
+        # Playwright mode (lazy init)
+        self._pw_ctx = None
+        self._pw_browser = None
+        self._pw_page = None
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        self.close()
+
+    def close(self):
+        """Ferme le navigateur Playwright si actif (no-op en mode requests)."""
+        if self._pw_browser:
+            try: self._pw_browser.close()
+            except Exception: pass
+        if self._pw_ctx:
+            try: self._pw_ctx.__exit__(None, None, None)
+            except Exception: pass
+        self._pw_browser = self._pw_page = self._pw_ctx = None
+
+    def _init_playwright(self):
+        """Lazy init du navigateur Chromium headless."""
+        if self._pw_page is not None:
+            return
+        from playwright.sync_api import sync_playwright
+        self._pw_ctx = sync_playwright().start()
+        self._pw_browser = self._pw_ctx.chromium.launch(headless=True)
+        ctx = self._pw_browser.new_context(
+            user_agent=random.choice(USER_AGENTS),
+            locale="en-US",
+            viewport={"width": 1280, "height": 800},
+        )
+        self._pw_page = ctx.new_page()
 
     def _sleep_if_needed(self):
         elapsed = time.time() - self._last_request_at
@@ -95,6 +138,8 @@ class TransfermarktClient:
 
     def _get(self, url: str) -> Optional[str]:
         self._sleep_if_needed()
+        if self.use_playwright:
+            return self._get_playwright(url)
         try:
             r = self.session.get(url, headers=self._headers(), timeout=self.timeout)
             self._last_request_at = time.time()
@@ -112,6 +157,39 @@ class TransfermarktClient:
         except requests.RequestException as e:
             print(f"[TM] Network error on {url}: {e}")
             return None
+
+    def _get_playwright(self, url: str) -> Optional[str]:
+        """Récupère le HTML via Chromium headless. Passe les Cloudflare challenges
+        en attendant que le titre de la page perde le 'moment' / 'instant' marker."""
+        from playwright.sync_api import TimeoutError as PWTimeout
+        self._init_playwright()
+        try:
+            self._pw_page.goto(url, timeout=self.timeout * 1000, wait_until="domcontentloaded")
+            self._last_request_at = time.time()
+        except PWTimeout:
+            print(f"[TM/PW] timeout on {url}")
+            return None
+        except Exception as e:
+            print(f"[TM/PW] error on {url}: {e}")
+            return None
+        # Cloudflare challenge ? Attend que le titre ne contienne plus 'moment'/'instant'.
+        title = (self._pw_page.title() or "").lower()
+        if "moment" in title or "instant" in title or "just a moment" in title:
+            try:
+                self._pw_page.wait_for_function(
+                    "() => !document.title.toLowerCase().includes('moment') "
+                    "&& !document.title.toLowerCase().includes('instant')",
+                    timeout=30000,
+                )
+            except PWTimeout:
+                print(f"[TM/PW] Cloudflare challenge not resolved on {url}")
+                return None
+        # Vérifier 404 via title TM ("Page Not Found")
+        title = (self._pw_page.title() or "").lower()
+        if "not found" in title or "404" in title:
+            print(f"[TM/PW] 404 on {url}")
+            return None
+        return self._pw_page.content()
 
     # ─────────────────────────────────────────────────────────────────
     # Profile parser

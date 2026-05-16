@@ -23,6 +23,12 @@ on:
         description: 'Seconds between Transfermarkt requests (default 3.0)'
         required: false
         default: '3.0'
+      use_playwright:
+        description: 'Use Chromium headless (bypass Cloudflare ban) — recommended now'
+        required: false
+        default: 'true'
+        type: choice
+        options: ['true', 'false']
 
 permissions:
   contents: read
@@ -49,12 +55,17 @@ jobs:
       - name: Install dependencies
         run: pip install -r scripts/requirements.txt
 
+      - name: Install Playwright Chromium (if needed)
+        if: ${{ github.event.inputs.use_playwright != 'false' }}
+        run: python -m playwright install --with-deps chromium
+
       - name: Run sync
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           BATCH_SIZE: ${{ github.event.inputs.batch_size || '200' }}
           RATE_LIMIT_SECONDS: ${{ github.event.inputs.rate_limit || '3.0' }}
+          USE_PLAYWRIGHT: ${{ github.event.inputs.use_playwright || 'true' }}
           GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         working-directory: scripts
         run: python sync_transfermarkt.py

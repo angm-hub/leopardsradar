@@ -31,6 +31,7 @@ from transfermarkt_client import TransfermarktClient
 
 BATCH_SIZE = int(os.environ.get("BATCH_SIZE", "200"))
 RATE_LIMIT = float(os.environ.get("RATE_LIMIT_SECONDS", "3.0"))
+USE_PLAYWRIGHT = os.environ.get("USE_PLAYWRIGHT", "false").lower() == "true"
 JOB_NAME = "sync-transfermarkt"
 
 
@@ -51,7 +52,9 @@ def main():
         print(f"!!! ABORTING: {e}", file=sys.stderr)
         sys.exit(1)
 
-    tm = TransfermarktClient(rate_limit_seconds=RATE_LIMIT)
+    tm = TransfermarktClient(rate_limit_seconds=RATE_LIMIT, use_playwright=USE_PLAYWRIGHT)
+    if USE_PLAYWRIGHT:
+        print(f"[mode] USE_PLAYWRIGHT=true → Chromium headless (bypass Cloudflare)")
 
     # 1. Sélectionner les joueurs à refresh.
     # Mode PRIORITY_NO_CLUB (défaut on) : prioriser les joueurs sans club
@@ -210,6 +213,10 @@ def main():
     print(f"Selections : +{stats['selections_added']}")
     print(f"Erreurs    : {stats['errors_count']}")
     print(f"Durée      : {duration_seconds}s")
+
+    # Cleanup Playwright si actif
+    try: tm.close()
+    except Exception: pass
 
     # Exit code non-zero si rien n'a marché
     if stats["players_updated"] == 0 and stats["players_processed"] == 0:
