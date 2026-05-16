@@ -348,7 +348,7 @@ def main():
                 "market_value_eur": details.get("market_value_eur"),
                 "image_url": details.get("image_url"),
                 "player_category": "radar",
-                "tier": "tier3",
+                "tier": "tier2",
                 "eligibility_status": "potentially_eligible",
                 "eligibility_note": (
                     f"Découvert via {JOB_NAME} ({started.date()}) — "

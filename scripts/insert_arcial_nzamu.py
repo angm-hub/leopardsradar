@@ -48,7 +48,7 @@ NZAMU_DATA = {
     "other_nationalities": ["DR Congo"],
     "is_binational": True,
     "player_category": "radar",
-    "tier": "tier3",
+    "tier": "tier2",
     "eligibility_status": "potentially_eligible",
     "eligibility_note": (
         "Signalé manquant par Alexandre le 2026-05-16. "
