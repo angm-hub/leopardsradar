@@ -53,13 +53,44 @@ def main():
 
     tm = TransfermarktClient(rate_limit_seconds=RATE_LIMIT)
 
-    # 1. Sélectionner les joueurs à refresh
-    players = sb.select(
-        "players",
-        select="id,name,slug,transfermarkt_id,updated_at",
-        order="updated_at.asc.nullsfirst",
-        limit=str(BATCH_SIZE),
-    )
+    # 1. Sélectionner les joueurs à refresh.
+    # Mode PRIORITY_NO_CLUB (défaut on) : prioriser les joueurs sans club
+    # connu — héritage Wikidata jamais enrichi (~1647 sur 2187). Ces profils
+    # bloquent la cartographie par championnat et la revue éditoriale.
+    # Désactivable via PRIORITY_NO_CLUB=false pour mode legacy.
+    priority_no_club = os.environ.get("PRIORITY_NO_CLUB", "true").lower() == "true"
+    if priority_no_club:
+        players = sb.select(
+            "players",
+            select="id,name,slug,transfermarkt_id,updated_at",
+            current_club="is.null",
+            order="updated_at.asc.nullsfirst",
+            limit=str(BATCH_SIZE),
+        )
+        print(f"[mode] PRIORITY_NO_CLUB=true → {len(players)} joueurs sans club ciblés")
+        # Fallback : si moins que BATCH_SIZE, complète avec les plus vieux
+        if len(players) < BATCH_SIZE:
+            need = BATCH_SIZE - len(players)
+            seen = {p["id"] for p in players}
+            extra = sb.select(
+                "players",
+                select="id,name,slug,transfermarkt_id,updated_at",
+                order="updated_at.asc.nullsfirst",
+                limit=str(need * 2),
+            )
+            for e in extra:
+                if e["id"] not in seen:
+                    players.append(e)
+                    seen.add(e["id"])
+                    if len(players) >= BATCH_SIZE:
+                        break
+    else:
+        players = sb.select(
+            "players",
+            select="id,name,slug,transfermarkt_id,updated_at",
+            order="updated_at.asc.nullsfirst",
+            limit=str(BATCH_SIZE),
+        )
     players = [p for p in players if p.get("transfermarkt_id")]
     print(f"Joueurs à traiter : {len(players)}")
 
