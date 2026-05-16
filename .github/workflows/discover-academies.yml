@@ -1,0 +1,84 @@
+name: Discover Academies (diaspora jeunes)
+
+# ──────────────────────────────────────────────────────────────────────
+# Sprint diaspora jeunes — chasse aux U16/U17/U18/U19/U21/B/Reserves
+# de la diaspora RDC dans les académies des clubs pros européens.
+#
+# Couverture : ~99 clubs pros (FR L1+L2, BEL Pro, NL Eredivisie, GER 1+2
+# Bundesliga, ENG Premier+Championship) × ~4 équipes jeunes = 397 rosters.
+#
+# Méthode : scrape roster TM → filtre patronyme bantou (whitelist v2.2,
+# 884 HIGH) → fetch fiche détaillée → insert en BDD avec
+# discovery_method='academy_scan_2026' + verified=false.
+# Le front exclut ces candidats du radar public jusqu'à validation
+# Alexandre par lots.
+#
+# Cron : 1er du mois 02h UTC. Wall time attendu ~30-40 min.
+#
+# Déclenché par : sortie du cas Arcial Nzamu Ena (TM 1472856) signalé
+# manquant le 2026-05-16. Diagnostic complet dans discover_academies.py.
+# ──────────────────────────────────────────────────────────────────────
+
+on:
+  schedule:
+    - cron: '0 2 1 * *'   # 1er du mois 02h UTC
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run — pas d''écriture en BDD'
+        required: false
+        default: false
+        type: boolean
+      limit:
+        description: 'Limite le nombre d''académies scannées (test)'
+        required: false
+        default: ''
+      league:
+        description: 'CSV des ligues à scanner (ex: L1,L2,BEL1). Vide = toutes.'
+        required: false
+        default: ''
+      min_tier:
+        description: 'Seuil patronyme : HIGH (recommandé) / MED / LOW'
+        required: false
+        default: 'HIGH'
+        type: choice
+        options: ['HIGH', 'MED', 'LOW']
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    # 397 rosters × 1.5s scrape + ~600 hits × 2s fetch détail = ~30-40 min.
+    # Marge à 120 min pour absorber les bans CF temporaires (pause 30s).
+    timeout-minutes: 120
+
+    concurrency:
+      group: discover-academies
+      cancel-in-progress: false
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: scripts/requirements.txt
+
+      - run: pip install -r scripts/requirements.txt
+
+      - name: Run academy scan
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        working-directory: scripts
+        run: |
+          ARGS=""
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then ARGS="$ARGS --dry-run"; fi
+          if [ -n "${{ github.event.inputs.limit }}" ]; then ARGS="$ARGS --limit ${{ github.event.inputs.limit }}"; fi
+          if [ -n "${{ github.event.inputs.league }}" ]; then ARGS="$ARGS --league ${{ github.event.inputs.league }}"; fi
+          if [ -n "${{ github.event.inputs.min_tier }}" ]; then ARGS="$ARGS --min-tier ${{ github.event.inputs.min_tier }}"; fi
+          python discover_academies.py $ARGS
