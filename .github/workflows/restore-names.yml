@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       dry_run:
-        description: 'Dry run (n\'ecrit pas en BDD)'
+        description: "Dry run (n ecrit pas en BDD)"
         required: false
         default: false
         type: boolean
