@@ -116,9 +116,22 @@ def main():
                 stats["error_details"].append({"player_id": player["id"], "error": "fetch_profile returned None"})
                 continue
 
-            # Construire le patch
+            # GARDE-FOU : si le parsing TM a retourné un nom "Unknown XXX"
+            # (= H1 introuvable, parser fail, Cloudflare blocking, etc.),
+            # SKIP l'update complete pour ne pas ecraser le nom existant.
+            # Incident 2026-05-16 : 500 noms ecrases en "Unknown {id}" suite
+            # a un sync Playwright ou CF a bloque silencieusement.
+            if not tm_player.name or tm_player.name.startswith("Unknown "):
+                stats["errors_count"] += 1
+                stats["error_details"].append({
+                    "player_id": player["id"],
+                    "error": f"name parse failed (got '{tm_player.name}') — skip to preserve existing data",
+                })
+                continue
+
+            # Construire le patch — name garanti non-Unknown grace au garde-fou
             patch = {
-                "name": tm_player.name or player["name"],
+                "name": tm_player.name,
                 "date_of_birth": tm_player.date_of_birth,
                 "place_of_birth": tm_player.place_of_birth,
                 "country_of_birth": tm_player.country_of_birth,
