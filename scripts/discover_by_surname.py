@@ -343,18 +343,20 @@ def main():
         else:
             not_found_or_ambiguous.append(c)
             verdict_str = "non trouvé" if wiki["verdict"] == "NOT_FOUND" else "ambigu"
-            # On garde si confidence HIGH (whitelist forte) MÊME si Wikipedia muet
-            if c["confidence"] == "HIGH":
-                verified_rdc.append(c)
-                print(f"  ? {c['name']:30} | Wiki {verdict_str}, gardé (HIGH whitelist)")
-            else:
-                print(f"  ? {c['name']:30} | Wiki {verdict_str}, skip (confiance {c['confidence']})")
+            # Garde-fou anti-pollution (2026-05-17) :
+            # HIGH + Wikipedia muet = on skipe également. Sans preuve Wikipedia,
+            # on n'a aucune donnée TM confirmant le lien RDC à ce stade du script
+            # (le profil TM complet n'est pas fetchés ici). Mieux vaut rater un
+            # vrai positif (rattrapable via discover_candidates.py ou manuellement)
+            # que polluer avec des stubs sans lien RDC vérifiable.
+            # Log explicite pour retrouver facilement ces candidats.
+            print(f"  - {c['name']:30} | Wiki {verdict_str}, skipped (confiance {c['confidence']}) — aucune preuve RDC vérifiable")
 
     print(f"\nRépartition après vérification :")
     print(f"  ✓ RDC confirmé              : {len(verified_rdc)}")
     print(f"  ✗ Congo-Brazza détecté      : {len(rejected_other_congo)}")
     print(f"  ✗ Autre pays africain       : {len(rejected_other_africa)}")
-    print(f"  ? Non trouvé / Ambigu       : {len(not_found_or_ambiguous) - sum(1 for c in not_found_or_ambiguous if c['confidence'] == 'HIGH')}")
+    print(f"  - Skipped (wiki muet/ambigu): {len(not_found_or_ambiguous)}")
 
     # 5. INSERT en base UNIQUEMENT les confirmés RDC
     inserted = 0

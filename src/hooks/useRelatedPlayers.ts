@@ -36,7 +36,9 @@ export function useRelatedPlayers({
           .from("players")
           .select("*")
           .eq("position", position)
+          .eq("player_category", "roster")
           .neq("eligibility_status", "ineligible")
+          .neq("archived", true)
           .order("market_value_eur", { ascending: false, nullsFirst: false })
           .limit(limit + 1); // +1 pour pouvoir retirer le current
 

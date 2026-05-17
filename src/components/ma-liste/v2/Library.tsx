@@ -49,7 +49,16 @@ export function Library({
   }, [starters, bench]);
 
   const filtered = useMemo(() => {
-    let list = allPlayers;
+    // Garde-fou défensif : exclure les joueurs archivés et dédupliquer par slug
+    // avant tout filtre UI — protège contre les doublons résiduels en cas de
+    // cache React Query ou d'archive DB incomplète au moment du fetch.
+    const seenSlugs = new Set<string>();
+    let list = allPlayers.filter((p) => {
+      if ((p as unknown as Record<string, unknown>)["archived"] === true) return false;
+      if (seenSlugs.has(p.slug)) return false;
+      seenSlugs.add(p.slug);
+      return true;
+    });
     if (tab === "roster") list = list.filter((p) => p.player_category === "roster");
     else if (tab === "radar") list = list.filter((p) => p.player_category === "radar");
     const q = search.trim().toLowerCase();

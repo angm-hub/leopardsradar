@@ -8,30 +8,31 @@ interface PlayerStatProfileProps {
   player: DBPlayer;
 }
 
-// Threshold below which we hide the hexagon and switch to a 1-col axis
-// breakdown : a polygon with only 1 or 2 vertices reads as broken, not
-// honest. With 3+ axes the silhouette becomes informative.
-const HEX_MIN_VALID_AXES = 3;
+// Minimum axes to display the aggregate score in the hexagon centre.
+// With fewer than 3 valid axes the average is misleading, so we hide it —
+// but the hexagon itself always renders (null axes collapse to centre with "—").
+const AGG_MIN_VALID_AXES = 3;
 
 /**
  * PlayerStatProfile — section "Profil statistique" sur la fiche Player.
  *
- * Three rendering modes :
- *   - Empty  : zero data → section hidden entirely
- *   - Sparse : 1-2 axes filled → axis breakdown alone (no hexagon),
- *              with an editorial note about partial data
- *   - Full   : 3+ axes filled → 2-col layout with hexagon left + breakdown right
+ * Two rendering modes :
+ *   - Empty  : zero axes with data → section hidden entirely
+ *   - Visible : 1+ axes filled → 2-col layout, hexagon always left,
+ *               breakdown always right. "Données partielles" banner when
+ *               < 3 axes filled (sparse), no aggregate score in hexagon
+ *               centre (averaging 1-2 axes would be misleading).
  *
- * The "sparse" mode prevents the dégénéré-polygon look on the long tail
- * of fiches where the free football-data.org tier doesn't reach (gardiens,
- * défenseurs non-scoreurs, championnats hors top 10).
+ * The hexagon always renders regardless of sparse/full — null axes
+ * collapse gracefully to centre with "—" labels, which is more
+ * informative than hiding the visual entirely.
  */
 export function PlayerStatProfile({ player }: PlayerStatProfileProps) {
   const scores = computePlayerScores(player);
   const validAxes = scores.order.filter((k) => scores.axes[k].value !== null).length;
   if (validAxes === 0) return null;
 
-  const isSparse = validAxes < HEX_MIN_VALID_AXES;
+  const isSparse = validAxes < AGG_MIN_VALID_AXES;
 
   return (
     <section className="container-site py-12 border-t border-border">
@@ -54,20 +55,15 @@ export function PlayerStatProfile({ player }: PlayerStatProfileProps) {
         <FullIntro positionLabel={scores.positionLabel} />
       )}
 
-      <div
-        className={
-          isSparse
-            ? "grid grid-cols-1"
-            : "grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start"
-        }
-      >
-        {!isSparse ? (
-          <div className="flex justify-center lg:justify-start">
-            <PlayerHexagon scores={scores} size={340} />
-          </div>
-        ) : null}
+      {/* Hexagon always renders — null axes collapse to centre and show "—".
+          isSparse only affects whether the aggregate score appears in the
+          hexagon centre (hidden when < 3 axes to avoid a misleading average). */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
+        <div className="flex justify-center lg:justify-start">
+          <PlayerHexagon scores={scores} size={340} />
+        </div>
 
-        <div className={isSparse ? "max-w-2xl space-y-2" : "space-y-2"}>
+        <div className="space-y-2">
           {scores.order.map((key) => {
             const a = scores.axes[key];
             return (
