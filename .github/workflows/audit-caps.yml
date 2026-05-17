@@ -25,6 +25,10 @@ on:
         description: 'Seuil d''écart pour alerte (défaut 2)'
         required: false
         default: '2'
+      auto_fix:
+        description: 'Corrige automatiquement caps_rdc quand real > cached (true/false)'
+        required: false
+        default: 'false'
 
 permissions:
   contents: read
@@ -65,5 +69,8 @@ jobs:
           fi
           if [ -n "${{ github.event.inputs.gap_threshold }}" ]; then
             ARGS="$ARGS --gap-threshold ${{ github.event.inputs.gap_threshold }}"
+          fi
+          if [ "${{ github.event.inputs.auto_fix }}" = "true" ]; then
+            ARGS="$ARGS --auto-fix"
           fi
           python audit_caps_consistency.py $ARGS

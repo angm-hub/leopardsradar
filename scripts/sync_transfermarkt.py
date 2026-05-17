@@ -57,36 +57,54 @@ def main():
         print(f"[mode] USE_PLAYWRIGHT=true → Chromium headless (bypass Cloudflare)")
 
     # 1. Sélectionner les joueurs à refresh.
-    # Mode PRIORITY_NO_CLUB (défaut on) : prioriser les joueurs sans club
-    # connu — héritage Wikidata jamais enrichi (~1647 sur 2187). Ces profils
-    # bloquent la cartographie par championnat et la revue éditoriale.
-    # Désactivable via PRIORITY_NO_CLUB=false pour mode legacy.
+    #
+    # Mode PRIORITY_NO_CLUB (défaut on) — ancienne logique : 100% sans-club.
+    # Problème : avec ~1 647 joueurs sans club et BATCH_SIZE=200, le fallback
+    # "complète avec les plus vieux" ne se déclenchait JAMAIS. Conséquence :
+    # les joueurs avec un club connu (ex. Moutoussamy) n'étaient jamais re-syncés.
+    #
+    # Nouveau comportement : split 50/50
+    #   - 50% du batch (BATCH_SIZE // 2) = joueurs sans club (priorité haute)
+    #   - 50% du batch = joueurs les plus vieux toutes catégories (refresh régulier)
+    #   - Déduplication : un joueur ne peut apparaître qu'une fois dans le batch
+    #
+    # PRIORITY_NO_CLUB=false : 100% les plus vieux (mode legacy, inchangé).
     priority_no_club = os.environ.get("PRIORITY_NO_CLUB", "true").lower() == "true"
     if priority_no_club:
-        players = sb.select(
+        half = BATCH_SIZE // 2
+
+        # Moitié 1 : joueurs sans club, les plus vieux en premier
+        no_club = sb.select(
             "players",
             select="id,name,slug,transfermarkt_id,updated_at",
             current_club="is.null",
             order="updated_at.asc.nullsfirst",
-            limit=str(BATCH_SIZE),
+            limit=str(half),
         )
-        print(f"[mode] PRIORITY_NO_CLUB=true → {len(players)} joueurs sans club ciblés")
-        # Fallback : si moins que BATCH_SIZE, complète avec les plus vieux
-        if len(players) < BATCH_SIZE:
-            need = BATCH_SIZE - len(players)
-            seen = {p["id"] for p in players}
-            extra = sb.select(
-                "players",
-                select="id,name,slug,transfermarkt_id,updated_at",
-                order="updated_at.asc.nullsfirst",
-                limit=str(need * 2),
-            )
-            for e in extra:
-                if e["id"] not in seen:
-                    players.append(e)
-                    seen.add(e["id"])
-                    if len(players) >= BATCH_SIZE:
-                        break
+        print(f"[mode] PRIORITY_NO_CLUB=true → split {half} sans-club + {BATCH_SIZE - half} oldest")
+        print(f"  → sans-club sélectionnés : {len(no_club)}")
+
+        seen = {p["id"] for p in no_club}
+
+        # Moitié 2 : tous les joueurs les plus vieux (include ceux qui ont un club)
+        # On demande 2× la cible pour avoir de la marge après déduplication
+        need = BATCH_SIZE - len(no_club)
+        oldest = sb.select(
+            "players",
+            select="id,name,slug,transfermarkt_id,updated_at",
+            order="updated_at.asc.nullsfirst",
+            limit=str(need * 2),
+        )
+        oldest_picked = []
+        for e in oldest:
+            if e["id"] not in seen:
+                oldest_picked.append(e)
+                seen.add(e["id"])
+                if len(oldest_picked) >= need:
+                    break
+        print(f"  → oldest sélectionnés    : {len(oldest_picked)}")
+
+        players = no_club + oldest_picked
     else:
         players = sb.select(
             "players",
@@ -101,6 +119,7 @@ def main():
         "players_processed": 0,
         "players_updated": 0,
         "selections_added": 0,
+        "caps_updated": 0,
         "errors_count": 0,
         "error_details": [],
     }
@@ -148,8 +167,54 @@ def main():
             # Drop None values (don't overwrite with NULL)
             patch = {k: v for k, v in patch.items() if v is not None}
 
+            # Caps RDC — mise à jour SEULEMENT si TM retourne une valeur non-None
+            # pour la fédération DR Congo (verein_id 3854).
+            # Garde-fous :
+            # 1. national_caps is None → parsing échoué ou bloc absent → on ne touche pas
+            # 2. national_team_id != "3854" → joueur lié à une autre fédération → on log
+            #    sans écraser (le caps_rdc RDC reste intact)
+            caps_rdc_updated = False
+            if tm_player.national_caps is not None:
+                if tm_player.national_team_id == "3854":
+                    patch["caps_rdc"] = tm_player.national_caps
+                    caps_rdc_updated = True
+                else:
+                    # Fedération différente affichée dans le data-header — log discret
+                    print(f"    [caps] fed={tm_player.national_team_id} (pas RDC) → caps_rdc non modifié")
+
             sb.update("players", {"id": f"eq.{player['id']}"}, patch)
             stats["players_updated"] += 1
+
+            # Compteur caps_updated + auto-fix des audit_findings pending
+            if caps_rdc_updated:
+                stats["caps_updated"] += 1
+                # Marquer toutes les findings pending pour ce joueur comme auto-fixed
+                # (le sync vient de corriger la valeur en base)
+                try:
+                    today_str = dt.datetime.utcnow().strftime("%Y-%m-%d")
+                    pending_findings = sb.select(
+                        "caps_audit_findings",
+                        **{
+                            "player_id": f"eq.{player['id']}",
+                            "status": "eq.pending",
+                            "select": "id",
+                        },
+                    )
+                    for finding in pending_findings:
+                        sb.update(
+                            "caps_audit_findings",
+                            {"id": f"eq.{finding['id']}"},
+                            {
+                                "status": "auto-fixed",
+                                "reviewed_at": dt.datetime.utcnow().isoformat(),
+                                "note": f"Auto-fix from sync-transfermarkt run {today_str}",
+                            },
+                        )
+                    if pending_findings:
+                        print(f"    [audit] {len(pending_findings)} finding(s) marquée(s) auto-fixed")
+                except Exception as e:
+                    # Échec sur l'audit ne bloque pas le sync principal
+                    print(f"    ! audit_findings update failed: {e}")
 
             # Sélections internationales (1 fetch supplémentaire)
             try:
@@ -223,6 +288,7 @@ def main():
     print(f"Status     : {log_status}")
     print(f"Processés  : {stats['players_processed']}")
     print(f"Updated    : {stats['players_updated']}")
+    print(f"Caps RDC   : {stats['caps_updated']} mis à jour")
     print(f"Selections : +{stats['selections_added']}")
     print(f"Erreurs    : {stats['errors_count']}")
     print(f"Durée      : {duration_seconds}s")

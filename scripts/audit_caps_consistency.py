@@ -12,7 +12,12 @@ et les écrit dans caps_audit_findings pour revue humaine via l'admin Supabase.
 Prérequis : migration 2026_05_15_caps_audit_findings.sql appliquée en base.
 
 Usage :
-  python audit_caps_consistency.py [--dry-run] [--gap-threshold N]
+  python audit_caps_consistency.py [--dry-run] [--gap-threshold N] [--auto-fix]
+
+Options :
+  --auto-fix  Corrige automatiquement les cas où real > cached (DB sous-estime).
+              Les cas où cached > real (DB sur-estime) restent en pending :
+              on ne sait pas si selections est incomplet ou si caps_rdc est inflated.
 
 Variables d'env :
   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
@@ -148,11 +153,20 @@ def main():
         default=DEFAULT_GAP_THRESHOLD,
         help=f"Seuil d'écart pour déclencher une alerte (défaut : {DEFAULT_GAP_THRESHOLD})",
     )
+    parser.add_argument(
+        "--auto-fix",
+        action="store_true",
+        help=(
+            "Corrige automatiquement caps_rdc quand real > cached (DB sous-estime). "
+            "Laisse en pending quand cached > real (possible données selections incomplètes). "
+            "Sans effet en mode --dry-run."
+        ),
+    )
     args = parser.parse_args()
 
     started_at = dt.datetime.utcnow()
     print(f"=== Léopards Radar — Audit Caps Consistency ===")
-    print(f"Start : {started_at.isoformat()}Z | Dry run : {args.dry_run} | Seuil : >{args.gap_threshold}")
+    print(f"Start : {started_at.isoformat()}Z | Dry run : {args.dry_run} | Seuil : >{args.gap_threshold} | Auto-fix : {args.auto_fix}")
 
     sb = SupabaseClient()
     try:
@@ -169,6 +183,7 @@ def main():
         "checked": 0,
         "with_gap": 0,
         "findings_written": 0,
+        "auto_fixed": 0,
         "errors_count": 0,
         "error_details": [],
     }
@@ -195,10 +210,60 @@ def main():
                     "real": real,
                     "gap": gap,
                 })
-                print(f"  [ÉCART] {name:30} | cached={cached:3} | réel={real:3} | Δ={gap}")
+
+                # Décider si l'auto-fix est applicable :
+                # - real > cached → DB sous-estime → on peut corriger en confiance
+                # - cached > real → DB sur-estime → on laisse en pending :
+                #   le compteur selections pourrait être incomplet (historique
+                #   non importé), écraser à real serait potentiellement faux.
+                can_auto_fix = args.auto_fix and (real > cached) and not args.dry_run
+
+                if can_auto_fix:
+                    direction = "sous-estime"
+                else:
+                    direction = "sur-estime" if cached > real else "sous-estime"
+                print(f"  [ÉCART] {name:30} | cached={cached:3} | réel={real:3} | Δ={gap} | {direction}")
+
                 upsert_finding(sb, pid, cached, real, gap, args.dry_run)
                 if not args.dry_run:
                     stats["findings_written"] += 1
+
+                # Auto-fix : écriture directe dans players.caps_rdc + marking finding
+                if can_auto_fix:
+                    try:
+                        today_str = dt.date.today().isoformat()
+                        sb.update(
+                            "players",
+                            {"id": f"eq.{pid}"},
+                            {
+                                "caps_rdc": real,
+                                "updated_at": dt.datetime.utcnow().isoformat(),
+                            },
+                        )
+                        # Marquer la finding qu'on vient d'upsert comme auto-fixed
+                        existing_finding = sb.select(
+                            "caps_audit_findings",
+                            **{
+                                "player_id": f"eq.{pid}",
+                                "status": "eq.pending",
+                                "select": "id",
+                                "limit": "1",
+                            },
+                        )
+                        for f in existing_finding:
+                            sb.update(
+                                "caps_audit_findings",
+                                {"id": f"eq.{f['id']}"},
+                                {
+                                    "status": "auto-fixed",
+                                    "reviewed_at": dt.datetime.utcnow().isoformat(),
+                                    "note": f"Auto-fix audit-caps --auto-fix run {today_str}: caps_rdc {cached}→{real}",
+                                },
+                            )
+                        stats["auto_fixed"] += 1
+                        print(f"    [auto-fix] caps_rdc {cached}→{real} pour {name}")
+                    except Exception as e:
+                        print(f"    ! auto-fix failed pour {name}: {e}", file=sys.stderr)
             else:
                 # Pas d'écart significatif — ne pas polluer la sortie
                 pass
@@ -240,11 +305,13 @@ def main():
     print(f"Joueurs vérifiés : {stats['checked']}")
     print(f"Écarts > {args.gap_threshold}      : {stats['with_gap']}")
     print(f"Findings écrites : {stats['findings_written']}")
+    print(f"Auto-fixés       : {stats['auto_fixed']}")
     print(f"Erreurs          : {stats['errors_count']}")
     print(f"Durée            : {duration_seconds}s")
 
-    if stats["with_gap"] > 0:
-        print(f"\n→ {stats['with_gap']} joueur(s) à vérifier dans admin/caps-audit")
+    if stats["with_gap"] > 0 and stats["with_gap"] > stats["auto_fixed"]:
+        remaining = stats["with_gap"] - stats["auto_fixed"]
+        print(f"\n→ {remaining} joueur(s) à vérifier manuellement dans admin/caps-audit")
 
     if stats["errors_count"] > 0:
         sys.exit(1)

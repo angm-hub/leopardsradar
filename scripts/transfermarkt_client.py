@@ -60,6 +60,13 @@ class TmPlayer:
     agent: Optional[str] = None
     image_url: Optional[str] = None
     raw_html_excerpt: Optional[str] = None      # for debug
+    # Sélection nationale — extrait du bloc "Caps/Goals:" du data-header TM.
+    # None si le joueur n'a pas de caps A affichés (pas de bloc présent).
+    # JAMAIS 0 par défaut : on préfère None à 0 pour éviter d'écraser un
+    # compteur existant quand le parsing échoue ou le bloc est absent.
+    national_team_id: Optional[str] = None      # TM verein_id (ex. "3854" = DR Congo)
+    national_caps: Optional[int] = None         # Total affiché dans le data-header
+    national_goals: Optional[int] = None        # Total buts en sélection
 
 
 class TransfermarktClient:
@@ -364,11 +371,71 @@ class TransfermarktClient:
             if label.startswith("Player agent:"):
                 player.agent = label.replace("Player agent:", "").strip()
 
+        # Caps/Goals sélection nationale — bloc dans le data-header.
+        # Structure HTML TM :
+        #   <li class="data-header__label">Caps/Goals:
+        #       <a href="/.../verein_id/3854">56</a>/
+        #       <a href="/.../verein_id/3854">0</a>
+        # On reste None si le bloc est absent ou si le parse échoue —
+        # JAMAIS 0 par défaut, pour ne pas écraser un compteur existant.
+        player.national_team_id, player.national_caps, player.national_goals = (
+            self._parse_national_caps(soup, tm_id)
+        )
+
         # Sauvegarde un extrait HTML pour debug si parse fail
         if not player.date_of_birth or not player.position:
             player.raw_html_excerpt = html[:5000]
 
         return player
+
+    @staticmethod
+    def _parse_national_caps(soup, tm_id: str):
+        """
+        Extrait (national_team_id, national_caps, national_goals) depuis le
+        bloc Caps/Goals du data-header Transfermarkt.
+
+        Retourne (None, None, None) si :
+        - le bloc est absent (joueur sans cap A)
+        - le parsing échoue pour n'importe quelle raison
+
+        Garantie : jamais (team_id, 0, 0) suite à un échec de parsing.
+        Le 0 en retour est réservé au cas où TM affiche réellement 0.
+        """
+        try:
+            for li in soup.select("li.data-header__label"):
+                label_text = li.get_text(separator=" ", strip=True)
+                if "Caps/Goals" not in label_text:
+                    continue
+
+                # Les 2 premiers <a> dans ce <li> sont caps puis goals
+                links = li.select("a")
+                if len(links) < 2:
+                    continue
+
+                # Extraire le verein_id (fédération) depuis le href du premier lien
+                href = links[0].get("href", "")
+                m = re.search(r"/verein_id/(\d+)", href)
+                if not m:
+                    continue
+                team_id = m.group(1)
+
+                # Parser les entiers — strip whitespace que TM insère souvent
+                caps_text = links[0].get_text(strip=True)
+                goals_text = links[1].get_text(strip=True)
+
+                if not caps_text.isdigit() or not goals_text.isdigit():
+                    continue
+
+                caps = int(caps_text)
+                goals = int(goals_text)
+                print(f"    [TM caps] TM {tm_id} → fed={team_id} caps={caps} goals={goals}")
+                return team_id, caps, goals
+
+        except Exception as exc:
+            # On log mais on ne plante pas — le sync du profil continue
+            print(f"    [TM caps] parse error for TM {tm_id}: {exc}")
+
+        return None, None, None
 
     # ─────────────────────────────────────────────────────────────────
     # National team appearances (sélections internationales)
