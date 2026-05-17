@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { Search, X, Sparkles, Heart } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import PlayerCardSkeleton from "@/components/ui/PlayerCardSkeleton";
@@ -13,6 +13,11 @@ import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
 import { ViewTabs, type RadarView } from "@/components/radar/ViewTabs";
 import { RadarCanvas } from "@/components/radar/RadarCanvas";
 import { RadarHighlights } from "@/components/radar/RadarHighlights";
+import {
+  AdvancedFilters,
+  ADVANCED_FILTERS_DEFAULT,
+  type AdvancedFilterState,
+} from "@/components/radar/AdvancedFilters";
 import {
   POSITION_BADGE,
   POSITION_DOT,
@@ -40,17 +45,32 @@ const TIER_OPTIONS: { value: TierFilter; label: string }[] = [
   { value: "tier2", label: "Tier 2" },
 ];
 
+// ── URL state helpers ────────────────────────────────────────────────────────
+
+function readSearchParam(params: URLSearchParams, key: string, def: string): string {
+  return params.get(key) ?? def;
+}
+
+function readNumParam(params: URLSearchParams, key: string, def: number): number {
+  const v = params.get(key);
+  if (!v) return def;
+  const n = parseInt(v, 10);
+  return isNaN(n) ? def : n;
+}
+
+// ── Cards ────────────────────────────────────────────────────────────────────
+
 function CategoryBadge({ category }: { category: string }) {
   if (category === "radar") {
     return (
       <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-400">
-        <Sparkles className="h-3 w-3" /> Éligible
+        <Sparkles className="h-3 w-3" /> Eligible
       </span>
     );
   }
   return (
     <span className="inline-flex items-center gap-1 rounded-full border border-orange-500/30 bg-orange-500/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-orange-400">
-      <Heart className="h-3 w-3" /> Héritage
+      <Heart className="h-3 w-3" /> Heritage
     </span>
   );
 }
@@ -124,55 +144,125 @@ function RadarCard({ player }: { player: DBPlayer }) {
   );
 }
 
+// ── Page ─────────────────────────────────────────────────────────────────────
+
 export default function Radar() {
   useDocumentMeta({
     title: "Radar",
     description:
-      "Le Radar Léopards — talents éligibles RDC et diaspora binationale, cartographiés par valeur marchande, jeunesse et tier UEFA.",
+      "Le Radar Leopards — talents eligibles RDC et diaspora binationale, cartographies par valeur marchande, jeunesse et tier UEFA.",
   });
+
   const { players, loading, error } = usePlayers({
     categories: ["radar", "heritage"],
     excludeEligibilityStatus: "ineligible",
     orderBy: { column: "market_value_eur", ascending: false },
   });
+
   const { stats } = useHomeStats();
   const radarTotal =
     stats && (stats.radar_count !== null || stats.heritage_count !== null)
       ? (stats.radar_count ?? 0) + (stats.heritage_count ?? 0)
       : null;
 
-  const [position, setPosition] = useState<PositionFilter>("ALL");
-  const [tier, setTier] = useState<TierFilter>("ALL");
-  const [nation, setNation] = useState<string>("ALL");
-  const [query, setQuery] = useState("");
-  const [debouncedQuery, setDebouncedQuery] = useState("");
-  // Default to "liste" on mobile (galaxy view labels are sub-6px and
-  // unreadable on a 390px viewport). Desktop keeps "carte" as default
-  // — that's the editorial moment of the radar. SSR-safe : if window
-  // is undefined (no SSR for now but future-proof), fall back to liste.
+  // ── URL state ──────────────────────────────────────────────────────────────
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Lire les filtres depuis l'URL (avec fallback sur les défauts)
+  const position = (readSearchParam(searchParams, "pos", "ALL")) as PositionFilter;
+  const tier = (readSearchParam(searchParams, "tier", "ALL")) as TierFilter;
+  const nation = readSearchParam(searchParams, "nat", "ALL");
+  const query = readSearchParam(searchParams, "q", "");
+
+  const advancedState: AdvancedFilterState = {
+    ageMin: readNumParam(searchParams, "ageMin", ADVANCED_FILTERS_DEFAULT.ageMin),
+    ageMax: readNumParam(searchParams, "ageMax", ADVANCED_FILTERS_DEFAULT.ageMax),
+    valueMin: readNumParam(searchParams, "valMin", ADVANCED_FILTERS_DEFAULT.valueMin),
+    valueMax: readNumParam(searchParams, "valMax", ADVANCED_FILTERS_DEFAULT.valueMax),
+    foot: (readSearchParam(searchParams, "foot", "ALL")) as AdvancedFilterState["foot"],
+    withPhoto: searchParams.get("photo") === "1",
+    withActiveContract: searchParams.get("contrat") === "1",
+  };
+
+  // Helper pour mettre à jour l'URL proprement (sans repousser toute l'entrée)
+  const updateParams = useCallback(
+    (updates: Record<string, string | null>) => {
+      setSearchParams(
+        (prev) => {
+          const next = new URLSearchParams(prev);
+          for (const [k, v] of Object.entries(updates)) {
+            const isDefault =
+              v === null ||
+              v === "" ||
+              v === "ALL" ||
+              (k === "ageMin" && v === String(ADVANCED_FILTERS_DEFAULT.ageMin)) ||
+              (k === "ageMax" && v === String(ADVANCED_FILTERS_DEFAULT.ageMax)) ||
+              (k === "valMin" && v === String(ADVANCED_FILTERS_DEFAULT.valueMin)) ||
+              (k === "valMax" && v === String(ADVANCED_FILTERS_DEFAULT.valueMax));
+            if (isDefault) {
+              next.delete(k);
+            } else {
+              next.set(k, v as string);
+            }
+          }
+          return next;
+        },
+        { replace: true },
+      );
+    },
+    [setSearchParams],
+  );
+
+  const setPosition = (v: PositionFilter) => updateParams({ pos: v });
+  const setTier = (v: TierFilter) => updateParams({ tier: v });
+  const setNation = (v: string) => updateParams({ nat: v });
+
+  // Debounce sur le champ search — on garde un état local pour la saisie
+  const [localQuery, setLocalQuery] = useState(query);
+  useEffect(() => {
+    setLocalQuery(query);
+  }, [query]);
+
+  useEffect(() => {
+    const t = setTimeout(() => {
+      updateParams({ q: localQuery.trim().toLowerCase() });
+    }, 300);
+    return () => clearTimeout(t);
+  }, [localQuery, updateParams]);
+
+  const setAdvanced = useCallback(
+    (next: AdvancedFilterState) => {
+      updateParams({
+        ageMin: next.ageMin !== ADVANCED_FILTERS_DEFAULT.ageMin ? String(next.ageMin) : null,
+        ageMax: next.ageMax !== ADVANCED_FILTERS_DEFAULT.ageMax ? String(next.ageMax) : null,
+        valMin: next.valueMin !== ADVANCED_FILTERS_DEFAULT.valueMin ? String(next.valueMin) : null,
+        valMax: next.valueMax !== ADVANCED_FILTERS_DEFAULT.valueMax ? String(next.valueMax) : null,
+        foot: next.foot !== "ALL" ? next.foot : null,
+        photo: next.withPhoto ? "1" : null,
+        contrat: next.withActiveContract ? "1" : null,
+      });
+    },
+    [updateParams],
+  );
+
+  // Vue — pas en URL pour ne pas polluer le share link
   const [view, setView] = useState<RadarView>(() => {
     if (typeof window === "undefined") return "liste";
     return window.matchMedia("(min-width: 768px)").matches ? "carte" : "liste";
   });
 
-  useEffect(() => {
-    const t = setTimeout(() => setDebouncedQuery(query.trim().toLowerCase()), 300);
-    return () => clearTimeout(t);
-  }, [query]);
-
-  // Build dynamic nation dropdown from `other_nationalities` with counts per nationality
+  // ── Dropdown nationalités dynamique ───────────────────────────────────────
   const nationOptions = useMemo(() => {
     const counts = new Map<string, number>();
     players.forEach((p) =>
       p.other_nationalities.forEach((n) => counts.set(n, (counts.get(n) ?? 0) + 1)),
     );
     const sorted = Array.from(counts.entries()).sort((a, b) => {
-      // Sort by count desc, then alpha
       if (b[1] !== a[1]) return b[1] - a[1];
       return a[0].localeCompare(b[0]);
     });
     return [
-      { value: "ALL", label: `Toutes nationalités (${players.length})` },
+      { value: "ALL", label: `Toutes nationalites (${players.length})` },
       ...sorted.map(([n, count]) => ({
         value: n,
         label: `${flagFor(n)} ${n} (${count})`,
@@ -180,27 +270,88 @@ export default function Radar() {
     ];
   }, [players]);
 
-  const filtersActive =
-    position !== "ALL" || tier !== "ALL" || nation !== "ALL" || debouncedQuery !== "";
-
-  const reset = () => {
-    setPosition("ALL");
-    setTier("ALL");
-    setNation("ALL");
-    setQuery("");
-  };
+  // ── Filtre combiné ────────────────────────────────────────────────────────
+  const debouncedQuery = query.trim().toLowerCase();
 
   const filtered = useMemo(() => {
+    const today = new Date().toISOString().slice(0, 10);
     return players.filter((p) => {
-      // Hide cap-tied (ineligible) profiles per product spec
       if (p.eligibility_status === "ineligible") return false;
+
+      // Filtres de base
       if (position !== "ALL" && p.position !== position) return false;
       if (tier !== "ALL" && p.tier !== tier) return false;
       if (nation !== "ALL" && !p.other_nationalities.includes(nation)) return false;
       if (debouncedQuery && !p.name.toLowerCase().includes(debouncedQuery)) return false;
+
+      // Filtres avancés — âge
+      if (p.age !== null) {
+        if (p.age < advancedState.ageMin || p.age > advancedState.ageMax) return false;
+      } else {
+        // Si l'âge est null et le slider a bougé, exclure le joueur
+        if (
+          advancedState.ageMin !== ADVANCED_FILTERS_DEFAULT.ageMin ||
+          advancedState.ageMax !== ADVANCED_FILTERS_DEFAULT.ageMax
+        )
+          return false;
+      }
+
+      // Valeur marchande (en M€, player.market_value_eur est en €)
+      const valueM = (p.market_value_eur ?? 0) / 1_000_000;
+      const effectiveMax =
+        advancedState.valueMax >= 50 ? Infinity : advancedState.valueMax;
+      if (valueM < advancedState.valueMin || valueM > effectiveMax) return false;
+
+      // Pied fort
+      if (advancedState.foot !== "ALL") {
+        if (!p.foot || p.foot !== advancedState.foot) return false;
+      }
+
+      // Avec photo
+      if (advancedState.withPhoto && !p.image_url && !p.image_url_alt) return false;
+
+      // Contrat actif
+      if (advancedState.withActiveContract) {
+        if (!p.contract_expires || p.contract_expires < today) return false;
+      }
+
       return true;
     });
-  }, [players, position, tier, nation, debouncedQuery]);
+  }, [
+    players,
+    position,
+    tier,
+    nation,
+    debouncedQuery,
+    advancedState.ageMin,
+    advancedState.ageMax,
+    advancedState.valueMin,
+    advancedState.valueMax,
+    advancedState.foot,
+    advancedState.withPhoto,
+    advancedState.withActiveContract,
+  ]);
+
+  // ── Etat actif ────────────────────────────────────────────────────────────
+  const basicFiltersActive =
+    position !== "ALL" || tier !== "ALL" || nation !== "ALL" || debouncedQuery !== "";
+
+  const advancedFiltersActive =
+    advancedState.ageMin !== ADVANCED_FILTERS_DEFAULT.ageMin ||
+    advancedState.ageMax !== ADVANCED_FILTERS_DEFAULT.ageMax ||
+    advancedState.valueMin !== ADVANCED_FILTERS_DEFAULT.valueMin ||
+    advancedState.valueMax !== ADVANCED_FILTERS_DEFAULT.valueMax ||
+    advancedState.foot !== "ALL" ||
+    advancedState.withPhoto ||
+    advancedState.withActiveContract;
+
+  const filtersActive = basicFiltersActive || advancedFiltersActive;
+
+  const reset = () => {
+    setLocalQuery("");
+    // Supprimer tous les params de filtre
+    setSearchParams({}, { replace: true });
+  };
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -217,10 +368,11 @@ export default function Radar() {
             Le Radar.
           </h1>
           <p className="mt-3 max-w-2xl text-lg text-muted-light">
-            {`${radarTotal ?? "—"} joueurs éligibles ou à ascendance RDC dans le monde.`}
+            {`${radarTotal ?? "—"} joueurs eligibles ou a ascendance RDC dans le monde.`}
           </p>
         </header>
 
+        {/* Barre de filtres sticky */}
         <div className="sticky top-16 z-20 bg-background/85 backdrop-blur-lg border-y border-border">
           <div className="container-site py-4 flex flex-wrap gap-3 items-center">
             <ViewTabs current={view} onChange={setView} />
@@ -240,39 +392,43 @@ export default function Radar() {
               onChange={(e) => setTier(e.target.value as TierFilter)}
             />
             <Select
-              label="Nationalité"
+              label="Nationalite"
               options={nationOptions}
               value={nation}
               onChange={(e) => setNation(e.target.value)}
             />
+
+            {/* Filtres avancés */}
+            <AdvancedFilters state={advancedState} onChange={setAdvanced} />
 
             <div className="relative flex-1 max-w-xs ml-auto">
               <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted" />
               <input
                 type="search"
                 placeholder="Rechercher un joueur…"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                value={localQuery}
+                onChange={(e) => setLocalQuery(e.target.value)}
                 className="w-full bg-card border border-border rounded-button pl-9 pr-3 py-2 text-sm text-foreground placeholder:text-muted hover:border-border-hover focus:border-primary outline-none transition-colors"
               />
             </div>
 
+            {/* Compteur live */}
             <span className="text-sm text-muted whitespace-nowrap">
-              {filtered.length} profil{filtered.length > 1 ? "s" : ""}
+              <span className="text-foreground font-mono font-semibold">{filtered.length}</span>
+              {radarTotal ? (
+                <span className="text-muted"> / {radarTotal}</span>
+              ) : null}
             </span>
 
             {filtersActive ? (
               <Button variant="ghost" size="sm" onClick={reset}>
-                <X className="h-3.5 w-3.5" /> Réinitialiser
+                <X className="h-3.5 w-3.5" /> Reinitialiser
               </Button>
             ) : null}
           </div>
         </div>
 
-        {/* Pépites de la semaine — ancrage éditorial avant le canvas.
-            WHY ici plutôt que dans le header : ça reste dans le flux de lecture,
-            après la barre de filtres, pour que les visiteurs qui arrivent directo
-            sur /radar voient d'abord 5 noms commentés avant les 988 nodes. */}
+        {/* Pepites de la semaine — ancrage editorial */}
         <RadarHighlights />
 
         <section className="container-site py-12">
@@ -297,9 +453,9 @@ export default function Radar() {
                     Le Radar se construit.
                   </p>
                   <p className="text-sm text-muted-light">
-                    Le Radar trace les joueurs éligibles ou à ascendance RDC
+                    Le Radar trace les joueurs eligibles ou a ascendance RDC
                     dans les championnats du monde. La cartographie initiale
-                    arrive à la prochaine mise à jour.
+                    arrive a la prochaine mise a jour.
                   </p>
                 </>
               ) : (
@@ -311,10 +467,10 @@ export default function Radar() {
                     Sur les{" "}
                     {radarTotal ? `${radarTotal} profils` : "profils"} du Radar,
                     cette combinaison de filtres ne renvoie rien. Essaie un
-                    poste ou un tier plus large.
+                    poste, un tier ou une plage d'age plus large.
                   </p>
                   <Button variant="outline" size="sm" onClick={reset}>
-                    Réinitialiser les filtres
+                    Reinitialiser les filtres
                   </Button>
                 </>
               )}

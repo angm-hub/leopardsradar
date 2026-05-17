@@ -1,30 +1,65 @@
 /**
- * QuadrantLabels — 1 mot par coin pour nommer les 4 territoires.
- * Discret mais lisible, sert de boussole sémantique.
+ * QuadrantLabels — 4 zones nommees avec sous-titre explicatif.
  *
- * - Haut-gauche : Pépites (jeune, valeur basse)
- * - Haut-droit  : Diamants (jeune, valeur haute)
- * - Bas-gauche  : Oubliés (confirmé, valeur basse)
- * - Bas-droit   : Stars (confirmé, valeur haute)
+ * Haut-gauche   : Pepites       (jeune + faible valeur)
+ * Haut-droit    : Future stars  (jeune + haute valeur)
+ * Bas-gauche    : Oublies       (age + faible valeur)
+ * Bas-droit     : Cracks        (age + haute valeur)
+ *
+ * Chaque label a un nom + un sous-titre court pour que le visiteur
+ * comprenne la semantique sans lire la legende.
  */
 export function QuadrantLabels() {
   return (
     <>
-      <Quadrant position="top-3 left-1/4 -translate-x-1/2" label="Pépites" />
-      <Quadrant position="top-3 right-1/4 translate-x-1/2" label="Diamants" />
-      <Quadrant position="bottom-5 left-1/4 -translate-x-1/2" label="Oubliés" />
-      <Quadrant position="bottom-5 right-1/4 translate-x-1/2" label="Stars" />
+      <Quadrant
+        position="top-4 left-6"
+        label="Pepites"
+        sub="Jeunes a suivre"
+      />
+      <Quadrant
+        position="top-4 right-6"
+        label="Future Stars"
+        sub="Jeunes a forte valeur"
+        align="right"
+      />
+      <Quadrant
+        position="bottom-8 left-6"
+        label="Oublies"
+        sub="Exp. sans spotlight"
+      />
+      <Quadrant
+        position="bottom-8 right-6"
+        label="Cracks"
+        sub="References du vivier"
+        align="right"
+      />
     </>
   );
 }
 
-function Quadrant({ position, label }: { position: string; label: string }) {
+function Quadrant({
+  position,
+  label,
+  sub,
+  align = "left",
+}: {
+  position: string;
+  label: string;
+  sub: string;
+  align?: "left" | "right";
+}) {
   return (
-    <p
-      className={`pointer-events-none absolute ${position} z-[2] rounded-full bg-background/45 backdrop-blur-sm px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.28em] text-foreground/60`}
+    <div
+      className={`pointer-events-none absolute ${position} z-[2] flex flex-col gap-0.5 ${align === "right" ? "items-end" : "items-start"}`}
       aria-hidden
     >
-      {label}
-    </p>
+      <p className="rounded-sm bg-background/50 backdrop-blur-sm px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.22em] text-foreground/65">
+        {label}
+      </p>
+      <p className="hidden md:block rounded-sm bg-background/30 px-1.5 py-0.5 font-mono text-[8px] uppercase tracking-[0.18em] text-foreground/35">
+        {sub}
+      </p>
+    </div>
   );
 }

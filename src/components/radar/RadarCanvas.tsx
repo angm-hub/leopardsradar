@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { GradientBackdrop } from "./GradientBackdrop";
 import { PlayerPill } from "./PlayerPill";
 import { InfoPanel } from "./InfoPanel";
@@ -13,7 +13,10 @@ interface RadarCanvasProps {
   totalRoster: number;
 }
 
-const MAX_PILLS = 80;
+// Augmenté de 80 à 200 pour une meilleure couverture après filtres granulaires.
+// Au-delà la lisibilité se dégrade — le toggle "Afficher tout" permet d'outrepasser.
+const DEFAULT_MAX_PILLS = 200;
+const MAX_PILLS = DEFAULT_MAX_PILLS;
 const SAFE_MARGIN = 12; // % — plus large pour aérer
 const TOP_FEATURED = 3;
 
@@ -37,6 +40,9 @@ const TOP_FEATURED = 3;
  *   - jitter pseudo-aléatoire pour éviter les empilements
  */
 export function RadarCanvas({ players, totalRoster }: RadarCanvasProps) {
+  const [showAll, setShowAll] = useState(false);
+  const displayLimit = showAll ? players.length : MAX_PILLS;
+
   const featuredIds = useMemo(() => {
     const sorted = [...players]
       .filter((p) => (p.market_value_eur ?? 0) > 0)
@@ -47,7 +53,7 @@ export function RadarCanvas({ players, totalRoster }: RadarCanvasProps) {
 
   const positioned = useMemo(() => {
     if (players.length === 0) return [];
-    const subset = players.slice(0, MAX_PILLS);
+    const subset = players.slice(0, displayLimit);
 
     // Rank-based positioning : chaque joueur prend la position de son
     // percentile dans la distribution. Garantit une répartition uniforme
@@ -150,7 +156,7 @@ export function RadarCanvas({ players, totalRoster }: RadarCanvasProps) {
     return players.reduce((s, p) => s + (p.market_value_eur ?? 0), 0);
   }, [players]);
 
-  const overflow = players.length > MAX_PILLS;
+  const overflow = players.length > displayLimit;
 
   return (
     <div className="relative w-full">
@@ -210,10 +216,28 @@ export function RadarCanvas({ players, totalRoster }: RadarCanvasProps) {
       <RadarLegend />
 
       {overflow ? (
-        <p className="mt-3 text-xs text-muted-light text-center">
-          Affichage limité à {MAX_PILLS} joueurs sur {players.length}.
-          Resserrez les filtres.
-        </p>
+        <div className="mt-4 flex flex-col items-center gap-2">
+          <p className="text-xs text-muted-light text-center">
+            {displayLimit} joueurs affichés sur {players.length}. Utilise les filtres pour affiner ou :
+          </p>
+          <button
+            type="button"
+            onClick={() => setShowAll(true)}
+            className="rounded-button border border-border bg-card px-4 py-2 text-xs text-muted-light hover:border-border-hover hover:text-foreground transition-colors"
+          >
+            Afficher les {players.length - displayLimit} suivants
+          </button>
+        </div>
+      ) : showAll && players.length > DEFAULT_MAX_PILLS ? (
+        <div className="mt-4 flex justify-center">
+          <button
+            type="button"
+            onClick={() => setShowAll(false)}
+            className="rounded-button border border-border bg-card px-4 py-2 text-xs text-muted-light hover:border-border-hover hover:text-foreground transition-colors"
+          >
+            Reduire l'affichage
+          </button>
+        </div>
       ) : null}
     </div>
   );

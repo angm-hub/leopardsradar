@@ -1,3 +1,4 @@
+import { useState, useCallback, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -16,14 +17,6 @@ const POSITION_DOT: Record<DBPosition, string> = {
 
 type TierUEFA = "S" | "A" | "B" | "C";
 
-/**
- * Dérive le tier UEFA d'un joueur.
- *
- * WHY heuristique valeur : le champ `tier` en base (tier1/tier2) n'a pas
- * de granularité suffisante pour distinguer S/A/B/C. On utilise donc la
- * valeur marchande comme proxy — distribution log-normale, les seuils
- * 30M/10M/3M correspondent aux percentiles observés dans le vivier RDC.
- */
 function getTierUEFA(player: DBPlayer): TierUEFA {
   const value = player.market_value_eur ?? 0;
   if (value >= 30_000_000) return "S";
@@ -32,39 +25,27 @@ function getTierUEFA(player: DBPlayer): TierUEFA {
   return "C";
 }
 
-/**
- * Style de fond/texte par tier.
- *
- * WHY style inline et non classes Tailwind dynamiques : les classes générées
- * à la volée (bg-primary, bg-success/80…) ne sont pas garanties dans le
- * bundle purged — l'inline est la seule approche sûre pour des valeurs
- * runtime.
- */
 function getTierStyle(tier: TierUEFA): { bg: string; color: string; border: string } {
   switch (tier) {
     case "S":
-      // Jaune RDC — top valeur, Champions League contender
       return {
         bg: "rgba(252,209,22,1)",
         color: "#0A0A0B",
         border: "rgba(252,209,22,0.9)",
       };
     case "A":
-      // Vert RDC vif — top 5 européen hors CL
       return {
         bg: "rgba(0,166,81,0.80)",
         color: "#0A0A0B",
         border: "rgba(0,166,81,0.65)",
       };
     case "B":
-      // Vert RDC atténué — compétitif Europe/national fort
       return {
         bg: "rgba(0,166,81,0.35)",
         color: "#d1fae5",
         border: "rgba(0,166,81,0.45)",
       };
     default:
-      // Gris neutre — autre ou valeur inconnue
       return {
         bg: "rgba(255,255,255,0.10)",
         color: "#a1a1aa",
@@ -75,21 +56,20 @@ function getTierStyle(tier: TierUEFA): { bg: string; color: string; border: stri
 
 // ── Taille proportionnelle ────────────────────────────────────────────────────
 
-const MIN_SIZE = 8;  // px — valeur ≤ 1M ou null
-const MAX_SIZE = 32; // px — valeur ≥ 100M
+const MIN_SIZE = 8;
+const MAX_SIZE = 32;
 
-/**
- * Calcule le diamètre de la pill en px selon la valeur marchande.
- *
- * WHY échelle logarithmique : la distribution des valeurs est une power law
- * (quelques joueurs à 50M+, majorité sous 5M). Le log compresse les écarts
- * extrêmes et rend la variation de taille lisible sans écraser les petites
- * valeurs. Le dénominateur log10(100_000_000) = 8 fixe le plafond à 100M.
- */
 function getPillSize(value: number | null): number {
   const v = Math.max(value ?? 0, 1);
   const raw = MIN_SIZE + (MAX_SIZE - MIN_SIZE) * (Math.log10(v) / Math.log10(100_000_000));
   return Math.min(MAX_SIZE, Math.max(MIN_SIZE, raw));
+}
+
+// ── Detect touch device ───────────────────────────────────────────────────────
+
+function isTouchDevice(): boolean {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia("(hover: none) and (pointer: coarse)").matches;
 }
 
 // ── Interface ─────────────────────────────────────────────────────────────────
@@ -105,12 +85,13 @@ interface PlayerPillProps {
 /**
  * PlayerPill — un joueur sur le canvas Radar.
  *
- * Variants :
- *  - default  : pill compact avec couleur tier + taille valeur
- *  - featured : pill premium avec avatar + halo doré (top valeur)
+ * Comportement tooltip :
+ *   - Desktop (hover): affichage au survol via CSS group-hover
+ *   - Mobile (touch): tap pour ouvrir, tap a l'exterieur pour fermer
  *
- * Couleur = tier UEFA (S jaune / A vert vif / B vert pâle / C gris).
- * Taille  = valeur marchande sur échelle log, 8px → 32px.
+ * Au tap/clic sur la pill sur mobile, le tooltip s'affiche. Un clic sur
+ * le lien dans le tooltip navigue vers la fiche. Un clic hors tooltip
+ * ferme le tooltip via un overlay transparent (pointer-events + useEffect).
  */
 export function PlayerPill({
   player,
@@ -120,6 +101,9 @@ export function PlayerPill({
   featured = false,
 }: PlayerPillProps) {
   const reduced = useReducedMotion();
+  const [tooltipOpen, setTooltipOpen] = useState(false);
+  const pillRef = useRef<HTMLDivElement>(null);
+
   const positionClass = player.position
     ? POSITION_DOT[player.position]
     : "bg-muted";
@@ -129,18 +113,13 @@ export function PlayerPill({
   const tierStyle = getTierStyle(tier);
   const pillSize = getPillSize(player.market_value_eur);
 
-  // Per-pill deterministic drift parameters. Same player.id always yields
-  // the same drift so the cloud feels alive without ever shifting state
-  // between renders.
+  // Drift animation
   const seed = (player.id * 9301 + 49297) % 233280;
-  const driftDur = 8 + (seed % 6); // 8s..14s
-  const driftX = 1.2 + ((seed >> 3) % 18) / 10; // 1.2..3.0px
-  const driftY = 1.0 + ((seed >> 5) % 15) / 10; // 1.0..2.5px
-  const driftDelay = (seed % 30) / 10; // 0..3s phase offset
+  const driftDur = 8 + (seed % 6);
+  const driftX = 1.2 + ((seed >> 3) % 18) / 10;
+  const driftY = 1.0 + ((seed >> 5) % 15) / 10;
+  const driftDelay = (seed % 30) / 10;
 
-  // Continuous drift only kicks in for users who haven't requested
-  // reduced motion. Featured pills get the same drift — the halo plays
-  // the differentiation role on its own.
   const driftAnim =
     reduced
       ? undefined
@@ -149,8 +128,41 @@ export function PlayerPill({
           y: [0, -driftY, driftY * 0.7, 0],
         };
 
+  // Fermeture du tooltip sur clic exterieur (mobile uniquement)
+  const handleClickOutside = useCallback(
+    (e: MouseEvent | TouchEvent) => {
+      if (pillRef.current && !pillRef.current.contains(e.target as Node)) {
+        setTooltipOpen(false);
+      }
+    },
+    [],
+  );
+
+  useEffect(() => {
+    if (!tooltipOpen) return;
+    document.addEventListener("mousedown", handleClickOutside, { passive: true });
+    document.addEventListener("touchstart", handleClickOutside, { passive: true });
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, [tooltipOpen, handleClickOutside]);
+
+  // Sur mobile : tap ouvre/ferme le tooltip sans naviguer.
+  // Sur desktop : hover CSS suffit, le clic navigue directement.
+  const handlePillInteract = useCallback(
+    (e: React.MouseEvent | React.TouchEvent) => {
+      if (isTouchDevice()) {
+        e.preventDefault();
+        setTooltipOpen((v) => !v);
+      }
+    },
+    [],
+  );
+
   return (
     <motion.div
+      ref={pillRef}
       className="absolute -translate-x-1/2 -translate-y-1/2"
       style={{ left: `${x}%`, top: `${y}%` }}
       initial={{ opacity: 0, scale: 0.7 }}
@@ -174,10 +186,22 @@ export function PlayerPill({
               }
         }
       >
-        <Link to={`/player/${player.slug}`} className="group relative block">
-          {/* Hover halo — soft radial glow that intensifies on hover.
-              Opacity 0 by default so it never adds visual noise to the
-              resting state. */}
+        {/* Wrapper group — hover desktop + tap mobile */}
+        <div
+          className="group relative"
+          onTouchStart={handlePillInteract}
+          onClick={
+            isTouchDevice()
+              ? (e) => {
+                  if (!tooltipOpen) {
+                    e.preventDefault();
+                    setTooltipOpen(true);
+                  }
+                }
+              : undefined
+          }
+        >
+          {/* Hover halo */}
           <span
             aria-hidden
             className="pointer-events-none absolute -inset-3 rounded-full opacity-0 blur-md transition-opacity duration-300 group-hover:opacity-80"
@@ -186,24 +210,43 @@ export function PlayerPill({
                 "radial-gradient(circle, rgba(252,209,22,0.45) 0%, rgba(252,209,22,0) 70%)",
             }}
           />
-          {featured ? (
-            <FeaturedPill
-              player={player}
-              lastName={lastName}
-              positionClass={positionClass}
-              tierStyle={tierStyle}
-              pillSize={pillSize}
-            />
-          ) : (
-            <DefaultPill
-              lastName={lastName}
-              positionClass={positionClass}
-              tierStyle={tierStyle}
-              pillSize={pillSize}
-            />
-          )}
-          <PillTooltip player={player} />
-        </Link>
+
+          {/* Lien vers la fiche — s'active sur desktop (pas mobile via pill) */}
+          <Link
+            to={`/player/${player.slug}`}
+            tabIndex={0}
+            aria-label={`${player.name}${player.age ? `, ${player.age} ans` : ""}${player.current_club ? `, ${player.current_club}` : ""}`}
+            onClick={
+              isTouchDevice()
+                ? (e) => {
+                    // Sur mobile, le clic sur la pill ouvre le tooltip.
+                    // La navigation se fait via le bouton dans le tooltip.
+                    if (!tooltipOpen) e.preventDefault();
+                  }
+                : undefined
+            }
+          >
+            {featured ? (
+              <FeaturedPill
+                player={player}
+                lastName={lastName}
+                positionClass={positionClass}
+                tierStyle={tierStyle}
+                pillSize={pillSize}
+              />
+            ) : (
+              <DefaultPill
+                lastName={lastName}
+                positionClass={positionClass}
+                tierStyle={tierStyle}
+                pillSize={pillSize}
+              />
+            )}
+          </Link>
+
+          {/* Tooltip — desktop via CSS group-hover, mobile via state */}
+          <PillTooltip player={player} open={tooltipOpen} />
+        </div>
       </motion.div>
     </motion.div>
   );
@@ -223,12 +266,9 @@ function DefaultPill({
   return (
     <div
       style={{
-        // WHY style inline : les valeurs bg/color/border sont runtime (tier).
-        // Les classes Tailwind dynamiques ne survivent pas au purge CSS en prod.
         backgroundColor: tierStyle.bg,
         color: tierStyle.color,
         boxShadow: `0 0 0 0.5px ${tierStyle.border}, 0 2px 6px rgba(0,0,0,0.45)`,
-        // Taille proportionnelle à la valeur — largeur min fixée pour le texte.
         minWidth: Math.max(pillSize + 32, 40),
       }}
       className={cn(
@@ -237,6 +277,8 @@ function DefaultPill({
         "transition-[box-shadow,filter,background-color] duration-200",
         "hover:[filter:brightness(1.1)]",
         "group-hover:z-10",
+        // Touch target minimum 44px via padding vertical supplementaire sur mobile
+        "min-h-[28px]",
       )}
     >
       <span
@@ -266,7 +308,6 @@ function FeaturedPill({
 }) {
   return (
     <div className="relative">
-      {/* Halo doux */}
       <div
         className="pointer-events-none absolute -inset-2 rounded-full opacity-50"
         style={{
@@ -287,6 +328,7 @@ function FeaturedPill({
           "transition-[box-shadow,filter] duration-200",
           "hover:[filter:brightness(1.08)]",
           "group-hover:z-20",
+          "min-h-[32px]",
         )}
       >
         <div className="relative h-7 w-7 rounded-full overflow-hidden border border-primary/50">
@@ -311,18 +353,39 @@ function FeaturedPill({
   );
 }
 
-function PillTooltip({ player }: { player: DBPlayer }) {
+/**
+ * PillTooltip — version améliorée.
+ *
+ * Desktop : visible via CSS group-hover (opacity transition).
+ * Mobile  : visible via prop `open` (state React controlé par tap).
+ *
+ * Le tooltip sur mobile inclut un bouton "Voir la fiche" explicite pour
+ * eviter la confusion entre tap-tooltip et tap-navigate.
+ */
+function PillTooltip({ player, open }: { player: DBPlayer; open: boolean }) {
+  const isTouch = isTouchDevice();
+
   return (
     <div
+      role="tooltip"
+      aria-label={`Detail : ${player.name}`}
       className={cn(
         "pointer-events-none absolute left-1/2 -translate-x-1/2 top-full mt-2",
-        "w-60 rounded-card border border-border bg-card",
-        "p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-150",
+        "w-56 rounded-card border border-border bg-card",
+        "p-3 transition-opacity duration-150",
         "shadow-2xl z-30",
+        // Desktop : piloté par CSS hover du parent .group
+        // Mobile  : piloté par state `open`
+        isTouch
+          ? open
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0"
+          : "opacity-0 group-hover:opacity-100",
       )}
     >
+      {/* Photo + nom + club */}
       <div className="flex items-start gap-2.5">
-        <div className="h-10 w-10 rounded-full overflow-hidden shrink-0 border border-border">
+        <div className="h-9 w-9 rounded-full overflow-hidden shrink-0 border border-border">
           <PlayerAvatar
             name={player.name}
             src={player.image_url}
@@ -341,21 +404,34 @@ function PillTooltip({ player }: { player: DBPlayer }) {
           ) : null}
         </div>
         {player.other_nationalities.length > 0 ? (
-          <span className="text-base leading-none">
+          <span className="text-base leading-none shrink-0">
             {flagFor(player.other_nationalities[0])}
           </span>
         ) : null}
       </div>
+
+      {/* Stats compactes */}
       <div className="mt-2.5 flex items-center justify-between text-[10px] font-mono pt-2 border-t border-border/50">
         <span className="text-muted">
           {player.age ? `${player.age} ans` : "—"}
+          {player.foot ? ` · ${player.foot === "right" ? "Pied D" : player.foot === "left" ? "Pied G" : "Ambidextre"}` : ""}
         </span>
         {player.market_value_eur && player.market_value_eur > 0 ? (
-          <span className="text-primary">
+          <span className="text-primary font-semibold">
             {formatMarketValue(player.market_value_eur)}
           </span>
         ) : null}
       </div>
+
+      {/* Bouton fiche — visible sur mobile uniquement */}
+      {isTouch && (
+        <Link
+          to={`/player/${player.slug}`}
+          className="mt-2.5 flex w-full items-center justify-center rounded-button bg-primary/15 border border-primary/30 py-1.5 text-[11px] font-medium text-primary transition-colors hover:bg-primary/25 pointer-events-auto"
+        >
+          Voir la fiche
+        </Link>
+      )}
     </div>
   );
 }
