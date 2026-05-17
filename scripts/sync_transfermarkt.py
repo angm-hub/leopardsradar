@@ -158,6 +158,7 @@ def main():
                 "foot": tm_player.foot,
                 "position": tm_player.position,
                 "current_club": tm_player.current_club_name,
+                "current_club_id": tm_player.current_club_id,
                 "contract_expires": tm_player.contract_expires,
                 "market_value_eur": tm_player.market_value_eur,
                 "agent": tm_player.agent,
@@ -166,6 +167,13 @@ def main():
             }
             # Drop None values (don't overwrite with NULL)
             patch = {k: v for k, v in patch.items() if v is not None}
+
+            # Si market_value_eur est mis a jour, tracker aussi market_value_updated_at.
+            # Permet de distinguer "jamais sync" (NULL) de "sync recente meme si valeur
+            # inchangee" (timestamp present). Verifie aux incident du 17/05/2026 ou les
+            # 65 joueurs roster avaient market_value_updated_at=NULL malgre des syncs.
+            if "market_value_eur" in patch:
+                patch["market_value_updated_at"] = dt.datetime.utcnow().isoformat()
 
             # Caps RDC — mise à jour SEULEMENT si TM retourne une valeur non-None
             # pour la fédération DR Congo (verein_id 3854).
