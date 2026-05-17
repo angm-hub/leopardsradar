@@ -265,13 +265,17 @@ def main():
                 "traceback": traceback.format_exc()[-500:],
             })
 
-    # 2. Recompute éligibilité globale
-    try:
-        recomputed = sb.rpc("recompute_all_eligibility")
-        print(f"\nÉligibilité recalculée pour {recomputed} joueurs.")
-    except Exception as e:
-        print(f"\n! recompute_all_eligibility failed: {e}")
-        stats["error_details"].append({"recompute_error": str(e)})
+    # 2. Recompute eligibilite globale -- DESACTIVE (2026-05-17).
+    # La fonction SQL recompute_all_eligibility ne reflete ni le manuel
+    # (eligibility_status) ni la realite TM (cap-tied externes). Tant qu elle
+    # n est pas refactor, on coupe son execution pour ne pas re-introduire les
+    # 579 mismatchs corriges par le bulk UPDATE du 17/05/2026. La source de
+    # verite est desormais le champ manuel eligibility_status, copie a la main
+    # vers computed_eligibility_status lors des audits manuels.
+    # A reactiver quand la fonction SQL aura ete refactor pour consulter
+    # caps_other_count + caps_rdc et trancher correctement INELIGIBLE / SELECTED
+    # / ELIGIBLE / POTENTIALLY.
+    print("\n[eligibility] recompute_all_eligibility skip (cf. patch 2026-05-17)")
 
     # 3. Log final
     finished_at = dt.datetime.utcnow()
