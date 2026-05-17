@@ -8,11 +8,11 @@ interface ViewTabsProps {
   onChange: (v: RadarView) => void;
 }
 
-const TABS: { value: RadarView; label: string; Icon: typeof Map; soon?: boolean }[] =
+const TABS: { value: RadarView; label: string; Icon: typeof Map }[] =
   [
     { value: "carte", label: "Carte", Icon: Map },
     { value: "liste", label: "Liste", Icon: LayoutGrid },
-    { value: "atlas", label: "Atlas mondial", Icon: Globe, soon: true },
+    { value: "atlas", label: "Atlas", Icon: Globe },
   ];
 
 /**
@@ -28,7 +28,7 @@ export function ViewTabs({ current, onChange }: ViewTabsProps) {
       role="tablist"
       aria-label="Mode de visualisation"
     >
-      {TABS.map(({ value, label, Icon, soon }) => {
+      {TABS.map(({ value, label, Icon }) => {
         const isActive = current === value;
         return (
           <button
@@ -36,23 +36,16 @@ export function ViewTabs({ current, onChange }: ViewTabsProps) {
             type="button"
             role="tab"
             aria-selected={isActive}
-            disabled={soon}
-            onClick={() => !soon && onChange(value)}
+            onClick={() => onChange(value)}
             className={cn(
               "relative flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-all",
               isActive
                 ? "bg-primary text-primary-foreground"
                 : "text-muted-light hover:text-foreground",
-              soon && "opacity-40 cursor-not-allowed",
             )}
           >
             <Icon className="h-3.5 w-3.5" />
             {label}
-            {soon ? (
-              <span className="text-[8px] uppercase tracking-wider text-muted ml-0.5">
-                Bientôt
-              </span>
-            ) : null}
           </button>
         );
       })}
