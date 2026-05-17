@@ -199,6 +199,55 @@ def upsert_stats(player_id: int, rows: list[dict]) -> int:
     return len(payload)
 
 
+def backfill_player_season_stats(player_id: int, rows: list[dict]) -> None:
+    """Met a jour players.season_goals/assists/games/minutes depuis les rows scrapeees.
+
+    Additionne toutes les competitions de la saison cible pour obtenir les totaux
+    saison. Ecrit dans la table players (champs season_*) pour que le frontend
+    puisse afficher les stats sans joindre player_stats_advanced.
+
+    Prerequis : appeler APRES upsert_stats (les rows sont deja validees).
+    """
+    if not rows:
+        return
+
+    total_goals = 0
+    total_assists = 0
+    total_games = 0
+    total_minutes = 0
+
+    for r in rows:
+        total_goals   += parse_int(r.get("goals", "")) or 0
+        total_assists += parse_int(r.get("assists", "")) or 0
+        total_games   += parse_int(r.get("games", "")) or 0
+        total_minutes += parse_int(r.get("minutes", "")) or 0
+
+    patch = {
+        "season_goals":   total_goals,
+        "season_assists": total_assists,
+        "season_games":   total_games,
+        "season_minutes": total_minutes,
+    }
+
+    res = supa_request(
+        "PATCH",
+        f"/rest/v1/players?id=eq.{player_id}",
+        headers={"Content-Type": "application/json", "Prefer": "return=minimal"},
+        json=patch,
+    )
+    if res.status_code >= 400:
+        print(
+            f"  [warn] season stats backfill failed pid={player_id}: "
+            f"HTTP {res.status_code} {res.text[:100]}",
+            file=sys.stderr,
+        )
+    else:
+        print(
+            f"  [ok] season stats backfilled: "
+            f"{total_goals}G {total_assists}A {total_games}gp {total_minutes}min",
+        )
+
+
 def update_freshness(player_id: int, current: dict | None) -> None:
     freshness = dict(current or {})
     freshness["stats_advanced"] = {
@@ -316,6 +365,9 @@ def main() -> int:
                 elif not args.dry_run:
                     n = upsert_stats(pid, rows)
                     if n > 0:
+                        # Backfill players.season_* pour que le frontend
+                        # affiche les stats sans jointure player_stats_advanced.
+                        backfill_player_season_stats(pid, rows)
                         update_freshness(pid, t.get("field_freshness"))
                         updated += 1
                         rows_total += n

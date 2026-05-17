@@ -12,6 +12,9 @@ import { PositionSection } from "@/components/roster/PositionSection";
 import { PlayerTable } from "@/components/roster/PlayerTable";
 import { RosterModeToggle, type RosterMode } from "@/components/roster/RosterModeToggle";
 import { RosterMoversSection } from "@/components/roster/RosterMoversSection";
+import { TopScorersBlock } from "@/components/roster/TopScorersBlock";
+import { TopGABlock } from "@/components/roster/TopGABlock";
+import { DesabreXI } from "@/components/roster/DesabreXI";
 import { usePlayers } from "@/hooks/usePlayers";
 import { useHomeStats } from "@/hooks/useHomeStats";
 import { useDocumentMeta } from "@/hooks/useDocumentMeta";
@@ -277,6 +280,17 @@ const Roster = () => {
         <div className="container-site">
           <RosterMoversSection hidden={filtersActive} />
         </div>
+
+        {/* Blocs éditoriaux stats — top buteurs, top G+A, 11 Desabre.
+            Masqués dès qu'un filtre est actif : l'utilisateur cherche un joueur
+            précis, les blocs agrégés n'ont plus de sens. */}
+        {!filtersActive && (
+          <div className="container-site mt-2 mb-6">
+            <TopScorersBlock players={players} />
+            <TopGABlock players={players} />
+            <DesabreXI players={players} />
+          </div>
+        )}
 
         <div className="sticky top-16 z-20 bg-background/85 backdrop-blur-lg border-y border-border">
           <div className="container-site py-4 flex flex-wrap gap-3 items-center">

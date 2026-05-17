@@ -13,6 +13,7 @@ import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
 import { ViewTabs, type RadarView } from "@/components/radar/ViewTabs";
 import { RadarCanvas } from "@/components/radar/RadarCanvas";
 import { RadarHighlights } from "@/components/radar/RadarHighlights";
+import { ProStatsBlock } from "@/components/radar/ProStatsBlock";
 import {
   AdvancedFilters,
   ADVANCED_FILTERS_DEFAULT,
@@ -430,6 +431,9 @@ export default function Radar() {
 
         {/* Pepites de la semaine — ancrage editorial */}
         <RadarHighlights />
+
+        {/* Bloc stats saison — top G+A, buts, temps de jeu parmi les talents radar */}
+        <ProStatsBlock players={players} />
 
         <section className="container-site py-12">
           {loading ? (
