@@ -1,0 +1,64 @@
+name: Compute Desabre XI reel
+
+# ──────────────────────────────────────────────────────────────────────
+# Calcule la composition reelle de Desabre depuis national_lineups.
+# Rafraichit la vue materielle desabre_xi_stats et ecrit le JSON cache
+# scripts/cache/desabre_xi.json.
+#
+# Cron : dimanche 05:00 UTC (apres sync-stats-multi 04:00).
+# S'execute aussi apres chaque run scrape-rdc-lineups (workflow_call).
+#
+# Un run prend < 2 minutes.
+#
+# Secrets requis :
+#   SUPABASE_URL
+#   SUPABASE_SERVICE_ROLE_KEY
+# ──────────────────────────────────────────────────────────────────────
+
+on:
+  schedule:
+    - cron: '0 5 * * 0'    # Dimanche 05:00 UTC
+  workflow_dispatch:
+    inputs:
+      refresh_view:
+        description: 'Rafraichir la vue materielle desabre_xi_stats'
+        required: false
+        default: 'true'
+        type: boolean
+      dry_run:
+        description: 'Dry run — afficher sans ecrire'
+        required: false
+        default: 'false'
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  compute:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: scripts/requirements.txt
+
+      - run: pip install -r scripts/requirements.txt
+
+      - name: Compute Desabre XI
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        working-directory: scripts
+        run: |
+          ARGS=""
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then ARGS="$ARGS --dry-run"; fi
+          if [ "${{ github.event.inputs.refresh_view }}" = "true" ] || [ -z "${{ github.event.inputs.refresh_view }}" ]; then
+            ARGS="$ARGS --refresh-view"
+          fi
+          python compute_desabre_xi.py $ARGS
