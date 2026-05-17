@@ -79,7 +79,10 @@ export function usePlayers(filters: Filters = {}) {
           ascending: orderBy.ascending ?? false,
           nullsFirst: false,
         });
-      if (limit) query = query.limit(limit);
+      // PostgREST a une limite hardcodee a 1000 rows par defaut.
+      // Sans cap explicite, le Radar affichait seulement 1000/1166 joueurs.
+      // On passe a 5000 par defaut (largement au-dessus du pool RDC actuel ~2.2k).
+      query = query.limit(limit ?? 5000);
 
       const { data, error: err } = await query;
       if (err) throw err;
