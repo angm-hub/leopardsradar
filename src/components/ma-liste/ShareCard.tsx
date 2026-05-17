@@ -32,9 +32,12 @@ const PRIMARY = "#FCD116"; // RDC yellow — accent only
 const RED = "#CE1126";
 const GREEN = "#00A651";
 
-const SERIF = "'Fraunces', 'Playfair Display', Georgia, serif";
-const SANS = "'Inter', system-ui, sans-serif";
-const MONO = "'JetBrains Mono', Menlo, monospace";
+// Brand book Leopards Radar v2 — Geist partout, pas de serif editorial.
+// L'alias SERIF garde le nom historique pour ne pas avoir a renommer les
+// 30+ usages dans ce fichier, mais pointe sur Geist.
+const SERIF = "'Geist', system-ui, sans-serif";
+const SANS = "'Geist', system-ui, sans-serif";
+const MONO = "'Geist Mono', ui-monospace, Menlo, monospace";
 
 const POS_ACCENT: Record<DBPosition, string> = {
   Goalkeeper: PRIMARY,

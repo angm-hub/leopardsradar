@@ -139,16 +139,15 @@
     @apply font-mono uppercase text-[10px] font-medium tracking-[0.16em];
   }
 
-  /* ─── Display heading — Fraunces editorial, tracking serré ─────────
-     Pour les titres-affiche du brand book ("Les Léopards.", "1974.",
-     "Three symbols. One gaze."). Line-height 0.92, weight 500.
-     Fraunces apporte un caractere editorial (axes opsz + soft) qui
-     matche l identite "premium tribune" sans tomber dans le serif
-     austere. Cf. memory `feedback_typo-anti-claude.md`. */
+  /* ─── Display heading — Geist 500, brand book Leopards Radar v2 ────
+     Pour les titres-affiche ("Les Leopards.", "1974.", "Three symbols.
+     One gaze."). Brand book page 005 « Type » : Geist 500 tracking -4%
+     line-height tres serre. Pas de serif editorial — la marque est
+     silencieuse, tout en sans. */
   .display-heading {
-    font-family: "Fraunces", Georgia, ui-serif, serif;
+    font-family: "Geist", system-ui, sans-serif;
     font-weight: 500;
-    letter-spacing: -0.035em;
+    letter-spacing: -0.04em;
     line-height: 0.92;
   }
 }

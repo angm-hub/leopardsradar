@@ -93,22 +93,30 @@ const config: Config = {
         },
       },
       fontFamily: {
-        // Charte graphique Léopards Radar — fonts self-hostées dans
-        // /public/fonts/ via fonts.css. Fraunces = display éditorial
-        // (titres, hero, accents italiques). DM Sans = body, UI courante.
-        // Space Mono = labels mono uppercase + tabular nums.
-        // Cf. memory kAIra `feedback_typo-anti-claude.md` — combo voulue
-        // pour ne pas faire "trop Claude" (Cormorant/Inter/JetBrains bannis).
-        serif: ['"Fraunces"', "Georgia", "ui-serif", "serif"],
-        sans: ['"DM Sans"', "system-ui", "sans-serif"],
-        mono: ['"Space Mono"', "ui-monospace", "monospace"],
-        display: ['"Fraunces"', "Georgia", "ui-serif", "serif"],
-        // Ma Liste v2 — DA dédiée alignée sur la charte du site
-        // (cf. docs/DESIGN_MA_LISTE_V2.md). Fraunces pour les display
-        // editoriaux, DM Sans pour le body, Space Mono pour les labels.
-        v2: ['"Fraunces"', "Georgia", "ui-serif", "serif"],
-        "v2-body": ['"DM Sans"', "system-ui", "sans-serif"],
-        "v2-mono": ['"Space Mono"', "ui-monospace", "monospace"],
+        // Brand book Leopards Radar Premium v2 (page 005 « Type »).
+        // Une seule family pour tout : Geist. Pas de serif editorial.
+        //
+        //   Display  Geist 500 tracking -4%   -> titres-affiche, hero
+        //   Body     Geist 400 tracking -1%   -> texte courant, UI
+        //   "Mono"   Geist 500 tracking +18% uppercase -> eyebrows, labels,
+        //                                                 statuts, timestamps
+        //                                                 (label editorial, pas
+        //                                                 vrai monospace)
+        //   Mono technique  Geist Mono 400/500  -> seulement pour tabular
+        //                                          data, code, ratios
+        //
+        // Fonts chargees via Google Fonts dans index.html. Geist Mono
+        // ajoute pour les usages techniques (xG, scores, ratios).
+        // L alias `serif` pointe sur Geist pour eviter toute regression
+        // sur les composants legacy qui utiliseraient `font-serif`.
+        serif: ['"Geist"', "system-ui", "sans-serif"],
+        sans: ['"Geist"', "system-ui", "sans-serif"],
+        mono: ['"Geist Mono"', "ui-monospace", "monospace"],
+        display: ['"Geist"', "system-ui", "sans-serif"],
+        // Ma Liste v2 — meme charte unifiee
+        v2: ['"Geist"', "system-ui", "sans-serif"],
+        "v2-body": ['"Geist"', "system-ui", "sans-serif"],
+        "v2-mono": ['"Geist Mono"', "ui-monospace", "monospace"],
       },
       fontSize: {
         // Display sizes calibrés pour Geist tracking serré -4.5%

@@ -50,7 +50,7 @@ function TierSwatch({ tier, label }: { tier: "S" | "A" | "B" | "C"; label: strin
           alignItems: "center",
           justifyContent: "center",
           fontSize: 7,
-          fontFamily: "Space Mono, monospace",
+          fontFamily: '"Geist Mono", ui-monospace, monospace',
           fontWeight: 700,
           flexShrink: 0,
         }}
