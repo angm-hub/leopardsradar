@@ -153,6 +153,18 @@ export function PlayerEligibilityBlock({ player, bases, selections }: PlayerElig
   const rdcBases = bases.filter((b) => b.nationality_code === "COD");
   const otherSelections = selections.filter((s) => s.federation_code !== "COD");
   const rdcSelections = selections.filter((s) => s.federation_code === "COD");
+
+  // Distinguer les rows placeholder (legacy counter — pas de vraie data par
+  // match) des vraies selections. Marker pose par la migration du 17/05/2026
+  // dans selections.notes ("placeholder=legacy-counter"). Une vraie row de
+  // match n a jamais ce marqueur.
+  const isPlaceholder = (s: DBSelection): boolean =>
+    !!s.notes && s.notes.includes("placeholder=legacy-counter");
+  const realSelections = selections.filter((s) => !isPlaceholder(s));
+  const realRdcOfficialCount = rdcSelections.filter(
+    (s) => !isPlaceholder(s) && s.category === "A_OFFICIAL",
+  ).length;
+  const hasOnlyPlaceholders = selections.length > 0 && realSelections.length === 0;
   const procedure = basisProcedure(player);
   const sources = Array.from(
     new Set(rdcBases.map((b) => b.evidence_url).filter((u): u is string => Boolean(u)))
@@ -287,14 +299,20 @@ export function PlayerEligibilityBlock({ player, bases, selections }: PlayerElig
         </div>
       ) : null}
 
-      {/* Engagements internationaux */}
-      {selections.length > 0 ? (
+      {/* Engagements internationaux.
+          - Si on a des vraies rows (federation officielle, match identifie), on
+            affiche la timeline classique.
+          - Si on n a QUE des placeholders (cas par defaut tant que le scraper
+            par-match n est pas branche), on remplace la liste par une note
+            honnete. Le compteur reel reste accessible via player.caps_rdc en
+            hero. Voir migration 2026-05-17 sur selections.notes. */}
+      {realSelections.length > 0 ? (
         <div className="mt-6 rounded-card border border-border bg-card p-6 md:p-8">
           <h4 className="text-[11px] uppercase tracking-[0.22em] text-muted font-mono mb-4">
-            Engagements internationaux ({selections.length})
+            Engagements internationaux ({realSelections.length})
           </h4>
           <ul className="space-y-2 text-sm">
-            {selections.slice(0, 12).map((s) => (
+            {realSelections.slice(0, 12).map((s) => (
               <li
                 key={s.id}
                 className={cn(
@@ -319,12 +337,24 @@ export function PlayerEligibilityBlock({ player, bases, selections }: PlayerElig
                 </span>
               </li>
             ))}
-            {selections.length > 12 ? (
+            {realSelections.length > 12 ? (
               <li className="text-[11px] text-muted pt-2 italic">
-                + {selections.length - 12} autres sélections
+                + {realSelections.length - 12} autres sélections
               </li>
             ) : null}
           </ul>
+        </div>
+      ) : hasOnlyPlaceholders ? (
+        <div className="mt-6 rounded-card border border-border bg-card p-6 md:p-8">
+          <h4 className="text-[11px] uppercase tracking-[0.22em] text-muted font-mono mb-3">
+            Engagements internationaux
+          </h4>
+          <p className="text-sm text-foreground/75 leading-relaxed">
+            Compteur global :{" "}
+            <span className="font-mono text-foreground">{player.caps_rdc ?? 0}</span>{" "}
+            sélections A en RDC (source Transfermarkt). Détail par match à venir
+            quand le feeder match par match sera branché.
+          </p>
         </div>
       ) : null}
 
@@ -366,9 +396,17 @@ export function PlayerEligibilityBlock({ player, bases, selections }: PlayerElig
         </div>
       ) : null}
 
-      {/* Méta */}
+      {/* Meta : caps officielles selon la source la plus fiable disponible.
+          - Si on a des vraies rows match par match -> realRdcOfficialCount
+          - Sinon -> player.caps_rdc (compteur dénormalisé syncé depuis TM)
+          Evite l incoherence "Caps officielles : 1" alors que le hero affiche 56. */}
       <div className="mt-8 pt-4 border-t border-border-soft flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono uppercase tracking-[0.22em] text-muted">
-        <span>Caps RDC officielles : {rdcSelections.filter((s) => s.category === "A_OFFICIAL").length}</span>
+        <span>
+          Caps RDC officielles :{" "}
+          {realRdcOfficialCount > 0
+            ? realRdcOfficialCount
+            : (player.caps_rdc ?? 0)}
+        </span>
         {player.computed_at ? (
           <span>Recalculé le {formatDateFr(player.computed_at)}</span>
         ) : null}
