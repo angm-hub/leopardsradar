@@ -15,6 +15,7 @@ import { RosterMoversSection } from "@/components/roster/RosterMoversSection";
 import { TopScorersBlock } from "@/components/roster/TopScorersBlock";
 import { TopGABlock } from "@/components/roster/TopGABlock";
 import { DesabreXI } from "@/components/roster/DesabreXI";
+import { SquadFIFA26Block } from "@/components/roster/SquadFIFA26Block";
 import { usePlayers } from "@/hooks/usePlayers";
 import { useHomeStats } from "@/hooks/useHomeStats";
 import { useDocumentMeta } from "@/hooks/useDocumentMeta";
@@ -286,6 +287,7 @@ const Roster = () => {
             précis, les blocs agrégés n'ont plus de sens. */}
         {!filtersActive && (
           <div className="container-site mt-2 mb-6">
+            <SquadFIFA26Block />
             <TopScorersBlock players={players} />
             <TopGABlock players={players} />
             <DesabreXI players={players} />
