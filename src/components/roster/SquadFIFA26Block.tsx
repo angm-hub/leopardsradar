@@ -60,11 +60,16 @@ function SquadRow({ row }: { row: FIFA26PlayerStats }) {
   const { player, stats } = row;
   const tone = sourceTone(stats.source);
   const hasData = stats.source !== "none";
+  const caps = player.caps_rdc ?? 0;
+  const matches = stats.matches ?? null;
+  const goals = stats.goals ?? null;
+  const assists = stats.assists ?? null;
+  const showGA = (goals !== null && goals > 0) || (assists !== null && assists > 0);
 
   return (
     <Link
       to={`/player/${player.slug}`}
-      aria-label={`${player.name} — ${formatMinutes(stats.minutes)} minutes saison 2025-2026`}
+      aria-label={`${player.name} — ${formatMinutes(stats.minutes)} minutes en ${formatStat(matches)} matchs saison 2025-2026, ${caps} sélections RDC`}
       className={cn(
         "group flex items-center gap-3 rounded-lg px-3 py-2.5",
         "border border-border/60 bg-card",
@@ -81,27 +86,52 @@ function SquadRow({ row }: { row: FIFA26PlayerStats }) {
       />
 
       <div className="min-w-0 flex-1">
-        <p className="font-serif text-[13px] font-semibold leading-tight text-foreground truncate group-hover:text-primary transition-colors">
-          {player.name}
-        </p>
+        <div className="flex items-center gap-1.5">
+          <p className="font-serif text-[13px] font-semibold leading-tight text-foreground truncate group-hover:text-primary transition-colors">
+            {player.name}
+          </p>
+          {caps > 0 && (
+            <span
+              title={`${caps} sélections RDC`}
+              className="shrink-0 font-mono text-[9px] tabular-nums text-primary/80 bg-primary/10 px-1.5 py-0.5 rounded leading-none"
+            >
+              {caps}
+            </span>
+          )}
+        </div>
         <p className="text-[10px] text-muted-light truncate mt-0.5">
           {player.current_club ?? "Sans club"}
         </p>
       </div>
 
-      {/* Bloc stats compact — minutes en gros, le reste petit */}
-      <div className="flex items-baseline gap-2 shrink-0 tabular-nums font-mono">
-        <span
-          className={cn(
-            "text-base font-semibold leading-none",
-            hasData ? "text-foreground" : "text-muted/50",
+      {/* Bloc stats : minutes en haut, matchs + G/A en bas */}
+      <div className="flex flex-col items-end shrink-0 tabular-nums font-mono">
+        <div className="flex items-baseline gap-1">
+          <span
+            className={cn(
+              "text-base font-semibold leading-none",
+              hasData ? "text-foreground" : "text-muted/50",
+            )}
+          >
+            {formatMinutes(stats.minutes)}
+          </span>
+          <span className="text-[9px] uppercase tracking-[0.12em] text-muted">
+            min
+          </span>
+        </div>
+        <div className="mt-0.5 text-[9px] text-muted-light flex items-center gap-1.5 leading-none">
+          <span title={`${formatStat(matches)} matchs`}>
+            {formatStat(matches)}m
+          </span>
+          {showGA && (
+            <>
+              <span className="text-muted/40" aria-hidden>·</span>
+              <span title={`${formatStat(goals)} buts ${formatStat(assists)} passes`} className="text-primary/70">
+                {formatStat(goals)}G {formatStat(assists)}A
+              </span>
+            </>
           )}
-        >
-          {formatMinutes(stats.minutes)}
-        </span>
-        <span className="text-[9px] uppercase tracking-[0.12em] text-muted">
-          min
-        </span>
+        </div>
       </div>
 
       {/* Source indicator — discret */}
