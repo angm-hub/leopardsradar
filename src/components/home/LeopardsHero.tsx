@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/ButtonPrimitive";
 import { Pill } from "@/components/ui/Pill";
+import { TextRevealWords, TextRevealMask } from "@/components/motion";
 
 // Lazy : le shader Paper pèse ~30 kB gzip (WebGL). On le sort du bundle main
 // pour préserver le LCP. Pendant le chargement (~200ms cache cold), un fond
@@ -201,19 +202,25 @@ export function LeopardsHero() {
           {/* H1 — Geist display tracking serré -4.5%, line-height 0.92 (brand
               book Premium v2). Mobile : 4xl pour éviter le break "footbal/l"
               sur 390px. md+ : 7xl/8xl pour l'impact silencieux du brand book. */}
-          {/* H1 — Geist display tracking serre -4.5%, line-height 0.92 (brand
-              book Premium v2). Le span gradient sur "football congolais." est
-              preserve intact. L'anim utilise itemVariants (fade + slide-up) :
-              TextRevealWords par mot casse le gradient bg-clip-text car chaque
-              span inline-block enfant perd le contexte de clip du parent. */}
+          {/* H1 — pattern hybride :
+              - "Toute la data du" : TextRevealWords (split par mot avec blur, ORA-style)
+              - "football congolais." : TextRevealMask (slide-up sans fragmenter,
+                permet de conserver le bg-clip-text gradient intact)
+              Le motion.h1 wrapper hereite itemVariants pour declencher la
+              cascade des anims enfants. */}
           <motion.h1
             variants={itemVariants}
             className="display-heading text-4xl sm:text-5xl md:text-7xl lg:text-8xl text-balance text-foreground"
           >
-            Toute la data du{" "}
-            <span className="bg-gradient-to-r from-foreground via-primary to-foreground/70 bg-clip-text text-transparent">
-              football congolais.
-            </span>
+            <TextRevealWords as="span" delay={0.15} stagger={0.06} blur>
+              Toute la data du
+            </TextRevealWords>
+            {" "}
+            <TextRevealMask delay={0.55} duration={1.0}>
+              <span className="bg-gradient-to-r from-foreground via-primary to-foreground/70 bg-clip-text text-transparent">
+                football congolais.
+              </span>
+            </TextRevealMask>
           </motion.h1>
 
           <motion.p
