@@ -4,7 +4,6 @@ import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/ButtonPrimitive";
 import { Pill } from "@/components/ui/Pill";
-import { TextRevealWords } from "@/components/motion";
 
 // Lazy : le shader Paper pèse ~30 kB gzip (WebGL). On le sort du bundle main
 // pour préserver le LCP. Pendant le chargement (~200ms cache cold), un fond
@@ -202,25 +201,20 @@ export function LeopardsHero() {
           {/* H1 — Geist display tracking serré -4.5%, line-height 0.92 (brand
               book Premium v2). Mobile : 4xl pour éviter le break "footbal/l"
               sur 390px. md+ : 7xl/8xl pour l'impact silencieux du brand book. */}
-          {/* H1 — reveal mot-par-mot ORA-style (blur + slide-up + stagger).
-              Le span gradient sur "football congolais." est preserve via une
-              seconde instance TextRevealWords avec delay et className gradient.
-              Le motion.h1 wrapper est supprime : TextRevealWords gere l'anim. */}
-          <h1 className="display-heading text-4xl sm:text-5xl md:text-7xl lg:text-8xl text-balance text-foreground">
-            <TextRevealWords as="span" delay={0.15} stagger={0.06} blur>
-              Toute la data du
-            </TextRevealWords>
-            {" "}
-            <TextRevealWords
-              as="span"
-              delay={0.5}
-              stagger={0.06}
-              blur
-              className="bg-gradient-to-r from-foreground via-primary to-foreground/70 bg-clip-text text-transparent"
-            >
+          {/* H1 — Geist display tracking serre -4.5%, line-height 0.92 (brand
+              book Premium v2). Le span gradient sur "football congolais." est
+              preserve intact. L'anim utilise itemVariants (fade + slide-up) :
+              TextRevealWords par mot casse le gradient bg-clip-text car chaque
+              span inline-block enfant perd le contexte de clip du parent. */}
+          <motion.h1
+            variants={itemVariants}
+            className="display-heading text-4xl sm:text-5xl md:text-7xl lg:text-8xl text-balance text-foreground"
+          >
+            Toute la data du{" "}
+            <span className="bg-gradient-to-r from-foreground via-primary to-foreground/70 bg-clip-text text-transparent">
               football congolais.
-            </TextRevealWords>
-          </h1>
+            </span>
+          </motion.h1>
 
           <motion.p
             variants={itemVariants}
