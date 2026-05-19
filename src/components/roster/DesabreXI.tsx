@@ -21,6 +21,7 @@ import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
 import { POSITION_LABEL } from "@/lib/playerHelpers";
 import { useDesabreXI, type DesabreSlot } from "@/hooks/useDesabreXI";
 import type { DBPlayer, DBPosition } from "@/types/dbPlayer";
+import { RevealOnScroll } from "@/components/motion";
 
 // ─── Types communs ────────────────────────────────────────────────────────────
 
@@ -372,6 +373,7 @@ export function DesabreXI({ players }: DesabreXIProps) {
 
   return (
     <section aria-labelledby="desabre-xi-heading" className="mb-10">
+    <RevealOnScroll y={28}>
       {/* En-tete + toggle */}
       <div className="mb-5 flex items-start justify-between gap-4 flex-wrap">
         <div>
@@ -472,6 +474,7 @@ export function DesabreXI({ players }: DesabreXIProps) {
           ? `Source : Transfermarkt · compositions depuis le 07/08/2022 · % = frequence de titularisation`
           : "Algo : score Leopards (level_score) puis valeur marchande Transfermarkt, par poste."}
       </p>
+    </RevealOnScroll>
     </section>
   );
 }

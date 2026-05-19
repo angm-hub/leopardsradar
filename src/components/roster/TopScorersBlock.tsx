@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
 import { POSITION_LABEL } from "@/lib/playerHelpers";
 import type { DBPlayer } from "@/types/dbPlayer";
+import { RevealOnScroll, RevealOnScrollItem } from "@/components/motion";
 
 interface TopScorersBlockProps {
   players: DBPlayer[];
@@ -130,7 +131,7 @@ export function TopScorersBlock({ players }: TopScorersBlockProps) {
   return (
     <section aria-labelledby="top-buteurs-heading" className="mb-10">
       {/* En-tête */}
-      <div className="mb-5 flex items-end justify-between gap-4">
+      <RevealOnScroll className="mb-5 flex items-end justify-between gap-4" y={20}>
         <div>
           <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary/80">
             Stats · Saison 25-26
@@ -142,20 +143,20 @@ export function TopScorersBlock({ players }: TopScorersBlockProps) {
             Top buteurs Leopards
           </h2>
         </div>
-      </div>
+      </RevealOnScroll>
 
       {/* Grid — scroll horizontal sur mobile, 5 cols sur desktop */}
-      <div
-        role="list"
+      <RevealOnScroll
         className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory md:mx-0 md:px-0 md:grid md:grid-cols-5 md:overflow-x-visible md:pb-0"
-        style={{ scrollbarWidth: "none" }}
+        staggerChildren={0.09}
+        y={24}
       >
         {top5.map((p, i) => (
-          <div key={p.id} role="listitem" className="snap-start">
+          <RevealOnScrollItem key={p.id} className="snap-start">
             <ScorerCard player={p} rank={i + 1} />
-          </div>
+          </RevealOnScrollItem>
         ))}
-      </div>
+      </RevealOnScroll>
 
       {/* Mention fraicheur */}
       <p className="mt-3 text-[10px] font-mono text-muted" aria-live="polite">

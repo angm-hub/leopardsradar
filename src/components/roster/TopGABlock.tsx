@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
 import { POSITION_LABEL } from "@/lib/playerHelpers";
 import type { DBPlayer } from "@/types/dbPlayer";
+import { RevealOnScroll, RevealOnScrollItem } from "@/components/motion";
 
 interface TopGABlockProps {
   players: DBPlayer[];
@@ -122,7 +123,7 @@ export function TopGABlock({ players }: TopGABlockProps) {
   return (
     <section aria-labelledby="top-ga-heading" className="mb-10">
       {/* En-tête */}
-      <div className="mb-5">
+      <RevealOnScroll className="mb-5" y={20}>
         <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-success/80">
           Stats · Saison 25-26
         </p>
@@ -135,20 +136,20 @@ export function TopGABlock({ players }: TopGABlockProps) {
         <p className="mt-1 text-xs text-muted-light">
           Buts + passes decisives. Joueurs de nationalite RDC en activite.
         </p>
-      </div>
+      </RevealOnScroll>
 
       {/* Grid — scroll horizontal mobile, 5 cols desktop */}
-      <div
-        role="list"
+      <RevealOnScroll
         className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory md:mx-0 md:px-0 md:grid md:grid-cols-5 md:overflow-x-visible md:pb-0"
-        style={{ scrollbarWidth: "none" }}
+        staggerChildren={0.09}
+        y={24}
       >
         {top5.map((p, i) => (
-          <div key={p.id} role="listitem" className="snap-start">
+          <RevealOnScrollItem key={p.id} className="snap-start">
             <GACard player={p} rank={i + 1} />
-          </div>
+          </RevealOnScrollItem>
         ))}
-      </div>
+      </RevealOnScroll>
 
       <p className="mt-3 text-[10px] font-mono text-muted">
         Source : FBRef · Mise a jour le {today}

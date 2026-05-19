@@ -4,12 +4,12 @@ import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/ButtonPrimitive";
 import { Pill } from "@/components/ui/Pill";
-import { RDCConstellation } from "@/components/ui/RDCConstellation";
+import { TextRevealWords } from "@/components/motion";
 
 // Lazy : le shader Paper pèse ~30 kB gzip (WebGL). On le sort du bundle main
-// pour préserver le LCP. Pendant le chargement (~200ms cache cold), la
-// RDCConstellation SVG sert de fallback — même intention de signature
-// territoriale, zéro flash.
+// pour préserver le LCP. Pendant le chargement (~200ms cache cold), un fond
+// dark uni sert de fallback — couche unique d'atmosphere, le shader fait
+// tout le travail visuel.
 const LeopardsGrainBackground = lazy(() =>
   import("@/components/ui/LeopardsGrainBackground").then((m) => ({
     default: m.LeopardsGrainBackground,
@@ -174,44 +174,17 @@ export function LeopardsHero() {
 
   return (
     <section className="relative min-h-[100dvh] overflow-hidden bg-background">
-      {/* Atmosphère Cobalt — première couche cinématique du brand book Premium v2.
-          Trois radial-gradients superposés (mist haut-gauche, deep bas-droit,
-          floor) sur linear cobalt 700→900→void. Remplace l'ancien blob vert
-          #00A651 par la signature territoriale cobalt (drapeau RDC désaturé). */}
-      <div aria-hidden className="absolute inset-0 atmos-jade" />
-
-      {/* Shader Paper Design (grain gradient blob WebGL) conservé — il ajoute
-          une 2e couche de profondeur cinétique au-dessus de l'atmosphère
-          statique. Lazy pour préserver le LCP. Fallback constellation SVG
-          si le shader rate son chargement. */}
-      <Suspense fallback={<RDCConstellation />}>
+      {/* Unique couche atmosphere : shader Paper Design (grain gradient blob WebGL).
+          Lazy pour preserver le LCP. Fallback minimal (background dark) si le
+          shader rate. On a retire atmos-jade / grain SVG / vignette / constellation
+          pour laisser l'aspect plus calme et premium type ORA — une seule couche
+          lumineuse anime sur fond noir. */}
+      <Suspense fallback={<div aria-hidden className="absolute inset-0 bg-background" />}>
         <LeopardsGrainBackground />
       </Suspense>
 
-      {/* Grain SVG inline — texture qui casse le flat des gradients. Brand
-          book pattern : opacity 0.35 sur grain standard, 0.18 sur grain-soft.
-          Mix-blend-mode overlay pour ne pas laver les ombres. */}
-      <div
-        aria-hidden
-        className="absolute inset-0 pointer-events-none mix-blend-overlay opacity-[0.18]"
-        style={{
-          backgroundImage:
-            "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1, 0 0 0 0 1, 0 0 0 0 1, 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E\")",
-        }}
-      />
-
-      {/* Vignette cinéma : assombrissement subtil aux bords pour focaliser
-          l'œil sur le centre. Brand book = "silence is the design". */}
-      <div
-        aria-hidden
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 80% 80% at 50% 50%, transparent 30%, rgba(5,11,26,0.55) 90%)",
-        }}
-      />
-
-      <div className="absolute inset-0 bg-gradient-to-b from-background/10 via-background/55 to-background pointer-events-none" />
+      {/* Fade vers le bas pour relier au reste de la page sans rupture. */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background pointer-events-none" />
 
       <div className="container-site relative z-10 flex min-h-[100dvh] items-center py-24">
         <motion.div
@@ -229,15 +202,25 @@ export function LeopardsHero() {
           {/* H1 — Geist display tracking serré -4.5%, line-height 0.92 (brand
               book Premium v2). Mobile : 4xl pour éviter le break "footbal/l"
               sur 390px. md+ : 7xl/8xl pour l'impact silencieux du brand book. */}
-          <motion.h1
-            variants={itemVariants}
-            className="display-heading text-4xl sm:text-5xl md:text-7xl lg:text-8xl text-balance text-foreground"
-          >
-            Toute la data du{" "}
-            <span className="bg-gradient-to-r from-foreground via-primary to-foreground/70 bg-clip-text text-transparent">
+          {/* H1 — reveal mot-par-mot ORA-style (blur + slide-up + stagger).
+              Le span gradient sur "football congolais." est preserve via une
+              seconde instance TextRevealWords avec delay et className gradient.
+              Le motion.h1 wrapper est supprime : TextRevealWords gere l'anim. */}
+          <h1 className="display-heading text-4xl sm:text-5xl md:text-7xl lg:text-8xl text-balance text-foreground">
+            <TextRevealWords as="span" delay={0.15} stagger={0.06} blur>
+              Toute la data du
+            </TextRevealWords>
+            {" "}
+            <TextRevealWords
+              as="span"
+              delay={0.5}
+              stagger={0.06}
+              blur
+              className="bg-gradient-to-r from-foreground via-primary to-foreground/70 bg-clip-text text-transparent"
+            >
               football congolais.
-            </span>
-          </motion.h1>
+            </TextRevealWords>
+          </h1>
 
           <motion.p
             variants={itemVariants}
