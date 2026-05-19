@@ -21,6 +21,7 @@ import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
 import { useFifa26Stats, type FIFA26PlayerStats, type StatsSource } from "@/hooks/useFifa26Stats";
 import { FIFA26_SQUAD, GROUP_LABEL_FR, GROUP_ORDER } from "@/lib/fifa26Squad";
 import type { DBPosition } from "@/types/dbPlayer";
+import { RevealOnScroll, RevealOnScrollItem, TextRevealWords } from "@/components/motion";
 
 // Resolution du groupe FECOFA (Mbuku/Cipenga annonces milieux mais DB Attack).
 const FIFA26_GROUP_LOOKUP = new Map<number, DBPosition>(
@@ -249,7 +250,7 @@ export function SquadFIFA26Block() {
 
   return (
     <section aria-labelledby="liste-fifa26-heading" className="mb-10">
-      <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+      <RevealOnScroll className="mb-5 flex flex-wrap items-end justify-between gap-3" y={20}>
         <div>
           <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary/80">
             La Liste FIFA · 26 selectionnes
@@ -258,7 +259,9 @@ export function SquadFIFA26Block() {
             id="liste-fifa26-heading"
             className="mt-1.5 font-serif text-2xl font-semibold tracking-tight text-foreground"
           >
-            Temps de jeu saison 2025-26
+            <TextRevealWords as="span" stagger={0.05} startOnView blur>
+              Temps de jeu saison 2025-26
+            </TextRevealWords>
           </h2>
         </div>
 
@@ -284,7 +287,7 @@ export function SquadFIFA26Block() {
             )}
           </div>
         )}
-      </div>
+      </RevealOnScroll>
 
       {error && (
         <p className="mb-3 text-xs text-blood">Erreur de chargement : {error}</p>
@@ -293,13 +296,21 @@ export function SquadFIFA26Block() {
       {loading ? (
         <SquadSkeleton />
       ) : (
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+        <RevealOnScroll
+          className="grid gap-6 md:grid-cols-2 xl:grid-cols-4"
+          staggerChildren={0.12}
+          y={28}
+        >
           {GROUP_ORDER.map((g) => {
             const rows = grouped.get(g) ?? [];
             if (rows.length === 0) return null;
-            return <GroupColumn key={g} group={g} rows={rows} />;
+            return (
+              <RevealOnScrollItem key={g}>
+                <GroupColumn group={g} rows={rows} />
+              </RevealOnScrollItem>
+            );
           })}
-        </div>
+        </RevealOnScroll>
       )}
 
       <p className="mt-4 text-[10px] font-mono text-muted" aria-live="polite">

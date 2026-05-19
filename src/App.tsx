@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Home from "./pages/Home.tsx";
 import { PromoBanner } from "./components/layout/PromoBanner";
+import { SmoothScroll } from "@/components/motion";
 
 /**
  * Route-level code splitting.
@@ -56,6 +57,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
+      <SmoothScroll>
       <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, "")}>
         {/* Skip-to-content link — invisible until focused via keyboard
             (Tab on page load). Required for WCAG 2.1 AA. Skips Navbar +
@@ -113,6 +115,7 @@ const App = () => (
           </Routes>
         </Suspense>
       </BrowserRouter>
+      </SmoothScroll>
     </TooltipProvider>
   </QueryClientProvider>
 );

@@ -9,6 +9,7 @@ import {
   formatMarketValue,
 } from "@/lib/playerHelpers";
 import type { DBPlayer } from "@/types/dbPlayer";
+import { RevealOnScroll, RevealOnScrollItem } from "@/components/motion";
 
 interface RosterHeroProps {
   players: DBPlayer[];
@@ -37,11 +38,17 @@ export function RosterHero({ players }: RosterHeroProps) {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
+      <RevealOnScroll
+        className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6"
+        staggerChildren={0.14}
+        y={36}
+      >
         {top.map((p, idx) => (
-          <HeroCard key={p.slug} player={p} rank={idx + 1} />
+          <RevealOnScrollItem key={p.slug}>
+            <HeroCard player={p} rank={idx + 1} />
+          </RevealOnScrollItem>
         ))}
-      </div>
+      </RevealOnScroll>
     </section>
   );
 }
