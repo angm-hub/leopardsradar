@@ -157,7 +157,10 @@ def main():
                 "height_cm": tm_player.height_cm,
                 "foot": tm_player.foot,
                 "position": tm_player.position,
-                "current_club": tm_player.current_club_name,
+                # TM renvoie "Without Club" / "Retired" en anglais : on
+                # normalise en francais pour l'affichage public.
+                "current_club": {"Without Club": "Sans club", "Retired": "Retraité"}.get(
+                    tm_player.current_club_name, tm_player.current_club_name),
                 "current_club_id": tm_player.current_club_id,
                 "contract_expires": tm_player.contract_expires,
                 "market_value_eur": tm_player.market_value_eur,
