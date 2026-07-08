@@ -47,3 +47,14 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
           commit_message: "deploy: ${{ github.event.head_commit.message }}"
+
+      # Vercel rebuild de son cote (base "/", VERCEL=1) : on ne pousse pas
+      # le dist gh-pages, on delegue le build a Vercel via le CLI.
+      # Connexion Git native impossible tant que le compte Vercel n'a pas
+      # de Login Connection GitHub : ce step fait le meme travail.
+      - name: Deploy to Vercel (production)
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: team_WgOfSMY7ogd7xGB0x3wLq71C
+          VERCEL_PROJECT_ID: prj_qgMxFIeeRzKk5oYqAK0gkATIKlSU
+        run: npx -y vercel@latest deploy --prod --yes --token "$VERCEL_TOKEN"

@@ -23,7 +23,14 @@ import { resolve } from "node:path";
 const ROOT = process.cwd();
 const ENV_PATH = resolve(ROOT, ".env");
 const DIST_PATH = resolve(ROOT, "dist", "sitemap.xml");
-const SITE_BASE = "https://angm-hub.github.io/leopardsradar";
+// URL canonique selon l'hebergeur : Vercel injecte VERCEL=1 au build.
+// Quand le domaine custom sera en place, definir SITE_BASE dans les env
+// vars du projet Vercel et tout suivra.
+const SITE_BASE =
+  process.env.SITE_BASE ??
+  (process.env.VERCEL
+    ? "https://leopardsradar.vercel.app"
+    : "https://angm-hub.github.io/leopardsradar");
 
 // ── Pages statiques + leur priorité SEO ─────────────────────────────────────
 // Priority : 1.0 (home) → 0.9 (sections produit principales) → 0.7 (éditorial)

@@ -3,14 +3,22 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 
+// GitHub Pages sert le site sous /leopardsradar/ ; Vercel le sert a la
+// racine. Vercel injecte VERCEL=1 dans l'env de build : on en deduit la
+// base. Sans ca, tous les assets 404 sur l'un ou l'autre des deux hotes.
+function resolveBase(mode: string): string {
+  if (mode !== "production") return "/";
+  return process.env.VERCEL ? "/" : "/leopardsradar/";
+}
+
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  // GitHub Pages serves the site under /leopardsradar/. Without an explicit
-  // base, asset URLs are emitted as relative paths and resolve incorrectly
-  // on deep routes (e.g. /leopardsradar/player/<slug> → 404 on assets).
-  // The BrowserRouter in App.tsx already reads import.meta.env.BASE_URL,
-  // so setting base here also fixes router resolution on GH Pages.
-  base: mode === "production" ? "/leopardsradar/" : "/",
+  // Without an explicit base, asset URLs are emitted as relative paths and
+  // resolve incorrectly on deep routes (e.g. /player/<slug> → 404 on
+  // assets). The BrowserRouter in App.tsx already reads
+  // import.meta.env.BASE_URL, so setting base here also fixes router
+  // resolution on both hosts.
+  base: resolveBase(mode),
   server: {
     host: "::",
     port: 8080,
@@ -29,10 +37,22 @@ export default defineConfig(({ mode }) => ({
     {
       name: "rewrite-relative-public-paths",
       transformIndexHtml(html: string) {
-        const base = mode === "production" ? "/leopardsradar/" : "/";
-        return html
+        const base = resolveBase(mode);
+        let out = html
           .replace(/href="\.\/fonts\.css"/g, `href="${base}fonts.css"`)
           .replace(/href="\.\/fonts\//g, `href="${base}fonts/`);
+        // Les meta og:url / og:image / twitter:image de index.html pointent
+        // sur GH Pages. Sur un build Vercel, on les fait suivre vers l'hote
+        // servi (SITE_BASE surchargera quand le domaine custom arrivera).
+        if (process.env.VERCEL) {
+          const siteBase =
+            process.env.SITE_BASE ?? "https://leopardsradar.vercel.app";
+          out = out.replaceAll(
+            "https://angm-hub.github.io/leopardsradar",
+            siteBase,
+          );
+        }
+        return out;
       },
     },
   ].filter(Boolean),
