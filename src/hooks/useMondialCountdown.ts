@@ -7,8 +7,8 @@ import { useEffect, useState } from "react";
  * On stocke la date en UTC midi (12:00) pour éviter les pirouettes timezone
  * autour des changements de jour.
  */
-const KICKOFF_ISO = "2026-06-11T17:00:00Z"; // 11 juin 2026 — Mexico City inaugural
-const TOURNAMENT_END_ISO = "2026-07-19T23:00:00Z"; // 19 juillet 2026 — finale
+const KICKOFF_ISO = "2026-06-11T17:00:00Z"; // 11 juin 2026 · Mexico City inaugural
+const TOURNAMENT_END_ISO = "2026-07-19T23:00:00Z"; // 19 juillet 2026 · finale
 
 export type MondialPhase = "before" | "during" | "after";
 

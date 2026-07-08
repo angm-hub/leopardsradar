@@ -119,7 +119,7 @@ export function PromoBanner() {
           }}
         >
           <Link
-            to="/ma-liste"
+            to={phase === "before" ? "/ma-liste" : "/mondial-2026"}
             onClick={handleClickThrough}
             className="group relative block"
           >
@@ -131,7 +131,7 @@ export function PromoBanner() {
                 {phase === "before" ? (
                   <>
                     <span className="font-medium">
-                      Mondial 2026 — coup d'envoi le {kickoffDateLabel}.
+                      Mondial 2026 · coup d'envoi le {kickoffDateLabel}.
                     </span>
                     <span className="ml-2 hidden text-white/80 sm:inline">
                       Compose ta liste des 26.
@@ -139,11 +139,11 @@ export function PromoBanner() {
                   </>
                 ) : phase === "during" ? (
                   <span className="font-medium">
-                    Léopards au Mondial 2026 — suis-les en direct.
+                    Le Mondial des Léopards · le parcours match par match.
                   </span>
                 ) : (
                   <span className="font-medium">
-                    Mondial 2026 terminé — bilan et héritage.
+                    Mondial 2026 · le bilan des Léopards.
                   </span>
                 )}
                 <span

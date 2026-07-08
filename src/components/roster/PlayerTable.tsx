@@ -32,22 +32,22 @@ const SECTION_META: Record<
 };
 
 const formatBirthShort = (iso: string | null): string => {
-  if (!iso) return "—";
+  if (!iso) return "n.d.";
   const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return "—";
+  if (Number.isNaN(d.getTime())) return "n.d.";
   return d.toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "2-digit" });
 };
 
 const formatFoot = (foot: string | null): string => {
-  if (!foot) return "—";
+  if (!foot) return "n.d.";
   if (foot === "left") return "G";
   if (foot === "right") return "D";
   if (foot === "both") return "Amb";
-  return "—";
+  return "n.d.";
 };
 
 const formatValueShort = (eur: number | null): string => {
-  if (!eur || eur <= 0) return "—";
+  if (!eur || eur <= 0) return "n.d.";
   if (eur >= 1_000_000) return `${(eur / 1_000_000).toFixed(eur >= 10_000_000 ? 0 : 1)} M€`;
   if (eur >= 1_000) return `${Math.round(eur / 1_000)} k€`;
   return `${eur} €`;
@@ -185,7 +185,7 @@ export function PlayerTable({ position, players }: PlayerTableProps) {
                   ) : null}
                 </div>
                 <p className="text-[10px] text-muted truncate font-mono">
-                  {p.current_club ?? "—"} · {p.age ? `${p.age} ans` : "—"}
+                  {p.current_club ?? "n.d."} · {p.age ? `${p.age} ans` : "n.d."}
                 </p>
               </div>
               <span className="text-[11px] font-mono text-primary/90 shrink-0">
@@ -286,7 +286,7 @@ function PlayerTableRow({ player, rank, isTop, animDelay }: RowProps) {
               {POSITION_LABEL[player.position].slice(0, 3)}
             </span>
           ) : (
-            <span className="text-muted">—</span>
+            <span className="text-muted">n.d.</span>
           )}
         </span>
 
@@ -298,7 +298,7 @@ function PlayerTableRow({ player, rank, isTop, animDelay }: RowProps) {
 
         {/* Taille */}
         <span className="font-mono text-[11px] text-muted-light text-right">
-          {player.height_cm ? `${player.height_cm}` : "—"}
+          {player.height_cm ? `${player.height_cm}` : "n.d."}
         </span>
 
         {/* Pied */}
@@ -308,7 +308,7 @@ function PlayerTableRow({ player, rank, isTop, animDelay }: RowProps) {
 
         {/* Club */}
         <span className="text-xs text-foreground/85 truncate">
-          {player.current_club ?? "—"}
+          {player.current_club ?? "n.d."}
         </span>
 
         {/* Caps */}

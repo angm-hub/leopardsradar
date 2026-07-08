@@ -36,7 +36,7 @@ export default function ComparePage() {
   useDocumentMeta({
     title: "Comparateur",
     description:
-      "Compare deux Léopards côte à côte — six axes statistiques, lecture des écarts, suggestions de paires.",
+      "Compare deux Léopards côte à côte · six axes statistiques, lecture des écarts, suggestions de paires.",
   });
 
   const { player: playerA, loading: loadingA } = usePlayerBySlug(slugA);
@@ -84,7 +84,7 @@ export default function ComparePage() {
             </p>
           ) : (
             <p className="mt-4 max-w-2xl text-muted-light">
-              Choisissez deux profils — radar, roster ou héritage — pour
+              Choisissez deux profils · radar, roster ou héritage · pour
               superposer leurs hexagones et lire les écarts axe par axe.
               Vous pouvez partager le lien pour discuter d'un duel.
             </p>
@@ -277,13 +277,13 @@ const SUGGESTED_DUELS: Array<{
     slugA: "castello-lukeba",
     slugB: "ngalayel-mukau",
     title: "Lukeba vs. Mukau",
-    why: "Deux pépites premium — un défenseur RB Leipzig face à un milieu LOSC.",
+    why: "Deux pépites premium · un défenseur RB Leipzig face à un milieu LOSC.",
   },
   {
     slugA: "stephy-mavididi",
     slugB: "samuel-mbangula",
     title: "Mavididi vs. Mbangula",
-    why: "Deux ailiers productifs — Leicester face à Brême sur la même saison.",
+    why: "Deux ailiers productifs · Leicester face à Brême sur la même saison.",
   },
 ];
 
@@ -317,7 +317,7 @@ function SetupHints({
         </div>
         <p className="mt-2 text-sm text-muted-light max-w-xl">
           Pour démarrer, voici trois confrontations qui montrent l'intérêt
-          du comparateur — entre profils du même poste comme à travers les
+          du comparateur · entre profils du même poste comme à travers les
           lignes.
         </p>
         <div className="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-3">

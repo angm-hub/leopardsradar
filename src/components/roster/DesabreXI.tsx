@@ -102,7 +102,7 @@ function RealPlayerPin({
         "group focus-visible:outline-none",
       )}
       style={{ left: `${slot_def.x}%`, top: `${slot_def.y}%` }}
-      aria-label={`${player_slot.player_name} — ${POSITION_LABEL[slot_def.pos as DBPosition] ?? slot_def.label} — ${player_slot.appearances_total} titularisations`}
+      aria-label={`${player_slot.player_name} · ${POSITION_LABEL[slot_def.pos as DBPosition] ?? slot_def.label} · ${player_slot.appearances_total} titularisations`}
     >
       <div className="relative">
         <PlayerAvatar
@@ -146,7 +146,7 @@ function AlgoPlayerPin({
         "group focus-visible:outline-none",
       )}
       style={{ left: `${slot.x}%`, top: `${slot.y}%` }}
-      aria-label={`${player.name} — ${POSITION_LABEL[slot.pos] ?? slot.label}`}
+      aria-label={`${player.name} · ${POSITION_LABEL[slot.pos] ?? slot.label}`}
     >
       <div className="relative">
         <PlayerAvatar
@@ -319,7 +319,7 @@ function AlgoGridView({
                       {player.name}
                     </p>
                     <p className="font-mono text-[9px] text-muted-light truncate">
-                      {player.current_club ?? "—"}
+                      {player.current_club ?? "n.d."}
                     </p>
                   </div>
                 </Link>

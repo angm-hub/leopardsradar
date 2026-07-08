@@ -70,7 +70,7 @@ export default function Methodologie() {
             ce qui apparaît ailleurs sur le site : d'où viennent les chiffres,
             comment ils sont pondérés, ce qui manque encore, et comment
             signaler une erreur. C'est volontairement plus long qu'un
-            disclaimer — c'est ce qui sépare une référence d'un agrégat
+            disclaimer · c'est ce qui sépare une référence d'un agrégat
             anonyme.
           </p>
         </section>
@@ -116,12 +116,12 @@ export default function Methodologie() {
               </p>
               <ol>
                 <li>
-                  <strong>Transfermarkt</strong> — état civil, club actuel, valeur
+                  <strong>Transfermarkt</strong> · état civil, club actuel, valeur
                   marchande, contrat, agent, photo. C'est notre source maître pour
                   tout ce qui touche à la carte d'identité du joueur.
                 </li>
                 <li>
-                  <strong>football-data.org</strong> — statistiques de saison
+                  <strong>football-data.org</strong> · statistiques de saison
                   (matchs, buts, passes décisives, minutes) pour les joueurs
                   évoluant dans les 12 compétitions majeures couvertes par
                   l'API : Premier League, LaLiga, Bundesliga, Serie A, Ligue 1,
@@ -129,11 +129,11 @@ export default function Methodologie() {
                   Brasileirão, Mondial, Euro.
                 </li>
                 <li>
-                  <strong>Fédération RDC + sources locales</strong> — sélections
+                  <strong>Fédération RDC + sources locales</strong> · sélections
                   officielles, palmarès, déclarations publiques d'éligibilité.
                 </li>
                 <li>
-                  <strong>Curating manuel</strong> — pour les joueurs hors
+                  <strong>Curating manuel</strong> · pour les joueurs hors
                   périmètre des trois sources ci-dessus (Linafoot, championnats
                   africains autres que les sud-africain et nord-africain
                   premières divisions, jeunes catégories), nous saisissons
@@ -142,7 +142,7 @@ export default function Methodologie() {
               </ol>
               <p>
                 Quand une donnée est manquante, nous affichons{" "}
-                <code>—</code> plutôt qu'un zéro. C'est moins joli, mais c'est
+                <code>n.d.</code> plutôt qu'un zéro. C'est moins joli, mais c'est
                 honnête.
               </p>
             </Prose>
@@ -167,7 +167,7 @@ export default function Methodologie() {
               </ul>
               <p>
                 Entre deux éditions, le site reste en consultation. Aucune
-                statistique n'est modifiée à la volée — la stabilité des
+                statistique n'est modifiée à la volée · la stabilité des
                 données prime sur la fraîcheur.
               </p>
               <h3>Pipeline automatique</h3>
@@ -182,7 +182,7 @@ export default function Methodologie() {
                 apparaissent dans ces classements voient leurs champs
                 <code> goals </code>, <code> assists </code> et
                 <code> matchs joués </code> mis à jour automatiquement. Le
-                reste — minutes exactes, statistiques défensives, gardiens —
+                reste · minutes exactes, statistiques défensives, gardiens :
                 reste manuel ou à venir avec une intégration ultérieure.
               </p>
             </Prose>
@@ -227,31 +227,31 @@ export default function Methodologie() {
 
               <h3>Les 2 axes par poste</h3>
               <p className="text-sm">
-                Voir les recettes complètes dans le code source — fichier{" "}
+                Voir les recettes complètes dans le code source · fichier{" "}
                 <code>src/lib/playerScores.ts</code>. Brièvement :
               </p>
               <ul>
                 <li>
-                  <strong>Attaquant</strong> — Finition (buts/90, cible 1.0) +
+                  <strong>Attaquant</strong> · Finition (buts/90, cible 1.0) +
                   Création (passes décisives/90, cible 0.4)
                 </li>
                 <li>
-                  <strong>Milieu</strong> — Création (passes décisives/90, cible
+                  <strong>Milieu</strong> · Création (passes décisives/90, cible
                   0.4) + Activité (tackles + interceptions/90, à venir)
                 </li>
                 <li>
-                  <strong>Défenseur</strong> — Solidité (buts contre/90 inversé,
+                  <strong>Défenseur</strong> · Solidité (buts contre/90 inversé,
                   à venir) + Construction (passes complétées %, à venir)
                 </li>
                 <li>
-                  <strong>Gardien</strong> — Clean sheets % + Buts encaissés/90
+                  <strong>Gardien</strong> · Clean sheets % + Buts encaissés/90
                   inversé (les deux à venir avec la prochaine intégration de
                   données)
                 </li>
               </ul>
               <p>
                 Quand un axe attend une donnée que nous n'avons pas encore,
-                il s'affiche <code>—</code> et le polygone se replie au centre
+                il s'affiche <code>n.d.</code> et le polygone se replie au centre
                 pour cet axe. L'indice central (moyenne) ne s'affiche que si
                 au moins quatre axes sur six sont disponibles, sinon il serait
                 trompeur.
@@ -268,7 +268,7 @@ export default function Methodologie() {
             <Prose>
               <p>
                 Chaque joueur reçoit un <strong>score composite de 0 à 100</strong> qui
-                reflète son niveau de jeu réel — pas une note éditoriale subjective.
+                reflète son niveau de jeu réel · pas une note éditoriale subjective.
                 Ce score est <strong>public</strong> : il apparaît sur la fiche de chaque
                 joueur, sur les cards du Roster et du Radar, et se met à jour
                 automatiquement chaque nuit.
@@ -365,7 +365,7 @@ export default function Methodologie() {
                   <tr>
                     <td className="py-3 pr-4 font-semibold text-muted-light align-top">Developing</td>
                     <td className="py-3 pr-4 font-mono text-foreground/80 align-top">20 – 39</td>
-                    <td className="py-3 pr-4 text-foreground/75 align-top">Jeune en progression dans un championnat de niveau 2 ou 3 — profil à suivre</td>
+                    <td className="py-3 pr-4 text-foreground/75 align-top">Jeune en progression dans un championnat de niveau 2 ou 3 · profil à suivre</td>
                     <td className="py-3 text-foreground/75 align-top">Engwanda, Mavissa</td>
                   </tr>
                   <tr>
@@ -447,7 +447,7 @@ export default function Methodologie() {
                 <Dl label="Caps RDC" formula="" rationale="Nombre de matchs A officiels disputés avec la RDC depuis le début de la carrière." />
                 <Dl label="Diaspora" formula="" rationale="Joueur né hors RDC mais éligible via ascendance directe (parent ou grand-parent congolais)." />
                 <Dl label="Tier 1 / Tier 2 (Radar)" formula="" rationale="Classement interne des profils radar par priorité d'approche. Tier 1 = joueur prêt à appeler, Tier 2 = à suivre dans la durée." />
-                <Dl label="Valeur marchande" formula="" rationale="Estimation publique Transfermarkt en euros. Indicative — peut varier de 30 à 50 % par rapport aux montants effectifs de transfert." />
+                <Dl label="Valeur marchande" formula="" rationale="Estimation publique Transfermarkt en euros. Indicative · peut varier de 30 à 50 % par rapport aux montants effectifs de transfert." />
                 <Dl label="Best XI Diaspora" formula="" rationale="Composition idéale hebdomadaire du onze RDC roster + diaspora éligible confondus, à formation choisie." />
                 <Dl label="Indice (centre de l'hexagone)" formula="" rationale="Moyenne arithmétique des six axes du profil statistique. N'apparaît que si au moins quatre axes sont disponibles." />
               </dl>
@@ -509,7 +509,7 @@ export default function Methodologie() {
                 Chaque correction reçue est intégrée à l'édition suivante,
                 chaque source manquante est documentée ici, chaque axe en
                 attente de donnée est listé. Ce qui n'est pas écrit n'est
-                pas vrai — une affirmation non sourcée ailleurs sur le site
+                pas vrai · une affirmation non sourcée ailleurs sur le site
                 est un bug, pas un parti pris.
               </p>
               <p>

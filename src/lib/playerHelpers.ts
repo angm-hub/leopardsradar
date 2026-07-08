@@ -164,7 +164,7 @@ export function formatMarketValue(eur: number | null | undefined): string {
  * Intentionally removes the gap before the euro symbol to avoid visual breakage.
  */
 export function formatMarketValueCompact(eur: number | null | undefined): string {
-  if (!eur) return "—";
+  if (!eur) return "n.d.";
   if (eur >= 1_000_000_000) return `${(eur / 1_000_000_000).toFixed(1)}Md€`;
   if (eur >= 1_000_000) return `${Math.round(eur / 1_000_000)}M€`;
   if (eur >= 1_000) return `${Math.round(eur / 1_000)}K€`;

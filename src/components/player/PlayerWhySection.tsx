@@ -25,7 +25,7 @@ export function buildPlayerEligibilityLine(args: {
   if (args.category === "heritage") {
     return "Profil héritage RDC : ascendance ou attaches familiales fortes avec le pays, à suivre dans la durée.";
   }
-  return `Profil suivi par notre radar — statut : ${eligibilityLabel(args.eligibilityStatus).toLowerCase()}.`;
+  return `Profil suivi par notre radar · statut : ${eligibilityLabel(args.eligibilityStatus).toLowerCase()}.`;
 }
 
 interface PlayerEligibilityQuoteProps {

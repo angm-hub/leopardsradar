@@ -6,7 +6,7 @@
  *   1. player_stats_advanced (FBRef, frais 17/05/2026, Big5 + UCL/UEL/UECL)
  *   2. player_stats_multi (TM /leistungsdaten/, couverture monde entier)
  *   3. players.season_*  (fallback historique players table)
- *   4. null = pas de data → affichage "—"
+ *   4. null = pas de data → affichage "n.d."
  *
  * Une seule source par joueur : on ne mixe pas pour eviter les double-comptes.
  * Si FBRef a 2 competitions (L1 + UCL), on SOMME ces deux competitions FBRef.

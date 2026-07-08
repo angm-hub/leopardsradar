@@ -27,7 +27,7 @@ export const LEVEL_BAND_DESCRIPTION: Record<LevelBand, string> = {
   elite:      "Titulaire régulier dans les plus grandes compétitions européennes avec expérience en sélection (ex. Wissa, Lukebakio).",
   high:       "Rotation fiable dans un top 5 européen ou titulaire dans un championnat de premier plan (ex. Mukau, Wan-Bissaka).",
   mid:        "Actif dans un championnat européen du top 10 ou équivalent africain de haut niveau (ex. Sadiki, Stroeykens).",
-  developing: "Jeune joueur en progression dans un championnat de niveau 2 ou 3 — profil à suivre dans la durée (ex. Engwanda, Mavissa).",
+  developing: "Jeune joueur en progression dans un championnat de niveau 2 ou 3 · profil à suivre dans la durée (ex. Engwanda, Mavissa).",
   watch:      "Profil identifié via vivier Linafoot ou diaspora, pas encore exposé au football européen professionnel.",
 };
 
@@ -36,7 +36,7 @@ export const LEVEL_BAND_DESCRIPTION: Record<LevelBand, string> = {
  * Retourne "— / 100" si le score est null/undefined (pas encore calculé).
  */
 export function formatLevelScore(score: number | null | undefined): string {
-  if (score === null || score === undefined) return "— / 100";
+  if (score === null || score === undefined) return "n.d. / 100";
   return `${score} / 100`;
 }
 

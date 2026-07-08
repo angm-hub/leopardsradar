@@ -17,7 +17,7 @@ export function StatsSection() {
 
   const hasMarketValue = !!stats?.total_market_value && stats.total_market_value > 0;
   const totalValueLabel = statsLoading
-    ? "—"
+    ? "…"
     : hasMarketValue
       ? formatMarketValueCompact(stats!.total_market_value)
       : "À venir";
@@ -28,10 +28,10 @@ export function StatsSection() {
     stats && stats.total_players
       ? Math.round(((stats.tier1_count ?? 0) / stats.total_players) * 100)
       : null;
-  const statFallback = statsLoading ? "—" : statsError ? "Erreur" : "—";
+  const statFallback = statsLoading ? "…" : statsError ? "Erreur" : "n.d.";
 
   // Renders a stat number with a shimmer skeleton while data loads.
-  // Replaces the bare "—" fallback that flashed for ~300 ms on every page
+  // Replaces the bare "n.d." fallback that flashed for ~300 ms on every page
   // load and made the bento grid look broken on slow networks.
   const StatNumber = ({
     value,

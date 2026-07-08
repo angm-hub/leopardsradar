@@ -16,7 +16,7 @@ import type { DBPlayer, DBPosition } from "@/types/dbPlayer";
  *
  * Each score is bounded [0, 100]. When a metric is unknown (data gap),
  * we return `null` instead of a fictitious zero — the UI then renders an
- * "—" mark and collapses that axis to the centre. Honesty over polish.
+ * "n.d." mark and collapses that axis to the centre. Honesty over polish.
  */
 
 // ---------- Types ----------
@@ -195,7 +195,7 @@ function clamp01to100(x: number): number {
  * Best-effort minutes : prefer the explicit `season_minutes` if we have it,
  * otherwise estimate from `season_games × 80` (a reasonable proxy for an
  * average starter in a top European league). Returns null when neither is
- * available so the dependent axes can collapse to "—".
+ * available so the dependent axes can collapse to "n.d.".
  *
  * The estimation is honest about its nature — the methodology page mentions
  * that the football-data.org free /scorers endpoint exposes goals + assists
@@ -272,13 +272,13 @@ const goalkeeperAxes: RoleAxes = {
     value: null,
     label: "Clean sheets",
     fullLabel: "Matchs sans encaisser (% des matchs joués)",
-    raw: "—",
+    raw: "n.d.",
   }),
   roleB: () => ({
     value: null,
     label: "Buts encaissés",
     fullLabel: "Buts encaissés / 90 min (inversé : moins = plus haut)",
-    raw: "—",
+    raw: "n.d.",
   }),
 };
 
@@ -287,14 +287,14 @@ const defenderAxes: RoleAxes = {
   roleA: () => ({
     value: null,
     label: "Solidité",
-    fullLabel: "Buts encaissés équipe / 90 (inversé) — donnée à venir",
-    raw: "—",
+    fullLabel: "Buts encaissés équipe / 90 (inversé) · donnée à venir",
+    raw: "n.d.",
   }),
   roleB: () => ({
     value: null,
     label: "Construction",
-    fullLabel: "Passes complétées % — donnée à venir",
-    raw: "—",
+    fullLabel: "Passes complétées % · donnée à venir",
+    raw: "n.d.",
   }),
 };
 
@@ -311,14 +311,14 @@ const midfieldAxes: RoleAxes = {
       value: score,
       label: "Création",
       fullLabel: "Passes décisives par 90 min",
-      raw: per90 ? `${per90} PD/90` : "—",
+      raw: per90 ? `${per90} PD/90` : "n.d.",
     };
   },
   roleB: () => ({
     value: null,
     label: "Activité",
-    fullLabel: "Tackles + interceptions / 90 — donnée à venir",
-    raw: "—",
+    fullLabel: "Tackles + interceptions / 90 · donnée à venir",
+    raw: "n.d.",
   }),
 };
 
@@ -335,7 +335,7 @@ const attackerAxes: RoleAxes = {
       value: score,
       label: "Finition",
       fullLabel: "Buts par 90 min",
-      raw: per90 ? `${per90} buts/90` : "—",
+      raw: per90 ? `${per90} buts/90` : "n.d.",
     };
   },
   roleB: (p) => {
@@ -349,7 +349,7 @@ const attackerAxes: RoleAxes = {
       value: score,
       label: "Création",
       fullLabel: "Passes décisives par 90 min",
-      raw: per90 ? `${per90} PD/90` : "—",
+      raw: per90 ? `${per90} PD/90` : "n.d.",
     };
   },
 };
@@ -365,7 +365,7 @@ const ROLE_AXES: Record<DBPosition, RoleAxes> = {
 
 /**
  * Compute the 6 axis scores for a player. Always returns a complete
- * shape — missing data is signalled by null values and "—" raw labels.
+ * shape — missing data is signalled by null values and "n.d." raw labels.
  */
 export function computePlayerScores(player: DBPlayer): PlayerScores {
   const role = player.position ? ROLE_AXES[player.position] : null;
@@ -377,7 +377,7 @@ export function computePlayerScores(player: DBPlayer): PlayerScores {
     raw:
       player.season_minutes > 0
         ? `${player.season_minutes.toLocaleString("fr-FR")} min`
-        : "—",
+        : "n.d.",
   };
 
   const regularity: AxisScore = {
@@ -387,7 +387,7 @@ export function computePlayerScores(player: DBPlayer): PlayerScores {
     raw:
       player.season_games > 0 && player.season_minutes > 0
         ? `${Math.round(player.season_minutes / player.season_games)} min/match`
-        : "—",
+        : "n.d.",
   };
 
   const league: AxisScore = {
@@ -404,16 +404,16 @@ export function computePlayerScores(player: DBPlayer): PlayerScores {
     raw:
       player.caps_rdc > 0
         ? `${player.caps_rdc} cap${player.caps_rdc > 1 ? "s" : ""}`
-        : "—",
+        : "n.d.",
   };
 
   const roleA: AxisScore = role
     ? role.roleA(player)
-    : { value: null, label: "—", fullLabel: "", raw: "—" };
+    : { value: null, label: "n.d.", fullLabel: "", raw: "n.d." };
 
   const roleB: AxisScore = role
     ? role.roleB(player)
-    : { value: null, label: "—", fullLabel: "", raw: "—" };
+    : { value: null, label: "n.d.", fullLabel: "", raw: "n.d." };
 
   return {
     axes: { volume, regularity, league, leopards, role_a: roleA, role_b: roleB },
@@ -426,7 +426,7 @@ export function computePlayerScores(player: DBPlayer): PlayerScores {
 }
 
 function leagueTierLabel(club: string | null): string {
-  if (!club) return "—";
+  if (!club) return "n.d.";
   const score = leagueTierScore(club);
   if (score === 100) return "Top 5 EU";
   if (score === 70) return "Sous-élite";

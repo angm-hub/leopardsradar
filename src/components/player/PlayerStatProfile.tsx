@@ -10,7 +10,7 @@ interface PlayerStatProfileProps {
 
 // Minimum axes to display the aggregate score in the hexagon centre.
 // With fewer than 3 valid axes the average is misleading, so we hide it —
-// but the hexagon itself always renders (null axes collapse to centre with "—").
+// but the hexagon itself always renders (null axes collapse to centre with "n.d.").
 const AGG_MIN_VALID_AXES = 3;
 
 /**
@@ -24,7 +24,7 @@ const AGG_MIN_VALID_AXES = 3;
  *               centre (averaging 1-2 axes would be misleading).
  *
  * The hexagon always renders regardless of sparse/full — null axes
- * collapse gracefully to centre with "—" labels, which is more
+ * collapse gracefully to centre with "n.d." labels, which is more
  * informative than hiding the visual entirely.
  */
 export function PlayerStatProfile({ player }: PlayerStatProfileProps) {
@@ -55,7 +55,7 @@ export function PlayerStatProfile({ player }: PlayerStatProfileProps) {
         <FullIntro positionLabel={scores.positionLabel} />
       )}
 
-      {/* Hexagon always renders — null axes collapse to centre and show "—".
+      {/* Hexagon always renders — null axes collapse to centre and show "n.d.".
           isSparse only affects whether the aggregate score appears in the
           hexagon centre (hidden when < 3 axes to avoid a misleading average). */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
@@ -89,7 +89,7 @@ export function PlayerStatProfile({ player }: PlayerStatProfileProps) {
                       : "font-serif text-2xl text-foreground"
                   }
                 >
-                  {a.value === null ? "—" : a.value}
+                  {a.value === null ? "n.d." : a.value}
                 </span>
               </div>
             );
@@ -112,7 +112,7 @@ function FullIntro({ positionLabel }: { positionLabel: string | null }) {
       ) : (
         "."
       )}{" "}
-      Les axes marqués <span className="font-mono text-foreground/70">—</span> attendent une
+      Les axes marqués <span className="font-mono text-foreground/70">n.d.</span> attendent une
       donnée que nous n'avons pas encore.
     </p>
   );
@@ -134,7 +134,7 @@ function SparseIntro({
           {positionLabel ? (
             <span className="text-muted-light">({positionLabel.toLowerCase()})</span>
           ) : null}{" "}
-          — {validCount} axe{validCount > 1 ? "s" : ""} renseigné{validCount > 1 ? "s" : ""} sur 6.
+          · {validCount} axe{validCount > 1 ? "s" : ""} renseigné{validCount > 1 ? "s" : ""} sur 6.
           Les statistiques saison ne sont actuellement disponibles que pour les
           joueurs des 10 compétitions majeures couvertes par notre pipeline auto.{" "}
           <Link

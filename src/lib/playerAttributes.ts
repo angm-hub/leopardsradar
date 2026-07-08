@@ -8,7 +8,7 @@
  *   1. Calculer la valeur brute de chaque attribut depuis player_stats_advanced
  *   2. Ranker le joueur vs tous les joueurs du même poste (Defender / Midfield / Attack)
  *   3. Percentile → note 1-20 : Math.round((percentile / 100) * 19) + 1
- *   4. Si data manquante : null (affiché "—" en UI, jamais 0)
+ *   4. Si data manquante : null (affiché "n.d." en UI, jamais 0)
  *
  * GK : 5 attributs spécifiques remplacent les 15 standards (saves, clean_sheets, etc.)
  *
@@ -74,7 +74,7 @@ export interface AttributeScore {
   note: number | null;  // null = données insuffisantes
   percentile: number | null;
   rawValue: number | null;
-  rawLabel: string;  // ex: "0.42 / 90" — affiché en tooltip
+  rawLabel: string;  // ex: "0.42 / 90" · affiché en tooltip
 }
 
 export interface AttributeFamily {
@@ -364,7 +364,7 @@ const ATTR_RAW_FORMAT: Record<string, (v: number) => string> = {
 };
 
 function formatRaw(key: string, value: number | null): string {
-  if (value === null || !Number.isFinite(value)) return "—";
+  if (value === null || !Number.isFinite(value)) return "n.d.";
   const fmt = ATTR_RAW_FORMAT[key];
   if (!fmt) return value.toFixed(2);
   return fmt(value);
@@ -490,7 +490,7 @@ function computeGkProfile(
   const gkScores: AttributeScore[] = GK_ATTRIBUTES.map(({ key, label }) => {
     const value = playerRaw[key];
     if (value === null || !Number.isFinite(value)) {
-      return { key, label, note: null, percentile: null, rawValue: null, rawLabel: "—" };
+      return { key, label, note: null, percentile: null, rawValue: null, rawLabel: "n.d." };
     }
     const inverted = INVERTED_ATTRS.has(key);
     const percentile = computePercentile(value, allRaws[key], inverted);
@@ -550,7 +550,7 @@ function computeFieldProfile(
       attributes: attrDefs.map(({ key, label }) => {
         const value = playerRaw[key];
         if (value === null || !Number.isFinite(value)) {
-          return { key, label, note: null, percentile: null, rawValue: null, rawLabel: "—" };
+          return { key, label, note: null, percentile: null, rawValue: null, rawLabel: "n.d." };
         }
         const inverted = INVERTED_ATTRS.has(key);
         // Si pas de données comparatives (0 autres joueurs), on retourne une note centrale
@@ -584,7 +584,7 @@ function computeFieldProfile(
 function buildEmptyProfile(isGk: boolean): AttributeProfile {
   const emptyAttrs = (labels: readonly { key: string; label: string }[]): AttributeScore[] =>
     labels.map(({ key, label }) => ({
-      key, label, note: null, percentile: null, rawValue: null, rawLabel: "—",
+      key, label, note: null, percentile: null, rawValue: null, rawLabel: "n.d.",
     }));
 
   if (isGk) {
@@ -636,7 +636,7 @@ export function computeKeyInsights(profile: AttributeProfile): KeyInsight[] {
     if (first && (first.note ?? 0) >= 17) {
       insights.push({
         type: "elite",
-        text: `Elite ${first.label} — ${first.note}/20`,
+        text: `Elite ${first.label} · ${first.note}/20`,
       });
       if (second && (second.note ?? 0) >= 15) {
         insights.push({
@@ -664,7 +664,7 @@ export function computeKeyInsights(profile: AttributeProfile): KeyInsight[] {
   if (insights.length === 0) {
     insights.push({
       type: "strong",
-      text: "Profil polyvalent — pas de dominante marquée",
+      text: "Profil polyvalent · pas de dominante marquée",
     });
   }
 

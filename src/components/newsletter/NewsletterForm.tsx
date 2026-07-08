@@ -57,7 +57,7 @@ export function NewsletterForm({
         <Check className="h-4 w-4 text-primary shrink-0" />
         <span className="text-balance">
           {message}{" "}
-          <span className="text-muted-light">— Léopards Radar</span>
+          <span className="text-muted-light">· Léopards Radar</span>
         </span>
       </div>
     );

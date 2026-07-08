@@ -258,7 +258,7 @@ export function HexagonCompare({
                   className="font-serif"
                   style={{ fontSize: 13, fill: COLOR_A }}
                 >
-                  {l.a.value === null ? "—" : l.a.value}
+                  {l.a.value === null ? "n.d." : l.a.value}
                 </text>
                 <text
                   x={l.lx}
@@ -267,7 +267,7 @@ export function HexagonCompare({
                   className="font-serif"
                   style={{ fontSize: 13, fill: COLOR_B }}
                 >
-                  {l.b.value === null ? "—" : l.b.value}
+                  {l.b.value === null ? "n.d." : l.b.value}
                 </text>
               </>
             ) : (
@@ -293,7 +293,7 @@ export function HexagonCompare({
                   className="font-serif"
                   style={{ fontSize: 12, fill: COLOR_A }}
                 >
-                  {l.a.value === null ? "—" : l.a.value}
+                  {l.a.value === null ? "n.d." : l.a.value}
                 </text>
                 <text
                   x={l.lx}
@@ -316,7 +316,7 @@ export function HexagonCompare({
                   className="font-serif"
                   style={{ fontSize: 12, fill: COLOR_B }}
                 >
-                  {l.b.value === null ? "—" : l.b.value}
+                  {l.b.value === null ? "n.d." : l.b.value}
                 </text>
               </>
             )}

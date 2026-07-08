@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 /* ──────────────────────────────────────────────────────────────────────────
-   Léopards Radar — Premium DA Cobalt (2026-05-15)
+   Léopards Radar · Premium DA Cobalt (2026-05-15)
    Foundation pivotée du brand book "Premium v2" :
    - Surfaces cobalt (au lieu de warm-black)
    - Grain SVG en overlay (cinématique vs flat)
@@ -89,7 +89,7 @@
 
 @layer components {
   /* ===================================================================
-     Surface system — cobalt material gradué + hairline retina.
+     Surface system · cobalt material gradué + hairline retina.
      Drop-in sur les cards principales, équivalent "border border-border
      bg-card" mais avec la matière du brand book Premium v2.
      =================================================================== */
@@ -128,7 +128,7 @@
   }
 
   /* ─── Editorial label — pattern brand book v2 ──────────────────────
-     Geist 500 uppercase tracking 0.18em — remplace l'ancien Space Mono.
+     Geist 500 uppercase tracking 0.18em · remplace l'ancien Space Mono.
      Utilisé pour kickers, eyebrows, statuts de match, timestamps. Le
      comportement existant `font-mono uppercase tracking-[0.18em]` reste
      valide ; cette classe est juste un raccourci propre. */
@@ -142,7 +142,7 @@
   /* ─── Display heading — Geist 500, brand book Leopards Radar v2 ────
      Pour les titres-affiche ("Les Leopards.", "1974.", "Three symbols.
      One gaze."). Brand book page 005 « Type » : Geist 500 tracking -4%
-     line-height tres serre. Pas de serif editorial — la marque est
+     line-height tres serre. Pas de serif editorial · la marque est
      silencieuse, tout en sans. */
   .display-heading {
     font-family: "Geist", system-ui, sans-serif;
@@ -206,7 +206,7 @@
 }
 
 /* ──────────────────────────────────────────────────────────────────────
-   Grain texture — SVG noise overlay, mix-blend-mode: overlay.
+   Grain texture · SVG noise overlay, mix-blend-mode: overlay.
    ────────────────────────────────────────────────────────────────────── */
 .grain {
   position: relative;
@@ -225,7 +225,7 @@
 .grain-heavy::after { opacity: 0.5; }
 
 /* ──────────────────────────────────────────────────────────────────────
-   Okapi stripes — pattern signature (rayures verticales irrégulières).
+   Okapi stripes · pattern signature (rayures verticales irrégulières).
    La signature visuelle du brand book : "le léopard chasse, l'okapi observe".
    ────────────────────────────────────────────────────────────────────── */
 .pattern-okapi {
@@ -236,7 +236,7 @@
 }
 
 /* ──────────────────────────────────────────────────────────────────────
-   Glass surfaces — subtiles, pour les cards stat / "Top form" / next match.
+   Glass surfaces · subtiles, pour les cards stat / "Top form" / next match.
    Backdrop blur + cobalt mist en surfacing.
    ────────────────────────────────────────────────────────────────────── */
 .glass {

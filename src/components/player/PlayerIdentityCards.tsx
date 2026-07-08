@@ -21,29 +21,29 @@ export function PlayerIdentityCards({
   foot,
   heightCm,
 }: PlayerIdentityCardsProps) {
-  const ageString = dateOfBirth ? buildAgeString(dateOfBirth) : "—";
-  const birthplace = [placeOfBirth, countryOfBirth].filter(Boolean).join(", ") || "—";
+  const ageString = dateOfBirth ? buildAgeString(dateOfBirth) : "n.d.";
+  const birthplace = [placeOfBirth, countryOfBirth].filter(Boolean).join(", ") || "n.d.";
   const footLabel = foot
     ? foot === "left"
       ? "Gauche"
       : foot === "right"
         ? "Droit"
         : "Ambidextre"
-    : "—";
+    : "n.d.";
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
       <Card icon={<Calendar className="h-3.5 w-3.5" />} label="Né le" value={ageString} />
       <Card icon={<MapPin className="h-3.5 w-3.5" />} label="Lieu de naissance" value={birthplace} />
       <Card icon={<Footprints className="h-3.5 w-3.5" />} label="Pied fort" value={footLabel} />
-      <Card icon={<Ruler className="h-3.5 w-3.5" />} label="Taille" value={heightCm ? `${heightCm} cm` : "—"} />
+      <Card icon={<Ruler className="h-3.5 w-3.5" />} label="Taille" value={heightCm ? `${heightCm} cm` : "n.d."} />
     </div>
   );
 }
 
 function buildAgeString(dob: string): string {
   const d = new Date(dob);
-  if (Number.isNaN(d.getTime())) return "—";
+  if (Number.isNaN(d.getTime())) return "n.d.";
   return d.toLocaleDateString("fr-FR", {
     day: "2-digit",
     month: "long",

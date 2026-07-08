@@ -13,7 +13,7 @@ export default function About() {
   useDocumentMeta({
     title: "À propos",
     description:
-      "Léopards Radar — média indépendant édité par Cobalt Sports & Entertainment. Data + curation + analyse sur le vivier congolais.",
+      "Léopards Radar · média indépendant édité par Cobalt Sports & Entertainment. Data + curation + analyse sur le vivier congolais.",
   });
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -34,14 +34,14 @@ export default function About() {
           </h1>
           <p className="mt-6 font-serif text-xl leading-[1.6] text-foreground/80 max-w-2xl">
             Un média indépendant qui trace tout le vivier congolais. Roster RDC,
-            diaspora éligible, statut FIFA — sourcé, structuré, mis à jour
+            diaspora éligible, statut FIFA · sourcé, structuré, mis à jour
             chaque dimanche.
           </p>
 
           {/* La mission */}
           <section className="mt-20">
             <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-primary mb-4">
-              01 — La mission
+              01 · La mission
             </p>
             <h2 className="display-heading text-3xl md:text-4xl text-foreground mb-6">
               La source de référence sur le vivier congolais.
@@ -51,7 +51,7 @@ export default function About() {
               <p>
                 Léopards Radar trace l'intégralité du vivier congolais : roster actif,
                 diaspora éligible selon l'<strong className="text-foreground">article 9 FIFA</strong>,
-                joueurs en formation, binationaux à instruire. On documente chaque trajectoire — du
+                joueurs en formation, binationaux à instruire. On documente chaque trajectoire · du
                 Tout-Puissant Mazembe à Manchester, de Kinshasa à Bruxelles.
               </p>
               <p>
@@ -65,7 +65,7 @@ export default function About() {
           {/* La méthode */}
           <section className="mt-20">
             <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-primary mb-4">
-              02 — La méthode
+              02 · La méthode
             </p>
             <h2 className="display-heading text-3xl md:text-4xl text-foreground mb-6">
               Sources vérifiées, règles FIFA appliquées.
@@ -99,7 +99,7 @@ export default function About() {
               d'une personne. */}
           <section className="mt-20">
             <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-primary mb-4">
-              03 — Indépendance
+              03 · Indépendance
             </p>
             <h2 className="display-heading text-3xl md:text-4xl text-foreground mb-6">
               Pas affilié. Pas commandité. Pas négociable.
@@ -138,7 +138,7 @@ export default function About() {
               pas une signature individuelle. */}
           <section className="mt-20 border-t border-border pt-12">
             <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-primary mb-4">
-              04 — Qui édite Léopards Radar
+              04 · Qui édite Léopards Radar
             </p>
             <h2 className="display-heading text-3xl md:text-4xl text-foreground mb-6">
               Édité par Cobalt Sports & Entertainment.
@@ -154,7 +154,7 @@ export default function About() {
               </p>
               <p>
                 Léopards Radar est notre premier produit ouvert au public
-                — d'autres suivront, dans la même logique : data sourcée,
+                · d'autres suivront, dans la même logique : data sourcée,
                 voix éditoriale claire, zéro hype.
               </p>
               <p className="text-base text-muted-light">

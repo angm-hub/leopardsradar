@@ -23,7 +23,7 @@ export function ShareModalV2({ open, onClose }: ShareModalV2Props) {
   const [copied, setCopied] = useState(false);
   // Pas besoin du formation/xi/bench ici : le hash est déjà sync en URL par le store
   const permalink = typeof window !== "undefined" ? window.location.href : "";
-  const pseudoLabel = pseudo.trim() ? ` — par ${pseudo.trim()}` : "";
+  const pseudoLabel = pseudo.trim() ? ` · par ${pseudo.trim()}` : "";
   const text = `Mes 26 pour les Léopards au Mondial 2026${pseudoLabel}.`;
 
   const copy = () => {

@@ -43,7 +43,7 @@ function GkAttributeProfile({ profile, className }: { profile: AttributeProfile;
         <FamilyColumn family={profile.attacking} />
       </div>
       <p className="mt-3 text-[11px] font-mono text-muted text-center">
-        Profil gardien — 5 attributs spécifiques
+        Profil gardien · 5 attributs spécifiques
       </p>
     </div>
   );
@@ -108,11 +108,11 @@ function AttributeRow({ attr }: { attr: AttributeScore }) {
         )}
         style={{ fontVariantNumeric: "tabular-nums" }}
       >
-        {hasData ? attr.note : "—"}
+        {hasData ? attr.note : "n.d."}
       </span>
 
       {/* Tooltip */}
-      {showTooltip && attr.rawLabel !== "—" && (
+      {showTooltip && attr.rawLabel !== "n.d." && (
         <div
           className="absolute right-0 top-full z-20 mt-1 rounded-md border border-border bg-card/95 backdrop-blur-sm px-3 py-2 text-[11px] text-muted-light shadow-xl shadow-black/40 pointer-events-none"
           role="tooltip"
@@ -120,7 +120,7 @@ function AttributeRow({ attr }: { attr: AttributeScore }) {
           <span className="font-mono text-foreground/80">{attr.rawLabel}</span>
           {attr.percentile !== null && (
             <span className="ml-2 text-muted">
-              — {attr.percentile}e centile
+              · {attr.percentile}e centile
             </span>
           )}
         </div>

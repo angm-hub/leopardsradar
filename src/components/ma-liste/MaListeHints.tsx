@@ -155,7 +155,7 @@ export function MaListeHints() {
         return {
           id: "bench-skewed",
           icon: AlertCircle,
-          text: `${max.n} ${label} sur le banc — pense à équilibrer les postes.`,
+          text: `${max.n} ${label} sur le banc : pense à équilibrer les postes.`,
           tone: "warn",
         };
       }

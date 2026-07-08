@@ -42,8 +42,8 @@ const ELIGIBILITY_DESCRIPTION: Record<string, string> = {
 };
 
 const ORIGIN_LABEL: Record<string, string> = {
-  local: "Local — né en RDC",
-  diaspora: "Diaspora — né hors RDC",
+  local: "Local · né en RDC",
+  diaspora: "Diaspora · né hors RDC",
   unknown: "Origine non documentée",
 };
 
@@ -54,12 +54,12 @@ const ORIGIN_TONE: Record<string, string> = {
 };
 
 function formatPercent(value: number | null | undefined): string {
-  if (value === null || value === undefined) return "—";
+  if (value === null || value === undefined) return "n.d.";
   return `${Number(value).toFixed(1)}%`;
 }
 
 function formatNumber(value: number | null | undefined): string {
-  if (value === null || value === undefined) return "—";
+  if (value === null || value === undefined) return "n.d.";
   return value.toLocaleString("fr-FR");
 }
 
@@ -76,7 +76,7 @@ function bandLabel(rank: number): string {
     case 5:
       return "Watch";
     default:
-      return "—";
+      return "n.d.";
   }
 }
 
@@ -90,7 +90,7 @@ function bandTone(rank: number): string {
 
 export default function Insights() {
   useDocumentMeta({
-    title: "Insights — Le vivier en chiffres",
+    title: "Insights · Le vivier en chiffres",
     description:
       "Analyses auto-générées du vivier Léopards : pipeline éligibilité FIFA, comparaison local vs diaspora, concentration par club. Données mises à jour chaque dimanche.",
   });
@@ -130,13 +130,13 @@ export default function Insights() {
               <span className="text-foreground/80">Insights</span>
             </nav>
             <span className="label-mono text-cobalt-mist mt-6 inline-block">
-              Sprint 5 — Analyses auto-générées
+              Sprint 5 · Analyses auto-générées
             </span>
             <h1 className="mt-4 display-heading text-5xl md:text-6xl text-foreground">
               Le vivier en chiffres.
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-foreground/75">
-              Trois lectures complémentaires du vivier — pipeline éligibilité,
+              Trois lectures complémentaires du vivier · pipeline éligibilité,
               profil type, concentration par club. Recompilées chaque dimanche
               à partir des 1 075 joueurs trackés. Les écarts qui apparaissent
               ne sont pas des opinions, ce sont des comptages.
@@ -165,7 +165,7 @@ export default function Insights() {
             <section className="container-site py-16 md:py-20">
               <div className="mb-10 max-w-2xl">
                 <span className="label-mono text-cobalt-mist mb-3 inline-block">
-                  01 — Pipeline éligibilité FIFA
+                  01 · Pipeline éligibilité FIFA
                 </span>
                 <h2 className="display-heading text-3xl md:text-4xl text-foreground">
                   Où en est le vivier.
@@ -193,7 +193,7 @@ export default function Insights() {
                       </span>
                     </div>
                     <p className="text-sm text-foreground/60 leading-relaxed">
-                      {ELIGIBILITY_DESCRIPTION[row.status] ?? "—"}
+                      {ELIGIBILITY_DESCRIPTION[row.status] ?? "n.d."}
                     </p>
                     <div className="mt-auto pt-3 border-t border-border/50">
                       <p className="label-mono-sm text-foreground/45">
@@ -202,7 +202,7 @@ export default function Insights() {
                       <p className="mt-1 display-heading text-lg text-primary">
                         {row.total_market_value_eur
                           ? formatMarketValue(row.total_market_value_eur)
-                          : "—"}
+                          : "n.d."}
                       </p>
                     </div>
                     {row.top_players_by_value && (
@@ -233,7 +233,7 @@ export default function Insights() {
               <div className="container-site relative z-10 py-16 md:py-20">
                 <div className="mb-10 max-w-2xl">
                   <span className="label-mono text-cobalt-mist mb-3 inline-block">
-                    02 — Profil type
+                    02 · Profil type
                   </span>
                   <h2 className="display-heading text-3xl md:text-4xl text-foreground">
                     Local vs diaspora.
@@ -273,7 +273,7 @@ export default function Insights() {
                             Âge moyen
                           </dt>
                           <dd className="mt-1 display-heading text-xl text-foreground">
-                            {row.avg_age ?? "—"}
+                            {row.avg_age ?? "n.d."}
                           </dd>
                         </div>
                         <div>
@@ -293,7 +293,7 @@ export default function Insights() {
                               ? formatMarketValue(
                                   Number(row.median_market_value_eur),
                                 )
-                              : "—"}
+                              : "n.d."}
                           </dd>
                         </div>
                         <div>
@@ -301,7 +301,7 @@ export default function Insights() {
                             Position dominante
                           </dt>
                           <dd className="mt-1 text-foreground/85 text-base">
-                            {row.most_common_position ?? "—"}
+                            {row.most_common_position ?? "n.d."}
                           </dd>
                         </div>
                       </dl>
@@ -315,7 +315,7 @@ export default function Insights() {
                     country_of_birth
                   </code>
                   contenant « congo ». « Diaspora » = né documenté ailleurs.
-                  « Inconnue » = pays de naissance pas encore renseigné — à
+                  « Inconnue » = pays de naissance pas encore renseigné · à
                   enrichir dans une prochaine vague.
                 </p>
               </div>
@@ -325,7 +325,7 @@ export default function Insights() {
             <section className="container-site py-16 md:py-20">
               <div className="mb-10 max-w-2xl">
                 <span className="label-mono text-cobalt-mist mb-3 inline-block">
-                  03 — Concentration géo
+                  03 · Concentration géo
                 </span>
                 <h2 className="display-heading text-3xl md:text-4xl text-foreground">
                   Où sont concentrés nos joueurs.
@@ -333,7 +333,7 @@ export default function Insights() {
                 <p className="mt-3 text-base md:text-lg text-foreground/70 leading-relaxed">
                   Clubs qui hébergent au moins deux Léopards éligibles
                   (sélectionnés ou éligibles confirmés). Utile pour identifier
-                  les bases naturelles de la sélection — les vestiaires où
+                  les bases naturelles de la sélection · les vestiaires où
                   les Léopards se croisent déjà au quotidien.
                 </p>
               </div>

@@ -37,7 +37,7 @@ export function PressQuoteCard({ item }: { item: DBPressItem }) {
         "hover:border-primary/50 hover:-translate-y-px",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
       )}
-      aria-label={`Citation de ${item.source_name} — ${item.headline}`}
+      aria-label={`Citation de ${item.source_name} · ${item.headline}`}
     >
       {/* Quote glyph en arrière-plan, signature visuelle */}
       <Quote
@@ -61,7 +61,7 @@ export function PressQuoteCard({ item }: { item: DBPressItem }) {
       <div className="mt-auto flex items-center justify-between gap-2 pt-3 border-t border-border/50">
         <div className="min-w-0 flex items-center gap-2 text-xs">
           <span className="truncate font-medium text-foreground/85">
-            — {item.source_name}
+            · {item.source_name}
           </span>
           {item.source_tier === "S" || item.source_tier === "A" ? (
             <span

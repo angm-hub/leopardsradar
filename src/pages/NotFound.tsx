@@ -21,7 +21,7 @@ const NotFound = () => {
             Erreur · 404
           </p>
           <h1 className="mt-4 font-serif text-5xl md:text-6xl font-semibold text-foreground tracking-tight text-balance">
-            404 — cette page a quitté le Roster.
+            404 · cette page a quitté le Roster.
           </h1>
           <p className="mt-6 text-lg text-muted-light leading-relaxed max-w-xl mx-auto">
             La page que tu cherches n'existe pas ou a été déplacée.

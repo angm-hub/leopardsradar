@@ -73,7 +73,7 @@ export function mapRowToPlayer(row: PlayerRow): Player {
     slug: row.slug,
     name: row.name,
     photoUrl: row.photo_url ?? "",
-    club: row.clubs?.name ?? row.club_name ?? "—",
+    club: row.clubs?.name ?? row.club_name ?? "n.d.",
     clubLogoUrl: row.clubs?.logo_url ?? row.club_logo_url ?? "",
     league: (row.clubs?.league ?? row.league ?? "Other") as League,
     position,

@@ -12,10 +12,10 @@ export function RadarLegend() {
         Couleur = tier UEFA · Taille = valeur marchande
       </p>
       <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
-        <TierSwatch tier="S" label="S — Champions League" />
-        <TierSwatch tier="A" label="A — Top 5 européen" />
-        <TierSwatch tier="B" label="B — Compétitif" />
-        <TierSwatch tier="C" label="C — Autre" />
+        <TierSwatch tier="S" label="S · Champions League" />
+        <TierSwatch tier="A" label="A · Top 5 européen" />
+        <TierSwatch tier="B" label="B · Compétitif" />
+        <TierSwatch tier="C" label="C · Autre" />
       </div>
     </div>
   );

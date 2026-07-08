@@ -32,7 +32,7 @@ export function PressReviewCard({ item }: { item: DBPressItem }) {
         "hover:border-primary/40 hover:bg-card-hover hover:-translate-y-px",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
       )}
-      aria-label={`${item.headline} — source ${item.source_name}`}
+      aria-label={`${item.headline} · source ${item.source_name}`}
     >
       {/* Source row — favicon + name + tier badge + horodatage */}
       <div className="flex items-center gap-2 text-xs text-muted">

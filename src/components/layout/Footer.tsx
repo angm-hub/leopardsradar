@@ -62,7 +62,7 @@ export function Footer() {
             <LRWordmark size={18} color="currentColor" />
             <p className="text-sm text-muted-light max-w-xs leading-relaxed">
               Toute la data du football congolais. Roster RDC, diaspora éligible,
-              statut FIFA — sourcé, mis à jour chaque dimanche.
+              statut FIFA · sourcé, mis à jour chaque dimanche.
             </p>
             <div className="mt-2 flex items-center gap-2.5 label-mono-sm text-muted">
               <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-cobalt-mist animate-pulse" />
@@ -146,7 +146,7 @@ export function Footer() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-border pt-6 sm:flex-row">
           <p className="text-xs text-muted">
-            © {new Date().getFullYear()} Léopards Radar — édité par{" "}
+            © {new Date().getFullYear()} Léopards Radar · édité par{" "}
             <span className="text-foreground/80">Cobalt Sports & Entertainment</span>.
             Construit avec passion depuis Paris.
           </p>

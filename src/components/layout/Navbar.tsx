@@ -86,7 +86,7 @@ export function Navbar() {
       <div className="container-site flex h-16 items-center justify-between">
         <Link
           to="/"
-          aria-label="Léopards Radar — Accueil"
+          aria-label="Léopards Radar · Accueil"
           className="text-foreground transition-opacity hover:opacity-90"
         >
           {/* Mobile : mark seul (gain horizontal). Desktop : lockup complet. */}

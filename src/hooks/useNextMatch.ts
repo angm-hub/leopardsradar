@@ -13,10 +13,21 @@ export interface NextMatch {
   country: string | null;
   home_or_away: "home" | "away" | "neutral";
   status: string;
+  score_rdc: number | null;
+  score_opponent: number | null;
 }
 
+/**
+ * Prochain match RDC s'il y en a un de programmé, sinon le dernier résultat.
+ *
+ * Entre deux fenêtres internationales, la table matches n'a rien de
+ * "scheduled" dans le futur : plutôt que d'afficher un "Calendrier à venir"
+ * vide (le bug de la période Mondial 2026, où le site semblait ignorer la
+ * compétition), on retombe sur le dernier match terminé avec son score.
+ */
 export function useNextMatch() {
   const [match, setMatch] = useState<NextMatch | null>(null);
+  const [isResult, setIsResult] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -24,7 +35,7 @@ export function useNextMatch() {
     (async () => {
       try {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const { data, error } = await (supabase as any)
+        const { data: next, error } = await (supabase as any)
           .from("matches")
           .select("*")
           .eq("is_published", true)
@@ -34,11 +45,33 @@ export function useNextMatch() {
           .limit(1)
           .maybeSingle();
         if (error) throw error;
-        if (!cancelled) setMatch((data as NextMatch) ?? null);
+        if (next) {
+          if (!cancelled) {
+            setMatch(next as NextMatch);
+            setIsResult(false);
+          }
+          return;
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { data: last, error: lastError } = await (supabase as any)
+          .from("matches")
+          .select("*")
+          .eq("is_published", true)
+          .eq("status", "finished")
+          .order("kickoff_at", { ascending: false })
+          .limit(1)
+          .maybeSingle();
+        if (lastError) throw lastError;
+        if (!cancelled) {
+          setMatch((last as NextMatch) ?? null);
+          setIsResult(Boolean(last));
+        }
       } catch (e) {
         if (!cancelled) {
           console.error("[useNextMatch]", e);
           setMatch(null);
+          setIsResult(false);
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -49,5 +82,5 @@ export function useNextMatch() {
     };
   }, []);
 
-  return { match, loading };
+  return { match, isResult, loading };
 }

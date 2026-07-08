@@ -33,7 +33,7 @@ export default function MentionsLegales() {
         </p>
         <p className="text-muted-light">
           Structure éditoriale indépendante basée à Paris (France).
-          Immatriculation officielle en cours — toute mise à jour figurera
+          Immatriculation officielle en cours · toute mise à jour figurera
           dans cette page sous la rubrique « Dernière mise à jour ».
         </p>
         <p>
@@ -52,7 +52,7 @@ export default function MentionsLegales() {
           Directeur de la publication
         </h2>
         <p>
-          <strong>Alexandre Ngomo</strong> — joignable à l'adresse électronique
+          <strong>Alexandre Ngomo</strong> · joignable à l'adresse électronique
           de contact ci-dessus.
         </p>
       </section>

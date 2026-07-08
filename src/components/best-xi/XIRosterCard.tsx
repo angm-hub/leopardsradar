@@ -71,7 +71,7 @@ export function XIRosterCard({
             {primaryFlag ? (
               <span className="leading-none">{flagFor(primaryFlag)}</span>
             ) : null}
-            {player.age ? `${player.age} ans` : "—"}
+            {player.age ? `${player.age} ans` : "n.d."}
           </span>
           {player.market_value_eur && player.market_value_eur > 0 ? (
             <span className="text-primary/90 font-semibold">

@@ -127,7 +127,7 @@ function HeroCard({ player, rank }: { player: DBPlayer; rank: number }) {
 
         <div className="mt-2 flex items-center justify-between font-mono text-[11px]">
           <span className="text-muted-light">
-            {player.age ? `${player.age} ans` : "—"}
+            {player.age ? `${player.age} ans` : "n.d."}
           </span>
           {player.market_value_eur && player.market_value_eur > 0 ? (
             <span className="text-primary font-semibold">

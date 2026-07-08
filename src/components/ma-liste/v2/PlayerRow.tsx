@@ -112,7 +112,7 @@ export function PlayerRow({
             {player.current_club ?? "Sans club"}
           </span>
           <span className="text-foreground/20">·</span>
-          <span>{player.position ? POSITION_LABEL[player.position] : "—"}</span>
+          <span>{player.position ? POSITION_LABEL[player.position] : "n.d."}</span>
           {(player.caps_rdc ?? 0) > 0 && (
             <>
               <span className="text-foreground/20">·</span>

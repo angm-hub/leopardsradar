@@ -36,7 +36,7 @@ export function XIStatsPanel({ players }: XIStatsPanelProps) {
 
   return (
     <dl className="grid grid-cols-2 gap-3">
-      <Stat label="Âge moyen" value={avgAge !== null ? avgAge.toFixed(1) : "—"} unit={avgAge !== null ? "ans" : undefined} />
+      <Stat label="Âge moyen" value={avgAge !== null ? avgAge.toFixed(1) : "n.d."} unit={avgAge !== null ? "ans" : undefined} />
       <Stat label="Valeur cumulée" value={formatValueShort(totalValue)} unit="€" />
       <Stat label="Déjà capés RDC" value={`${cappedCount}`} unit="/ 11" />
       <Stat label="Clubs représentés" value={`${clubs.size}`} />

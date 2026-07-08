@@ -180,7 +180,7 @@ function EmptyState({
       <p className="mt-3 text-sm text-muted-light">
         {hasFilter
           ? "Essaie une autre catégorie ou consulte toutes les histoires."
-          : "Le flux éditorial démarre bientôt — première publication imminente."}
+          : "Le flux éditorial démarre bientôt · première publication imminente."}
       </p>
       {hasFilter ? (
         <button

@@ -177,7 +177,7 @@ export function LeopardsHero() {
       {/* Unique couche atmosphere : shader Paper Design (grain gradient blob WebGL).
           Lazy pour preserver le LCP. Fallback minimal (background dark) si le
           shader rate. On a retire atmos-jade / grain SVG / vignette / constellation
-          pour laisser l'aspect plus calme et premium type ORA — une seule couche
+          pour laisser l'aspect plus calme et premium type ORA · une seule couche
           lumineuse anime sur fond noir. */}
       <Suspense fallback={<div aria-hidden className="absolute inset-0 bg-background" />}>
         <LeopardsGrainBackground />
@@ -227,12 +227,12 @@ export function LeopardsHero() {
             variants={itemVariants}
             className="text-lg md:text-xl text-foreground/75 max-w-2xl text-balance"
           >
-            {totalPlayers ?? "—"} joueurs trackés. Diaspora éligible cartographiée.
+            {totalPlayers ?? "…"} joueurs trackés. Diaspora éligible cartographiée.
             Statut FIFA recalculé chaque dimanche.{" "}
             {phase === "before"
-              ? `Mondial 2026 — J-${daysUntilKickoff}.`
+              ? `Mondial 2026 · J-${daysUntilKickoff}.`
               : phase === "during"
-                ? "Suis les Léopards en direct du Mondial 2026."
+                ? "Le Mondial des Léopards, match par match."
                 : "Bilan et héritage du Mondial 2026."}
           </motion.p>
 
@@ -249,17 +249,17 @@ export function LeopardsHero() {
             variants={itemVariants}
             className="flex flex-col items-center gap-4 w-full sm:w-auto"
           >
-            <Link to="/ma-liste" className="w-full sm:w-auto">
+            <Link to="/radar" className="w-full sm:w-auto">
               <Button variant="primary" size="lg" className="group w-full sm:w-auto">
-                Compose ta liste des 26
+                Explorer le radar
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
             </Link>
             <Link
-              to="/roster"
+              to={phase === "before" ? "/roster" : "/mondial-2026"}
               className="group inline-flex items-center gap-1.5 text-sm font-medium text-foreground/65 transition-colors hover:text-foreground"
             >
-              Voir le Roster
+              {phase === "before" ? "Voir le Roster" : "Le bilan du Mondial"}
               <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
             </Link>
           </motion.div>
@@ -272,7 +272,7 @@ export function LeopardsHero() {
 
           {/* Hero footer mini-grid — 4 chiffres alignés. Cards séparées avec
               gap réel (vs gap-px bg-border/40 qui faisait "tableur"). Le badge
-              "+N" sur Suivis n'apparaît plus qu'entre 1 et 30 — au-delà, c'est
+              "+N" sur Suivis n'apparaît plus qu'entre 1 et 30 · au-delà, c'est
               un import en masse, pas un signal éditorial : afficher "+566"
               donnerait l'impression d'une croissance gonflée. */}
           <motion.div
@@ -334,7 +334,7 @@ function HeroStat({
   return (
     <div className="relative rounded-lg border border-border/60 bg-background/70 backdrop-blur-sm px-3 py-3 sm:py-4 text-center">
       <div className="font-serif text-2xl sm:text-3xl text-foreground leading-none tracking-tight">
-        {value ?? "—"}
+        {value ?? "…"}
       </div>
       <div className="mt-1.5 text-[10px] font-mono uppercase tracking-[0.18em] text-muted">
         {label}

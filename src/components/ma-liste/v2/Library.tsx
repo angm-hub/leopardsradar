@@ -215,7 +215,7 @@ export function Library({
                         )}
                       </div>
                       <p className="truncate font-mono text-[10px] uppercase tracking-[0.04em] text-foreground/45 mt-0.5">
-                        {(p.current_club ?? "—")} · {p.position ? POSITION_LABEL[p.position] : "—"}
+                        {(p.current_club ?? "n.d.")} · {p.position ? POSITION_LABEL[p.position] : "n.d."}
                       </p>
                     </div>
                     {placed && (

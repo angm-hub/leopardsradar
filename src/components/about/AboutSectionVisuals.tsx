@@ -25,11 +25,11 @@ export function MissionVisual() {
 
   const items = [
     {
-      value: loading ? "—" : (stats?.total_players ?? "—"),
+      value: loading ? "n.d." : (stats?.total_players ?? "n.d."),
       label: "joueurs",
     },
     {
-      value: loading ? "—" : (stats?.total_countries ?? "—"),
+      value: loading ? "n.d." : (stats?.total_countries ?? "n.d."),
       label: "pays",
     },
     { value: "3", label: "continents" },
@@ -119,7 +119,7 @@ export function EditeurVisual() {
       </div>
       <div className="flex items-center gap-2 text-xs text-muted">
         <Check className="h-3 w-3 text-success" aria-hidden />
-        <span>Studio indépendant — Paris</span>
+        <span>Studio indépendant · Paris</span>
       </div>
     </div>
   );

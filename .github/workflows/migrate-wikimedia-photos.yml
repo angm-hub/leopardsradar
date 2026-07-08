@@ -1,0 +1,58 @@
+name: Migrate Wikimedia Photos
+
+# ──────────────────────────────────────────────────────────────────────
+# Léopards Radar — Migration des photos hotlinkées Wikimedia vers le
+# storage Supabase (bucket player-photos).
+#
+# Pourquoi : Wikimedia rate-limite le hotlinking (HTTP 429 text/html),
+# bloqué ensuite par les navigateurs via ORB. Constaté à l'audit du
+# 5 juillet 2026 sur /radar. On télécharge une fois (cadence lente,
+# User-Agent conforme policy Wikimedia) et on sert depuis notre bucket.
+#
+# Cadence : hebdo le mardi 04h30 UTC (après backfill-photos de 04h,
+# qui peut réintroduire des hotlinks dans image_url_alt) + manuel.
+# ──────────────────────────────────────────────────────────────────────
+
+on:
+  schedule:
+    - cron: '30 4 * * 2'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'dry-run : affiche sans écrire (true/false)'
+        required: false
+        default: 'false'
+      limit:
+        description: 'Nombre max de joueurs traités'
+        required: false
+        default: '120'
+
+permissions:
+  contents: read
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: scripts/requirements.txt
+
+      - run: pip install -r scripts/requirements.txt
+
+      - name: Migrate Wikimedia photos to storage
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        working-directory: scripts
+        run: |
+          ARGS="--limit ${{ github.event.inputs.limit || '120' }}"
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then ARGS="$ARGS --dry-run"; fi
+          python migrate_wikimedia_photos.py $ARGS

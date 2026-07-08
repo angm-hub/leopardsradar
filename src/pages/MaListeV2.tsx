@@ -64,7 +64,7 @@ const POSITION_CONFIG: {
 
 export default function MaListeV2() {
   useDocumentMeta({
-    title: "Ma Liste — Léopards Radar",
+    title: "Ma Liste · Léopards Radar",
     description:
       "Ta convocation des 26 pour les Léopards au Mondial 2026. 11 titulaires, 15 remplaçants, 1 capitaine.",
   });

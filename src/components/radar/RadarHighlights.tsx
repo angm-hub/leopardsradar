@@ -109,7 +109,7 @@ function RadarTopCard({
           </span>
         )}
         <span className="font-mono text-sm font-semibold text-foreground">
-          {marketValue ? formatMarketValue(marketValue) : "—"}
+          {marketValue ? formatMarketValue(marketValue) : "n.d."}
         </span>
       </div>
     </Link>

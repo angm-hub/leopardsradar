@@ -100,7 +100,7 @@ export function ThreeSymbolsSection() {
       <div className="container-site relative z-10 py-20 md:py-28">
         {/* Eyebrow + titre éditorial */}
         <div className="mb-12 flex flex-col items-start gap-3 md:mb-16">
-          <span className="label-mono text-cobalt-mist">012 — Sémiologie</span>
+          <span className="label-mono text-cobalt-mist">012 · Sémiologie</span>
           <h2
             id="three-symbols-heading"
             className="display-heading text-4xl md:text-5xl lg:text-6xl text-foreground"
@@ -139,7 +139,7 @@ export function ThreeSymbolsSection() {
         <div className="mt-14 md:mt-20 flex flex-col items-start gap-3 border-t border-border/40 pt-8 md:flex-row md:items-end md:justify-between">
           <div>
             <span className="label-mono text-foreground/45">
-              1974 — 2026 · Cinquante ans de regard
+              1974 · 2026 · Cinquante ans de regard
             </span>
             <p className="mt-3 max-w-xl text-base md:text-lg text-foreground/70">
               Le Zaïre, premier sub-saharien en Coupe du Monde.{" "}

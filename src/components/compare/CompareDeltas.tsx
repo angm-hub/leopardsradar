@@ -15,7 +15,7 @@ type Row = {
   /** Raw numeric values used to compute the delta. Null = unknown. */
   vA: number | null;
   vB: number | null;
-  /** Display strings (already formatted, e.g. "12 buts" or "—"). */
+  /** Display strings (already formatted, e.g. "12 buts" or "n.d."). */
   dispA: string;
   dispB: string;
   /** Bigger-is-better. Set false to flip the leader colouring (e.g. age). */
@@ -51,8 +51,8 @@ export function CompareDeltas({
       label: labelMix,
       vA: a.value,
       vB: b.value,
-      dispA: a.value === null ? "—" : `${a.value}`,
-      dispB: b.value === null ? "—" : `${b.value}`,
+      dispA: a.value === null ? "n.d." : `${a.value}`,
+      dispB: b.value === null ? "n.d." : `${b.value}`,
       hint: a.label === b.label ? a.fullLabel : undefined,
     };
   });
@@ -85,10 +85,10 @@ export function CompareDeltas({
       vB: playerB.season_minutes || 0,
       dispA: playerA.season_minutes
         ? playerA.season_minutes.toLocaleString("fr-FR")
-        : "—",
+        : "n.d.",
       dispB: playerB.season_minutes
         ? playerB.season_minutes.toLocaleString("fr-FR")
-        : "—",
+        : "n.d.",
       hint: "Quand l'API ne livre pas les minutes, le profil hexagonal estime à matchs × 80.",
     },
     {
@@ -118,8 +118,8 @@ export function CompareDeltas({
       label: "Âge",
       vA: playerA.age,
       vB: playerB.age,
-      dispA: playerA.age ? `${playerA.age} ans` : "—",
-      dispB: playerB.age ? `${playerB.age} ans` : "—",
+      dispA: playerA.age ? `${playerA.age} ans` : "n.d.",
+      dispB: playerB.age ? `${playerB.age} ans` : "n.d.",
       higherIsBetter: false,
       hint: "Plus jeune = plus de runway international.",
     },
@@ -149,7 +149,7 @@ function valuePerCapRow(a: DBPlayer, b: DBPlayer): Row {
   const valA = compute(a);
   const valB = compute(b);
   const fmt = (v: number | null): string => {
-    if (v === null) return "—";
+    if (v === null) return "n.d.";
     if (v >= 1_000_000) return `${(v / 1_000_000).toFixed(1).replace(/\.0$/, "")} M €/cap`;
     if (v >= 1_000) return `${Math.round(v / 1_000)} K €/cap`;
     return `${v} €/cap`;
@@ -184,7 +184,7 @@ function contributionPer90Row(a: DBPlayer, b: DBPlayer): Row {
   const valA = compute(a);
   const valB = compute(b);
   const fmt = (v: number | null): string =>
-    v === null ? "—" : `${v.toFixed(2)} G+A/90`;
+    v === null ? "n.d." : `${v.toFixed(2)} G+A/90`;
   return {
     label: "Contribution / 90 min",
     vA: valA === null ? null : Math.round(valA * 1000), // scale up so delta math reads cleanly

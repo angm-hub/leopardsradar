@@ -199,7 +199,7 @@ function BodyBlock({ block }: { block: ArticleBlock }) {
         </p>
         {block.cite ? (
           <footer className="mt-3 text-xs font-mono uppercase tracking-[0.2em] text-muted-light">
-            — {block.cite}
+            · {block.cite}
           </footer>
         ) : null}
       </blockquote>

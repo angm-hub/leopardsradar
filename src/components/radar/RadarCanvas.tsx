@@ -17,7 +17,7 @@ interface RadarCanvasProps {
 // Au-delà la lisibilité se dégrade — le toggle "Afficher tout" permet d'outrepasser.
 const DEFAULT_MAX_PILLS = 200;
 const MAX_PILLS = DEFAULT_MAX_PILLS;
-const SAFE_MARGIN = 12; // % — plus large pour aérer
+const SAFE_MARGIN = 12; // % · plus large pour aérer
 const TOP_FEATURED = 3;
 
 /**

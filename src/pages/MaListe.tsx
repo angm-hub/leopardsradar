@@ -41,7 +41,7 @@ export default function MaListe() {
   useDocumentMeta({
     title: "Ma Liste des 26",
     description:
-      "Compose ta liste des 26 Léopards pour le Mondial 2026. 11 titulaires, 15 remplaçants, 1 capitaine — partage ton onze idéal.",
+      "Compose ta liste des 26 Léopards pour le Mondial 2026. 11 titulaires, 15 remplaçants, 1 capitaine · partage ton onze idéal.",
   });
   const currentStep = useMaListeStore((s) => s.currentStep);
   const [listCount, setListCount] = useState(0);

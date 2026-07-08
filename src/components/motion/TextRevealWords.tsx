@@ -47,7 +47,7 @@ const wordVariants = (blur: boolean): Variants => ({
     filter: "blur(0px)",
     transition: {
       duration: 0.7,
-      ease: [0.16, 1, 0.3, 1], // expo.out — la courbe Awwwards
+      ease: [0.16, 1, 0.3, 1], // expo.out · la courbe Awwwards
     },
   },
 });

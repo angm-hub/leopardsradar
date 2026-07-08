@@ -53,7 +53,7 @@ function Tribute1974() {
 
       <div className="container-site relative z-10 py-20 md:py-28">
         <div className="flex flex-col items-start gap-3">
-          <span className="label-mono text-torch/85">014 — Heritage</span>
+          <span className="label-mono text-torch/85">014 · Héritage</span>
           <span className="inline-flex items-center gap-2 rounded-full border border-torch/30 bg-torch/10 px-3 py-1 label-mono-sm text-torch">
             <span
               className="h-1.5 w-1.5 rounded-full bg-torch"
@@ -123,7 +123,7 @@ function OkapiManifesto() {
     >
       <div className="container-site py-20 md:py-28">
         <div className="flex flex-col items-start gap-3">
-          <span className="label-mono text-cobalt-mist">018 — Editorial</span>
+          <span className="label-mono text-cobalt-mist">018 · Éditorial</span>
           <h2
             id="heritage-okapi"
             className="display-heading text-3xl text-foreground md:text-5xl"
@@ -159,7 +159,7 @@ function OkapiManifesto() {
               <div className="flex items-start justify-between">
                 <LRMark size={18} color="#ECE8DD" />
                 <span className="label-mono-sm text-foreground/55">
-                  VOL. 01 · ISSUE 04 · KIN—PAR
+                  VOL. 01 · ISSUE 04 · KIN·PAR
                 </span>
               </div>
 
@@ -184,7 +184,7 @@ function OkapiManifesto() {
           <div className="bg-cobalt-night p-8 md:p-10">
             <div className="flex items-center justify-between">
               <span className="label-mono-sm text-foreground/55">
-                P. 04 — 011
+                P. 04 · 011
               </span>
               <span className="label-mono-sm text-foreground/55">
                 BY · LR EDITORIAL

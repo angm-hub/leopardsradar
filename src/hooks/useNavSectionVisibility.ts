@@ -68,7 +68,7 @@ export function useNavSectionVisibility(): NavSectionVisibility {
   const { data } = useQuery({
     queryKey: ["nav-section-visibility"],
     queryFn: fetchCounts,
-    staleTime: 10 * 60 * 1000, // 10 min — cadence éditoriale
+    staleTime: 10 * 60 * 1000, // 10 min · cadence éditoriale
     gcTime: 30 * 60 * 1000,
     // Pas de refetchOnMount/Window : la nav doit être ultra-stable
     refetchOnMount: false,

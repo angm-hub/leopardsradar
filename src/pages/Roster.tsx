@@ -66,7 +66,7 @@ const Roster = () => {
   useDocumentMeta({
     title: "Roster",
     description:
-      "Le roster Léopards 2025/26 — internationaux RDC en activité, cartographiés par poste, valeur marchande, club et tier UEFA.",
+      "Le roster Léopards 2025/26 · internationaux RDC en activité, cartographiés par poste, valeur marchande, club et tier UEFA.",
   });
 
   const { players, loading, error } = usePlayers({
@@ -267,7 +267,7 @@ const Roster = () => {
             Roster Léopards
           </h1>
           <p className="mt-3 text-lg text-muted-light">
-            {`${statsLoading ? "—" : (rosterCount ?? "—")} internationaux RDC — Saison 2025/26`}
+            {`${statsLoading ? "n.d." : (rosterCount ?? "n.d.")} internationaux RDC · Saison 2025/26`}
           </p>
           <p className="mt-2 max-w-xl text-sm text-muted">
             Composition publique du staff RDC, mise à jour à chaque trêve internationale.
@@ -328,7 +328,7 @@ const Roster = () => {
             </div>
 
             <span className="text-sm text-muted whitespace-nowrap">
-              {(filtersActive ? filtered.length : (rosterCount ?? "—"))} joueur{(filtersActive ? filtered.length : (rosterCount ?? 0)) > 1 ? "s" : ""}
+              {(filtersActive ? filtered.length : (rosterCount ?? "n.d."))} joueur{(filtersActive ? filtered.length : (rosterCount ?? 0)) > 1 ? "s" : ""}
             </span>
 
             {filtersActive ? (

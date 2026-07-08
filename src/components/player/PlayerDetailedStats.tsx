@@ -15,13 +15,13 @@ interface PlayerDetailedStatsProps {
 }
 
 function fmt(v: number | null | undefined, decimals = 0): string {
-  if (v === null || v === undefined) return "—";
-  if (!Number.isFinite(v)) return "—";
+  if (v === null || v === undefined) return "n.d.";
+  if (!Number.isFinite(v)) return "n.d.";
   return decimals > 0 ? v.toFixed(decimals) : String(Math.round(v));
 }
 
 function fmtPct(v: number | null | undefined): string {
-  if (v === null || v === undefined) return "—";
+  if (v === null || v === undefined) return "n.d.";
   return `${(v * 100).toFixed(0)}%`;
 }
 
@@ -81,12 +81,12 @@ export function PlayerDetailedStats({ stats, loading, className }: PlayerDetaile
     );
   }
 
-  // Filtrer les colonnes pertinentes (exclure colonnes toutes à "—")
+  // Filtrer les colonnes pertinentes (exclure colonnes toutes à "n.d.")
   const relevantColumns = COLUMNS.filter((col) => {
     if (["season", "competition", "matches_played", "minutes_played", "goals", "assists"].includes(col.key as string)) {
       return true;
     }
-    return stats.some((r) => col.format(r) !== "—");
+    return stats.some((r) => col.format(r) !== "n.d.");
   });
 
   return (

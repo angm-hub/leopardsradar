@@ -154,10 +154,10 @@ export default function Confidentialite() {
         </p>
         <ul className="list-disc pl-6 space-y-2">
           <li>
-            <strong>Supabase</strong> — base de données et authentification
+            <strong>Supabase</strong> · base de données et authentification
           </li>
           <li>
-            <strong>Lovable</strong> — hébergement et analytics anonymisés
+            <strong>Lovable</strong> · hébergement et analytics anonymisés
           </li>
         </ul>
       </section>

@@ -14,7 +14,7 @@ export function QuadrantLabels() {
     <>
       <Quadrant
         position="top-4 left-6"
-        label="Pepites"
+        label="Pépites"
         sub="Jeunes a suivre"
       />
       <Quadrant

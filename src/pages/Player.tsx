@@ -278,7 +278,7 @@ export default function PlayerPage() {
                   Statistiques avancées
                 </h2>
                 <p className="text-sm text-muted-light">
-                  Toutes saisons et compétitions — source FBref / scraper Léopards Radar.
+                  Toutes saisons et compétitions · source FBref / scraper Léopards Radar.
                 </p>
               </div>
               <PlayerDetailedStats
@@ -295,7 +295,7 @@ export default function PlayerPage() {
         )}
 
         {/* ════════════════════════════════════════════════════════
-            TAB FIFA — Statut éligibilité
+            TAB FIFA · Statut éligibilité
         ════════════════════════════════════════════════════════ */}
         <div
           id="panel-fifa"
@@ -341,11 +341,11 @@ function SparseProfileBanner({ player }: { player: import("@/types/dbPlayer").DB
         <p className="text-muted-light leading-relaxed max-w-2xl text-sm">
           Détecté via la chaîne d'enrichissement (Wikidata, sélections jeunes
           EU, patronymes bantu). Date de naissance, club, taille et statistiques
-          saison sont en cours de collecte — mise à jour chaque dimanche.
+          saison sont en cours de collecte · mise à jour chaque dimanche.
         </p>
         <p className="text-muted text-xs mt-6">
-          L'angle éditorial — base juridique RDC, fenêtre de switch FIFA, procédure
-          FECOFA — est disponible dans l'onglet "Statut FIFA".
+          L'angle éditorial · base juridique RDC, fenêtre de switch FIFA, procédure
+          FECOFA · est disponible dans l'onglet "Statut FIFA".
         </p>
         <div className="mt-6">
           <a

@@ -81,7 +81,7 @@ export function PlayerWeeklyProgress({ slug }: { slug: string }) {
             <p className="mt-2 text-sm text-foreground/80 max-w-xl leading-relaxed">
               Premier snapshot enregistré. Les variations semaine après semaine
               apparaîtront à partir du <strong className="text-foreground">prochain
-              dimanche</strong> — buts, passes décisives et valeur marché
+              dimanche</strong> · buts, passes décisives et valeur marché
               comparés à la semaine d'avant.
             </p>
           </div>
@@ -141,10 +141,10 @@ function DeltaTile({
   suffix?: string;
   kind?: "int" | "euro";
 }) {
-  // Etat null ou 0 → tile en sourdine. Avant : "—" en font-serif text-2xl,
+  // Etat null ou 0 → tile en sourdine. Avant : "n.d." en font-serif text-2xl,
   // ce qui créait un mur de tirets visuel sur les semaines calmes (3 tiles
-  // sur 4 à "—" donnait l'impression d'un produit qui ne tracke rien).
-  // Maintenant : opacité réduite, label discret, "—" en plus petit. Les
+  // sur 4 à "n.d." donnait l'impression d'un produit qui ne tracke rien).
+  // Maintenant : opacité réduite, label discret, "n.d." en plus petit. Les
   // tiles avec un vrai signal ressortent visuellement.
   const isEmpty = value === null || value === 0;
 
@@ -154,7 +154,7 @@ function DeltaTile({
         <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted/70">
           {label}
         </div>
-        <div className="mt-2 font-serif text-base text-muted/80">—</div>
+        <div className="mt-2 font-serif text-base text-muted/80">n.d.</div>
       </div>
     );
   }

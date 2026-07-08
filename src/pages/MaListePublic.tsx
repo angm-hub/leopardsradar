@@ -103,7 +103,7 @@ export default function MaListePublic() {
     : "";
   const permalink = `${typeof window !== "undefined" ? window.location.origin : ""}/ma-liste/${slug}`;
   const title = list?.pseudo
-    ? `Ma liste des 26 — ${list.pseudo} | Léopards Radar`
+    ? `Ma liste des 26 · ${list.pseudo} | Léopards Radar`
     : "Ma liste des 26 | Léopards Radar";
   const description = list
     ? `Sélection ${list.formation}, âge moyen ${list.avg_age}, ${list.radar_count} joueurs du Radar. Compose la tienne sur leopardsradar.com.`

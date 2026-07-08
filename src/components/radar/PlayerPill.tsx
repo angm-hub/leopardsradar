@@ -413,7 +413,7 @@ function PillTooltip({ player, open }: { player: DBPlayer; open: boolean }) {
       {/* Stats compactes */}
       <div className="mt-2.5 flex items-center justify-between text-[10px] font-mono pt-2 border-t border-border/50">
         <span className="text-muted">
-          {player.age ? `${player.age} ans` : "—"}
+          {player.age ? `${player.age} ans` : "n.d."}
           {player.foot ? ` · ${player.foot === "right" ? "Pied D" : player.foot === "left" ? "Pied G" : "Ambidextre"}` : ""}
         </span>
         {player.market_value_eur && player.market_value_eur > 0 ? (

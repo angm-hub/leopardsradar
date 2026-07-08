@@ -29,7 +29,7 @@ function GACard({ player, rank }: { player: DBPlayer; rank: number }) {
   return (
     <Link
       to={`/player/${player.slug}`}
-      aria-label={`${player.name} — ${ga} participations aux buts cette saison`}
+      aria-label={`${player.name} · ${ga} participations aux buts cette saison`}
       className={cn(
         "group relative flex flex-col gap-3 shrink-0 w-[200px] sm:w-auto",
         "rounded-card border border-border bg-card p-4",

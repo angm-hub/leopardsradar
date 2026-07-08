@@ -114,7 +114,7 @@ export function BuilderLibrary({
     ? `Joueurs compatibles · ${activeSlot}`
     : bench.length < 15
       ? `Ajouter au banc · ${bench.length}/15`
-      : "Banc complet — désélectionnez un joueur";
+      : "Banc complet · désélectionnez un joueur";
 
   return (
     <aside className="flex flex-col h-full rounded-card border border-border bg-card overflow-hidden">
@@ -253,7 +253,7 @@ export function BuilderLibrary({
                       <p className="truncate text-[10px] text-muted leading-tight mt-0.5 font-mono">
                         {player.position
                           ? POSITION_LABEL[player.position].slice(0, 3)
-                          : "—"}
+                          : "n.d."}
                         {" · "}
                         {player.current_club ?? "Sans club"}
                       </p>

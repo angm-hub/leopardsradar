@@ -172,7 +172,7 @@ function PitchPlayer({
     <Link
       to={`/player/${player.slug}`}
       className="group block"
-      aria-label={`${player.name} — ${player.current_club ?? ""}`}
+      aria-label={`${player.name} · ${player.current_club ?? ""}`}
     >
       <div className="flex flex-col items-center gap-1">
         <div className="relative">
@@ -221,7 +221,7 @@ export default function BestXI() {
   useDocumentMeta({
     title: "Best XI",
     description:
-      "Le Best XI Léopards de la semaine — composition rêvée, formation, statistiques, valeur cumulée. Édition hebdomadaire chaque dimanche.",
+      "Le Best XI Léopards de la semaine · composition rêvée, formation, statistiques, valeur cumulée. Édition hebdomadaire chaque dimanche.",
   });
   const { data, loading, error } = useBestXI();
 
@@ -233,7 +233,7 @@ export default function BestXI() {
   const handleShare = (channel: "twitter" | "whatsapp" | "copy") => {
     if (!data) return;
     const url = typeof window !== "undefined" ? window.location.href : "";
-    const text = `${data.title} — Le Best XI Diaspora cette semaine sur Léopards Radar`;
+    const text = `${data.title} · Le Best XI Diaspora cette semaine sur Léopards Radar`;
     if (channel === "twitter") {
       window.open(
         `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
@@ -454,8 +454,8 @@ export default function BestXI() {
               Compose ta sélection des 26.
             </h3>
             <p className="mt-3 text-muted-light max-w-md mx-auto">
-              Notre Best XI t'inspire ? Bâtis le tien — ton onze, ton banc, ton
-              capitaine — et partage ta liste avec un lien.
+              Notre Best XI t'inspire ? Bâtis le tien · ton onze, ton banc, ton
+              capitaine · et partage ta liste avec un lien.
             </p>
             <Link to="/ma-liste" className="inline-block mt-6">
               <Button>

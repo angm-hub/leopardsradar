@@ -1,5 +1,5 @@
 /**
- * ProStatsBlock — "Pepites stats · Saison 25-26"
+ * ProStatsBlock — "Pépites stats · Saison 25-26"
  *
  * 3 mini-cards horizontales placees entre RadarHighlights et le canvas :
  *   1. G+A : top 1 radar par (season_goals + season_assists)
@@ -38,7 +38,7 @@ function StatCard({ label, value, unit, player, accentClass = "text-primary" }: 
   return (
     <Link
       to={`/player/${player.slug}`}
-      aria-label={`${label} : ${player.name} — ${value} ${unit}`}
+      aria-label={`${label} : ${player.name} · ${value} ${unit}`}
       className={cn(
         "group flex items-center gap-4 p-4 rounded-card border border-border bg-card",
         "transition-colors duration-200 hover:border-border-hover flex-1 min-w-0",
@@ -210,13 +210,13 @@ export function ProStatsBlock({ players }: ProStatsBlockProps) {
           id="pro-stats-heading"
           className="mt-1.5 font-serif text-2xl font-semibold tracking-tight text-foreground"
         >
-          Pepites stats
+          Pépites stats
         </h2>
         <p className="mt-1 text-xs text-muted-light">
-          Meilleurs chiffres de saison parmi les talents eligibles RDC.
+          Meilleurs chiffres de saison parmi les talents éligibles RDC.
           {!hasAnyMinutes && hasAnyGames && (
             <span className="ml-1 text-muted/70">
-              Minutes non encore synchronisees — affichage en matchs joues.
+              Minutes non encore synchronisées : affichage en matchs joués.
             </span>
           )}
         </p>

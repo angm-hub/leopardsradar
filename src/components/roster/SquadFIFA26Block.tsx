@@ -6,7 +6,7 @@
  * saison 2025-2026 (minutes + matchs + buts + passes).
  *
  * Source des stats : hook useFifa26Stats qui cascade FBRef → Transfermarkt →
- * players.season_* → "—". Le badge de source en haut signale la fraicheur :
+ * players.season_* → "n.d.". Le badge de source en haut signale la fraicheur :
  * vert = FBRef live, ambre = TM, gris = fallback.
  *
  * Tri intra-groupe : minutes desc (ceux qui jouent le plus en premier),
@@ -31,13 +31,13 @@ const FIFA26_GROUP_LOOKUP = new Map<number, DBPosition>(
 // ─── Helpers presentation ─────────────────────────────────────────────────────
 
 function formatMinutes(min: number | null): string {
-  if (min === null || min === undefined) return "—";
+  if (min === null || min === undefined) return "n.d.";
   if (min === 0) return "0";
   return min.toLocaleString("fr-FR");
 }
 
 function formatStat(v: number | null): string {
-  if (v === null || v === undefined) return "—";
+  if (v === null || v === undefined) return "n.d.";
   return v.toLocaleString("fr-FR");
 }
 
@@ -51,7 +51,7 @@ function sourceTone(source: StatsSource): { dot: string; label: string } {
       return { dot: "bg-slate-400", label: "DB" };
     case "none":
     default:
-      return { dot: "bg-slate-700", label: "—" };
+      return { dot: "bg-slate-700", label: "n.d." };
   }
 }
 
@@ -70,7 +70,7 @@ function SquadRow({ row }: { row: FIFA26PlayerStats }) {
   return (
     <Link
       to={`/player/${player.slug}`}
-      aria-label={`${player.name} — ${formatMinutes(stats.minutes)} minutes en ${formatStat(matches)} matchs saison 2025-2026, ${caps} sélections RDC`}
+      aria-label={`${player.name} · ${formatMinutes(stats.minutes)} minutes en ${formatStat(matches)} matchs saison 2025-2026, ${caps} sélections RDC`}
       className={cn(
         "group flex items-center gap-3 rounded-lg px-3 py-2.5",
         "border border-border/60 bg-card",
@@ -180,7 +180,7 @@ function GroupColumn({
           <span className="ml-1.5 text-muted">· {rows.length}</span>
         </h3>
         <span className="font-mono text-[10px] text-muted tabular-nums">
-          {totalMinutes.toLocaleString("fr-FR")} min cumulees
+          {totalMinutes.toLocaleString("fr-FR")} min cumulées
         </span>
       </div>
 
@@ -253,7 +253,7 @@ export function SquadFIFA26Block() {
       <RevealOnScroll className="mb-5 flex flex-wrap items-end justify-between gap-3" y={20}>
         <div>
           <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary/80">
-            La Liste FIFA · 26 selectionnes
+            La Liste FIFA · 26 sélectionnés
           </p>
           <h2
             id="liste-fifa26-heading"
@@ -282,7 +282,7 @@ export function SquadFIFA26Block() {
             {sourceCounts.none > 0 && (
               <span className="inline-flex items-center gap-1.5">
                 <span className="h-1.5 w-1.5 rounded-full bg-slate-700" aria-hidden />
-                — {sourceCounts.none}
+                · {sourceCounts.none}
               </span>
             )}
           </div>

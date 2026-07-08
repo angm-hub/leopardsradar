@@ -80,7 +80,7 @@ export function LevelBandBadge({
   return (
     <span
       title={description}
-      aria-label={`Niveau ${label}${showScore && score != null ? ` — ${formatLevelScore(score)}` : ""}`}
+      aria-label={`Niveau ${label}${showScore && score != null ? ` · ${formatLevelScore(score)}` : ""}`}
       className={cn(
         // Base — pill arrondie avec border
         "inline-flex items-center gap-1 rounded-full border font-mono uppercase tracking-wider select-none",

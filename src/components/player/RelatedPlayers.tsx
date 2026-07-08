@@ -84,7 +84,7 @@ export function RelatedPlayers({
                     </p>
                     <div className="mt-1 flex items-center justify-between text-[10px] font-mono">
                       <span className="text-muted truncate">
-                        {p.current_club ?? "—"}
+                        {p.current_club ?? "n.d."}
                       </span>
                       {p.market_value_eur && p.market_value_eur > 0 ? (
                         <span className="text-primary/85 shrink-0 ml-2">

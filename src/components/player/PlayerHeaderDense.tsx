@@ -67,7 +67,7 @@ export function PlayerHeaderDense({ player, games }: PlayerHeaderDenseProps) {
 
   const handleShare = (channel: "twitter" | "whatsapp" | "copy") => {
     const url = typeof window !== "undefined" ? window.location.href : "";
-    const text = `${player.name} — ${player.current_club ?? "profil RDC"} sur Léopards Radar`;
+    const text = `${player.name} · ${player.current_club ?? "profil RDC"} sur Léopards Radar`;
     if (channel === "twitter") {
       window.open(
         `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
@@ -208,7 +208,7 @@ export function PlayerHeaderDense({ player, games }: PlayerHeaderDenseProps) {
                     addToBench(player);
                     toast.success(
                       player.computed_eligibility_status === "POTENTIALLY"
-                        ? `${player.name} ajouté — à instruire avant Mondial.`
+                        ? `${player.name} ajouté · à instruire avant Mondial.`
                         : `${player.name} ajouté à ta liste.`,
                       {
                         action: {
@@ -274,7 +274,7 @@ export function PlayerHeaderDense({ player, games }: PlayerHeaderDenseProps) {
             />
             <BigStat
               label="NOTE MOY."
-              value={player.season_rating ? player.season_rating.toFixed(2) : "—"}
+              value={player.season_rating ? player.season_rating.toFixed(2) : "n.d."}
               muted={!player.season_rating}
               accent={!!player.season_rating && player.season_rating >= 7}
             />
@@ -289,7 +289,7 @@ export function PlayerHeaderDense({ player, games }: PlayerHeaderDenseProps) {
             />
             <BigStat
               label="BUTS SAISON"
-              value={player.season_goals ?? "—"}
+              value={player.season_goals ?? "n.d."}
               muted={!player.season_goals}
             />
           </div>

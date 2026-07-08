@@ -75,7 +75,7 @@ export default function RevueDePresse() {
                 Revue de presse.
               </h1>
               <p className="mt-3 text-lg text-muted-light max-w-2xl">
-                Ce qui se dit sur les Léopards — sources spécialisées RDC,
+                Ce qui se dit sur les Léopards · sources spécialisées RDC,
                 médias diaspora, comptes officiels. Curation éditoriale, pas
                 de firehose.
               </p>
@@ -203,7 +203,7 @@ export default function RevueDePresse() {
 
               {/* Layout magazine : hero + grille asymétrique quand pas de filtre actif.
                   Quote pull intercalée tous les ~5 items quand la curator_note
-                  est assez longue (> 50 chars) — donne un rythme de lecture
+                  est assez longue (> 50 chars) · donne un rythme de lecture
                   type magazine, l'œil ralentit sur la citation. */}
               {!filtersActive && items.length > 0 ? (
                 <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:grid-rows-[auto]">

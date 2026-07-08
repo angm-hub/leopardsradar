@@ -371,7 +371,7 @@ def main():
             "transfermarkt_id": [tid for tid, ca in all_candidates.items() if ca == c][0],
             "player_category": "radar",
             "eligibility_status": "potentially_eligible",
-            "eligibility_note": f"BINATIONAL INVISIBLE — découvert via {c['source_team_name']} (patronyme '{c['surname']}', confiance {c['confidence']}).{wiki_note} À vérifier manuellement (origine RDC à confirmer).",
+            "eligibility_note": f"BINATIONAL INVISIBLE · découvert via {c['source_team_name']} (patronyme '{c['surname']}', confiance {c['confidence']}).{wiki_note} À vérifier manuellement (origine RDC à confirmer).",
             "verified": False,
             "nationalities": ["DR Congo"],
             "source_urls": [c["profile_url"]] + ([c["wiki_url"]] if c["wiki_url"] else []),

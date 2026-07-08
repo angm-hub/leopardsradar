@@ -28,7 +28,7 @@ const SURFACE = "#131316";
 const BORDER = "#26262C";
 const FG = "#F4F4F1";
 const MUTED = "#8B8B95";
-const PRIMARY = "#FCD116"; // RDC yellow — accent only
+const PRIMARY = "#FCD116"; // RDC yellow · accent only
 const RED = "#CE1126";
 const GREEN = "#00A651";
 

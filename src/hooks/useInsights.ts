@@ -90,7 +90,7 @@ export function useInsights() {
   return useQuery({
     queryKey: ["insights-bundle"],
     queryFn: fetchInsights,
-    staleTime: 60 * 60 * 1000,     // 1h — refresh hebdo de la BDD
+    staleTime: 60 * 60 * 1000,     // 1h · refresh hebdo de la BDD
     gcTime: 4 * 60 * 60 * 1000,
     refetchOnWindowFocus: false,
   });

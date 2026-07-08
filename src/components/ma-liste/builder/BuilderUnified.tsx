@@ -682,7 +682,7 @@ function BenchStrip({
                 type="button"
                 onClick={() => onSetCaptain(player)}
                 className="block w-full aspect-square rounded-md overflow-hidden ring-1 ring-border group-hover:ring-primary/50 transition-all"
-                title={`${player.name}${isCap ? " (Capitaine)" : ""} — click pour capitaine`}
+                title={`${player.name}${isCap ? " (Capitaine)" : ""} · click pour capitaine`}
               >
                 <PlayerAvatar
                   name={player.name}

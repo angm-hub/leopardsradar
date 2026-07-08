@@ -64,7 +64,7 @@ export function BestXIPreviewSection() {
                   {data.editorial_note}
                 </p>
                 <footer className="mt-6 label-mono-sm text-muted">
-                  — Note éditoriale Léopards Radar
+                  · Note éditoriale Léopards Radar
                 </footer>
               </blockquote>
             ) : (
@@ -117,7 +117,7 @@ function BestXIEmpty() {
 }
 
 function formatPublishedDate(iso: string | null): string {
-  if (!iso) return "—";
+  if (!iso) return "n.d.";
   return new Date(iso).toLocaleDateString("fr-FR", {
     day: "numeric",
     month: "long",

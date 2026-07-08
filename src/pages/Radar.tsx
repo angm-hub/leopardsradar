@@ -42,7 +42,7 @@ const POSITION_OPTIONS: { value: PositionFilter; label: string }[] = [
 
 const TIER_OPTIONS: { value: TierFilter; label: string }[] = [
   { value: "ALL", label: "Tous tiers" },
-  { value: "tier1", label: "Tier 1 — Top clubs" },
+  { value: "tier1", label: "Tier 1 · Top clubs" },
   { value: "tier2", label: "Tier 2" },
 ];
 
@@ -151,7 +151,7 @@ export default function Radar() {
   useDocumentMeta({
     title: "Radar",
     description:
-      "Le Radar Leopards — talents eligibles RDC et diaspora binationale, cartographies par valeur marchande, jeunesse et tier UEFA.",
+      "Le Radar Léopards : talents éligibles RDC et diaspora binationale, cartographiés par valeur marchande, jeunesse et tier UEFA.",
   });
 
   const { players, loading, error } = usePlayers({
@@ -263,7 +263,7 @@ export default function Radar() {
       return a[0].localeCompare(b[0]);
     });
     return [
-      { value: "ALL", label: `Toutes nationalites (${players.length})` },
+      { value: "ALL", label: `Toutes nationalités (${players.length})` },
       ...sorted.map(([n, count]) => ({
         value: n,
         label: `${flagFor(n)} ${n} (${count})`,
@@ -369,7 +369,7 @@ export default function Radar() {
             Le Radar.
           </h1>
           <p className="mt-3 max-w-2xl text-lg text-muted-light">
-            {`${radarTotal ?? "—"} joueurs eligibles ou a ascendance RDC dans le monde.`}
+            {`${radarTotal ?? "n.d."} joueurs éligibles ou à ascendance RDC dans le monde.`}
           </p>
         </header>
 
@@ -393,7 +393,7 @@ export default function Radar() {
               onChange={(e) => setTier(e.target.value as TierFilter)}
             />
             <Select
-              label="Nationalite"
+              label="Nationalité"
               options={nationOptions}
               value={nation}
               onChange={(e) => setNation(e.target.value)}
@@ -457,7 +457,7 @@ export default function Radar() {
                     Le Radar se construit.
                   </p>
                   <p className="text-sm text-muted-light">
-                    Le Radar trace les joueurs eligibles ou a ascendance RDC
+                    Le Radar trace les joueurs éligibles ou à ascendance RDC
                     dans les championnats du monde. La cartographie initiale
                     arrive a la prochaine mise a jour.
                   </p>

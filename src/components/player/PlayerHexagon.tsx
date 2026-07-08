@@ -15,7 +15,7 @@ interface PlayerHexagonProps {
  *   - Total typographic and palette control (Fraunces serif on values,
  *     Space Mono on axes, kAIra yellow + green only — no chart-library
  *     defaults that scream "AI-generated dashboard").
- *   - Honest data — null axes collapse to centre and show "—" instead of
+ *   - Honest data — null axes collapse to centre and show "n.d." instead of
  *     a zero that lies.
  *   - Sweep entry animation drawn axis-by-axis instead of a fade-in pop.
  *
@@ -239,7 +239,7 @@ export function PlayerHexagon({ scores, size = 320 }: PlayerHexagonProps) {
                 className="font-serif fill-foreground"
                 style={{ fontSize: 14 }}
               >
-                {p.score.value === null ? "—" : p.score.value}
+                {p.score.value === null ? "n.d." : p.score.value}
               </text>
             </g>
           );
