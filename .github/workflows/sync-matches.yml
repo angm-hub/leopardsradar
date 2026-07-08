@@ -17,10 +17,11 @@ name: Sync Matchs RDC (Wikipedia → Supabase)
 # Aucune clé API tierce requise — Wikipedia est gratuit et sans compte.
 # ──────────────────────────────────────────────────────────────────────
 
+# Cron désactivé le 2026-07-08 : la table matches est désormais alimentée
+# par l'edge function Supabase sync-matches-apifootball (API-Football,
+# pg_cron quotidien 05h20 UTC, upsert par fixture_id). Ce workflow
+# Wikipedia reste disponible en manuel comme fallback.
 on:
-  schedule:
-    # Tous les jours à 06:00 UTC = 08:00 Paris (UTC+2 été)
-    - cron: '0 6 * * *'
   workflow_dispatch:
     inputs:
       dry_run:
