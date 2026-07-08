@@ -64,8 +64,29 @@ export function usePlayers(filters: Filters = {}) {
     setLoading(true);
     setError(null);
     try {
+      // Colonnes réellement consommées par les vues liste (Radar, Roster,
+      // Ma Liste, CommandPalette). Le select("*") historique embarquait
+      // aussi les gros champs texte (editorial_note, sources u17/u20/u23,
+      // ids externes) sur ~2 200 lignes : payload multiplié pour rien.
+      // Si une vue liste a besoin d'un nouveau champ, l'ajouter ICI.
+      const LIST_COLUMNS = [
+        "id", "transfermarkt_id", "name", "slug",
+        "image_url", "image_url_alt",
+        "date_of_birth", "age", "place_of_birth", "country_of_birth",
+        "height_cm", "position", "foot",
+        "current_club", "current_club_id", "contract_expires",
+        "on_loan_from", "agent",
+        "is_binational", "nationalities", "other_nationalities",
+        "player_category", "tier", "caps_rdc",
+        "eligibility_status", "eligibility_note",
+        "market_value_eur",
+        "season_games", "season_goals", "season_assists",
+        "season_minutes", "season_rating",
+        "verified", "level_score", "level_band",
+        "created_at", "updated_at",
+      ].join(",");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      let query: any = (supabase as any).from("players").select("*");
+      let query: any = (supabase as any).from("players").select(LIST_COLUMNS);
 
       if (category) query = query.eq("player_category", category);
       if (categoriesKey) query = query.in("player_category", categoriesKey.split(","));

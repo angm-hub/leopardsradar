@@ -17,9 +17,29 @@
  * un wallpaper, pas un hero.
  */
 
+import { useEffect, useState } from "react";
 import { GrainGradient } from "@paper-design/shaders-react";
 import { useReducedMotion } from "framer-motion";
 import { RDCConstellation } from "@/components/ui/RDCConstellation";
+
+// Mobile = fallback statique. L'audit Playwright du 5 juillet 2026 montrait
+// des GPU stalls répétés (ReadPixels) sur le shader en 390px : sur petit
+// écran le gain visuel ne justifie pas le coût batterie/jank. On matche
+// pointer coarse OU viewport étroit, réévalué au resize.
+const MOBILE_QUERY = "(max-width: 767px), (pointer: coarse)";
+
+function useIsMobile(): boolean {
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== "undefined" && window.matchMedia(MOBILE_QUERY).matches,
+  );
+  useEffect(() => {
+    const mql = window.matchMedia(MOBILE_QUERY);
+    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mql.addEventListener("change", onChange);
+    return () => mql.removeEventListener("change", onChange);
+  }, []);
+  return isMobile;
+}
 
 // ─── Palette RDC — Premium DA Cobalt (2026-05-15) ────────────────────────────
 // Pivot du brand book "Premium v2" : drapeau RDC désaturé 15-20% pour rester
@@ -47,10 +67,11 @@ export function LeopardsGrainBackground({
   className,
 }: LeopardsGrainBackgroundProps) {
   const reducedMotion = useReducedMotion();
+  const isMobile = useIsMobile();
 
-  // Reduced-motion : on ne charge pas le shader animé. Le SVG constellation
-  // statique a déjà la même intention de signature territoriale + reste sobre.
-  if (reducedMotion) {
+  // Reduced-motion et mobile : on ne charge pas le shader animé. Le SVG
+  // constellation statique a la même intention de signature, sans WebGL.
+  if (reducedMotion || isMobile) {
     return (
       <div aria-hidden className={className} style={{ opacity }}>
         <RDCConstellation />
