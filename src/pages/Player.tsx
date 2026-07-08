@@ -18,6 +18,7 @@ import { usePlayer } from "@/hooks/usePlayer";
 import { usePlayerAttributes } from "@/hooks/usePlayerAttributes";
 import { useDocumentMeta } from "@/hooks/useDocumentMeta";
 import { cn } from "@/lib/utils";
+import { PlayerGradeBars } from "@/components/player/PlayerGradeBars";
 import {
   POSITION_LABEL,
   formatMarketValue,
@@ -204,6 +205,16 @@ export default function PlayerPage() {
                 capsRdc: player.caps_rdc,
               })}
             />
+          </section>
+
+          {/* ── Radar de potentiel (gradebars percentiles) ──
+              Toujours affiché, y compris pour les profils creux : les axes
+              niveau de jeu + ancrage Léopards couvrent tout le pool. C'est
+              la signature data de la fiche (F2 de la thèse produit). */}
+          <section className="container-site py-10 border-b border-border/40">
+            <div className="max-w-3xl">
+              <PlayerGradeBars slug={player.slug} />
+            </div>
           </section>
 
           {/* ── Attribut Profile 15 + Insights + Strengths ── */}
