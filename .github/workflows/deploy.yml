@@ -1,0 +1,49 @@
+name: Build & Deploy GH Pages
+
+# ──────────────────────────────────────────────────────────────────────
+# Léopards Radar — build + déploiement automatique sur gh-pages.
+#
+# Avant : déploiement manuel depuis le poste local (npm run deploy),
+# dépendant d'un token PAT dans le remote (expiré en juillet 2026,
+# déploiements bloqués pendant 7 semaines sans que rien ne le signale).
+# Maintenant : chaque push sur main reconstruit et publie. Le garde-fou
+# copy (scripts/check-copy.mjs) bloque le build si un tiret cadratin
+# traîne dans du texte affiché.
+# ──────────────────────────────────────────────────────────────────────
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: deploy-gh-pages
+  cancel-in-progress: true
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build (avec garde-fou copy)
+        run: npm run build
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          commit_message: "deploy: ${{ github.event.head_commit.message }}"
