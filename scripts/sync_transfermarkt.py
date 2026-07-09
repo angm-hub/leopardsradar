@@ -78,6 +78,9 @@ def main():
             "players",
             select="id,name,slug,transfermarkt_id,updated_at",
             current_club="is.null",
+            # Audit 2026-07-09 : ne jamais depenser le batch sur les archives
+            # (1 200+ fiches apres le nettoyage des faux positifs).
+            archived="not.is.true",
             order="updated_at.asc.nullsfirst",
             limit=str(half),
         )
@@ -92,6 +95,7 @@ def main():
         oldest = sb.select(
             "players",
             select="id,name,slug,transfermarkt_id,updated_at",
+            archived="not.is.true",
             order="updated_at.asc.nullsfirst",
             limit=str(need * 2),
         )

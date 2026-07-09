@@ -13,6 +13,9 @@ on:
   schedule:
     # Sunday 03:00 UTC = Sunday 04:00 Paris (UTC+1) / 05:00 (UTC+2 été)
     - cron: '0 3 * * 0'
+    # 2e passage hebdo (audit 2026-07-09) : couverture valeurs trop lente a
+    # 200 joueurs/semaine pour ~1 100 actifs. Dimanche + mercredi.
+    - cron: '0 3 * * 3'
   workflow_dispatch:        # déclenchement manuel depuis l'UI GitHub
     inputs:
       batch_size:
