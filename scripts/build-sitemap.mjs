@@ -134,7 +134,7 @@ async function main() {
     fetchAll(
       url,
       key,
-      "/rest/v1/players?select=slug,updated_at&slug=not.is.null&order=updated_at.desc",
+      "/rest/v1/players?select=slug,updated_at&slug=not.is.null&archived=not.is.true&or=(discovery_method.is.null,discovery_method.neq.academy_scan_2026,verified.is.true,caps_rdc.gt.0)&order=updated_at.desc",
     ),
     fetchAll(
       url,

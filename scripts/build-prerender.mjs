@@ -125,7 +125,7 @@ async function main() {
   const PAGE = 1000;
   for (;;) {
     const r = await fetch(
-      `${url}/rest/v1/players?select=slug,name,position,current_club,age,caps_rdc&order=id.asc`,
+      `${url}/rest/v1/players?select=slug,name,position,current_club,age,caps_rdc&archived=not.is.true&or=(discovery_method.is.null,discovery_method.neq.academy_scan_2026,verified.is.true,caps_rdc.gt.0)&order=id.asc`,
       {
         headers: {
           apikey: key,
