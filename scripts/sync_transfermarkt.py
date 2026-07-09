@@ -69,11 +69,19 @@ def main():
     #   - Déduplication : un joueur ne peut apparaître qu'une fois dans le batch
     #
     # PRIORITY_NO_CLUB=false : 100% les plus vieux (mode legacy, inchangé).
+    #
+    # Cle de rotation (audit valeurs 2026-07-09) : market_value_updated_at, PAS
+    # updated_at. updated_at bouge a chaque ecriture sur la fiche (notes, photos,
+    # eligibilite...), donc les tetes d'affiche ne remontaient jamais dans la file
+    # (Lukeba 45M jamais re-sync). market_value_updated_at n'est pose que par ce
+    # job. Les nulls (jamais syncs) passent en premier, departages par valeur
+    # marchande decroissante : les fiches les plus visibles d'abord.
+    MV_ORDER = "market_value_updated_at.asc.nullsfirst,market_value_eur.desc.nullslast"
     priority_no_club = os.environ.get("PRIORITY_NO_CLUB", "true").lower() == "true"
     if priority_no_club:
         half = BATCH_SIZE // 2
 
-        # Moitié 1 : joueurs sans club, les plus vieux en premier
+        # Moitié 1 : joueurs sans club, jamais syncs ou les plus anciens en premier
         no_club = sb.select(
             "players",
             select="id,name,slug,transfermarkt_id,updated_at",
@@ -81,22 +89,22 @@ def main():
             # Audit 2026-07-09 : ne jamais depenser le batch sur les archives
             # (1 200+ fiches apres le nettoyage des faux positifs).
             archived="not.is.true",
-            order="updated_at.asc.nullsfirst",
+            order=MV_ORDER,
             limit=str(half),
         )
-        print(f"[mode] PRIORITY_NO_CLUB=true → split {half} sans-club + {BATCH_SIZE - half} oldest")
+        print(f"[mode] PRIORITY_NO_CLUB=true → split {half} sans-club + {BATCH_SIZE - half} valeur la plus ancienne")
         print(f"  → sans-club sélectionnés : {len(no_club)}")
 
         seen = {p["id"] for p in no_club}
 
-        # Moitié 2 : tous les joueurs les plus vieux (include ceux qui ont un club)
+        # Moitié 2 : toutes fiches actives, valeur jamais syncee ou la plus ancienne
         # On demande 2× la cible pour avoir de la marge après déduplication
         need = BATCH_SIZE - len(no_club)
         oldest = sb.select(
             "players",
             select="id,name,slug,transfermarkt_id,updated_at",
             archived="not.is.true",
-            order="updated_at.asc.nullsfirst",
+            order=MV_ORDER,
             limit=str(need * 2),
         )
         oldest_picked = []
@@ -106,14 +114,15 @@ def main():
                 seen.add(e["id"])
                 if len(oldest_picked) >= need:
                     break
-        print(f"  → oldest sélectionnés    : {len(oldest_picked)}")
+        print(f"  → valeur-ancienne sélectionnés : {len(oldest_picked)}")
 
         players = no_club + oldest_picked
     else:
         players = sb.select(
             "players",
             select="id,name,slug,transfermarkt_id,updated_at",
-            order="updated_at.asc.nullsfirst",
+            archived="not.is.true",
+            order=MV_ORDER,
             limit=str(BATCH_SIZE),
         )
     players = [p for p in players if p.get("transfermarkt_id")]
@@ -175,12 +184,12 @@ def main():
             # Drop None values (don't overwrite with NULL)
             patch = {k: v for k, v in patch.items() if v is not None}
 
-            # Si market_value_eur est mis a jour, tracker aussi market_value_updated_at.
-            # Permet de distinguer "jamais sync" (NULL) de "sync recente meme si valeur
-            # inchangee" (timestamp present). Verifie aux incident du 17/05/2026 ou les
-            # 65 joueurs roster avaient market_value_updated_at=NULL malgre des syncs.
-            if "market_value_eur" in patch:
-                patch["market_value_updated_at"] = dt.datetime.utcnow().isoformat()
+            # market_value_updated_at = timestamp de la derniere sync TM reussie,
+            # que TM ait une valeur ou non. C'est la cle de rotation du batch :
+            # si on ne le posait que quand une valeur existe, les fiches sans
+            # valeur TM resteraient NULL et repasseraient en tete de file a
+            # chaque run (famine des autres). Incident 17/05/2026 + audit 09/07/2026.
+            patch["market_value_updated_at"] = dt.datetime.utcnow().isoformat()
 
             # Caps RDC — mise à jour SEULEMENT si TM retourne une valeur non-None
             # pour la fédération DR Congo (verein_id 3854).
