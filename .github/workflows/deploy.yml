@@ -52,7 +52,14 @@ jobs:
       # le dist gh-pages, on delegue le build a Vercel via le CLI.
       # Connexion Git native impossible tant que le compte Vercel n'a pas
       # de Login Connection GitHub : ce step fait le meme travail.
+      #
+      # TEMPORAIRE (10/07/2026) : continue-on-error tant que VERCEL_TOKEN
+      # est invalide (token expire, action Alexandre : vercel login puis
+      # maj du secret). Sans ca, chaque push marque le workflow en echec
+      # alors que GH Pages deploie bien, et on ne voit plus les vraies
+      # regressions. Retirer ce flag une fois le token repose.
       - name: Deploy to Vercel (production)
+        continue-on-error: true
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: team_WgOfSMY7ogd7xGB0x3wLq71C
