@@ -7,6 +7,7 @@ import PlayerCardSkeleton from "@/components/ui/PlayerCardSkeleton";
 import { Button } from "@/components/ui/ButtonPrimitive";
 import { Select } from "@/components/ui/SelectPrimitive";
 import { usePlayers } from "@/hooks/usePlayers";
+import { publicEligibilityNote } from "@/components/player/PlayerWhySection";
 import { useHomeStats } from "@/hooks/useHomeStats";
 import { useDocumentMeta } from "@/hooks/useDocumentMeta";
 import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
@@ -137,7 +138,7 @@ function RadarCard({ player }: { player: DBPlayer }) {
         </div>
         {player.eligibility_note ? (
           <p className="mt-2 text-[11px] text-muted-light/80 line-clamp-2 leading-snug">
-            {player.eligibility_note}
+            {publicEligibilityNote(player.eligibility_note)}
           </p>
         ) : null}
       </div>
