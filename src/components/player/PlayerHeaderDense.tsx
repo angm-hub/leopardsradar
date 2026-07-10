@@ -92,7 +92,7 @@ export function PlayerHeaderDense({ player, games }: PlayerHeaderDenseProps) {
       {/* Breadcrumb */}
       <div className="container-site pt-28 pb-0">
         <nav className="mb-6 flex items-center gap-2 text-xs text-muted font-mono uppercase tracking-[0.18em]">
-          <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
+          <Link to="/" className="hover:text-foreground transition-colors">Accueil</Link>
           <span className="opacity-40">/</span>
           <Link to={rootHref} className="hover:text-foreground transition-colors">{rootLabel}</Link>
           <span className="opacity-40">/</span>
@@ -268,7 +268,7 @@ export function PlayerHeaderDense({ player, games }: PlayerHeaderDenseProps) {
               accent={!!player.season_goals && player.season_goals >= 10}
             />
             <BigStat
-              label="PASSES DEC."
+              label="PASSES DÉC."
               value={player.season_assists ?? 0}
               muted={!player.season_assists}
             />
@@ -283,7 +283,7 @@ export function PlayerHeaderDense({ player, games }: PlayerHeaderDenseProps) {
           <div className="mt-8 grid grid-cols-2 md:grid-cols-3 gap-px bg-border rounded-card overflow-hidden border border-border">
             <BigStat label="CAPS RDC" value={player.caps_rdc ?? 0} />
             <BigStat
-              label="VALEUR MARCHE"
+              label="VALEUR MARCHANDE"
               value={formatMarketValue(player.market_value_eur)}
               muted={!player.market_value_eur}
             />

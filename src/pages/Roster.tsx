@@ -270,7 +270,7 @@ const Roster = () => {
             {`${statsLoading ? "n.d." : (rosterCount ?? "n.d.")} internationaux RDC · Saison 2025/26`}
           </p>
           <p className="mt-2 max-w-xl text-sm text-muted">
-            Composition publique du staff RDC, mise à jour à chaque trêve internationale.
+            Composition publique de l'effectif RDC, mise à jour à chaque trêve internationale.
           </p>
         </header>
 
@@ -371,7 +371,7 @@ const Roster = () => {
                     Aucun Léopard avec ces filtres.
                   </p>
                   <p className="text-sm text-muted-light">
-                    Sur les 65 internationaux du roster, aucun ne matche cette
+                    Sur les 65 internationaux du roster, aucun ne correspond à cette
                     combinaison. Essaie de changer le poste ou le tri.
                   </p>
                   <Button variant="outline" size="sm" onClick={reset}>

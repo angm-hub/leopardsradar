@@ -314,7 +314,7 @@ export default function Insights() {
                   <code className="mx-1 px-1.5 py-0.5 rounded bg-cobalt-night/60 font-mono text-[11px] text-foreground/80">
                     country_of_birth
                   </code>
-                  contenant « congo ». « Diaspora » = né documenté ailleurs.
+                  contenant « congo ». « Diaspora » = pays de naissance documenté ailleurs.
                   « Inconnue » = pays de naissance pas encore renseigné · à
                   enrichir dans une prochaine vague.
                 </p>

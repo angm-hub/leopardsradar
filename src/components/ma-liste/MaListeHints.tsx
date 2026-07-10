@@ -79,7 +79,7 @@ export function MaListeHints() {
       return {
         id: "xi-incomplete",
         icon: Layers,
-        text: `${missing} ${missing > 1 ? "places" : "place"} ${missing > 1 ? "vides" : "vide"} sur le terrain. Clique un slot pour le remplir.`,
+        text: `${missing} ${missing > 1 ? "places" : "place"} ${missing > 1 ? "vides" : "vide"} sur le terrain. Clique sur un slot pour le remplir.`,
         tone: "info",
       };
     }
@@ -89,7 +89,7 @@ export function MaListeHints() {
       return {
         id: "no-captain",
         icon: Crown,
-        text: "Le XI est complet. Désigne ton capitaine en cliquant l'étoile d'un titulaire.",
+        text: "Le XI est complet. Désigne ton capitaine en cliquant sur l'étoile d'un titulaire.",
         tone: "warn",
       };
     }

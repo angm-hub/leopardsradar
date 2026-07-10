@@ -351,7 +351,7 @@ function SparseProfileBanner({ player }: { player: import("@/types/dbPlayer").DB
         </h2>
         <p className="text-muted-light leading-relaxed max-w-2xl text-sm">
           Détecté via la chaîne d'enrichissement (Wikidata, sélections jeunes
-          EU, patronymes bantu). Date de naissance, club, taille et statistiques
+          EU, patronymes bantous). Date de naissance, club, taille et statistiques
           saison sont en cours de collecte · mise à jour chaque dimanche.
         </p>
         <p className="text-muted text-xs mt-6">

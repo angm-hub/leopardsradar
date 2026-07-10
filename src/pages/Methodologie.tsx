@@ -133,10 +133,10 @@ export default function Methodologie() {
                   officielles, palmarès, déclarations publiques d'éligibilité.
                 </li>
                 <li>
-                  <strong>Curating manuel</strong> · pour les joueurs hors
+                  <strong>Curation manuelle</strong> · pour les joueurs hors
                   périmètre des trois sources ci-dessus (Linafoot, championnats
-                  africains autres que les sud-africain et nord-africain
-                  premières divisions, jeunes catégories), nous saisissons
+                  africains autres que les premières divisions sud-africaine
+                  et nord-africaine, catégories de jeunes), nous saisissons
                   manuellement les données après vérification croisée.
                 </li>
               </ol>
@@ -232,12 +232,12 @@ export default function Methodologie() {
               </p>
               <ul>
                 <li>
-                  <strong>Attaquant</strong> · Finition (buts/90, cible 1.0) +
-                  Création (passes décisives/90, cible 0.4)
+                  <strong>Attaquant</strong> · Finition (buts/90, cible 1,0) +
+                  Création (passes décisives/90, cible 0,4)
                 </li>
                 <li>
                   <strong>Milieu</strong> · Création (passes décisives/90, cible
-                  0.4) + Activité (tackles + interceptions/90, à venir)
+                  0.4) + Activité (tacles + interceptions/90, à venir)
                 </li>
                 <li>
                   <strong>Défenseur</strong> · Solidité (buts contre/90 inversé,
@@ -311,7 +311,7 @@ export default function Methodologie() {
                     <td className="py-3 pr-4 text-foreground font-semibold align-top">Sélections A senior RDC</td>
                     <td className="py-3 pr-4 font-mono text-primary align-top">20 pts</td>
                     <td className="py-3 text-foreground/75 text-sm align-top">
-                      2 pts par sélection officielle ou amicale avec la fédération COD, capé à 20 pts
+                      2 pts par sélection officielle ou amicale avec la fédération COD, plafonné à 20 pts
                       (10 sélections = score max). Mesure l'engagement international, pas juste la présence.
                     </td>
                   </tr>
@@ -319,7 +319,7 @@ export default function Methodologie() {
                     <td className="py-3 pr-4 text-foreground font-semibold align-top">Minutes jouées (saison en cours)</td>
                     <td className="py-3 pr-4 font-mono text-primary align-top">10 pts</td>
                     <td className="py-3 text-foreground/75 text-sm align-top">
-                      Capé à 1 500 minutes pour 10 pts max. Un titulaire sur ≈17 matchs complets
+                      Plafonné à 1 500 minutes pour 10 pts max. Un titulaire sur ≈17 matchs complets
                       atteint le plafond. Mesure la présence réelle sur le terrain cette saison.
                     </td>
                   </tr>

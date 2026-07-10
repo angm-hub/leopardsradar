@@ -116,7 +116,7 @@ export function PlayerRow({
           {(player.caps_rdc ?? 0) > 0 && (
             <>
               <span className="text-foreground/20">·</span>
-              <span className="text-foreground/65">{player.caps_rdc} sélections</span>
+              <span className="text-foreground/65">{player.caps_rdc} sélection{(player.caps_rdc ?? 0) > 1 ? "s" : ""}</span>
             </>
           )}
         </div>

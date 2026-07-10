@@ -140,7 +140,7 @@ export function TopScorersBlock({ players }: TopScorersBlockProps) {
             id="top-buteurs-heading"
             className="mt-1.5 font-serif text-2xl font-semibold tracking-tight text-foreground"
           >
-            Top buteurs Leopards
+            Top buteurs Léopards
           </h2>
         </div>
       </RevealOnScroll>
@@ -160,7 +160,7 @@ export function TopScorersBlock({ players }: TopScorersBlockProps) {
 
       {/* Mention fraicheur */}
       <p className="mt-3 text-[10px] font-mono text-muted" aria-live="polite">
-        Source : FBRef · Mise a jour le {today}
+        Source : FBRef · Mise à jour le {today}
       </p>
     </section>
   );

@@ -59,7 +59,7 @@ export const FIFA26_PLAYER_IDS: number[] = FIFA26_SQUAD.map((s) => s.id);
 // Libelles courts pour les groupes (mobile-first : economiser l'espace)
 export const GROUP_LABEL_FR: Record<DBPosition, string> = {
   Goalkeeper: "Gardiens",
-  Defender:   "Defenseurs",
+  Defender:   "Défenseurs",
   Midfield:   "Milieux",
   Attack:     "Attaquants",
 };

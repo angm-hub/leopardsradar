@@ -121,7 +121,7 @@ export function CompareDeltas({
       dispA: playerA.age ? `${playerA.age} ans` : "n.d.",
       dispB: playerB.age ? `${playerB.age} ans` : "n.d.",
       higherIsBetter: false,
-      hint: "Plus jeune = plus de runway international.",
+      hint: "Plus jeune = plus de marge de progression à l'international.",
     },
   ];
 

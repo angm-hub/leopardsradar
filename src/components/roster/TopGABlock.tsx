@@ -131,10 +131,10 @@ export function TopGABlock({ players }: TopGABlockProps) {
           id="top-ga-heading"
           className="mt-1.5 font-serif text-2xl font-semibold tracking-tight text-foreground"
         >
-          Top G+A combines
+          Top G+A combinés
         </h2>
         <p className="mt-1 text-xs text-muted-light">
-          Buts + passes decisives. Joueurs de nationalite RDC en activite.
+          Buts + passes décisives. Joueurs de nationalité RDC en activité.
         </p>
       </RevealOnScroll>
 
@@ -152,7 +152,7 @@ export function TopGABlock({ players }: TopGABlockProps) {
       </RevealOnScroll>
 
       <p className="mt-3 text-[10px] font-mono text-muted">
-        Source : FBRef · Mise a jour le {today}
+        Source : FBRef · Mise à jour le {today}
       </p>
     </section>
   );

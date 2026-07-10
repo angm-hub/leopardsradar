@@ -66,13 +66,13 @@ function CategoryBadge({ category }: { category: string }) {
   if (category === "radar") {
     return (
       <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-400">
-        <Sparkles className="h-3 w-3" /> Eligible
+        <Sparkles className="h-3 w-3" /> Éligible
       </span>
     );
   }
   return (
     <span className="inline-flex items-center gap-1 rounded-full border border-orange-500/30 bg-orange-500/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-orange-400">
-      <Heart className="h-3 w-3" /> Heritage
+      <Heart className="h-3 w-3" /> Héritage
     </span>
   );
 }
@@ -424,7 +424,7 @@ export default function Radar() {
 
             {filtersActive ? (
               <Button variant="ghost" size="sm" onClick={reset}>
-                <X className="h-3.5 w-3.5" /> Reinitialiser
+                <X className="h-3.5 w-3.5" /> Réinitialiser
               </Button>
             ) : null}
           </div>
@@ -460,22 +460,22 @@ export default function Radar() {
                   <p className="text-sm text-muted-light">
                     Le Radar trace les joueurs éligibles ou à ascendance RDC
                     dans les championnats du monde. La cartographie initiale
-                    arrive a la prochaine mise a jour.
+                    arrive à la prochaine mise à jour.
                   </p>
                 </>
               ) : (
                 <>
                   <p className="display-heading text-xl text-foreground">
-                    Aucun talent ne matche.
+                    Aucun talent ne correspond.
                   </p>
                   <p className="text-sm text-muted-light">
                     Sur les{" "}
                     {radarTotal ? `${radarTotal} profils` : "profils"} du Radar,
                     cette combinaison de filtres ne renvoie rien. Essaie un
-                    poste, un tier ou une plage d'age plus large.
+                    poste, un tier ou une plage d'âge plus large.
                   </p>
                   <Button variant="outline" size="sm" onClick={reset}>
-                    Reinitialiser les filtres
+                    Réinitialiser les filtres
                   </Button>
                 </>
               )}

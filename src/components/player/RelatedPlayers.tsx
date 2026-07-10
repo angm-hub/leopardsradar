@@ -44,7 +44,7 @@ export function RelatedPlayers({
           Plus de Léopards.
         </h2>
         <p className="text-sm text-muted-light font-mono">
-          Autres {label.toLowerCase()}s suivis
+          Autres {label === "Milieu" ? "milieux" : `${label.toLowerCase()}s`} suivis
         </p>
       </div>
 

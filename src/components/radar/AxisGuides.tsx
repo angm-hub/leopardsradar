@@ -34,7 +34,7 @@ export function AxisGuides() {
           className="rounded-sm bg-background/60 backdrop-blur-sm px-1.5 py-0.5 text-[9px] font-mono uppercase tracking-[0.2em] text-foreground/55"
           style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
         >
-          Confirme
+          Confirmé
         </span>
       </div>
 

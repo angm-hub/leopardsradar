@@ -9,7 +9,7 @@ const PREVIEWS = [
   {
     icon: Activity,
     title: "Performances internationales",
-    desc: "Comment tes Léopards ont joué ce week-end. Buts, assists, minutes, analyses.",
+    desc: "Comment tes Léopards ont joué ce week-end. Buts, passes décisives, minutes, analyses.",
   },
   {
     icon: Sparkles,

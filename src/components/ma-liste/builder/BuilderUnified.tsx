@@ -155,7 +155,7 @@ export function BuilderUnified() {
             <p className="mt-2 text-sm text-muted-light">
               {activeSlot
                 ? `Choisis un joueur pour ${activeSlot} dans la liste →`
-                : `Clique un slot vide pour le remplir, ou pioche dans la liste pour ton banc.`}
+                : `Clique sur un slot vide pour le remplir, ou pioche dans la liste pour ton banc.`}
             </p>
           </div>
 
@@ -682,7 +682,7 @@ function BenchStrip({
                 type="button"
                 onClick={() => onSetCaptain(player)}
                 className="block w-full aspect-square rounded-md overflow-hidden ring-1 ring-border group-hover:ring-primary/50 transition-all"
-                title={`${player.name}${isCap ? " (Capitaine)" : ""} · click pour capitaine`}
+                title={`${player.name}${isCap ? " (Capitaine)" : ""} · clic pour capitaine`}
               >
                 <PlayerAvatar
                   name={player.name}

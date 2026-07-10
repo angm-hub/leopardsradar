@@ -235,7 +235,7 @@ export function RadarCanvas({ players, totalRoster }: RadarCanvasProps) {
             onClick={() => setShowAll(false)}
             className="rounded-button border border-border bg-card px-4 py-2 text-xs text-muted-light hover:border-border-hover hover:text-foreground transition-colors"
           >
-            Reduire l'affichage
+            Réduire l'affichage
           </button>
         </div>
       ) : null}

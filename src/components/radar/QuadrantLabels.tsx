@@ -3,7 +3,7 @@
  *
  * Haut-gauche   : Pepites       (jeune + faible valeur)
  * Haut-droit    : Future stars  (jeune + haute valeur)
- * Bas-gauche    : Oublies       (age + faible valeur)
+ * Bas-gauche    : Oubliés       (age + faible valeur)
  * Bas-droit     : Cracks        (age + haute valeur)
  *
  * Chaque label a un nom + un sous-titre court pour que le visiteur
@@ -15,23 +15,23 @@ export function QuadrantLabels() {
       <Quadrant
         position="top-4 left-6"
         label="Pépites"
-        sub="Jeunes a suivre"
+        sub="Jeunes à suivre"
       />
       <Quadrant
         position="top-4 right-6"
         label="Future Stars"
-        sub="Jeunes a forte valeur"
+        sub="Jeunes à forte valeur"
         align="right"
       />
       <Quadrant
         position="bottom-8 left-6"
-        label="Oublies"
+        label="Oubliés"
         sub="Exp. sans spotlight"
       />
       <Quadrant
         position="bottom-8 right-6"
         label="Cracks"
-        sub="References du vivier"
+        sub="Références du vivier"
         align="right"
       />
     </>

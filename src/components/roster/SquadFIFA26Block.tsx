@@ -314,7 +314,7 @@ export function SquadFIFA26Block() {
       )}
 
       <p className="mt-4 text-[10px] font-mono text-muted" aria-live="polite">
-        Mise a jour le {today} · FBRef (Big5 + UEFA) · Transfermarkt (autres ligues) · fallback DB
+        Mise à jour le {today} · FBRef (Big5 + UEFA) · Transfermarkt (autres ligues) · fallback DB
       </p>
     </section>
   );

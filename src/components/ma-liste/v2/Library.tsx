@@ -231,7 +231,7 @@ export function Library({
 
       {/* Footer count */}
       <div className="border-t border-border bg-background/40 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.08em] text-foreground/45">
-        {filtered.length} disponibles
+        {filtered.length} disponible{filtered.length > 1 ? "s" : ""}
       </div>
     </div>
   );

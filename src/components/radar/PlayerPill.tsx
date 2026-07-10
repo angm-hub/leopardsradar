@@ -368,7 +368,7 @@ function PillTooltip({ player, open }: { player: DBPlayer; open: boolean }) {
   return (
     <div
       role="tooltip"
-      aria-label={`Detail : ${player.name}`}
+      aria-label={`Détail : ${player.name}`}
       className={cn(
         "pointer-events-none absolute left-1/2 -translate-x-1/2 top-full mt-2",
         "w-56 rounded-card border border-border bg-card",

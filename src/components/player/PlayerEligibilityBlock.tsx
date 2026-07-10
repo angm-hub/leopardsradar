@@ -120,10 +120,12 @@ function blockerExplain(b: string): string {
   if (major) return `Participation à une grande compétition senior avec ${major[1]} (CDM/CAN/EURO/CONCACAF/Asie/Conmebol). Cap-tied définitif.`;
   const cap_age = b.match(/^CAP_TIED_(\w+)_OFFICIAL_AGE_(\d+)$/);
   if (cap_age) return `${cap_age[1]} A officiel à ${cap_age[2]} ans (≥ 21). Règle FIFA <21 ans non remplie.`;
+  const cap_age_a = b.match(/^CAP_TIED_(\w+)_A_AGE_(\d+)$/);
+  if (cap_age_a) return `Match A (officiel ou amical) avec ${cap_age_a[1]} à ${cap_age_a[2]} ans (≥ 21). Règle FIFA <21 ans non remplie.`;
   const cap_3 = b.match(/^CAP_TIED_(\w+)_3PLUS_CAPS$/);
   if (cap_3) return `≥ 3 caps A officielles avec ${cap_3[1]}. Cap-tied 3-cap rule.`;
   const cap_pre21 = b.match(/^CAP_OTHER_(\w+)_PRE21_(\d+)x$/);
-  if (cap_pre21) return `${cap_pre21[2]} caps A officiel ${cap_pre21[1]} avant 21 ans. Switch FIFA encore possible.`;
+  if (cap_pre21) return `${cap_pre21[2]} cape(s) A avec ${cap_pre21[1]} avant 21 ans. Switch FIFA encore possible.`;
   return b;
 }
 

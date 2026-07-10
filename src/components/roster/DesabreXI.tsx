@@ -219,7 +219,7 @@ function RealGridView({
                         {slot.player_name}
                       </p>
                       <p className="font-mono text-[9px] text-muted-light truncate">
-                        {slot.appearances_total} starts ({slot.start_pct}%)
+                        {slot.appearances_total} tit. ({slot.start_pct}%)
                       </p>
                     </div>
                   </Link>
@@ -391,8 +391,8 @@ export function DesabreXI({ players }: DesabreXIProps) {
           </h2>
           <p className="mt-1 max-w-lg text-xs text-muted-light leading-snug">
             {useRealData
-              ? "Composition basee sur les titularisations reelles depuis aout 2022. Le joueur le plus souvent titularise par poste."
-              : "Composition algorithmique basee sur le score Leopards + caps RDC. Les données historiques ne sont pas encore disponibles."}
+              ? "Composition basée sur les titularisations réelles depuis août 2022. Le joueur le plus souvent titularisé par poste."
+              : "Composition algorithmique basée sur le score Léopards + caps RDC. Les données historiques ne sont pas encore disponibles."}
           </p>
         </div>
 
@@ -400,7 +400,7 @@ export function DesabreXI({ players }: DesabreXIProps) {
         <div className="flex flex-col items-end gap-2">
           {useRealData ? (
             <span className="rounded-full border border-success/30 bg-success/10 px-2.5 py-1 font-mono text-[9px] uppercase tracking-wider text-success/80">
-              Historique reel
+              Historique réel
             </span>
           ) : (
             <span className="rounded-full border border-warning/30 bg-warning/10 px-2.5 py-1 font-mono text-[9px] uppercase tracking-wider text-warning/80">
@@ -471,8 +471,8 @@ export function DesabreXI({ players }: DesabreXIProps) {
       {/* Legende */}
       <p className="mt-3 font-mono text-[10px] text-muted">
         {useRealData
-          ? `Source : Transfermarkt · compositions depuis le 07/08/2022 · % = frequence de titularisation`
-          : "Algo : score Leopards (level_score) puis valeur marchande Transfermarkt, par poste."}
+          ? `Source : Transfermarkt · compositions depuis le 07/08/2022 · % = fréquence de titularisation`
+          : "Algo : score Léopards (level_score) puis valeur marchande Transfermarkt, par poste."}
       </p>
     </RevealOnScroll>
     </section>

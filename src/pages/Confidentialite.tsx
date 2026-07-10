@@ -16,14 +16,15 @@ export default function Confidentialite() {
           Responsable du traitement
         </h2>
         <p>
-          L'éditeur du site Léopards Radar (cf.{" "}
+          Le responsable du traitement est l'éditeur du site Léopards Radar.
+          Voir les{" "}
           <a
             href="/mentions-legales"
             className="text-primary hover:underline"
           >
             mentions légales
           </a>
-          ) pour les coordonnées et l'identité du responsable de traitement.
+           pour ses coordonnées et son identité.
         </p>
       </section>
 
