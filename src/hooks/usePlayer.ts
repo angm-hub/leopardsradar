@@ -39,11 +39,15 @@ export function usePlayer(slug: string | undefined) {
       setError(null);
       try {
         // 1. Fetch player
+        // Les fiches archivees (soft-delete Alexandre : faux positifs,
+        // dossiers RDC non etablis type Lukeba 10/07/2026) ne doivent pas
+        // rester accessibles en URL directe : mieux vaut le 404 editorial.
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const { data, error: err } = await (supabase as any)
           .from("players")
           .select("*")
           .eq("slug", slug)
+          .not("archived", "is", true)
           .maybeSingle();
         if (err) throw err;
         if (cancelled) return;

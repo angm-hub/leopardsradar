@@ -360,11 +360,13 @@ function usePlayerBySlug(slug: string | null) {
     setLoading(true);
     (async () => {
       try {
+        // Fiches archivees exclues (meme regle que usePlayer).
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const { data, error } = await (supabase as any)
           .from("players")
           .select("*")
           .eq("slug", slug)
+          .not("archived", "is", true)
           .maybeSingle();
         if (error) throw error;
         if (cancelled) return;
