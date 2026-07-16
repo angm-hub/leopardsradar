@@ -78,7 +78,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     to={link.href}
-                    className="text-sm text-muted-light hover:text-foreground transition-colors"
+                    className="inline-block py-1 text-sm text-muted-light hover:text-foreground transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -95,7 +95,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     to={link.href}
-                    className="text-sm text-muted-light hover:text-foreground transition-colors"
+                    className="inline-block py-1 text-sm text-muted-light hover:text-foreground transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -104,7 +104,7 @@ export function Footer() {
               <li>
                 <a
                   href="mailto:alexandre@withkaira.com?subject=Donnée à corriger"
-                  className="text-sm text-muted-light hover:text-foreground transition-colors"
+                  className="inline-block py-1 text-sm text-muted-light hover:text-foreground transition-colors"
                 >
                   Signaler une erreur
                 </a>
@@ -112,7 +112,7 @@ export function Footer() {
               <li>
                 <a
                   href="mailto:alexandre@withkaira.com?subject=Source / piste"
-                  className="text-sm text-muted-light hover:text-foreground transition-colors"
+                  className="inline-block py-1 text-sm text-muted-light hover:text-foreground transition-colors"
                 >
                   Proposer une source
                 </a>
@@ -128,7 +128,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     to={link.href}
-                    className="text-sm text-muted-light hover:text-foreground transition-colors"
+                    className="inline-block py-1 text-sm text-muted-light hover:text-foreground transition-colors"
                   >
                     {link.label}
                   </Link>

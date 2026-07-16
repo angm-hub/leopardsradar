@@ -123,7 +123,7 @@ function RadarCard({ player }: { player: DBPlayer }) {
         {player.current_club ? (
           <p className="text-sm text-foreground/70 truncate">{player.current_club}</p>
         ) : null}
-        <h3 className="mt-1 display-heading text-xl text-foreground truncate">
+        <h3 className="mt-1 display-heading text-lg md:text-xl leading-tight text-foreground line-clamp-2">
           {player.name}
         </h3>
         <div className="mt-1 flex items-center justify-between gap-2 text-xs">
@@ -169,6 +169,7 @@ export default function Radar() {
 
   // ── URL state ──────────────────────────────────────────────────────────────
   const [searchParams, setSearchParams] = useSearchParams();
+  const [visibleCount, setVisibleCount] = useState(40);
 
   // Lire les filtres depuis l'URL (avec fallback sur les défauts)
   const position = (readSearchParam(searchParams, "pos", "ALL")) as PositionFilter;
@@ -334,6 +335,12 @@ export default function Radar() {
     advancedState.withActiveContract,
   ]);
 
+  // Retour au premier lot quand le filtre change (sinon on garde un
+  // compteur gonfle par un "Voir plus" d'une recherche precedente).
+  useEffect(() => {
+    setVisibleCount(40);
+  }, [position, tier, nation, debouncedQuery, advancedState.ageMin, advancedState.ageMax, advancedState.valueMin, advancedState.valueMax, advancedState.foot, advancedState.withPhoto, advancedState.withActiveContract]);
+
   // ── Etat actif ────────────────────────────────────────────────────────────
   const basicFiltersActive =
     position !== "ALL" || tier !== "ALL" || nation !== "ALL" || debouncedQuery !== "";
@@ -410,7 +417,7 @@ export default function Radar() {
                 placeholder="Rechercher un joueur…"
                 value={localQuery}
                 onChange={(e) => setLocalQuery(e.target.value)}
-                className="w-full bg-card border border-border rounded-button pl-9 pr-3 py-2 text-sm text-foreground placeholder:text-muted hover:border-border-hover focus:border-primary outline-none transition-colors"
+                className="w-full bg-card border border-border rounded-button pl-9 pr-3 py-2 text-base md:text-sm text-foreground placeholder:text-muted hover:border-border-hover focus:border-primary outline-none transition-colors"
               />
             </div>
 
@@ -483,10 +490,25 @@ export default function Radar() {
           ) : view === "carte" ? (
             <RadarCanvas players={filtered} totalRoster={players.length} />
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-              {filtered.map((p) => (
-                <RadarCard key={p.slug} player={p} />
-              ))}
+            /* Rendu par lots : la vue liste peut contenir ~1000 fiches. Tout
+               rendre d'un coup produisait une page mobile de ~120 000 px
+               (audit responsivite du 16/07/2026). */
+            <div>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                {filtered.slice(0, visibleCount).map((p) => (
+                  <RadarCard key={p.slug} player={p} />
+                ))}
+              </div>
+              {filtered.length > visibleCount && (
+                <div className="mt-8 flex justify-center">
+                  <Button
+                    variant="outline"
+                    onClick={() => setVisibleCount((c) => c + 40)}
+                  >
+                    Voir plus ({filtered.length - visibleCount} restants)
+                  </Button>
+                </div>
+              )}
             </div>
           )}
         </section>

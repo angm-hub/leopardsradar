@@ -109,7 +109,7 @@ export function PromoBanner() {
           transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
           role="banner"
           aria-label="Promotion Mondial 2026"
-          className="fixed top-0 inset-x-0 z-[70] overflow-hidden border-b border-cobalt-500/30"
+          className="fixed top-0 inset-x-0 z-[70] overflow-hidden border-b border-cobalt-500/30 pt-[env(safe-area-inset-top)]"
           style={{
             // Pivot DA Cobalt : gradient cobalt 700 → 900 → void deep
             // (drapeau RDC désaturé). Avant : vert RDC saturé qui faisait
@@ -123,11 +123,11 @@ export function PromoBanner() {
             onClick={handleClickThrough}
             className="group relative block"
           >
-            <div className="mx-auto flex w-full max-w-7xl items-center justify-center gap-3 px-4 py-2 text-center lg:px-8">
+            <div className="mx-auto flex w-full min-w-0 max-w-7xl items-center justify-center gap-3 px-4 py-2 pr-12 text-center lg:px-8">
               <span className="inline-flex shrink-0 items-center rounded-full bg-primary px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.18em] text-primary-foreground">
                 {phase === "before" ? `J-${daysUntilKickoff}` : phase === "during" ? "EN COURS" : "MONDIAL"}
               </span>
-              <p className="truncate text-[12px] leading-snug text-white md:text-[13px]">
+              <p className="min-w-0 truncate text-[12px] leading-snug text-white md:text-[13px]">
                 {phase === "before" ? (
                   <>
                     <span className="font-medium">
@@ -154,15 +154,17 @@ export function PromoBanner() {
                 </span>
               </p>
             </div>
-            <button
-              type="button"
-              onClick={handleClose}
-              aria-label="Fermer la bannière"
-              className="absolute right-1.5 top-1/2 -translate-y-1/2 inline-flex h-7 w-7 items-center justify-center rounded-full text-white/70 transition-colors hover:bg-white/10 hover:text-white"
-            >
-              <X className="h-3.5 w-3.5" />
-            </button>
           </Link>
+          <button
+            type="button"
+            onClick={handleClose}
+            aria-label="Fermer la bannière"
+            className="absolute right-0 top-1/2 -translate-y-1/2 inline-flex h-11 w-11 items-center justify-center text-white/70 transition-colors hover:text-white"
+          >
+            <span className="inline-flex h-7 w-7 items-center justify-center rounded-full transition-colors hover:bg-white/10">
+              <X className="h-3.5 w-3.5" />
+            </span>
+          </button>
         </motion.div>
       )}
     </AnimatePresence>

@@ -323,7 +323,7 @@ const Roster = () => {
                 placeholder="Rechercher un joueur…"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="w-full bg-card border border-border rounded-button pl-9 pr-3 py-2 text-sm text-foreground placeholder:text-muted hover:border-border-hover focus:border-primary outline-none transition-colors"
+                className="w-full bg-card border border-border rounded-button pl-9 pr-3 py-2 text-base md:text-sm text-foreground placeholder:text-muted hover:border-border-hover focus:border-primary outline-none transition-colors"
               />
             </div>
 

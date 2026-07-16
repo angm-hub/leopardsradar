@@ -88,6 +88,7 @@ export function AdvancedFilters({ state, onChange }: AdvancedFiltersProps) {
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
+        aria-label="Filtres avancés"
         className={cn(
           "flex items-center gap-1.5 rounded-button border px-3 py-2 text-sm transition-colors",
           hasActive

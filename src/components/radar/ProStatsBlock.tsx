@@ -38,7 +38,7 @@ function StatCard({ label, value, unit, player, accentClass = "text-primary" }: 
   return (
     <Link
       to={`/player/${player.slug}`}
-      aria-label={`${label} : ${player.name} · ${value} ${unit}`}
+      aria-label={`${player.name} · ${value} ${unit} (${label})`}
       className={cn(
         "group flex items-center gap-4 p-4 rounded-card border border-border bg-card",
         "transition-colors duration-200 hover:border-border-hover flex-1 min-w-0",

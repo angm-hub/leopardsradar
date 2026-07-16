@@ -81,6 +81,9 @@ const App = () => (
           Aller au contenu principal
         </a>
         <PromoBanner />
+        {/* id="main" : cible stable du skip link sur toutes les routes
+            (les <main> des pages n'ont pas d'id, Lighthouse "bypass" echouait). */}
+        <div id="main" tabIndex={-1} className="outline-none">
         <Suspense fallback={<RouteFallback />}>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -116,6 +119,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
+        </div>
       </BrowserRouter>
       </SmoothScroll>
     </TooltipProvider>

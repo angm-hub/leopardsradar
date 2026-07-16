@@ -40,7 +40,9 @@ export default function RevueDePresse() {
   });
 
   const [category, setCategory] = useState<PressCategory | "all">("all");
-  const [windowDays, setWindowDays] = useState<number | null>(7);
+  // 30 jours par defaut : avec 7 jours, la page s'ouvrait sur "aucun item"
+  // des que la semaine etait calme (audit responsivite du 16/07/2026).
+  const [windowDays, setWindowDays] = useState<number | null>(30);
   const [source, setSource] = useState<string | null>(null);
 
   // Le layout magazine (hero + grille) n'a de sens qu'en vue feed non filtrée.

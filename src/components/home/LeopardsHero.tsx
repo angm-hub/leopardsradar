@@ -100,7 +100,7 @@ function PersonaTabs() {
             key={p.key}
             type="button"
             onClick={() => selectPersona(p.key)}
-            className="relative px-3 py-1.5 text-xs font-mono uppercase tracking-[0.15em] transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="relative min-h-[44px] px-3 py-1.5 text-xs font-mono uppercase tracking-[0.15em] transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             aria-pressed={active === p.key}
           >
             {/* Pill actif — layoutId pour la transition glissante */}

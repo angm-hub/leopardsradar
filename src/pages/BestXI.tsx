@@ -18,10 +18,13 @@ const FORMATION_COORDS: Record<string, Record<string, { x: number; y: number }[]
     RB: [{ x: 85, y: 70 }],
     RCB: [{ x: 62, y: 72 }],
     LCB: [{ x: 38, y: 72 }],
-    CB: [{ x: 50, y: 72 }],
+    // La compose auto emet 2 CB et 3 CM : chaque poste doit fournir autant
+    // de coordonnees que de slots, sinon tout s'empile au meme point
+    // (superposition constatee a l'audit mobile du 16/07/2026).
+    CB: [{ x: 38, y: 72 }, { x: 62, y: 72 }],
     LB: [{ x: 15, y: 70 }],
     RCM: [{ x: 72, y: 48 }],
-    CM: [{ x: 50, y: 50 }],
+    CM: [{ x: 50, y: 52 }, { x: 28, y: 46 }, { x: 72, y: 46 }],
     LCM: [{ x: 28, y: 48 }],
     RW: [{ x: 80, y: 22 }],
     ST: [{ x: 50, y: 16 }],

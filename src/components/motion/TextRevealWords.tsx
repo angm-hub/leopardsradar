@@ -82,6 +82,7 @@ export function TextRevealWords({
       animate={startOnView ? undefined : "visible"}
       whileInView={startOnView ? "visible" : undefined}
       viewport={startOnView ? { once: true, margin: "-15% 0px" } : undefined}
+      role="text"
       aria-label={children}
     >
       {words.map((word, i) =>

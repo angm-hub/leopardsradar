@@ -223,9 +223,15 @@ export default function PlayerPage() {
           ) : (
             <section className="container-site py-10 border-b border-border/40">
               {attrLoading ? (
+                /* Hauteur proche du contenu final (profil 15 + sidebar) :
+                   sans ca, la section pousse la page de ~500px au chargement
+                   (CLS 0.235 mesure au Lighthouse mobile du 16/07/2026). */
                 <div className="space-y-4">
                   <div className="h-4 w-36 bg-card animate-pulse rounded" />
-                  <div className="h-48 bg-card animate-pulse rounded-card" />
+                  <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6 items-start">
+                    <div className="h-[430px] bg-card animate-pulse rounded-card" />
+                    <div className="hidden lg:block h-[320px] bg-card animate-pulse rounded-card" />
+                  </div>
                 </div>
               ) : hasAttrProfile ? (
                 <div className="space-y-6">

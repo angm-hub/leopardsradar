@@ -87,7 +87,7 @@ export function Navbar() {
         <Link
           to="/"
           aria-label="Léopards Radar · Accueil"
-          className="text-foreground transition-opacity hover:opacity-90"
+          className="inline-flex min-h-[44px] items-center text-foreground transition-opacity hover:opacity-90"
         >
           {/* Mobile : mark seul (gain horizontal). Desktop : lockup complet. */}
           <span className="sm:hidden">
@@ -141,7 +141,7 @@ export function Navbar() {
         <button
           type="button"
           aria-label="Ouvrir le menu"
-          className="md:hidden text-foreground p-2 -mr-2"
+          className="md:hidden inline-flex h-11 w-11 items-center justify-center text-foreground -mr-2"
           onClick={() => setOpen(true)}
         >
           <Menu className="h-5 w-5" />
@@ -171,7 +171,7 @@ export function Navbar() {
             <button
               type="button"
               aria-label="Fermer le menu"
-              className="text-foreground p-1"
+              className="inline-flex h-11 w-11 items-center justify-center text-foreground -mr-2"
               onClick={() => setOpen(false)}
             >
               <X className="h-5 w-5" />

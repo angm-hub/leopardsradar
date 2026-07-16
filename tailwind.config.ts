@@ -35,7 +35,7 @@ const config: Config = {
         border: "#1A2B4A",
         "border-hover": "#2A3D64",
         foreground: "#ECE8DD",            // Bone — warm cream (vs cool #F4F4F1)
-        muted: "#5C6E8C",
+        muted: "#7285A6",                 // WCAG AA : 5.26:1 sur background, 4.9:1 sur card (avant #5C6E8C = 3.8:1)
         "muted-light": "#8A9BBC",
 
         // ── Cobalt scale (atmosphère principale) ──────────────────

@@ -22,7 +22,7 @@ export function Select({ label, options, className, ...props }: SelectProps) {
         {...props}
         className={cn(
           "appearance-none bg-card border border-border text-foreground",
-          "rounded-button pl-4 pr-10 py-2 text-sm cursor-pointer",
+          "rounded-button pl-4 pr-10 py-2 text-base md:text-sm cursor-pointer",
           "hover:border-border-hover focus:border-primary focus:outline-none",
           "transition-colors",
         )}
