@@ -193,7 +193,12 @@ def main():
                 "contract_expires": tm_player.contract_expires,
                 "market_value_eur": tm_player.market_value_eur,
                 "agent": tm_player.agent,
-                "image_url": tm_player.image_url,
+                # Jamais la silhouette TM par defaut : le front affiche des
+                # initiales bien plus propres quand image_url est NULL.
+                # 394 fiches purgees le 15/07/2026 a cause de ca.
+                "image_url": (tm_player.image_url
+                              if tm_player.image_url and "default" not in tm_player.image_url
+                              and "photo-missing" not in tm_player.image_url else None),
                 "updated_at": dt.datetime.utcnow().isoformat(),
             }
             # Drop None values (don't overwrite with NULL)
