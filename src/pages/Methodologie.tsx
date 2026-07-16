@@ -395,7 +395,7 @@ export default function Methodologie() {
                   href="https://github.com/leopardsradar/leopardsradar/blob/main/scripts/migrations/2026_05_15_player_level_band.sql"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-primary hover:text-primary-hover underline underline-offset-4"
+                  className="break-all text-primary hover:text-primary-hover underline underline-offset-4"
                 >
                   scripts/migrations/2026_05_15_player_level_band.sql
                 </a>
