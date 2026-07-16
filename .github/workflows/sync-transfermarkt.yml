@@ -32,9 +32,14 @@ on:
         default: 'true'
         type: choice
         options: ['true', 'false']
+      is_retry:
+        description: 'Interne : marque un run de retry anti-403 (ne pas re-retenter)'
+        required: false
+        default: 'false'
 
 permissions:
   contents: read
+  actions: write   # requis pour le re-dispatch du job retry-nouvelle-ip
 
 jobs:
   sync:
@@ -72,3 +77,20 @@ jobs:
           GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         working-directory: scripts
         run: python sync_transfermarkt.py
+
+  # TM sert des 403 a certaines IP de runners GitHub (incidents 05/07, 10/07,
+  # 15/07 : 200/200 parses "Unknown"). Un nouveau run = un nouveau runner =
+  # une nouvelle IP, ce qui a suffi a chaque relance manuelle. Sur echec,
+  # ce job re-declenche le meme workflow UNE fois (garde anti-boucle is_retry).
+  retry-nouvelle-ip:
+    needs: sync
+    if: failure() && github.event.inputs.is_retry != 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Re-dispatch sur un runner neuf
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          sleep 120
+          gh workflow run sync-transfermarkt.yml --repo ${{ github.repository }} -f is_retry=true

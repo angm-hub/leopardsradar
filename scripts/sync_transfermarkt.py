@@ -137,6 +137,14 @@ def main():
         "error_details": [],
     }
 
+    # Fail-fast anti-bot : quand TM sert sa page de blocage aux runners GitHub
+    # (403/Cloudflare), 100% des parses sortent "Unknown {id}". Inutile de
+    # bruler 45 min et 200 requetes : on abandonne apres N echecs consecutifs
+    # en debut de run, le job retry du workflow repart sur un runner neuf
+    # (nouvelle IP, ce qui suffit a chaque fois). Incidents 05/07, 10/07, 15/07.
+    CONSECUTIVE_UNKNOWN_ABORT = 15
+    consecutive_unknown = 0
+
     for i, player in enumerate(players, 1):
         try:
             tm_id = player["transfermarkt_id"]
@@ -159,7 +167,14 @@ def main():
                     "player_id": player["id"],
                     "error": f"name parse failed (got '{tm_player.name}') — skip to preserve existing data",
                 })
+                consecutive_unknown += 1
+                if consecutive_unknown >= CONSECUTIVE_UNKNOWN_ABORT and stats["players_updated"] == 0:
+                    print(f"\n!!! BAN SIGNAL: {consecutive_unknown} parses 'Unknown' consecutifs, "
+                          "0 update. Runner probablement bloque par TM, abandon rapide "
+                          "(le job retry reprendra sur une autre IP).")
+                    break
                 continue
+            consecutive_unknown = 0
 
             # Construire le patch — name garanti non-Unknown grace au garde-fou
             patch = {
