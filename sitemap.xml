@@ -2,79 +2,967 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://angm-hub.github.io/leopardsradar/</loc>
-    <lastmod>2026-07-10</lastmod>
+    <lastmod>2026-07-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://angm-hub.github.io/leopardsradar/roster</loc>
-    <lastmod>2026-07-10</lastmod>
+    <lastmod>2026-07-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://angm-hub.github.io/leopardsradar/radar</loc>
-    <lastmod>2026-07-10</lastmod>
+    <lastmod>2026-07-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://angm-hub.github.io/leopardsradar/best-xi</loc>
-    <lastmod>2026-07-10</lastmod>
+    <lastmod>2026-07-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://angm-hub.github.io/leopardsradar/histoires</loc>
-    <lastmod>2026-07-10</lastmod>
+    <lastmod>2026-07-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://angm-hub.github.io/leopardsradar/revue-de-presse</loc>
-    <lastmod>2026-07-10</lastmod>
+    <lastmod>2026-07-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://angm-hub.github.io/leopardsradar/compare</loc>
-    <lastmod>2026-07-10</lastmod>
+    <lastmod>2026-07-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://angm-hub.github.io/leopardsradar/ma-liste</loc>
-    <lastmod>2026-07-10</lastmod>
+    <lastmod>2026-07-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://angm-hub.github.io/leopardsradar/insights</loc>
-    <lastmod>2026-07-10</lastmod>
+    <lastmod>2026-07-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://angm-hub.github.io/leopardsradar/a-propos</loc>
-    <lastmod>2026-07-10</lastmod>
+    <lastmod>2026-07-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://angm-hub.github.io/leopardsradar/methodologie</loc>
-    <lastmod>2026-07-10</lastmod>
+    <lastmod>2026-07-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://angm-hub.github.io/leopardsradar/newsletter</loc>
-    <lastmod>2026-07-10</lastmod>
+    <lastmod>2026-07-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/serge-atakayi</loc>
-    <lastmod>2026-07-10</lastmod>
+    <loc>https://angm-hub.github.io/leopardsradar/player/ngoy-nsumbu</loc>
+    <lastmod>2026-07-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/ruffice-amede-kabongo</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/jucie-lupeta</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/paul-nsio</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/franck-idumbo</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/kevin-nzuzi-mata</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/joseph-ganda</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/aristote-nkaka</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/aime-mabika</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/kabongo-tshimanga</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/thomas-basila</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/giovani-bamba</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/tresor-mbuyu</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/lobi-manzoki</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/rosaire-longelo</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/joy-mukena</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/raphael-eyongo</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/jordan-gele</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/pierre-yves-ngawa</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/exauce-mpembele-boula</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/jonathan-benteke</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/jared-khasa</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/jeremie-matumona</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/enrique-lofolomo</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/nathan-bitumazala</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/bez-lubala</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/walter-bwalya</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/manasse-kusu</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/josue-kimboma</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/georges-nsukula</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/gael-kakuta</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/cedric-makutungu</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/djoully-nzoko</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/peter-ouaneh</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/taylor-luvambo</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/thierry-lutonda</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/emmanuel-matuta</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/rodney-kongolo</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/charles-m-mombwa</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/dan-nlundulu</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/quentin-bena</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/brandon-ndezi</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/noah-mawete-kinsiona</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/jonathan-mutombo</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/julien-ngoy</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/lionel-mpasi-nzau</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/elias-bakatukanda</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/yann-massombo</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/maxime-sivis</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/kevin-tshiembe</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/kelian-nsona</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/xavier-mbuyamba</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/gedeon-kalulu</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/noah-mbamba</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/bali-mumba</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/fally-mayulu</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/gady-beyuku</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/fiston-mayele</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/kamunda-tshinabu</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/andy-boyeli</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/dina-dinanga</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/esele-bakasu</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/kanku-madiata-tresor</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/tshamalenga-kabundi</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/savity-lipenia</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/tresor-mputu</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/mihayo-kazembe</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/kabamba-musasa</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/beyuku-glodi</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/joosep-konsa</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/tresor-kangambu</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/kiki-musampa</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/pascal-kalemba</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/naby-twimumu</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/mwepu-ilunga</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/dituabanza-nsumbu</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/doris-fuakumputu</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/kakoko-etepe</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/eddy-bembuana-keve</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/jose-bosingwa</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/elias-ntaganda</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/max-mayunga</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/riffi-mandanda</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/albert-braine-mayama</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/david-iboma</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/luzayadio-bangu</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/peggy-lokando</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/freddy-mulongo</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/cedric-baseya</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/jean-santos-muntubila</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/mayanga-maku</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/tristan-m-bongo</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/makindu-sabhou-makengo</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/kilasu-massamba</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/guylain-ndumbu-nsungu</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/michel-nzamongini-babale</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/n-dinga-mbote</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/kabasu-babo</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/badile-lubamba</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/filston-mongu</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/josias-roulez</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/elos-elonga-ekakia</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/lobilo-boba</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/pepito-kisuba</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/yves-ma-kalambay</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/emil-noll</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/yves-angani</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/ali-lukunku</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/richard-ekunde</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/muteba-kidiaba</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/bijou-kisombe-mundaba</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/dieumerci-mbokani</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/delain-sasa</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/bulayima-mukuayanzo</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/kibonge-mafu</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/mana-mamuwene</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/mavuba-mafuila</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/chris-emmanuel-lokesa</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/adam-bossou</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/dieudonne-kalulika</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/bwanga-tshimen</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/assani-lukimya-mulongoti</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/jacques-mbuyamba</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/botomotoito-skito-litimba</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/nzelo-herve-lembi</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/aristote-zeke-omwele</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/jean-paul-boeka-lisasi</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/roger-hitoto</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/papi-kimoto</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/ngandu-kasongo</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/olivier-n-siabamfumu</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/tueba-menayane</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/kambam-srinibas-singh</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/makiadi-pambani</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/mbala-mbuta-biscotte</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/serge-mputu-mbungu</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/jody-lukoki</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/filston-mawana</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/paulin-tokala-kombe</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/eric-gasana</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/francis-nzaba</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/mwanza-mukombo</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/ndjeka-mukando</loc>
+    <lastmod>2026-07-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/salomon-mange</loc>
+    <lastmod>2026-07-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/alain-muana-kizamba</loc>
+    <lastmod>2026-07-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/brian-cipenga</loc>
+    <lastmod>2026-07-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/axel-tuanzebe</loc>
+    <lastmod>2026-07-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/jeff-tutuana</loc>
+    <lastmod>2026-07-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/endri-shkambaj</loc>
+    <lastmod>2026-07-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -92,6 +980,36 @@
   </url>
   <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/darly-nlandu</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/serge-atakayi</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/arcial-nzamu-ena</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/brice-wembangomo</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/sefu-ngongo</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/jethro-orizaza-nzau</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -133,205 +1051,289 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/arcial-nzamu-ena</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/madi-monamay</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/brice-wembangomo</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/joel-sami</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/sefu-ngongo</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/kanku-tshisambu</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/jethro-orizaza-nzau</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/pathy-ilunga</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/gabriel-ngalula</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/giannelli-imbula</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/christopher-oualembo</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/samuel-moutoussamy</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/pascal-kalemba</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/dylan-batubinsika</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/isaac-tshibangu</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/calvin-zola</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/dieumerci-mbokani</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/richard-kule-mbombo</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/william-balikwisha</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/mohammed-tchite</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/luis-pedro-cavanda</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/nyanguila-kalonji</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/kazenga-lualua</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/pombolo-sadi-wa</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/danny-mwanga</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/serge-djamba-shango</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/youssouf-mulumbu</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/dimitry-imbongo</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/patrick-n-koyi</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/edouard-kabamba</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/remi-mulumba</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/andre-bukia</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/silas</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/tubilandu-ndimbi</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/ngandu-kasongo</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/joel-tshibamba</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/christian-landu-tubi</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/timothy-fayulu</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/oscar-kabwit-tshikomb</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/nono-lubanzadio</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/tcham-n-toya</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/brian-bayeye</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/christian-kinkela</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/pepe-bonet-kapambu</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/steve-zakuani</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/ludovick-wola-wetshay</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/guily-manziba</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/henock-inonga-baka</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/guelor-dibulana</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/jeremy-ngakia</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/jonathan-kanu-kambele</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/cedric-lubasa</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/francis-dady-n-goy</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/serge-lofo-bongeli</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/pieter-mbemba</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/freddy-mombongo-dues</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/eric-gasana</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/yves-kibuey</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/jordi-makiese-3521</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/jean-marc-makusu</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/lobi-manzoki</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/issama-mpeko</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/emeka-mamale</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/herita-ilunga</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/patrick-samba</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/fabrice-omonga</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/tshamalenga-kabundi</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/mbenza-bedi</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/arthur-masuaku</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/jason-lusuamu</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/jires-kembo-ekoko</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/jean-castegnaro</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/parfait-mandanda</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/occupe-bayenga</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/exauce-mayombo</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/hugues-wembangomo</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/anthony-musaba</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/el-chadaille-bitshiabu</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/pierre-kalulu</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/herve-kage</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/jordy-makengo</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/arsene-zola</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -343,31 +1345,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/bulayima-mukuayanzo</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/itubu-imbem</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/savity-lipenia</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/mana-mamuwene</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/kibonge-mafu</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -386,24 +1364,6 @@
   </url>
   <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/masena-moke</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/filston-mawana</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/francis-nzaba</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/esele-bakasu</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -452,18 +1412,6 @@
   </url>
   <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/pierre-mwana-kasongo</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/mwanza-mukombo</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/kamunda-tshinabu</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -763,12 +1711,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/walter-bwalya</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/andre-kona-n-gole</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
@@ -883,12 +1825,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/salomon-mange</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/kabwe-kasongo</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
@@ -961,12 +1897,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/fiston-mayele</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/ilombe-mboyo</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
@@ -997,19 +1927,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/gedeon-kalulu</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/ladislas-bushiri</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/lionel-mpasi-nzau</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -1040,12 +1958,6 @@
   </url>
   <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/malongo-gedeon-mpia</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/brian-cipenga</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -1939,12 +2851,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/jonathan-benteke</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/adjani-mujangi-bia-9211</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
@@ -2197,12 +3103,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/aristote-nkaka</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/jojea-kwizera</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
@@ -2293,390 +3193,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/madi-monamay</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/joel-sami</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/kanku-tshisambu</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/pathy-ilunga</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/alain-muana-kizamba</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/giannelli-imbula</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/samuel-moutoussamy</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/gael-kakuta</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/doris-fuakumputu</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/dylan-batubinsika</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/calvin-zola</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/axel-tuanzebe</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/richard-kule-mbombo</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/mohammed-tchite</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/nyanguila-kalonji</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/pombolo-sadi-wa</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/serge-djamba-shango</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/dimitry-imbongo</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/edouard-kabamba</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/andre-bukia</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/tubilandu-ndimbi</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/joel-tshibamba</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/timothy-fayulu</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/nono-lubanzadio</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/brian-bayeye</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/pepe-bonet-kapambu</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/ludovick-wola-wetshay</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/henock-inonga-baka</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/jeremy-ngakia</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/cedric-lubasa</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/serge-lofo-bongeli</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/freddy-mombongo-dues</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/yves-kibuey</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/jean-marc-makusu</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/issama-mpeko</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/ndjeka-mukando</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/herita-ilunga</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/fabrice-omonga</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/mbenza-bedi</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/arthur-masuaku</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/jason-lusuamu</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/jires-kembo-ekoko</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/jean-castegnaro</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/parfait-mandanda</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/occupe-bayenga</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/exauce-mayombo</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/hugues-wembangomo</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/aime-mabika</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/anthony-musaba</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/el-chadaille-bitshiabu</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/pierre-kalulu</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/herve-kage</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/jordy-makengo</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/andy-boyeli</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/lobilo-boba</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/nzelo-herve-lembi</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/filston-mongu</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/arsene-zola</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/botomotoito-skito-litimba</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/jacques-mbuyamba</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/kanku-madiata-tresor</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/assani-lukimya-mulongoti</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/bwanga-tshimen</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/dieudonne-kalulika</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/wilson-kamavuaka</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
@@ -2719,12 +3235,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/adam-bossou</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/belux-bukasa-kasongo</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
@@ -2732,12 +3242,6 @@
   </url>
   <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/joel-beya</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/chris-emmanuel-lokesa</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -2779,12 +3283,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/eddy-bembuana-keve</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/yannick-bapupa</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
@@ -2809,37 +3307,13 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/kakoko-etepe</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/dituabanza-nsumbu</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/cedric-tsimba</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/naby-twimumu</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/jean-rene-shasha-mafumba</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/kiki-musampa</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -2881,18 +3355,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/dina-dinanga</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/ngoy-nsumbu</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/ricky-tulengi</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
@@ -2929,12 +3391,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/pepito-kisuba</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/jonathan-ifunga-ifasso</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
@@ -2947,19 +3403,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/elos-elonga-ekakia</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/branham-braney-kabala</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/josias-roulez</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -2971,43 +3415,13 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/badile-lubamba</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/kabasu-babo</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/daniel-bakongolia</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/n-dinga-mbote</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/michel-nzamongini-babale</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/joel-kasubandi</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/guylain-ndumbu-nsungu</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -3073,30 +3487,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/kilasu-massamba</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/makindu-sabhou-makengo</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/tristan-m-bongo</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/mayanga-maku</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/emmanuel-ngudikama</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
@@ -3104,12 +3494,6 @@
   </url>
   <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/gauthier-mankenda</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/jean-santos-muntubila</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -3157,12 +3541,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/cedric-baseya</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/stephy-mavididi</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
@@ -3181,25 +3559,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/freddy-mulongo</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/bridge-ndilu</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/peggy-lokando</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/luzayadio-bangu</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -3218,18 +3578,6 @@
   </url>
   <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/pierre-okende</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/david-iboma</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/albert-braine-mayama</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -3254,12 +3602,6 @@
   </url>
   <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/japhet-tanganga</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/riffi-mandanda</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -3373,12 +3715,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/max-mayunga</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/platini-mpiana</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
@@ -3445,18 +3781,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/elias-ntaganda</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/jose-bosingwa</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/johan-manzambi</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
@@ -3500,12 +3824,6 @@
   </url>
   <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/mike-mampuya</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/charles-m-mombwa</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -3644,12 +3962,6 @@
   </url>
   <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/emomo-eddy-ngoyi</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/jeff-tutuana</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -3937,12 +4249,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/mavuba-mafuila</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/ange-nanizayamo</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
@@ -3955,25 +4261,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/mwepu-ilunga</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/tumba-tshimanga</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/tresor-mputu</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/olivier-n-siabamfumu</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -3986,12 +4274,6 @@
   </url>
   <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/nolan-mbemba</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/emil-noll</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -4039,12 +4321,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/mbala-mbuta-biscotte</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/makaya-nsilulu</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
@@ -4087,12 +4363,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/mihayo-kazembe</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/tonton-zola-moukoko</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
@@ -4105,25 +4375,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/tueba-menayane</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/nathan-fasika</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/yves-angani</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/aristote-zeke-omwele</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -4153,12 +4405,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/beyuku-glodi</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/yannick-bangala-litombo</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
@@ -4166,36 +4412,6 @@
   </url>
   <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/mika-miche</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/ali-lukunku</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/yves-ma-kalambay</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/jean-paul-boeka-lisasi</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/roger-hitoto</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/makiadi-pambani</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -4225,18 +4441,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/richard-ekunde</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/kabamba-musasa</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/eric-bokanga</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
@@ -4256,30 +4460,6 @@
   </url>
   <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/nill-de-pauw</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/jody-lukoki</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/paulin-tokala-kombe</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/serge-mputu-mbungu</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/muteba-kidiaba</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -4310,18 +4490,6 @@
   </url>
   <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/cerruti-siya</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/papi-kimoto</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/bijou-kisombe-mundaba</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -4393,19 +4561,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/delain-sasa</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/singa-manzangala</loc>
-    <lastmod>2026-07-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/tresor-kangambu</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -4448,6 +4604,150 @@
   </url>
   <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/afimico-pululu</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/gabriel-ngalula</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/christopher-oualembo</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/isaac-tshibangu</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/william-balikwisha</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/luis-pedro-cavanda</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/kazenga-lualua</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/danny-mwanga</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/youssouf-mulumbu</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/patrick-n-koyi</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/remi-mulumba</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/silas</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/christian-landu-tubi</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/oscar-kabwit-tshikomb</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/tcham-n-toya</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/christian-kinkela</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/steve-zakuani</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/guily-manziba</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/guelor-dibulana</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/jonathan-kanu-kambele</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/francis-dady-n-goy</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/pieter-mbemba</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/jordi-makiese-3521</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/emeka-mamale</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/patrick-samba</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -5329,37 +5629,13 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/ruffice-amede-kabongo</loc>
-    <lastmod>2026-07-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/enzo-molebe</loc>
     <lastmod>2026-07-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/kabongo-tshimanga</loc>
-    <lastmod>2026-07-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/phanuel-kavita</loc>
-    <lastmod>2026-07-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/tresor-mbuyu</loc>
-    <lastmod>2026-07-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/raphael-eyongo</loc>
     <lastmod>2026-07-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -5377,37 +5653,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/pierre-yves-ngawa</loc>
-    <lastmod>2026-07-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/nathan-dekoke</loc>
-    <lastmod>2026-07-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/enrique-lofolomo</loc>
-    <lastmod>2026-07-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/jeremie-matumona</loc>
-    <lastmod>2026-07-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/nathan-bitumazala</loc>
-    <lastmod>2026-07-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/cedric-makutungu</loc>
     <lastmod>2026-07-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -5419,61 +5665,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/taylor-luvambo</loc>
-    <lastmod>2026-07-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/djoully-nzoko</loc>
-    <lastmod>2026-07-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/peter-ouaneh</loc>
-    <lastmod>2026-07-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/quentin-bena</loc>
-    <lastmod>2026-07-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/dan-nlundulu</loc>
-    <lastmod>2026-07-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/levi-malungu</loc>
-    <lastmod>2026-07-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/noah-mawete-kinsiona</loc>
-    <lastmod>2026-07-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/elias-bakatukanda</loc>
-    <lastmod>2026-07-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/julien-ngoy</loc>
-    <lastmod>2026-07-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/yann-massombo</loc>
     <lastmod>2026-07-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -5485,25 +5677,13 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/maxime-sivis</loc>
-    <lastmod>2026-07-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/joel-ito</loc>
     <lastmod>2026-07-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/noah-mbamba</loc>
-    <lastmod>2026-07-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/ngonda-muzinga</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/ferrety-sousa</loc>
     <lastmod>2026-07-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -5521,7 +5701,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/ferrety-sousa</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/ngonda-muzinga</loc>
     <lastmod>2026-07-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -5533,109 +5713,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/isaac-lufuiku</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/jeremie-minssart</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/david-kabamba-kalonji</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/exauce-mpembele-boula</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/lionel-lukoki</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/noha-ndombasi</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/franck-idumbo</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/jonathan-bolingi</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/paris-maghoma</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/arthur-spadoni</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/giovani-bamba</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/benedict-dos-santos</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/benis-belesi</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/jean-loic-mibenge</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/nathan-zaidila</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/benjamin-kabeya</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/senda-mukandila</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/terence-makengo</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/noah-ndeke</loc>
     <lastmod>2026-07-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -5647,31 +5725,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/thomas-basila</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/shako-onangolo</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/samuel-ntanda</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/jordi-nsiala</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/steven-nsimba</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/andy-pembele</loc>
     <lastmod>2026-07-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -5683,49 +5737,13 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/ridge-mobulu</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/joy-mukena</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/honore-bayanginisa</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/elvis-kuyema</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/emmanuel-da-costa</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/philippe-kailu-mayuma</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/noah-mutanda</loc>
     <lastmod>2026-07-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/andy-pembele</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/ridge-mobulu</loc>
     <lastmod>2026-07-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -5743,13 +5761,13 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/germain-kapela</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/philippe-kailu-mayuma</loc>
     <lastmod>2026-07-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/christian-nsundi</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/jonathan-bolingi</loc>
     <lastmod>2026-07-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -5761,7 +5779,31 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/christian-nsundi</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/daniel-labila</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/emmanuel-da-costa</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/jordi-nsiala</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/steven-nsimba</loc>
     <lastmod>2026-07-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -5773,7 +5815,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/kevin-nzuzi-mata</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/david-kabamba-kalonji</loc>
     <lastmod>2026-07-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -5785,19 +5827,109 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/noah-ndeke</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/samuel-ntanda</loc>
     <lastmod>2026-07-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/kelian-nsona</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/isaac-lufuiku</loc>
     <lastmod>2026-07-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/thierry-lutonda</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/shako-onangolo</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/terence-makengo</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/senda-mukandila</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/benjamin-kabeya</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/benis-belesi</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/benedict-dos-santos</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/arthur-spadoni</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/paris-maghoma</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/honore-bayanginisa</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/nathan-zaidila</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/jean-loic-mibenge</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/elvis-kuyema</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/lionel-lukoki</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/jeremie-minssart</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/noha-ndombasi</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/germain-kapela</loc>
     <lastmod>2026-07-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -5827,31 +5959,13 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/xavier-mbuyamba</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/samuel-bamba</loc>
     <lastmod>2026-07-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/rosaire-longelo</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/rollin-menayese</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/rodney-kongolo</loc>
     <lastmod>2026-07-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -5870,12 +5984,6 @@
   </url>
   <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/plamedi-nsingi</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/paul-nsio</loc>
     <lastmod>2026-07-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -5905,12 +6013,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/manasse-kusu</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/maecky-ngombo</loc>
     <lastmod>2026-07-08</lastmod>
     <changefreq>weekly</changefreq>
@@ -5929,18 +6031,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/kevin-tshiembe</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/jucie-lupeta</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/josue-escartin</loc>
     <lastmod>2026-07-08</lastmod>
     <changefreq>weekly</changefreq>
@@ -5953,19 +6043,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/jared-khasa</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/harrison-manzala</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/emmanuel-matuta</loc>
     <lastmod>2026-07-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -6175,121 +6253,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/dave-moli</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/godwill-kukonki</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/chrisolithe-diozeye-mwini</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/joel-schingtienne</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/joel-mawungu</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/josue-kimboma</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/bigen-yala-lusala</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/joseph-kalulu</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/joseph-ganda</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/joseph-boyamba</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/jordy-soladio</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/jordan-gele</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/jonathan-mutombo</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/jonathan-mambu</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/joel-mumbongo</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/owe-bonyanga</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/joe-mendes</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/bali-mumba</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/daniel-mayele</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/jilvaro-luyinga</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/gabriel-mutombo</loc>
     <lastmod>2026-05-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -6301,7 +6265,25 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/james-balagizi</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/brandon-dady</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/francis-kembolo</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/joseph-kalulu</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/freddy-mbemba</loc>
     <lastmod>2026-05-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -6313,7 +6295,43 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/fostave-mabani</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/jeremy-kumbi</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/fiston-mwika-mula</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/ezeckiel-zola-ngundu</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/rabbi-nsingi</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/rodrigue-nsingi-malongi</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/christopher-luhaka</loc>
     <lastmod>2026-05-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -6325,19 +6343,13 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/holly-tshimanga</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/andre-ntambue</loc>
     <lastmod>2026-05-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/herve-mombela</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/dermi-lusala</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/dave-moli</loc>
     <lastmod>2026-05-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -6349,7 +6361,31 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/rabbi-nsingi</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/godwill-kukonki</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/dermi-lusala</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/preston-nsifua-bazola</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/erwin-senakuku</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/herve-mombela</loc>
     <lastmod>2026-05-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -6367,7 +6403,13 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/rodrigue-nsingi-malongi</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/enzo-keutgen</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/tresor-matondo</loc>
     <lastmod>2026-05-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -6379,7 +6421,19 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/andre-ntambue</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/jonathan-mambu</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/chrisolithe-diozeye-mwini</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/holly-tshimanga</loc>
     <lastmod>2026-05-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -6397,13 +6451,91 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/emmanuel-gerarca</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/glen-matondo</loc>
     <lastmod>2026-05-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/preston-nsifua-bazola</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/arnaud-luzayadio</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/franz-tangala</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/joel-mumbongo</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/daniel-fois</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/francis-massampu</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/jordy-soladio</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/joel-schingtienne</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/bigen-yala-lusala</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/owe-bonyanga</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/chris-kasongo</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/joel-mawungu</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/gedeon-mulenda</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/joe-mendes</loc>
     <lastmod>2026-05-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -6415,7 +6547,13 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/georges-nsukula</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/daniel-mayele</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/ephraim-kalonji</loc>
     <lastmod>2026-05-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -6427,19 +6565,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/brandon-ndezi</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/brandon-dady</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/bryan-bofunda</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/jilvaro-luyinga</loc>
     <lastmod>2026-05-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -6457,133 +6583,25 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/joseph-boyamba</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://angm-hub.github.io/leopardsradar/player/james-balagizi</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://angm-hub.github.io/leopardsradar/player/jason-kaluanga</loc>
     <lastmod>2026-05-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/gabriel-mutombo</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/chris-kasongo</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/franz-tangala</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/francis-massampu</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/tresor-matondo</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/freddy-mbemba</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/fostave-mabani</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/fiston-mwika-mula</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/fally-mayulu</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/ezeckiel-zola-ngundu</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/erwin-senakuku</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/daniel-fois</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/bez-lubala</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/christopher-luhaka</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/ephraim-kalonji</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/arnaud-luzayadio</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/enzo-keutgen</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/francis-kembolo</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/gedeon-mulenda</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/emmanuel-gerarca</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://angm-hub.github.io/leopardsradar/player/gady-beyuku</loc>
+    <loc>https://angm-hub.github.io/leopardsradar/player/bryan-bofunda</loc>
     <lastmod>2026-05-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
