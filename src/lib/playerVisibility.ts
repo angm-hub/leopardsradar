@@ -29,11 +29,15 @@ type SupabaseQuery = any;
 export function applyPublicVisibilityFilter(query: SupabaseQuery): SupabaseQuery {
   // Clause AND : archives caches TOUJOURS (NULL ou false OK, true exclu).
   // PostgREST .not("archived", "is", true) couvre les 2 valeurs admises.
+  // Regle durcie (15/07/2026) : TOUTE fiche issue d'une decouverte
+  // automatique (discovery_method non NULL, quel que soit le job) reste
+  // cachee tant qu'elle n'est pas validee (verified) ou capee RDC.
+  // Avant, seul academy_scan_2026 etait gate : les faux positifs du job
+  // comprehensive-discovery passaient (3 fiches Inde/Estonie/Albanie).
   return query
     .not("archived", "is", true)
     .or(
       "discovery_method.is.null," +
-      "discovery_method.neq.academy_scan_2026," +
       "verified.eq.true," +
       "caps_rdc.gt.0",
     );

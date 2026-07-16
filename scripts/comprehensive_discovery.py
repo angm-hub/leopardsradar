@@ -1168,6 +1168,11 @@ def build_player_row(cand: dict) -> dict:
             f"À vérifier : origine RDC à confirmer, éligibilité à instruire."
         ),
         "verified": False,
+        # Signe l'insert : les decouvertes automatiques ne sont visibles
+        # publiquement qu'apres validation (cf. playerVisibility.ts).
+        # Incident 15/07/2026 : 3 faux positifs (Inde, Estonie, Albanie)
+        # visibles car discovery_method restait NULL.
+        "discovery_method": "comprehensive_discovery_v3",
         "nationalities": nationalities,
         "other_nationalities": other_nationalities,
         "is_binational": is_binational,

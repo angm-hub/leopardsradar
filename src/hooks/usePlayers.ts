@@ -13,7 +13,7 @@ interface Filters {
   orderBy?: { column: keyof DBPlayer; ascending?: boolean };
   excludeEligibilityStatus?: string;
   /**
-   * Si true (défaut), masque les candidats `discovery_method=academy_scan_2026`
+   * Si true (défaut), masque toute découverte automatique non validée
    * non encore vérifiés par Alexandre. Mettre à false dans les écrans admin
    * où on veut voir tous les candidats pour les valider.
    */
