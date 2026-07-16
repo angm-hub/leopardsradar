@@ -76,7 +76,8 @@ export default function MaListePublic() {
         const { data: playerRows, error: pErr } = await (supabase as any)
           .from("players")
           .select("*")
-          .in("slug", Array.from(slugs));
+          .in("slug", Array.from(slugs))
+          .not("archived", "is", true);
         if (pErr) throw pErr;
         const map = new Map<string, DBPlayer>();
         for (const p of (playerRows ?? []) as DBPlayer[]) {

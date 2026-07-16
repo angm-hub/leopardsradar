@@ -51,6 +51,7 @@ export function usePlayerSearch({
         const baseQuery = (supabase as any)
           .from("players")
           .select("*")
+          .not("archived", "is", true)
           .ilike("name", `%${trimmed}%`)
           .neq("eligibility_status", "ineligible");
         const { data, error } = await applyPublicVisibilityFilter(baseQuery)

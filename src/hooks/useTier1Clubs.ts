@@ -28,6 +28,7 @@ export function useTier1Clubs() {
           .from("players")
           .select("current_club, eligibility_status, tier")
           .eq("tier", "tier1")
+          .not("archived", "is", true)
           .neq("eligibility_status", "ineligible")
           .not("current_club", "is", null);
         if (error) throw error;
