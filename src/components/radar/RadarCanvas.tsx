@@ -201,7 +201,7 @@ export function RadarCanvas({ players, totalRoster }: RadarCanvasProps) {
       </div>
 
       {/* Légende position (dots) */}
-      <div className="mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[11px] text-muted-light">
+      <div className="mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs md:text-[11px] text-muted-light">
         <LegendDot color="bg-pos-gk" label="Gardien" />
         <LegendDot color="bg-pos-def" label="Défenseur" />
         <LegendDot color="bg-pos-mid" label="Milieu" />

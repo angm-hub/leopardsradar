@@ -346,15 +346,15 @@ const ATTR_RAW_FORMAT: Record<string, (v: number) => string> = {
   otbInvolvement: (v) => `${Math.round(v)} touches / 90`,
   creativity: (v) => `${v.toFixed(2)} KP+xAG / 90`,
   dribbling: (v) => `${(v * 100).toFixed(0)}% dribbles réussis`,
-  ballRetention: (v) => `${v.toFixed(1)} prog. carries / 90`,
-  shortPass: (v) => `${v.toFixed(1)} prog. passes / 90`,
-  longPass: (v) => `${(v * 100).toFixed(0)}% long passes`,
+  ballRetention: (v) => `${v.toFixed(1)} conduites prog. / 90`,
+  shortPass: (v) => `${v.toFixed(1)} passes prog. / 90`,
+  longPass: (v) => `${(v * 100).toFixed(0)}% passes longues`,
   crossing: (v) => `${v.toFixed(2)} PD / 90`,
   aerial: (v) => `${(v * 100).toFixed(0)}% duels aériens`,
-  physicality: (v) => `${v.toFixed(1)} aérien+tackle / 90`,
+  physicality: (v) => `${v.toFixed(1)} aérien+tacles / 90`,
   stamina: (v) => `${Math.round(v)} min / match`,
   ballRecovery: (v) => `${v.toFixed(1)} récup / 90`,
-  defAwareness: (v) => `${v.toFixed(1)} déf. actions / 90`,
+  defAwareness: (v) => `${v.toFixed(1)} actions déf. / 90`,
   // GK
   savePct: (v) => `${(v * 100).toFixed(0)}% arrêts`,
   savesPer90: (v) => `${v.toFixed(1)} arrêts / 90`,
@@ -376,34 +376,34 @@ function formatRaw(key: string, value: number | null): string {
 
 const FIELD_ATTRIBUTES = {
   attacking: [
-    { key: "finishing",      label: "Finishing" },
-    { key: "goalThreat",     label: "Goal Threat" },
-    { key: "goalContrib",    label: "Goal Contrib." },
-    { key: "otbInvolvement", label: "OTB Involvement" },
-    { key: "creativity",     label: "Creativity" },
+    { key: "finishing",      label: "Finition" },
+    { key: "goalThreat",     label: "Menace de but" },
+    { key: "goalContrib",    label: "Apport décisif" },
+    { key: "otbInvolvement", label: "Volume de jeu" },
+    { key: "creativity",     label: "Créativité" },
   ],
   technical: [
-    { key: "dribbling",      label: "Dribbling" },
-    { key: "ballRetention",  label: "Ball Retention" },
-    { key: "shortPass",      label: "Short Pass" },
-    { key: "longPass",       label: "Long Pass" },
-    { key: "crossing",       label: "Crossing" },
+    { key: "dribbling",      label: "Dribble" },
+    { key: "ballRetention",  label: "Conservation" },
+    { key: "shortPass",      label: "Passes courtes" },
+    { key: "longPass",       label: "Passes longues" },
+    { key: "crossing",       label: "Centres" },
   ],
   physical: [
-    { key: "aerial",         label: "Aerial" },
-    { key: "physicality",    label: "Physicality" },
-    { key: "stamina",        label: "Stamina" },
-    { key: "ballRecovery",   label: "Ball Recovery" },
-    { key: "defAwareness",   label: "Def. Awareness" },
+    { key: "aerial",         label: "Jeu aérien" },
+    { key: "physicality",    label: "Impact physique" },
+    { key: "stamina",        label: "Endurance" },
+    { key: "ballRecovery",   label: "Récupération" },
+    { key: "defAwareness",   label: "Lecture déf." },
   ],
 } as const;
 
 const GK_ATTRIBUTES = [
-  { key: "savePct",        label: "Save %" },
-  { key: "savesPer90",     label: "Saves / 90" },
-  { key: "cleanSheetPct",  label: "Clean Sheets" },
-  { key: "postShotXgPer90", label: "PSxG Conceded" },
-  { key: "stamina",        label: "Stamina" },
+  { key: "savePct",        label: "% d'arrêts" },
+  { key: "savesPer90",     label: "Arrêts / 90" },
+  { key: "cleanSheetPct",  label: "Clean sheets" },
+  { key: "postShotXgPer90", label: "PSxG concédé" },
+  { key: "stamina",        label: "Endurance" },
 ];
 
 // Attributs inversés (moins = mieux) — seul postShotXgPer90 pour GK
@@ -414,21 +414,21 @@ const INVERTED_ATTRS = new Set(["postShotXgPer90"]);
 // ─────────────────────────────────────────────────────────────────────────────
 
 const STRENGTH_LABELS: Record<string, string> = {
-  finishing:      "GOALS PER 90",
-  goalThreat:     "XG PER 90",
-  goalContrib:    "GOAL CONTRIBUTIONS PER 90",
-  otbInvolvement: "TOUCHES PER 90",
-  creativity:     "KEY PASSES + XAG PER 90",
-  dribbling:      "DRIBBLE SUCCESS RATE",
-  ballRetention:  "PROGRESSIVE CARRIES PER 90",
-  shortPass:      "PROGRESSIVE PASSES PER 90",
-  longPass:       "LONG PASS COMPLETION",
-  crossing:       "ASSISTS PER 90",
-  aerial:         "AERIAL DUELS WON",
-  physicality:    "AERIAL + TACKLES PER 90",
-  stamina:        "MINUTES PER GAME",
-  ballRecovery:   "BALL RECOVERIES PER 90",
-  defAwareness:   "DEFENSIVE ACTIONS PER 90",
+  finishing:      "BUTS / 90",
+  goalThreat:     "XG / 90",
+  goalContrib:    "BUTS + PASSES DÉC. / 90",
+  otbInvolvement: "TOUCHES / 90",
+  creativity:     "PASSES CLÉS + XAG / 90",
+  dribbling:      "% DRIBBLES RÉUSSIS",
+  ballRetention:  "CONDUITES PROGRESSIVES / 90",
+  shortPass:      "PASSES PROGRESSIVES / 90",
+  longPass:       "% PASSES LONGUES RÉUSSIES",
+  crossing:       "PASSES DÉCISIVES / 90",
+  aerial:         "% DUELS AÉRIENS GAGNÉS",
+  physicality:    "DUELS AÉRIENS + TACLES / 90",
+  stamina:        "MINUTES / MATCH",
+  ballRecovery:   "BALLONS RÉCUPÉRÉS / 90",
+  defAwareness:   "ACTIONS DÉFENSIVES / 90",
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -508,9 +508,9 @@ function computeGkProfile(
   // Pour GK : 5 attrs dans "attacking" par convention d'affichage simplifié
   return {
     isGk: true,
-    attacking: { label: "GOALKEEPER", attributes: gkScores },
-    technical: { label: "TECHNICAL", attributes: [] },
-    physical: { label: "PHYSICAL", attributes: [] },
+    attacking: { label: "GARDIEN", attributes: gkScores },
+    technical: { label: "TECHNIQUE", attributes: [] },
+    physical: { label: "PHYSIQUE", attributes: [] },
   };
 }
 
@@ -573,9 +573,9 @@ function computeFieldProfile(
 
   return {
     isGk: false,
-    attacking: buildFamily("ATTACKING", FIELD_ATTRIBUTES.attacking),
-    technical: buildFamily("TECHNICAL", FIELD_ATTRIBUTES.technical),
-    physical: buildFamily("PHYSICAL", FIELD_ATTRIBUTES.physical),
+    attacking: buildFamily("ATTAQUE", FIELD_ATTRIBUTES.attacking),
+    technical: buildFamily("TECHNIQUE", FIELD_ATTRIBUTES.technical),
+    physical: buildFamily("PHYSIQUE", FIELD_ATTRIBUTES.physical),
   };
 }
 
@@ -590,17 +590,17 @@ function buildEmptyProfile(isGk: boolean): AttributeProfile {
   if (isGk) {
     return {
       isGk: true,
-      attacking: { label: "GOALKEEPER", attributes: emptyAttrs(GK_ATTRIBUTES) },
-      technical: { label: "TECHNICAL", attributes: [] },
-      physical: { label: "PHYSICAL", attributes: [] },
+      attacking: { label: "GARDIEN", attributes: emptyAttrs(GK_ATTRIBUTES) },
+      technical: { label: "TECHNIQUE", attributes: [] },
+      physical: { label: "PHYSIQUE", attributes: [] },
     };
   }
 
   return {
     isGk: false,
-    attacking: { label: "ATTACKING", attributes: emptyAttrs(FIELD_ATTRIBUTES.attacking) },
-    technical: { label: "TECHNICAL", attributes: emptyAttrs(FIELD_ATTRIBUTES.technical) },
-    physical: { label: "PHYSICAL", attributes: emptyAttrs(FIELD_ATTRIBUTES.physical) },
+    attacking: { label: "ATTAQUE", attributes: emptyAttrs(FIELD_ATTRIBUTES.attacking) },
+    technical: { label: "TECHNIQUE", attributes: emptyAttrs(FIELD_ATTRIBUTES.technical) },
+    physical: { label: "PHYSIQUE", attributes: emptyAttrs(FIELD_ATTRIBUTES.physical) },
   };
 }
 
@@ -636,19 +636,19 @@ export function computeKeyInsights(profile: AttributeProfile): KeyInsight[] {
     if (first && (first.note ?? 0) >= 17) {
       insights.push({
         type: "elite",
-        text: `Elite ${first.label} · ${first.note}/20`,
+        text: `Niveau élite : ${first.label} · ${first.note}/20`,
       });
       if (second && (second.note ?? 0) >= 15) {
         insights.push({
           type: "strong",
-          text: `Strong ${second.label} (${second.note})`,
+          text: `Point fort : ${second.label} (${second.note})`,
         });
       }
     } else if (first) {
       const others = top.slice(0, 2).map((a) => `${a.label} ${a.note}`).join(", ");
       insights.push({
         type: "strong",
-        text: `Strong ${others}`,
+        text: `Points forts : ${others}`,
       });
     }
   }
@@ -657,7 +657,7 @@ export function computeKeyInsights(profile: AttributeProfile): KeyInsight[] {
     const limited = bottom.slice(0, 2).map((a) => `${a.label} ${a.note}`).join(", ");
     insights.push({
       type: "limited",
-      text: `Limited ${limited}`,
+      text: `En retrait : ${limited}`,
     });
   }
 

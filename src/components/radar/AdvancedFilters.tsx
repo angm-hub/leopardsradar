@@ -12,7 +12,7 @@
  * Le composant est repliable sur mobile via un bouton "Filtres avancés".
  */
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as RadixSlider from "@radix-ui/react-slider";
 import { SlidersHorizontal, X } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -72,7 +72,29 @@ function fmtValue(v: number): string {
 
 export function AdvancedFilters({ state, onChange }: AdvancedFiltersProps) {
   const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
   const hasActive = !isDefaultAdvanced(state);
+
+  // Fermeture à l'Escape et au clic/tap hors du panneau. Sans ça, le panneau
+  // ouvert bloque les contrôles qu'il recouvre (constat du test mobile 16/07).
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    const onPointerDown = (e: MouseEvent | TouchEvent) => {
+      const root = rootRef.current;
+      if (root && !root.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("mousedown", onPointerDown);
+    document.addEventListener("touchstart", onPointerDown);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("mousedown", onPointerDown);
+      document.removeEventListener("touchstart", onPointerDown);
+    };
+  }, [open]);
 
   const set = <K extends keyof AdvancedFilterState>(
     key: K,
@@ -82,7 +104,7 @@ export function AdvancedFilters({ state, onChange }: AdvancedFiltersProps) {
   const reset = () => onChange(ADVANCED_FILTERS_DEFAULT);
 
   return (
-    <div className="relative">
+    <div className="relative" ref={rootRef}>
       {/* Bouton toggle — affiche le nombre de filtres actifs */}
       <button
         type="button"
@@ -109,8 +131,11 @@ export function AdvancedFilters({ state, onChange }: AdvancedFiltersProps) {
       {open && (
         <div
           className={cn(
-            "absolute right-0 top-full mt-2 z-40",
-            "w-[320px] rounded-card border border-border bg-card shadow-2xl shadow-background/80",
+            // Mobile : bottom sheet pleine largeur (le bouton icône est au bord
+            // gauche, un panneau ancré right-0 partirait hors écran).
+            "fixed inset-x-3 bottom-3 z-50 max-h-[70vh] overflow-y-auto",
+            "md:absolute md:inset-x-auto md:bottom-auto md:right-0 md:top-full md:mt-2 md:z-40 md:max-h-none md:overflow-visible md:w-[320px]",
+            "rounded-card border border-border bg-card shadow-2xl shadow-background/80",
             "p-5 flex flex-col gap-5",
           )}
         >

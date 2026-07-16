@@ -26,7 +26,7 @@ export function InfoPanel({ total, shown, positions, avgAge }: InfoPanelProps) {
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-75" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-success" />
           </span>
-          <p className="text-[9px] uppercase tracking-[0.25em] text-foreground/60 font-mono">
+          <p className="text-xs md:text-[9px] uppercase tracking-[0.25em] text-foreground/60 font-mono">
             Sélection live
           </p>
         </div>
@@ -41,7 +41,7 @@ export function InfoPanel({ total, shown, positions, avgAge }: InfoPanelProps) {
         </div>
 
         {avgAge !== null ? (
-          <p className="mt-1.5 text-[10px] text-muted font-mono">
+          <p className="mt-1.5 text-xs md:text-[10px] text-muted font-mono">
             Âge moyen · {avgAge.toFixed(1)} ans
           </p>
         ) : null}
@@ -69,7 +69,7 @@ function PosCell({
   return (
     <div className="flex flex-col items-center gap-0.5 rounded-button bg-card/40 py-1.5">
       <span className={`h-1.5 w-1.5 rounded-sm ${dot}`} aria-hidden />
-      <span className="text-[10px] font-mono text-foreground/85 leading-none">
+      <span className="text-xs md:text-[10px] font-mono text-foreground/85 leading-none">
         {value}
       </span>
       <span className="text-[8px] uppercase tracking-wider text-muted leading-none">

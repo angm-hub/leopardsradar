@@ -8,7 +8,7 @@
 export function RadarLegend() {
   return (
     <div className="mt-5 flex flex-col gap-3">
-      <p className="text-center text-[11px] font-mono text-muted-light uppercase tracking-[0.18em]">
+      <p className="text-center text-xs md:text-[11px] font-mono text-muted-light uppercase tracking-[0.18em]">
         Couleur = tier UEFA · Taille = valeur marchande
       </p>
       <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
@@ -37,7 +37,7 @@ function TierSwatch({ tier, label }: { tier: "S" | "A" | "B" | "C"; label: strin
   const { bg, color } = bgMap[tier];
 
   return (
-    <span className="inline-flex items-center gap-2 text-[11px] text-muted-light">
+    <span className="inline-flex items-center gap-2 text-xs md:text-[11px] text-muted-light">
       <span
         aria-hidden
         style={{

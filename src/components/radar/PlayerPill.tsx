@@ -398,7 +398,7 @@ function PillTooltip({ player, open }: { player: DBPlayer; open: boolean }) {
             {player.name}
           </p>
           {player.current_club ? (
-            <p className="text-[10px] text-muted-light truncate mt-0.5">
+            <p className="text-xs md:text-[10px] text-muted-light truncate mt-0.5">
               {player.current_club}
             </p>
           ) : null}
@@ -411,7 +411,7 @@ function PillTooltip({ player, open }: { player: DBPlayer; open: boolean }) {
       </div>
 
       {/* Stats compactes */}
-      <div className="mt-2.5 flex items-center justify-between text-[10px] font-mono pt-2 border-t border-border/50">
+      <div className="mt-2.5 flex items-center justify-between text-xs md:text-[10px] font-mono pt-2 border-t border-border/50">
         <span className="text-muted">
           {player.age ? `${player.age} ans` : "n.d."}
           {player.foot ? ` · ${player.foot === "right" ? "Pied D" : player.foot === "left" ? "Pied G" : "Ambidextre"}` : ""}
@@ -427,7 +427,7 @@ function PillTooltip({ player, open }: { player: DBPlayer; open: boolean }) {
       {isTouch && (
         <Link
           to={`/player/${player.slug}`}
-          className="mt-2.5 flex w-full items-center justify-center rounded-button bg-primary/15 border border-primary/30 py-1.5 text-[11px] font-medium text-primary transition-colors hover:bg-primary/25 pointer-events-auto"
+          className="mt-2.5 flex w-full items-center justify-center rounded-button bg-primary/15 border border-primary/30 py-1.5 text-xs md:text-[11px] font-medium text-primary transition-colors hover:bg-primary/25 pointer-events-auto"
         >
           Voir la fiche
         </Link>

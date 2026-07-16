@@ -1,14 +1,36 @@
+import { lazy, Suspense } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { RoutePrefetch } from "@/components/util/RoutePrefetch";
 import LeopardsHero from "@/components/home/LeopardsHero";
-import { PressReviewSection } from "@/components/home/PressReviewSection";
-import FeaturedThisWeek from "@/components/home/FeaturedThisWeek";
-import StatsSection from "@/components/home/StatsSection";
-import BestXIPreviewSection from "@/components/home/BestXIPreviewSection";
-import { ThreeSymbolsSection } from "@/components/home/ThreeSymbolsSection";
-import NewsletterSection from "@/components/home/NewsletterSection";
-import { MaListeCTA } from "@/components/home/MaListeCTA";
+
+// Sections sous la ligne de flottaison : lazy pour sortir leur poids (et
+// celui de leurs hooks/data) du chunk index. Seul le hero reste eager — c'est
+// lui qui porte le LCP. Les fallbacks réservent une hauteur approximative
+// pour ne créer aucun décalage si l'utilisateur scrolle pendant le chargement.
+const PressReviewSection = lazy(() =>
+  import("@/components/home/PressReviewSection").then((m) => ({
+    default: m.PressReviewSection,
+  })),
+);
+const FeaturedThisWeek = lazy(() => import("@/components/home/FeaturedThisWeek"));
+const StatsSection = lazy(() => import("@/components/home/StatsSection"));
+const BestXIPreviewSection = lazy(
+  () => import("@/components/home/BestXIPreviewSection"),
+);
+const ThreeSymbolsSection = lazy(() =>
+  import("@/components/home/ThreeSymbolsSection").then((m) => ({
+    default: m.ThreeSymbolsSection,
+  })),
+);
+const NewsletterSection = lazy(() => import("@/components/home/NewsletterSection"));
+const MaListeCTA = lazy(() =>
+  import("@/components/home/MaListeCTA").then((m) => ({ default: m.MaListeCTA })),
+);
+
+function SectionFallback({ minH = 480 }: { minH?: number }) {
+  return <div style={{ minHeight: minH }} aria-hidden />;
+}
 
 /**
  * Home — pivot Revue de presse + landing sévèrement coupée (14 mai 2026).
@@ -41,13 +63,27 @@ const Home = () => {
       <RoutePrefetch />
       <main className="flex-1">
         <LeopardsHero />
-        <PressReviewSection />
-        <FeaturedThisWeek />
-        <StatsSection />
-        <BestXIPreviewSection />
-        <ThreeSymbolsSection />
-        <MaListeCTA />
-        <NewsletterSection />
+        <Suspense fallback={<SectionFallback minH={640} />}>
+          <PressReviewSection />
+        </Suspense>
+        <Suspense fallback={<SectionFallback />}>
+          <FeaturedThisWeek />
+        </Suspense>
+        <Suspense fallback={<SectionFallback />}>
+          <StatsSection />
+        </Suspense>
+        <Suspense fallback={<SectionFallback />}>
+          <BestXIPreviewSection />
+        </Suspense>
+        <Suspense fallback={<SectionFallback />}>
+          <ThreeSymbolsSection />
+        </Suspense>
+        <Suspense fallback={<SectionFallback minH={320} />}>
+          <MaListeCTA />
+        </Suspense>
+        <Suspense fallback={<SectionFallback minH={320} />}>
+          <NewsletterSection />
+        </Suspense>
       </main>
       <Footer />
     </div>

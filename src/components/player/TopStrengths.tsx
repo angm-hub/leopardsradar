@@ -23,7 +23,7 @@ export function TopStrengths({ strengths, position, className }: TopStrengthsPro
     <div className={cn("rounded-card border border-border bg-card p-4 md:p-5", className)}>
       <div className="flex items-baseline justify-between gap-3 mb-4">
         <h3 className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted">
-          Top Strengths
+          Points forts
         </h3>
         {position && (
           <span className="text-[10px] font-mono text-muted/60">

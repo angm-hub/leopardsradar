@@ -22,7 +22,7 @@ export function KeyInsights({ insights, className }: KeyInsightsProps) {
   return (
     <div className={cn("rounded-card border border-border bg-card p-4 md:p-5", className)}>
       <h3 className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted mb-3">
-        Key Insights
+        À retenir
       </h3>
       <ul className="space-y-2" role="list">
         {insights.map((insight, i) => (

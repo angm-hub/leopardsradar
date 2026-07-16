@@ -54,7 +54,7 @@ function Quadrant({
       className={`pointer-events-none absolute ${position} z-[2] flex flex-col gap-0.5 ${align === "right" ? "items-end" : "items-start"}`}
       aria-hidden
     >
-      <p className="rounded-sm bg-background/50 backdrop-blur-sm px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.22em] text-foreground/65">
+      <p className="rounded-sm bg-background/50 backdrop-blur-sm px-2 py-0.5 font-mono text-xs md:text-[10px] uppercase tracking-[0.22em] text-foreground/65">
         {label}
       </p>
       <p className="hidden md:block rounded-sm bg-background/30 px-1.5 py-0.5 font-mono text-[8px] uppercase tracking-[0.18em] text-foreground/35">
