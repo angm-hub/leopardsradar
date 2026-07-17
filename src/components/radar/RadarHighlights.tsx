@@ -82,7 +82,7 @@ function RadarTopCard({
           initialsClassName="text-sm"
         />
         <div className="min-w-0 flex-1">
-          <h3 className="font-serif text-base font-semibold leading-tight text-foreground truncate group-hover:text-primary transition-colors">
+          <h3 className="font-serif text-base font-semibold leading-tight text-foreground line-clamp-2 group-hover:text-primary transition-colors">
             {name}
           </h3>
           <p className="text-[11px] text-muted-light truncate">
@@ -129,8 +129,23 @@ export function RadarHighlights() {
   // Si pas de data ou loading court → on ne montre rien plutôt qu'un placeholder
   // bidon. L'absence vaut mieux que le mensonge.
   if (loading) {
+    // Le skeleton rend AUSSI l'en-tête : sans lui, le titre apparaissait au
+    // chargement des données et poussait tout le canvas (CLS 0,211 desktop,
+    // audit 17/07).
     return (
       <section className="container-site pb-10 pt-2">
+        <div className="mb-6">
+          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-success/85">
+            Radar · Top 5 valeurs
+          </p>
+          <h2 className="mt-2 font-serif text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
+            Les 5 plus belles valeurs du vivier.
+          </h2>
+          <p className="mt-1.5 text-sm text-muted-light">
+            Joueurs éligibles RDC ou diaspora avec la valeur marchande la plus élevée.
+            Mis à jour automatiquement à chaque sync Transfermarkt.
+          </p>
+        </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
           {Array.from({ length: 5 }).map((_, i) => (
             <div

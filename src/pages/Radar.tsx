@@ -91,33 +91,37 @@ function RadarCard({ player }: { player: DBPlayer }) {
       />
       <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-3/5 bg-gradient-to-t from-background via-background/80 to-transparent" />
 
-      <div className="absolute top-3 left-3 flex flex-col gap-1.5 items-start">
-        <CategoryBadge category={player.player_category} />
-        {player.position ? (
-          <span
-            className={cn(
-              "inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider backdrop-blur-md",
-              POSITION_BADGE[player.position],
-            )}
-          >
+      {/* Une seule rangée haute : les deux coins absolus se chevauchaient sur
+          les cartes à 3 drapeaux (badge « HÉRITAGE » tronqué en « HÉRITA »,
+          constat audit 17/07). */}
+      <div className="absolute top-3 inset-x-3 flex items-start justify-between gap-2">
+        <div className="flex min-w-0 flex-col gap-1.5 items-start">
+          <CategoryBadge category={player.player_category} />
+          {player.position ? (
             <span
-              aria-hidden
-              className={cn("inline-block h-1.5 w-1.5 rounded-full", POSITION_DOT[player.position])}
-            />
-            {POSITION_LABEL[player.position]}
-          </span>
+              className={cn(
+                "inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider backdrop-blur-md",
+                POSITION_BADGE[player.position],
+              )}
+            >
+              <span
+                aria-hidden
+                className={cn("inline-block h-1.5 w-1.5 rounded-full", POSITION_DOT[player.position])}
+              />
+              {POSITION_LABEL[player.position]}
+            </span>
+          ) : null}
+        </div>
+        {player.nationalities.length > 0 ? (
+          <div className="flex flex-shrink-0 items-center gap-0.5 rounded-full bg-background/40 backdrop-blur-md border border-border/40 px-2 py-1">
+            {player.nationalities.slice(0, 3).map((nat) => (
+              <span key={nat} className="text-sm leading-none" title={nat}>
+                {flagFor(nat)}
+              </span>
+            ))}
+          </div>
         ) : null}
       </div>
-
-      {player.nationalities.length > 0 ? (
-        <div className="absolute top-3 right-3 flex items-center gap-0.5 rounded-full bg-background/40 backdrop-blur-md border border-border/40 px-2 py-1">
-          {player.nationalities.slice(0, 3).map((nat) => (
-            <span key={nat} className="text-sm leading-none" title={nat}>
-              {flagFor(nat)}
-            </span>
-          ))}
-        </div>
-      ) : null}
 
       <div className="absolute bottom-0 left-0 right-0 p-5">
         {player.current_club ? (
@@ -446,7 +450,7 @@ export default function Radar() {
         <RadarHighlights />
 
         {/* Bloc stats saison — top G+A, buts, temps de jeu parmi les talents radar */}
-        <ProStatsBlock players={players} />
+        <ProStatsBlock players={players} loading={loading} />
 
         <section className="container-site py-12">
           {loading ? (

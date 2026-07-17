@@ -280,7 +280,10 @@ export function PlayerHeaderDense({ player, games }: PlayerHeaderDenseProps) {
             />
           </div>
         ) : (
-          <div className="mt-8 grid grid-cols-2 md:grid-cols-3 gap-px bg-border rounded-card overflow-hidden border border-border">
+          // 4 cellules : en grid-cols-2 mobile, 3 cellules laissaient un trou
+          // vide en bas à droite (constat audit 17/07 : ni chiffre ni n.d.,
+          // contraire à la règle de la Méthodologie).
+          <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-px bg-border rounded-card overflow-hidden border border-border">
             <BigStat label="CAPS RDC" value={player.caps_rdc ?? 0} />
             <BigStat
               label="VALEUR MARCHANDE"
@@ -291,6 +294,11 @@ export function PlayerHeaderDense({ player, games }: PlayerHeaderDenseProps) {
               label="BUTS SAISON"
               value={player.season_goals ?? "n.d."}
               muted={!player.season_goals}
+            />
+            <BigStat
+              label="ÂGE"
+              value={player.age ? `${player.age} ans` : "n.d."}
+              muted={!player.age}
             />
           </div>
         )}

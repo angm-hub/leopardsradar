@@ -31,7 +31,7 @@ export function XIRosterCard({
   return (
     <Link
       to={`/player/${player.slug}`}
-      className="group relative flex items-stretch gap-3 rounded-card border border-border bg-card p-3 transition-all hover:border-primary/50 hover:bg-card-hover hover:shadow-lg hover:shadow-primary/5"
+      className="group relative flex items-stretch gap-3 overflow-hidden rounded-card border border-border bg-card p-3 transition-all hover:border-primary/50 hover:bg-card-hover hover:shadow-lg hover:shadow-primary/5"
     >
       {/* Numéro de maillot en filigrane */}
       <span

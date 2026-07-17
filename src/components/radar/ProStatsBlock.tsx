@@ -20,6 +20,8 @@ import type { DBPlayer } from "@/types/dbPlayer";
 
 interface ProStatsBlockProps {
   players: DBPlayer[];
+  /** Skeleton avec en-tête pendant le chargement (anti-CLS, audit 17/07). */
+  loading?: boolean;
 }
 
 // ─── Mini-card ────────────────────────────────────────────────────────────────
@@ -92,7 +94,7 @@ function StatCard({ label, value, unit, player, accentClass = "text-primary" }: 
 
 // ─── Section ──────────────────────────────────────────────────────────────────
 
-export function ProStatsBlock({ players }: ProStatsBlockProps) {
+export function ProStatsBlock({ players, loading = false }: ProStatsBlockProps) {
   // Filtrer les joueurs radar/heritage avec au moins une stat
   const radarPlayers = useMemo(
     () =>
@@ -192,6 +194,31 @@ export function ProStatsBlock({ players }: ProStatsBlockProps) {
         player={topTime}
         accentClass="text-muted-light"
       />,
+    );
+  }
+
+  if (loading) {
+    return (
+      <section className="container-site pb-8 pt-2">
+        <div className="mb-5">
+          <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary/80">
+            Radar · Stats saison 25-26
+          </p>
+          <h2 className="mt-1.5 font-serif text-2xl font-semibold tracking-tight text-foreground">
+            Pépites stats
+          </h2>
+        </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div
+              key={i}
+              className="h-[88px] rounded-card border border-border bg-gradient-to-r from-card via-card-hover to-card animate-shimmer"
+              style={{ backgroundSize: "200% 100%" }}
+              aria-hidden
+            />
+          ))}
+        </div>
+      </section>
     );
   }
 

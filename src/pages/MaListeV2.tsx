@@ -11,6 +11,7 @@
  * capitaine = 1 clic. Auto-save URL hash + localStorage. Mode remix v1.
  */
 import { useState, useEffect, useMemo } from "react";
+import { createPortal } from "react-dom";
 import { motion, MotionConfig } from "framer-motion";
 import { useMaListeV2Store, MAX_STARTERS, MAX_BENCH } from "@/store/maListeV2Store";
 import { usePlayers } from "@/hooks/usePlayers";
@@ -243,15 +244,20 @@ export default function MaListeV2() {
               </aside>
             </div>
 
-            {/* Mobile toggle library */}
-            <button
-              type="button"
-              onClick={() => setMobileLibraryOpen((v) => !v)}
-              className="lg:hidden fixed bottom-24 right-4 z-20 h-14 w-14 rounded-full bg-primary text-primary-foreground shadow-[0_10px_30px_-8px_rgba(245,197,24,0.6)] flex items-center justify-center text-xl font-bold"
-              aria-label={mobileLibraryOpen ? "Fermer la pioche" : "Ouvrir la pioche"}
-            >
-              {mobileLibraryOpen ? "×" : "+"}
-            </button>
+            {/* Mobile toggle library — rendu via portal : un ancêtre motion
+                porte un transform, qui faisait du fixed un absolute (bouton
+                flottant au milieu du contenu, constat audit 17/07). */}
+            {createPortal(
+              <button
+                type="button"
+                onClick={() => setMobileLibraryOpen((v) => !v)}
+                className="lg:hidden fixed bottom-24 right-4 z-20 h-14 w-14 rounded-full bg-primary text-primary-foreground shadow-[0_10px_30px_-8px_rgba(245,197,24,0.6)] flex items-center justify-center text-xl font-bold"
+                aria-label={mobileLibraryOpen ? "Fermer la pioche" : "Ouvrir la pioche"}
+              >
+                {mobileLibraryOpen ? "×" : "+"}
+              </button>,
+              document.body,
+            )}
           </div>
         </main>
 
