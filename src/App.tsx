@@ -1,11 +1,12 @@
 import { lazy, Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Home from "./pages/Home.tsx";
 import { PromoBanner } from "./components/layout/PromoBanner";
+import { PRESSE_PUBLIEE } from "@/config/editorial";
 import { SmoothScroll } from "@/components/motion";
 
 /**
@@ -91,7 +92,10 @@ const App = () => (
             <Route path="/player/:slug" element={<Player />} />
             <Route path="/radar" element={<Radar />} />
             <Route path="/best-xi" element={<BestXI />} />
-            <Route path="/revue-de-presse" element={<RevueDePresse />} />
+            <Route
+              path="/revue-de-presse"
+              element={PRESSE_PUBLIEE ? <RevueDePresse /> : <Navigate to="/" replace />}
+            />
             <Route path="/a-propos" element={<About />} />
             <Route path="/about" element={<About />} />
             <Route path="/newsletter" element={<Newsletter />} />

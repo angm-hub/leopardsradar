@@ -59,7 +59,7 @@ function Tribute1974() {
               className="h-1.5 w-1.5 rounded-full bg-torch"
               aria-hidden
             />
-            Zaïre · World Cup 1974
+            Zaïre · Coupe du Monde 1974
           </span>
         </div>
 
@@ -75,8 +75,8 @@ function Tribute1974() {
               id="heritage-1974"
               className="display-heading mt-6 text-3xl text-foreground md:mt-8 md:text-5xl"
             >
-              The first sub-Saharan side<br />
-              at a World Cup.
+              Première équipe d'Afrique noire<br />
+              en Coupe du Monde.
             </h2>
             <p className="mt-6 max-w-xl text-base leading-relaxed text-foreground/65 md:text-lg">
               Le Zaïre arrive en Allemagne avec ses Léopards et un drapeau
@@ -87,7 +87,7 @@ function Tribute1974() {
 
           <div className="flex flex-col gap-4">
             <div className="glass rounded-card p-5">
-              <span className="label-mono-sm text-foreground/55">Squad</span>
+              <span className="label-mono-sm text-foreground/55">Effectif</span>
               <div className="display-heading mt-2 text-3xl text-foreground md:text-4xl">
                 22 Léopards.
               </div>
@@ -97,7 +97,7 @@ function Tribute1974() {
             </div>
             <div className="glass rounded-card p-5">
               <span className="label-mono-sm text-foreground/55">
-                50 years later
+                50 ans plus tard
               </span>
               <div className="display-heading mt-2 text-3xl text-primary md:text-4xl">
                 1 075 Léopards.
@@ -159,7 +159,7 @@ function OkapiManifesto() {
               <div className="flex items-start justify-between">
                 <LRMark size={18} color="#ECE8DD" />
                 <span className="label-mono-sm text-foreground/55">
-                  VOL. 01 · ISSUE 04 · KIN·PAR
+                  VOL. 01 · NUMÉRO 04 · KIN·PAR
                 </span>
               </div>
 
@@ -170,11 +170,11 @@ function OkapiManifesto() {
 
               <div>
                 <span className="label-mono-sm text-foreground/55">
-                  FEATURE
+                  GRAND FORMAT
                 </span>
                 <div className="display-heading mt-2 text-4xl text-foreground md:text-5xl">
-                  The other<br />
-                  <span className="italic text-bone-ivory">emblem.</span>
+                  L'autre<br />
+                  <span className="italic text-bone-ivory">emblème.</span>
                 </div>
               </div>
             </div>

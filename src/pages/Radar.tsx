@@ -136,11 +136,16 @@ function RadarCard({ player }: { player: DBPlayer }) {
             </span>
           ) : null}
         </div>
-        {player.eligibility_note ? (
-          <p className="mt-2 text-[11px] text-muted-light/80 line-clamp-2 leading-snug">
-            {publicEligibilityNote(player.eligibility_note)}
-          </p>
-        ) : null}
+        {(() => {
+          const note = player.eligibility_note
+            ? publicEligibilityNote(player.eligibility_note)
+            : "";
+          return note ? (
+            <p className="mt-2 text-[11px] text-muted-light/80 line-clamp-2 leading-snug">
+              {note}
+            </p>
+          ) : null;
+        })()}
       </div>
     </Link>
   );

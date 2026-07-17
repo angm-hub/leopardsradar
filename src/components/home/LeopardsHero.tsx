@@ -51,8 +51,10 @@ const PERSONAS: Persona[] = [
     key: "journaliste",
     label: "Journaliste",
     tagline: "Tu travailles sur un papier ?",
-    cta: "Consulter la revue de presse",
-    href: "/revue-de-presse",
+    // Presse dépubliée (cf. config/editorial) : on route vers la méthode,
+    // la vraie valeur pour un journaliste qui source un papier.
+    cta: "Lire la méthodologie",
+    href: "/methodologie",
   },
   {
     key: "curieux",

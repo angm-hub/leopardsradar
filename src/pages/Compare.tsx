@@ -274,9 +274,9 @@ const SUGGESTED_DUELS: Array<{
     why: "Le finisseur en Premier League face au capitaine vétéran de la Liga.",
   },
   {
-    slugA: "castello-lukeba",
+    slugA: "el-chadaille-bitshiabu",
     slugB: "ngalayel-mukau",
-    title: "Lukeba vs. Mukau",
+    title: "Bitshiabu vs. Mukau",
     why: "Deux pépites premium · un défenseur RB Leipzig face à un milieu LOSC.",
   },
   {

@@ -96,10 +96,10 @@ const STATIC_ROUTES = [
   ["/radar", "Le Radar | Léopards Radar", "Les joueurs éligibles ou à ascendance RDC dans le monde, cartographiés par valeur, jeunesse et niveau."],
   ["/best-xi", "Best XI Diaspora | Léopards Radar", "La meilleure composition possible des Léopards, roster et diaspora confondus. Recomposée chaque dimanche."],
   ["/mondial-2026", "Mondial 2026, le bilan | Léopards Radar", "Le parcours des Léopards à la Coupe du Monde 2026 : quatre matchs, les chiffres, les hommes."],
-  ["/revue-de-presse", "Revue de presse | Léopards Radar", "Ce qui s'est dit cette semaine sur le football congolais. Sources triées, biais documentés."],
+  // /revue-de-presse retirée : section dépubliée jusqu'au lancement (cf. src/config/editorial.ts)
   ["/histoires", "Histoires | Léopards Radar", "Les récits du football congolais, racontés par la data."],
   ["/methodologie", "Méthodologie | Léopards Radar", "D'où viennent les données, comment on les calcule, ce qu'on n'a pas. Transparence par défaut."],
-  ["/a-propos", "À propos | Léopards Radar", "Toute la data du football congolais, en un seul endroit. Édité par Cobalt Sports & Entertainment."],
+  ["/a-propos", "À propos | Léopards Radar", "Toute la data du football congolais, en un seul endroit. Un média indépendant construit à Paris."],
   ["/compare", "Comparateur | Léopards Radar", "Compare deux Léopards côte à côte : six axes statistiques et lecture des écarts."],
   ["/newsletter", "Le récap du dimanche | Léopards Radar", "L'analyse de la semaine des Léopards, 6 minutes de lecture, livrée le dimanche à 21 h."],
 ];

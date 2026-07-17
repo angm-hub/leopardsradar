@@ -105,7 +105,7 @@ export function IndependanceVisual() {
   );
 }
 
-// ─── 04 — Édition : wordmark Cobalt Sports & Entertainment ────────────────────
+// ─── 04 — Édition : signature Léopards Radar ─────────────────────────────────
 
 export function EditeurVisual() {
   return (
@@ -114,12 +114,12 @@ export function EditeurVisual() {
         Édité par
       </span>
       <div className="font-serif text-2xl md:text-3xl text-foreground leading-tight tracking-tight">
-        COBALT
-        <span className="text-muted-light"> SPORTS &amp; ENTERTAINMENT</span>
+        LÉOPARDS
+        <span className="text-muted-light"> RADAR</span>
       </div>
       <div className="flex items-center gap-2 text-xs text-muted">
         <Check className="h-3 w-3 text-success" aria-hidden />
-        <span>Studio indépendant · Paris</span>
+        <span>Média indépendant · Paris</span>
       </div>
     </div>
   );

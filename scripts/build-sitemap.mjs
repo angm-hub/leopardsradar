@@ -41,7 +41,7 @@ const STATIC_PAGES = [
   { path: "radar", priority: "0.9", changefreq: "weekly" },
   { path: "best-xi", priority: "0.9", changefreq: "weekly" },
   { path: "histoires", priority: "0.8", changefreq: "weekly" },
-  { path: "revue-de-presse", priority: "0.8", changefreq: "daily" },
+  // revue-de-presse retirée : section dépubliée jusqu'au lancement (cf. src/config/editorial.ts)
   { path: "compare", priority: "0.7", changefreq: "monthly" },
   { path: "ma-liste", priority: "0.7", changefreq: "monthly" },
   { path: "insights", priority: "0.7", changefreq: "weekly" },

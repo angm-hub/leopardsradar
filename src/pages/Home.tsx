@@ -3,6 +3,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { RoutePrefetch } from "@/components/util/RoutePrefetch";
 import LeopardsHero from "@/components/home/LeopardsHero";
+import { PRESSE_PUBLIEE } from "@/config/editorial";
 
 // Sections sous la ligne de flottaison : lazy pour sortir leur poids (et
 // celui de leurs hooks/data) du chunk index. Seul le hero reste eager — c'est
@@ -63,9 +64,11 @@ const Home = () => {
       <RoutePrefetch />
       <main className="flex-1">
         <LeopardsHero />
-        <Suspense fallback={<SectionFallback minH={640} />}>
-          <PressReviewSection />
-        </Suspense>
+        {PRESSE_PUBLIEE && (
+          <Suspense fallback={<SectionFallback minH={640} />}>
+            <PressReviewSection />
+          </Suspense>
+        )}
         <Suspense fallback={<SectionFallback />}>
           <FeaturedThisWeek />
         </Suspense>

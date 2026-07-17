@@ -13,7 +13,7 @@ export default function About() {
   useDocumentMeta({
     title: "À propos",
     description:
-      "Léopards Radar · média indépendant édité par Cobalt Sports & Entertainment. Data + curation + analyse sur le vivier congolais.",
+      "Léopards Radar · média indépendant. Data + curation + analyse sur le vivier congolais.",
   });
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -141,20 +141,14 @@ export default function About() {
               04 · Qui édite Léopards Radar
             </p>
             <h2 className="display-heading text-3xl md:text-4xl text-foreground mb-6">
-              Édité par Cobalt Sports & Entertainment.
+              Un média indépendant.
             </h2>
             <EditeurVisual />
             <div className="space-y-5 text-lg leading-[1.75] text-foreground/85">
               <p>
-                Léopards Radar est édité par{" "}
-                <strong className="text-foreground">Cobalt Sports &
-                Entertainment</strong>, studio indépendant basé à Paris.
-                On construit des médias et des outils éditoriaux autour du
-                sport, de la musique et de la culture africaine.
-              </p>
-              <p>
-                Léopards Radar est notre premier produit ouvert au public
-                · d'autres suivront, dans la même logique : data sourcée,
+                <strong className="text-foreground">Léopards Radar</strong> est
+                un média indépendant construit à Paris, sans attache à un club,
+                une fédération ou un agent. Une seule ligne : data sourcée,
                 voix éditoriale claire, zéro hype.
               </p>
               <p className="text-base text-muted-light">

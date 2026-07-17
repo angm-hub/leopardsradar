@@ -9,14 +9,32 @@ import { eligibilityLabel } from "@/lib/playerHelpers";
 const VERDICT_RE =
   /SWITCHABLE|INELIGIBLE|SELECTED|Aucune cape|Base juridique|cap-tied|éligible|eligible/i;
 
+/**
+ * Segments de journal purement techniques (pipelines de découverte,
+ * fact-checks datés, tags internes) : ne JAMAIS les servir au visiteur,
+ * même en dernier recours. Constat de l'audit front du 17/07 : le fallback
+ * « dernier segment » faisait fuiter des notes du type
+ * « Fact-check web 2026-07-08 (SIGNAL_FORT) : ... » sur les cartes du radar.
+ */
+const TECHNICAL_RE =
+  /fact[-_]check|per wikidata|découvert via|découvert automatiquement|à enrichir|transfermarkt rdc pool|SIGNAL_|CONFIRME_|[A-Z]+_(FORT|TAG|FAIBLE)|discovery_method|academy_scan|https?:\/\//i;
+
 export function publicEligibilityNote(raw: string): string {
   const segments = raw
-    .split(" | ")
+    .split(/\s\|\s|\s·\s/)
     .map((s) => s.trim())
     .filter(Boolean);
   if (segments.length === 0) return "";
-  const verdicts = segments.filter((s) => VERDICT_RE.test(s));
-  const picked = verdicts.length > 0 ? verdicts.slice(-2) : [segments[segments.length - 1]];
+  const publishable = segments.filter((s) => !TECHNICAL_RE.test(s));
+  const verdicts = publishable.filter((s) => VERDICT_RE.test(s));
+  // Verdicts d'abord ; sinon le dernier segment PUBLIABLE ; sinon rien
+  // (l'appelant a un fallback synthétique, le silence vaut mieux que le jargon).
+  const picked =
+    verdicts.length > 0
+      ? verdicts.slice(-2)
+      : publishable.length > 0
+        ? [publishable[publishable.length - 1]]
+        : [];
   return picked
     .map((s) =>
       s

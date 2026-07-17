@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
 import { LRWordmark } from "@/components/ui/Wordmark";
+import { PRESSE_PUBLIEE } from "@/config/editorial";
 
 const NAV_LINKS = [
   { label: "Roster", href: "/roster" },
   { label: "Radar", href: "/radar" },
   { label: "Best XI", href: "/best-xi" },
-  { label: "Revue de presse", href: "/revue-de-presse" },
+  ...(PRESSE_PUBLIEE ? [{ label: "Revue de presse", href: "/revue-de-presse" }] : []),
   { label: "Histoires", href: "/histoires" },
   { label: "Ma Liste", href: "/ma-liste" },
 ];
@@ -146,8 +147,7 @@ export function Footer() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-border pt-6 sm:flex-row">
           <p className="text-xs text-muted">
-            © {new Date().getFullYear()} Léopards Radar · édité par{" "}
-            <span className="text-foreground/80">Cobalt Sports & Entertainment</span>.
+            © {new Date().getFullYear()} Léopards Radar · média indépendant.
             Construit avec passion depuis Paris.
           </p>
           <p className="text-[11px] font-mono uppercase tracking-[0.2em] text-muted">

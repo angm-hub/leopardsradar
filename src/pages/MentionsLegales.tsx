@@ -5,7 +5,7 @@ import LegalLayout from "@/components/layout/LegalLayout";
  *
  * Sprint 1.2 du brief Léopards Radar v3 : nettoyage des placeholders dev-mode
  * "[à compléter]". Disclosure honnête : éditeur en nom propre via la marque
- * Cobalt Sports & Entertainment, structure non encore immatriculée.
+ * Léopards Radar, structure non encore immatriculée.
  *
  * Conformité LCEN (loi pour la confiance dans l'économie numérique) : pour un
  * éditeur non professionnel et personne physique, l'identité complète peut
@@ -29,7 +29,7 @@ export default function MentionsLegales() {
         <p>
           Le site <strong>Léopards Radar</strong> (ci-après « le Site ») est
           édité par <strong>Alexandre Ngomo</strong>, personne physique, sous
-          la marque <strong>Cobalt Sports &amp; Entertainment</strong>.
+          la marque <strong>Léopards Radar</strong>.
         </p>
         <p className="text-muted-light">
           Structure éditoriale indépendante basée à Paris (France).

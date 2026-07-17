@@ -31,9 +31,12 @@ export function useBestXIEditions() {
     (async () => {
       try {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // La table n'a pas de colonne `edition` (id, title, published_at,
+        // formation, players, editorial_note, is_published) : le numéro
+        // d'édition est dérivé de l'ordre de publication.
         const { data, error } = await (supabase as any)
           .from("best_xi")
-          .select("id, edition, formation, published_at, title, editorial_note")
+          .select("id, formation, published_at, title, editorial_note")
           .eq("is_published", true)
           .order("published_at", { ascending: false })
           .limit(6);
@@ -46,8 +49,13 @@ export function useBestXIEditions() {
           return;
         }
 
-        // Index 0 = édition courante → on la saute.
-        setEditions((data as BestXIEdition[]).slice(1));
+        // Index 0 = édition courante → on la saute. Le titre porte déjà la
+        // date d'édition ; `edition` reste null et l'UI affiche le titre.
+        setEditions(
+          (data as Omit<BestXIEdition, "edition">[])
+            .slice(1)
+            .map((e) => ({ ...e, edition: null })),
+        );
       } catch {
         // Silencieux : la section disparaît simplement si Supabase est KO.
         if (!cancelled) setEditions([]);

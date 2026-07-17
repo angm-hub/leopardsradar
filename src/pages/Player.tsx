@@ -7,6 +7,7 @@ import { PlayerEligibilityQuote, buildPlayerEligibilityLine } from "@/components
 import { PlayerEligibilityBlock } from "@/components/player/PlayerEligibilityBlock";
 import { PlayerCareerTimeline } from "@/components/player/PlayerCareerTimeline";
 import { PlayerPressMentions } from "@/components/player/PlayerPressMentions";
+import { PRESSE_PUBLIEE } from "@/config/editorial";
 import { RelatedPlayers } from "@/components/player/RelatedPlayers";
 import { PlayerHeaderDense } from "@/components/player/PlayerHeaderDense";
 import { PlayerTabsV2 } from "@/components/player/PlayerTabsV2";
@@ -306,7 +307,7 @@ export default function PlayerPage() {
 
             {/* Presse dans ce tab aussi */}
             <div className="scroll-mt-24">
-              <PlayerPressMentions playerId={player.id} />
+              {PRESSE_PUBLIEE && <PlayerPressMentions playerId={player.id} />}
             </div>
           </div>
         )}
@@ -329,7 +330,7 @@ export default function PlayerPage() {
           {/* Presse dans ce tab si pas de tab detailed */}
           {!hasAdvancedStats && (
             <div className="scroll-mt-24">
-              <PlayerPressMentions playerId={player.id} />
+              {PRESSE_PUBLIEE && <PlayerPressMentions playerId={player.id} />}
             </div>
           )}
         </div>

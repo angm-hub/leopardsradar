@@ -21,6 +21,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { PRESSE_PUBLIEE } from "@/config/editorial";
 
 export interface NavSectionVisibility {
   bestXI: boolean;
@@ -31,7 +32,7 @@ export interface NavSectionVisibility {
 const DEFAULT_VISIBILITY: NavSectionVisibility = {
   bestXI: true,
   histoires: true,
-  presse: true,
+  presse: PRESSE_PUBLIEE,
 };
 
 const THRESHOLDS = {
@@ -60,7 +61,7 @@ async function fetchCounts(): Promise<NavSectionVisibility> {
   return {
     bestXI: (bestXIRes.count ?? 0) >= THRESHOLDS.bestXI,
     histoires: (articlesRes.count ?? 0) >= THRESHOLDS.histoires,
-    presse: (pressRes.count ?? 0) >= THRESHOLDS.presse,
+    presse: PRESSE_PUBLIEE && (pressRes.count ?? 0) >= THRESHOLDS.presse,
   };
 }
 
