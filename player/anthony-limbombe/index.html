@@ -40,13 +40,13 @@
          Display, body et UI partagent la meme family. Geist Mono ajoute
          pour les vraies refs techniques (xG, scores, ratios). Pas de
          serif, pas de Bricolage, pas de JetBrains — la marque est
-         silencieuse, la hierarchie passe par poids + tracking. -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
+         silencieuse, la hierarchie passe par poids + tracking.
+         Self-host depuis le 17/07 (audit front) : les @font-face vivent
+         dans fonts.css, plus aucune requete Google Fonts. Preload des
+         2 poids critiques du premier ecran. -->
+    <link rel="preload" href="/leopardsradar/fonts/geist-400-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/leopardsradar/fonts/geist-500-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/leopardsradar/fonts.css" />
 
     <!-- ====================================================================
          SPA fallback decoder pour GitHub Pages — hack rafgraph.
@@ -73,8 +73,8 @@
         }
       })(window.location);
     </script>
-  <script type="module" crossorigin src="/leopardsradar/assets/index-C22b5fcR.js"></script>
-  <link rel="stylesheet" crossorigin href="/leopardsradar/assets/index-BT-BEoGD.css">
+  <script type="module" crossorigin src="/leopardsradar/assets/index-DkMQfS8Z.js"></script>
+  <link rel="stylesheet" crossorigin href="/leopardsradar/assets/index-DHzdOs-N.css">
     <link rel="canonical" href="https://angm-hub.github.io/leopardsradar/player/anthony-limbombe" />
     <meta property="og:title" content="Anthony Limbombe · Sans club | Léopards Radar" />
     <meta property="og:description" content="Attaquant · Sans club · 31 ans. Profil, statut FIFA, statistiques de saison et valeur marchande sur Léopards Radar, la data du football congolais." />
