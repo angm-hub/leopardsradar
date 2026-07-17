@@ -27,7 +27,7 @@ export default function Histoires() {
   }, []);
 
   const [filter, setFilter] = useState<CategoryFilter>("ALL");
-  const { articles, loading } = useArticles();
+  const { articles, loading, error } = useArticles();
 
   // Filters disponibles : seulement les catégories qui ont ≥1 article publié.
   const filters = useMemo(() => {
@@ -107,6 +107,17 @@ export default function Histoires() {
         <section className="container-site py-12 md:py-16 space-y-10 md:space-y-14">
           {loading ? (
             <ListSkeleton />
+          ) : error ? (
+            // Erreur réseau : dire les choses plutôt qu'un état vide muet
+            // (constat audit 17/07 : erreurs Supabase non affichées).
+            <div className="rounded-card border border-border bg-card p-10 text-center">
+              <p className="font-serif text-xl text-foreground">
+                Impossible de charger les histoires.
+              </p>
+              <p className="mt-2 text-sm text-muted-light">
+                Réessaie dans un instant, nos serveurs reprennent leur souffle.
+              </p>
+            </div>
           ) : (
             <>
               {featured ? <StoryHero story={featured} /> : null}

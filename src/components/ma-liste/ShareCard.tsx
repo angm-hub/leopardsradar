@@ -23,12 +23,14 @@ interface Props {
  *   story = 1080×1350 (Instagram feed 4:5, LinkedIn, Twitter post)
  *   og    = 1200×630  (Open Graph, X card, WhatsApp link preview)
  * ───────────────────────────────────────────────────────────── */
-const BG = "#0A0A0B";
-const SURFACE = "#131316";
-const BORDER = "#26262C";
-const FG = "#F4F4F1";
-const MUTED = "#8B8B95";
-const PRIMARY = "#FCD116"; // RDC yellow · accent only
+// Palette alignée sur les tokens du site (audit 17/07) : l'export de la
+// liste portait une palette zinc étrangère à la DA navy.
+const BG = "#050B1A";      // token background
+const SURFACE = "#0E1F44"; // token card
+const BORDER = "#1A2B4A";  // token border
+const FG = "#ECE8DD";      // token foreground
+const MUTED = "#8A9BBC";   // token muted-light
+const PRIMARY = "#F5C518"; // token star · accent or
 const RED = "#CE1126";
 const GREEN = "#00A651";
 
@@ -502,7 +504,7 @@ function EmptyBenchSlot({ size = 38 }: { size?: number }) {
         style={{
           fontFamily: MONO,
           fontSize: 8,
-          color: "#3A3A42",
+          color: "#2A3D64",
         }}
       >
         ·
