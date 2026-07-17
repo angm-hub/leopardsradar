@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { StoryHero } from "@/components/stories/StoryHero";
@@ -68,9 +69,9 @@ export default function Histoires() {
       <main className="flex-1">
         <header className="container-site pt-32 pb-10">
           <nav aria-label="breadcrumb" className="text-sm text-muted">
-            <a href="/" className="hover:text-foreground transition-colors">
-              Home
-            </a>
+            <Link to="/" className="hover:text-foreground transition-colors">
+              Accueil
+            </Link>
             <span className="mx-2 text-muted/60">/</span>
             <span className="text-foreground/80">Histoires</span>
           </nav>

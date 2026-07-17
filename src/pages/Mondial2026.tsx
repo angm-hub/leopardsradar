@@ -105,7 +105,7 @@ export default function Mondial2026() {
         <header className="container-site pt-32 pb-10">
           <nav aria-label="breadcrumb" className="text-sm text-muted">
             <Link to="/" className="hover:text-foreground transition-colors">
-              Home
+              Accueil
             </Link>
             <span className="mx-2 text-muted/60">/</span>
             <span className="text-foreground/80">Mondial 2026</span>

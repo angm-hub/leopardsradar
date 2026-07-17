@@ -59,9 +59,9 @@ export default function Histoire() {
       <main className="flex-1">
         <header className="container-site pt-32 pb-10 max-w-3xl">
           <nav aria-label="breadcrumb" className="text-sm text-muted">
-            <a href="/" className="hover:text-foreground transition-colors">
-              Home
-            </a>
+            <Link to="/" className="hover:text-foreground transition-colors">
+              Accueil
+            </Link>
             <span className="mx-2 text-muted/60">/</span>
             <Link
               to="/histoires"

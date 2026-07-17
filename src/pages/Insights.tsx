@@ -124,7 +124,7 @@ export default function Insights() {
           <div className="container-site relative z-10 py-16 md:py-20">
             <nav aria-label="breadcrumb" className="text-sm text-muted">
               <Link to="/" className="hover:text-foreground transition-colors">
-                Home
+                Accueil
               </Link>
               <span className="mx-2 text-muted/60">/</span>
               <span className="text-foreground/80">Insights</span>
