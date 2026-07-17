@@ -92,7 +92,15 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--limit", type=int, default=130)
+    # scope=value : les plus valorisees d'abord (backlog historique).
+    # scope=recent : les fiches les plus recemment creees d'abord. A utiliser
+    # apres une vague d'ingestion (nouvelles fiches a valeur marchande nulle,
+    # sinon reléguées en fin de file par le tri par valeur et jamais atteintes).
+    parser.add_argument("--scope", choices=["value", "recent"], default="value")
     args = parser.parse_args()
+
+    order_by = ("created_at.desc.nullslast" if args.scope == "recent"
+                else "market_value_eur.desc.nullslast,player_category.asc")
 
     started_at = dt.datetime.utcnow()
     sb = SupabaseClient()
@@ -108,7 +116,7 @@ def main() -> None:
             "image_url_alt": "is.null",
             "transfermarkt_id": "not.is.null",
         },
-        order="market_value_eur.desc.nullslast,player_category.asc",
+        order=order_by,
         limit=str(args.limit),
     )
     players = [p for p in players if (p.get("transfermarkt_id") or "").isdigit()]
