@@ -237,10 +237,37 @@ def parse_caps_from_note(note: str, dob: Optional[date]) -> list:
     return selections
 
 
+# Labels RDC NON ambigus. Le mot "congo" seul est BANNI ici : il matche aussi
+# le Congo-Brazzaville (Q971). country_of_birth est un champ libre, souvent issu
+# de Wikidata, parfois faux (contredit place_of_birth) ou ambigu. Il ne doit
+# JAMAIS a lui seul produire une preuve BIRTH=RDC. Incident Wissa/Nzaba 07/2026.
+RDC_BIRTH_LABELS = {
+    "dr congo", "rd congo", "democratic republic of the congo",
+    "république démocratique du congo", "republique democratique du congo",
+    "zaire", "zaïre", "belgian congo", "congo belge", "cd", "cod",
+}
+# Marqueurs de villes/lieux RDC (dont anciens noms) pour valider une naissance.
+RDC_PLACE_MARKERS = (
+    "kinshasa", "kinshasha", "lubumbashi", "mbuji", "kananga", "kisangani",
+    "goma", "bukavu", "matadi", "kolwezi", "likasi", "boma", "tshikapa",
+    "bunia", "uvira", "kikwit", "matete", "oicha", "beni", "mbandaka",
+    "leopoldville", "léopoldville", "luluabourg", "stanleyville", "elisabethville",
+)
+
+
+def _place_contradicts_rdc(place) -> bool:
+    """True si un lieu de naissance est renseigné et n'est manifestement PAS en RDC.
+    Sert de garde-fou : on refuse une preuve BIRTH=RDC quand le lieu contredit."""
+    if not place:
+        return False
+    p = str(place).lower()
+    return not any(m in p for m in RDC_PLACE_MARKERS)
+
+
 def infer_basis_from_player(player: dict) -> list:
     """
     Infère les bases juridiques RDC depuis les colonnes existantes :
-      - country_of_birth = 'DR Congo' → BIRTH
+      - country_of_birth label RDC explicite ET lieu non contradictoire → BIRTH
       - 'DR Congo' dans nationalities/other_nationalities → UNKNOWN par défaut
       - eligibility_note contient 'mère' / 'mother' → MOTHER
       - eligibility_note contient 'père' / 'father' → FATHER
@@ -249,12 +276,16 @@ def infer_basis_from_player(player: dict) -> list:
     bases = []
     note = (player.get("eligibility_note") or "").lower()
 
-    # Birth
-    if (player.get("country_of_birth") or "").lower() in ("dr congo", "congo", "zaire"):
+    # Birth — GARDE-FOU : label RDC explicite (jamais "congo" seul) ET lieu de
+    # naissance non contradictoire. Sinon la candidature RDC retombe en UNKNOWN
+    # via le fallback plus bas, mais aucune fausse preuve de naissance n'est créée.
+    cob = (player.get("country_of_birth") or "").lower()
+    if cob in RDC_BIRTH_LABELS and not _place_contradicts_rdc(player.get("place_of_birth")):
         bases.append({
             "nationality_code": "COD",
             "basis": "BIRTH",
-            "evidence_quote": f"country_of_birth = '{player.get('country_of_birth')}'",
+            "evidence_quote": f"country_of_birth = '{player.get('country_of_birth')}', "
+                              f"place_of_birth = '{player.get('place_of_birth')}'",
             "confidence": "HIGH",
         })
 
