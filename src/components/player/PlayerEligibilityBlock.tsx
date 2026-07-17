@@ -91,6 +91,16 @@ const CONFIDENCE_LABEL: Record<Confidence, string> = {
   LOW: "Faible",
 };
 
+// Phrase naturelle sous le statut, à la place du « Confiance : Élevée »
+// mécanique (retour Alexandre 17/07). Rien quand tout est consolidé : le
+// statut parle de lui-même, on n'ajoute une note que quand il y a une
+// réserve à signaler.
+const CONFIDENCE_SENTENCE: Record<Confidence, string | null> = {
+  HIGH: null,
+  MEDIUM: "Statut probable, quelques éléments restent à confirmer au cas par cas.",
+  LOW: "Piste à instruire : les données sont encore incomplètes.",
+};
+
 const CONFIDENCE_COLOR: Record<Confidence, string> = {
   HIGH: "text-emerald-300",
   MEDIUM: "text-orange-300",
@@ -197,12 +207,9 @@ export function PlayerEligibilityBlock({ player, bases, selections }: PlayerElig
             <h3 className={cn("mt-1 font-serif text-3xl", config?.color ?? "text-foreground")}>
               {config?.label ?? "Inconnu"}
             </h3>
-            {player.computed_confidence ? (
-              <p className="mt-2 text-sm">
-                <span className="text-muted">Confiance : </span>
-                <span className={cn("font-semibold", CONFIDENCE_COLOR[player.computed_confidence])}>
-                  {CONFIDENCE_LABEL[player.computed_confidence]}
-                </span>
+            {player.computed_confidence && CONFIDENCE_SENTENCE[player.computed_confidence] ? (
+              <p className="mt-2 text-sm text-muted-light leading-relaxed">
+                {CONFIDENCE_SENTENCE[player.computed_confidence]}
               </p>
             ) : null}
           </div>

@@ -35,6 +35,40 @@ USE_PLAYWRIGHT = os.environ.get("USE_PLAYWRIGHT", "false").lower() == "true"
 JOB_NAME = "sync-transfermarkt"
 
 
+def _name_tokens(name: str) -> set[str]:
+    """Jetons significatifs (>=3 lettres, sans accents/casse) d'un nom."""
+    import unicodedata
+
+    if not name:
+        return set()
+    norm = unicodedata.normalize("NFKD", name).encode("ascii", "ignore").decode()
+    return {t for t in norm.lower().replace("'", " ").replace("-", " ").split() if len(t) >= 3}
+
+
+def _tokens_match(a: str, b: str) -> bool:
+    """Deux jetons désignent le même mot : égalité, préfixe 4 lettres commun
+    (Cédric/Cedrick), ou inclusion (Nsafu/N'Safu). Assez lâche pour tolérer
+    les variantes orthographiques et les troncatures, assez strict pour
+    séparer deux patronymes distincts (Mayele/Rossetti)."""
+    return a == b or a[:4] == b[:4] or a in b or b in a
+
+
+def names_diverge(stored: str, tm_name: str) -> bool:
+    """True si AUCUN jeton du nom stocké ne correspond à un jeton du nom TM.
+
+    Signal fort d'un transfermarkt_id erroné : le profil TM décrit une autre
+    personne. Incident 17/07/2026 : la fiche `fiston-mayele` affichait
+    « Vittorio Rossetti » parce qu'un mauvais TM id (340127) avait été
+    synchronisé. Quand ça arrive, on refuse d'importer la bio TM (nom,
+    naissance, photo...) pour ne pas croiser deux identités. On ne bloque
+    que sur divergence TOTALE (les troncatures « Arnold »/« Arnold Issoko »
+    et variantes « Cedrick »/« Cédric » restent autorisées)."""
+    a, b = _name_tokens(stored), _name_tokens(tm_name)
+    if not a or not b:
+        return False  # pas assez d'info pour trancher → on ne bloque pas
+    return not any(_tokens_match(x, y) for x in a for y in b)
+
+
 def main():
     started_at = dt.datetime.utcnow()
     print(f"=== Léopards Radar — Sync Transfermarkt ===")
@@ -176,9 +210,29 @@ def main():
                 continue
             consecutive_unknown = 0
 
-            # Construire le patch — name garanti non-Unknown grace au garde-fou
+            # GARDE-FOU IDENTITE : si le nom TM ne partage AUCUN jeton avec le
+            # nom stocke, le transfermarkt_id pointe vers une autre personne
+            # (mauvais matching a la decouverte). On refuse d'importer sa bio :
+            # sinon on croise deux identites. Incident 17/07/2026 : Mayele
+            # affichait « Vittorio Rossetti » (TM 340127). On log pour revue,
+            # on ne synchronise ni la bio ni la valeur (toutes fausses aussi).
+            if names_diverge(player["name"], tm_player.name):
+                stats["errors_count"] += 1
+                stats["error_details"].append({
+                    "player_id": player["id"],
+                    "error": (f"TM_ID_MISMATCH: fiche='{player['name']}' vs "
+                              f"TM='{tm_player.name}' (TM {tm_id}) — bio ignoree, "
+                              "transfermarkt_id probablement errone"),
+                })
+                print(f"    !! MISMATCH IDENTITE: '{player['name']}' != TM '{tm_player.name}' "
+                      f"(TM {tm_id}) — skip, TM id a re-verifier")
+                continue
+
+            # Construire le patch. `name` n'est JAMAIS ecrase : c'est l'identite
+            # canonique posee a la decouverte (nom complet). TM renvoie parfois
+            # un nom d'affichage tronque (« Arnold » pour Arnold Issoko) ou, si
+            # le TM id est errone, le nom d'un autre joueur. Incident 17/07/2026.
             patch = {
-                "name": tm_player.name,
                 "date_of_birth": tm_player.date_of_birth,
                 "place_of_birth": tm_player.place_of_birth,
                 "country_of_birth": tm_player.country_of_birth,
