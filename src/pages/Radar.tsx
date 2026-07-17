@@ -26,6 +26,7 @@ import {
   POSITION_LABEL,
   flagFor,
   formatMarketValue,
+  nationalityFr,
 } from "@/lib/playerHelpers";
 import { cn } from "@/lib/utils";
 import type { DBPlayer, DBPosition, DBTier } from "@/types/dbPlayer";
@@ -115,7 +116,7 @@ function RadarCard({ player }: { player: DBPlayer }) {
         {player.nationalities.length > 0 ? (
           <div className="flex flex-shrink-0 items-center gap-0.5 rounded-full bg-background/40 backdrop-blur-md border border-border/40 px-2 py-1">
             {player.nationalities.slice(0, 3).map((nat) => (
-              <span key={nat} className="text-sm leading-none" title={nat}>
+              <span key={nat} className="text-sm leading-none" title={nationalityFr(nat)}>
                 {flagFor(nat)}
               </span>
             ))}
@@ -378,7 +379,7 @@ export default function Radar() {
       <main className="flex-1">
         <header className="container-site pt-32 pb-12">
           <nav aria-label="breadcrumb" className="text-sm text-muted">
-            <a href="/" className="hover:text-foreground transition-colors">Home</a>
+            <Link to="/" className="hover:text-foreground transition-colors">Accueil</Link>
             <span className="mx-2 text-muted/60">/</span>
             <span className="text-foreground/80">Radar</span>
           </nav>

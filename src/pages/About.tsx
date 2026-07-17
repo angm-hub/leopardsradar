@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { useDocumentMeta } from "@/hooks/useDocumentMeta";
@@ -21,7 +22,7 @@ export default function About() {
       <main className="flex-1 pt-32 pb-24">
         <div className="container-site mx-auto max-w-3xl">
           <nav aria-label="breadcrumb" className="text-sm text-muted">
-            <a href="/" className="hover:text-foreground transition-colors">Home</a>
+            <Link to="/" className="hover:text-foreground transition-colors">Accueil</Link>
             <span className="mx-2 text-muted/60">/</span>
             <span className="text-foreground/80">À propos</span>
           </nav>

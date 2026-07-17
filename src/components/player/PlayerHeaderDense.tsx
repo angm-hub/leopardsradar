@@ -30,8 +30,7 @@ import {
   POSITION_BADGE,
   POSITION_DOT,
   flagFor,
-  formatMarketValue,
-} from "@/lib/playerHelpers";
+  formatMarketValue, nationalityFr } from "@/lib/playerHelpers";
 import { isLevelBand } from "@/lib/playerLevel";
 import { cn } from "@/lib/utils";
 import type { DBPlayer } from "@/types/dbPlayer";
@@ -169,7 +168,7 @@ export function PlayerHeaderDense({ player, games }: PlayerHeaderDenseProps) {
               {player.nationalities.map((nat) => (
                 <span key={nat} className="inline-flex items-center gap-1 text-[11px] text-muted-light">
                   <span className="text-base leading-none">{flagFor(nat)}</span>
-                  <span className="font-mono">{nat}</span>
+                  <span className="font-mono">{nationalityFr(nat)}</span>
                 </span>
               ))}
               {player.market_value_eur && player.market_value_eur > 0 && (

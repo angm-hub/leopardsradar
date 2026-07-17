@@ -35,7 +35,7 @@ export default function Newsletter() {
       <main>
         <section className="container-site pt-32 pb-16">
           <nav aria-label="breadcrumb" className="text-sm text-muted mb-8">
-            <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
+            <Link to="/" className="hover:text-foreground transition-colors">Accueil</Link>
             <span className="mx-2 text-muted/60">/</span>
             <span className="text-foreground/80">Newsletter</span>
           </nav>

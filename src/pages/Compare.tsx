@@ -65,7 +65,7 @@ export default function ComparePage() {
       <main>
         <section className="container-site pt-28 pb-8">
           <nav className="mb-8 text-sm text-muted">
-            <Link to="/" className="hover:text-foreground">Home</Link>
+            <Link to="/" className="hover:text-foreground">Accueil</Link>
             <span className="mx-2 opacity-50">/</span>
             <span className="text-foreground/80">Comparer</span>
           </nav>
@@ -84,9 +84,9 @@ export default function ComparePage() {
             </p>
           ) : (
             <p className="mt-4 max-w-2xl text-muted-light">
-              Choisissez deux profils · radar, roster ou héritage · pour
+              Choisis deux profils · radar, roster ou héritage · pour
               superposer leurs hexagones et lire les écarts axe par axe.
-              Vous pouvez partager le lien pour discuter d'un duel.
+              Tu peux partager le lien pour discuter d'un duel.
             </p>
           )}
         </section>

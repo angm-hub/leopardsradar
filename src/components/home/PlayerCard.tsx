@@ -7,6 +7,7 @@ import {
   POSITION_LABEL,
   flagFor,
   formatMarketValue,
+  nationalityFr,
 } from "@/lib/playerHelpers";
 import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
 import { LevelBandBadge } from "@/components/player/LevelBandBadge";
@@ -94,7 +95,7 @@ export function PlayerCard({ player, className }: PlayerCardProps) {
         {nationalities.length > 0 ? (
           <div className="flex flex-shrink-0 items-center gap-0.5 rounded-full bg-background/40 backdrop-blur-md border border-border/40 px-2 py-1">
             {nationalities.slice(0, 3).map((nat) => (
-              <span key={nat} className="text-sm leading-none" title={nat}>
+              <span key={nat} className="text-sm leading-none" title={nationalityFr(nat)}>
                 {flagFor(nat)}
               </span>
             ))}

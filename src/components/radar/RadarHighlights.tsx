@@ -135,7 +135,7 @@ export function RadarHighlights() {
     return (
       <section className="container-site pb-10 pt-2">
         <div className="mb-6">
-          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-success/85">
+          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-primary/80">
             Radar · Top 5 valeurs
           </p>
           <h2 className="mt-2 font-serif text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
@@ -170,7 +170,7 @@ export function RadarHighlights() {
       {/* En-tête éditorial — copy ajusté à la réalité : tri par valeur, pas
           curation à la main (qui n'existe pas encore). */}
       <div className="mb-6">
-        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-success/85">
+        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-primary/80">
           Radar · Top 5 valeurs
         </p>
         <h2

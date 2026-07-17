@@ -68,9 +68,11 @@ function SquadRow({ row }: { row: FIFA26PlayerStats }) {
   const showGA = (goals !== null && goals > 0) || (assists !== null && assists > 0);
 
   return (
+    // Pas d'aria-label : il ne reprenait pas tout le texte visible de la
+    // carte (échec Lighthouse label-content-name-mismatch, audit 17/07) ;
+    // le contenu visible se suffit pour les lecteurs d'écran.
     <Link
       to={`/player/${player.slug}`}
-      aria-label={`${player.name} · ${formatMinutes(stats.minutes)} minutes en ${formatStat(matches)} matchs saison 2025-2026, ${caps} sélections RDC`}
       className={cn(
         "group flex items-center gap-3 rounded-lg px-3 py-2.5",
         "border border-border/60 bg-card",

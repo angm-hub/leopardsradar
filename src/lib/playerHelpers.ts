@@ -137,6 +137,57 @@ const FLAG: Record<string, string> = {
   "Tanzania": "🇹🇿",
 };
 
+
+// ── Nationalités en français ─────────────────────────────────────────────────
+// La base stocke les noms anglais (Wikidata/TM). Côté public, tout est en
+// français (audit front 17/07 : « DR Congo · France » sur les fiches).
+const NATIONALITY_FR: Record<string, string> = {
+  "DR Congo": "RD Congo",
+  "Congo": "RD Congo",
+  "Belgian Congo": "Congo belge",
+  "Republic of the Congo (Léopoldville)": "Congo-Léopoldville",
+  "Republic of the Congo": "Congo-Brazzaville",
+  "France": "France",
+  "Belgium": "Belgique",
+  "England": "Angleterre",
+  "Germany": "Allemagne",
+  "Switzerland": "Suisse",
+  "Netherlands": "Pays-Bas",
+  "Kingdom of the Netherlands": "Pays-Bas",
+  "Sweden": "Suède",
+  "Italy": "Italie",
+  "Rwanda": "Rwanda",
+  "Norway": "Norvège",
+  "Angola": "Angola",
+  "United Kingdom": "Royaume-Uni",
+  "Finland": "Finlande",
+  "United States": "États-Unis",
+  "Portugal": "Portugal",
+  "Canada": "Canada",
+  "Zambia": "Zambie",
+  "Luxembourg": "Luxembourg",
+  "Tanzania": "Tanzanie",
+  "Burundi": "Burundi",
+  "Ireland": "Irlande",
+  "Wales": "Pays de Galles",
+  "Gabon": "Gabon",
+  "Israel": "Israël",
+  "Equatorial Guinea": "Guinée équatoriale",
+  "Chile": "Chili",
+  "Denmark": "Danemark",
+  "Central African Republic": "Centrafrique",
+  "Spain": "Espagne",
+  "Burkina Faso": "Burkina Faso",
+  "Ghana": "Ghana",
+  "South Africa": "Afrique du Sud",
+  "Morocco": "Maroc",
+  "statelessness": "apatride",
+};
+
+export function nationalityFr(nation: string): string {
+  return NATIONALITY_FR[nation] ?? nation;
+}
+
 export function flagFor(nation: string): string {
   return FLAG[nation] ?? "🌍";
 }

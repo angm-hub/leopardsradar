@@ -65,7 +65,7 @@ export default function RevueDePresse() {
       <main className="flex-1">
         <header className="container-site pt-32 pb-8 md:pb-12">
           <nav aria-label="breadcrumb" className="text-sm text-muted">
-            <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
+            <Link to="/" className="hover:text-foreground transition-colors">Accueil</Link>
             <span className="mx-2 text-muted/60">/</span>
             <span className="text-foreground/80">Revue de presse</span>
           </nav>
@@ -188,7 +188,7 @@ export default function RevueDePresse() {
                 Aucun item dans cette fenêtre.
               </p>
               <p className="text-muted-light">
-                Essayez d'élargir la période ou de retirer le filtre catégorie.
+                Essaie d'élargir la période ou de retirer le filtre catégorie.
               </p>
             </div>
           ) : (
