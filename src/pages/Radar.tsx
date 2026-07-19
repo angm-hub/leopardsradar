@@ -14,6 +14,7 @@ import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
 import { ViewTabs, type RadarView } from "@/components/radar/ViewTabs";
 import { RadarCanvas } from "@/components/radar/RadarCanvas";
 import { RadarHighlights } from "@/components/radar/RadarHighlights";
+import { RadarProspects } from "@/components/radar/RadarProspects";
 import { ProStatsBlock } from "@/components/radar/ProStatsBlock";
 import {
   AdvancedFilters,
@@ -447,8 +448,11 @@ export default function Radar() {
           </div>
         </div>
 
-        {/* Pepites de la semaine — ancrage editorial */}
+        {/* Pepites de la semaine — ancrage editorial (top valeurs) */}
         <RadarHighlights />
+
+        {/* Diamants bruts — jeunes sans prix TM, contre-poids au tri par valeur */}
+        <RadarProspects players={players} />
 
         {/* Bloc stats saison — top G+A, buts, temps de jeu parmi les talents radar */}
         <ProStatsBlock players={players} loading={loading} />
