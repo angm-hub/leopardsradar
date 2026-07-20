@@ -256,6 +256,34 @@ function per90Score(absolute: number, games: number, minutes: number, target: nu
   return clamp01to100((per90 / target) * 100);
 }
 
+/**
+ * Note de match — rating de club API-Football (season_rating), mappé sur
+ * 0-100 : 6.0 → 0, 7.0 → 50, 8.0 → 100. C'est le seul signal holistique de
+ * "niveau de performance" dont on dispose ; il remplace les axes de rôle qui
+ * restaient "n.d." faute de données granulaires (clean sheets, tacles…).
+ *
+ * Garde-fou d'échantillon : au moins 3 matchs OU 270 minutes, sinon la note
+ * porte sur trop peu de temps de jeu (un 8.4 sur un cameo n'est pas fiable)
+ * et on collapse l'axe à "n.d." plutôt que de mentir.
+ */
+function matchRatingScore(p: DBPlayer): number | null {
+  const r = p.season_rating;
+  if (r == null || r <= 0) return null;
+  if (!((p.season_games ?? 0) >= 3 || (p.season_minutes ?? 0) >= 270)) return null;
+  return clamp01to100(((r - 6.0) / 2.0) * 100);
+}
+
+function ratingAxis(p: DBPlayer): AxisScore {
+  const value = matchRatingScore(p);
+  const r = p.season_rating;
+  return {
+    value,
+    label: "Note de match",
+    fullLabel: "Note de match moyenne (API-Football, saison en cours)",
+    raw: value !== null && r ? `${r.toFixed(2)} / 10` : "n.d.",
+  };
+}
+
 // ---------- Per-position axis recipes ----------
 
 interface RoleAxes {
@@ -266,14 +294,9 @@ interface RoleAxes {
 
 const goalkeeperAxes: RoleAxes = {
   positionLabel: "Gardien",
-  // We don't have clean sheets / goals against in DB → fall back to
-  // graceful unknowns. When the edge function ships, this will populate.
-  roleA: () => ({
-    value: null,
-    label: "Clean sheets",
-    fullLabel: "Matchs sans encaisser (% des matchs joués)",
-    raw: "n.d.",
-  }),
+  // Clean sheets / buts encaissés pas encore en DB. La note de match
+  // (season_rating) donne enfin un signal de niveau au poste de gardien.
+  roleA: (p) => ratingAxis(p),
   roleB: () => ({
     value: null,
     label: "Buts encaissés",
@@ -284,12 +307,7 @@ const goalkeeperAxes: RoleAxes = {
 
 const defenderAxes: RoleAxes = {
   positionLabel: "Défenseur",
-  roleA: () => ({
-    value: null,
-    label: "Solidité",
-    fullLabel: "Buts encaissés équipe / 90 (inversé) · donnée à venir",
-    raw: "n.d.",
-  }),
+  roleA: (p) => ratingAxis(p),
   roleB: () => ({
     value: null,
     label: "Construction",
@@ -314,12 +332,7 @@ const midfieldAxes: RoleAxes = {
       raw: per90 ? `${per90} PD/90` : "n.d.",
     };
   },
-  roleB: () => ({
-    value: null,
-    label: "Activité",
-    fullLabel: "Tackles + interceptions / 90 · donnée à venir",
-    raw: "n.d.",
-  }),
+  roleB: (p) => ratingAxis(p),
 };
 
 const attackerAxes: RoleAxes = {
