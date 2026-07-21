@@ -43,6 +43,7 @@ const Compare = lazy(() => import("./pages/Compare.tsx"));
 const Mondial2026 = lazy(() => import("./pages/Mondial2026.tsx"));
 const RevueDePresse = lazy(() => import("./pages/RevueDePresse.tsx"));
 const Insights = lazy(() => import("./pages/Insights.tsx"));
+const Pro = lazy(() => import("./pages/Pro.tsx"));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 
 const queryClient = new QueryClient();
@@ -119,6 +120,7 @@ const App = () => (
             <Route path="/mondial-2026" element={<Mondial2026 />} />
             <Route path="/compare" element={<Compare />} />
             <Route path="/insights" element={<Insights />} />
+            <Route path="/pro" element={<Pro />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
