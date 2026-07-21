@@ -3,6 +3,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { RoutePrefetch } from "@/components/util/RoutePrefetch";
 import LeopardsHero from "@/components/home/LeopardsHero";
+import ProBridge from "@/components/home/ProBridge";
 import { PRESSE_PUBLIEE } from "@/config/editorial";
 
 // Sections sous la ligne de flottaison : lazy pour sortir leur poids (et
@@ -84,6 +85,7 @@ const Home = () => {
         <Suspense fallback={<SectionFallback minH={320} />}>
           <MaListeCTA />
         </Suspense>
+        <ProBridge />
         <Suspense fallback={<SectionFallback minH={320} />}>
           <NewsletterSection />
         </Suspense>

@@ -100,6 +100,7 @@ const STATIC_ROUTES = [
   ["/histoires", "Histoires | Léopards Radar", "Les récits du football congolais, racontés par la data."],
   ["/methodologie", "Méthodologie | Léopards Radar", "D'où viennent les données, comment on les calcule, ce qu'on n'a pas. Transparence par défaut."],
   ["/a-propos", "À propos | Léopards Radar", "Toute la data du football congolais, en un seul endroit. Un média indépendant construit à Paris."],
+  ["/pro", "Léopards Radar Pro | L'intelligence data du football congolais", "Le vivier congolais et binational avec l'éligibilité de chacun, vérifiée à la main. Pour les clubs, les agences et les fédérations."],
   ["/compare", "Comparateur | Léopards Radar", "Compare deux Léopards côte à côte : six axes statistiques et lecture des écarts."],
   ["/newsletter", "Le récap du dimanche | Léopards Radar", "L'analyse de la semaine des Léopards, 6 minutes de lecture, livrée le dimanche à 21 h."],
 ];
