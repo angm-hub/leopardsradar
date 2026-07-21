@@ -118,6 +118,14 @@ export function Footer() {
                   Proposer une source
                 </a>
               </li>
+              <li>
+                <Link
+                  to="/pro"
+                  className="inline-block py-1 text-sm text-muted-light hover:text-foreground transition-colors"
+                >
+                  Léopards Radar Pro
+                </Link>
+              </li>
             </ul>
           </div>
 
