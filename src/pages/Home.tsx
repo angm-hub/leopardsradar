@@ -20,11 +20,6 @@ const StatsSection = lazy(() => import("@/components/home/StatsSection"));
 const BestXIPreviewSection = lazy(
   () => import("@/components/home/BestXIPreviewSection"),
 );
-const ThreeSymbolsSection = lazy(() =>
-  import("@/components/home/ThreeSymbolsSection").then((m) => ({
-    default: m.ThreeSymbolsSection,
-  })),
-);
 const NewsletterSection = lazy(() => import("@/components/home/NewsletterSection"));
 const MaListeCTA = lazy(() =>
   import("@/components/home/MaListeCTA").then((m) => ({ default: m.MaListeCTA })),
@@ -78,9 +73,6 @@ const Home = () => {
         </Suspense>
         <Suspense fallback={<SectionFallback />}>
           <BestXIPreviewSection />
-        </Suspense>
-        <Suspense fallback={<SectionFallback />}>
-          <ThreeSymbolsSection />
         </Suspense>
         <Suspense fallback={<SectionFallback minH={320} />}>
           <MaListeCTA />
