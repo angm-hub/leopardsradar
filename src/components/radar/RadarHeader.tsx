@@ -28,7 +28,7 @@ export function RadarHeader({ shown, total, totalValue }: RadarHeaderProps) {
         </h2>
         <p className="mt-2 text-sm text-muted-light max-w-xl">
           Chaque pastille est un joueur. Position selon le niveau de jeu (axe X) et
-          la jeunesse (axe Y) — le coin haut-droit réunit les jeunes déjà au niveau.
+          la jeunesse (axe Y). Le coin haut-droit réunit les jeunes déjà au niveau.
           Taille = temps de jeu. Survole pour le détail.
         </p>
       </div>
