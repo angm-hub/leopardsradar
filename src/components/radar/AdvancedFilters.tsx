@@ -2,7 +2,10 @@
  * AdvancedFilters — filtres granulaires du Radar.
  *
  * Complète les filtres de base (poste, tier, nationalité, search) avec :
- *   - Slider âge (16-40 ans)
+ *   - Slider âge (14-40 ans ; min au plancher = aucune borne basse, on garde
+ *     les rares U14 plutôt que de les couper — cible scouting précoce)
+ *   - Toggle "inclure les joueurs sans âge" (activé par défaut : sinon les 95
+ *     profils sans date de naissance disparaissaient dès qu'on bougeait le slider)
  *   - Slider valeur marchande (0 - 50M, étapes log)
  *   - Toggle pied fort (G / D / Ambidextre)
  *   - Toggle "avec photo uniquement"
@@ -18,22 +21,50 @@ import { SlidersHorizontal, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { DBFoot } from "@/types/dbPlayer";
 
+// Plancher du slider âge. Le min à cette valeur = "aucune borne basse" : on
+// n'exclut jamais les rares U14 par défaut (cible scouting précoce).
+export const AGE_SLIDER_MIN = 14;
+
+// Bandes du re-score tier-aware (score_band). Bien plus discriminant que
+// level_band, dont 89% du vivier tombe dans "watch". Ne filtre que les joueurs
+// notés (cohort performers) — comportement attendu : "montre-moi l'élite".
+export type LevelBandFilter =
+  | "ALL"
+  | "Élite"
+  | "Haut niveau"
+  | "Solide"
+  | "En retrait"
+  | "Sous-régime";
+export type LeagueTierFilter = "ALL" | "1" | "2" | "3" | "4";
+
 export interface AdvancedFilterState {
   ageMin: number;
   ageMax: number;
+  includeUnknownAge: boolean;
   valueMin: number; // en M€
   valueMax: number; // en M€
   foot: DBFoot | "ALL";
+  levelBand: LevelBandFilter;
+  leagueTier: LeagueTierFilter;
+  capedRdc: boolean;
+  uncotedOnly: boolean;
+  withStats: boolean;
   withPhoto: boolean;
   withActiveContract: boolean;
 }
 
 export const ADVANCED_FILTERS_DEFAULT: AdvancedFilterState = {
-  ageMin: 16,
+  ageMin: AGE_SLIDER_MIN,
   ageMax: 40,
+  includeUnknownAge: true,
   valueMin: 0,
   valueMax: 50,
   foot: "ALL",
+  levelBand: "ALL",
+  leagueTier: "ALL",
+  capedRdc: false,
+  uncotedOnly: false,
+  withStats: false,
   withPhoto: false,
   withActiveContract: false,
 };
@@ -42,13 +73,36 @@ function isDefaultAdvanced(f: AdvancedFilterState): boolean {
   return (
     f.ageMin === ADVANCED_FILTERS_DEFAULT.ageMin &&
     f.ageMax === ADVANCED_FILTERS_DEFAULT.ageMax &&
+    f.includeUnknownAge === ADVANCED_FILTERS_DEFAULT.includeUnknownAge &&
     f.valueMin === ADVANCED_FILTERS_DEFAULT.valueMin &&
     f.valueMax === ADVANCED_FILTERS_DEFAULT.valueMax &&
     f.foot === ADVANCED_FILTERS_DEFAULT.foot &&
+    f.levelBand === ADVANCED_FILTERS_DEFAULT.levelBand &&
+    f.leagueTier === ADVANCED_FILTERS_DEFAULT.leagueTier &&
+    f.capedRdc === ADVANCED_FILTERS_DEFAULT.capedRdc &&
+    f.uncotedOnly === ADVANCED_FILTERS_DEFAULT.uncotedOnly &&
+    f.withStats === ADVANCED_FILTERS_DEFAULT.withStats &&
     f.withPhoto === ADVANCED_FILTERS_DEFAULT.withPhoto &&
     f.withActiveContract === ADVANCED_FILTERS_DEFAULT.withActiveContract
   );
 }
+
+const LEVEL_OPTIONS: { value: LevelBandFilter; label: string }[] = [
+  { value: "ALL", label: "Tous" },
+  { value: "Élite", label: "Élite" },
+  { value: "Haut niveau", label: "Haut niveau" },
+  { value: "Solide", label: "Solide" },
+  { value: "En retrait", label: "En retrait" },
+  { value: "Sous-régime", label: "Sous-régime" },
+];
+
+const LEAGUE_OPTIONS: { value: LeagueTierFilter; label: string }[] = [
+  { value: "ALL", label: "Toutes" },
+  { value: "1", label: "T1" },
+  { value: "2", label: "T2" },
+  { value: "3", label: "T3" },
+  { value: "4", label: "T4" },
+];
 
 interface AdvancedFiltersProps {
   state: AdvancedFilterState;
@@ -171,11 +225,11 @@ export function AdvancedFilters({ state, onChange }: AdvancedFiltersProps) {
                 Âge
               </p>
               <p className="text-xs font-mono text-foreground">
-                {state.ageMin} – {state.ageMax} ans
+                {state.ageMin <= AGE_SLIDER_MIN ? "≤" : ""}{state.ageMin} – {state.ageMax} ans
               </p>
             </div>
             <RadixSlider.Root
-              min={16}
+              min={AGE_SLIDER_MIN}
               max={40}
               step={1}
               value={[state.ageMin, state.ageMax]}
@@ -198,7 +252,7 @@ export function AdvancedFilters({ state, onChange }: AdvancedFiltersProps) {
               />
             </RadixSlider.Root>
             <div className="flex justify-between text-[10px] font-mono text-muted">
-              <span>16</span>
+              <span>{AGE_SLIDER_MIN}</span>
               <span>40</span>
             </div>
           </div>
@@ -266,8 +320,76 @@ export function AdvancedFilters({ state, onChange }: AdvancedFiltersProps) {
             </div>
           </div>
 
+          {/* Niveau de jeu (band, couvre tout le vivier) */}
+          <div className="flex flex-col gap-2">
+            <p className="text-[11px] font-mono uppercase tracking-[0.18em] text-muted-light">
+              Niveau de jeu
+            </p>
+            <div className="flex gap-1.5 flex-wrap">
+              {LEVEL_OPTIONS.map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => set("levelBand", opt.value)}
+                  className={cn(
+                    "rounded-full border px-3 py-1 text-xs transition-colors",
+                    state.levelBand === opt.value
+                      ? "border-primary/60 bg-primary/15 text-primary"
+                      : "border-border text-muted-light hover:border-border-hover hover:text-foreground",
+                  )}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Tier de ligue (T1–T4) */}
+          <div className="flex flex-col gap-2">
+            <p className="text-[11px] font-mono uppercase tracking-[0.18em] text-muted-light">
+              Ligue
+            </p>
+            <div className="flex gap-1.5 flex-wrap">
+              {LEAGUE_OPTIONS.map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => set("leagueTier", opt.value)}
+                  className={cn(
+                    "rounded-full border px-3 py-1 text-xs transition-colors",
+                    state.leagueTier === opt.value
+                      ? "border-primary/60 bg-primary/15 text-primary"
+                      : "border-border text-muted-light hover:border-border-hover hover:text-foreground",
+                  )}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Toggles */}
           <div className="flex flex-col gap-2 border-t border-border/50 pt-4">
+            <Toggle
+              label="Déjà capé RDC"
+              checked={state.capedRdc}
+              onChange={(v) => set("capedRdc", v)}
+            />
+            <Toggle
+              label="Non cotés uniquement"
+              checked={state.uncotedOnly}
+              onChange={(v) => set("uncotedOnly", v)}
+            />
+            <Toggle
+              label="Avec stats saison"
+              checked={state.withStats}
+              onChange={(v) => set("withStats", v)}
+            />
+            <Toggle
+              label="Inclure les joueurs sans âge"
+              checked={state.includeUnknownAge}
+              onChange={(v) => set("includeUnknownAge", v)}
+            />
             <Toggle
               label="Avec photo uniquement"
               checked={state.withPhoto}
@@ -322,8 +444,14 @@ function Toggle({
 function countActiveAdvanced(f: AdvancedFilterState): number {
   let count = 0;
   if (f.ageMin !== ADVANCED_FILTERS_DEFAULT.ageMin || f.ageMax !== ADVANCED_FILTERS_DEFAULT.ageMax) count++;
+  if (f.includeUnknownAge !== ADVANCED_FILTERS_DEFAULT.includeUnknownAge) count++;
   if (f.valueMin !== ADVANCED_FILTERS_DEFAULT.valueMin || f.valueMax !== ADVANCED_FILTERS_DEFAULT.valueMax) count++;
   if (f.foot !== "ALL") count++;
+  if (f.levelBand !== "ALL") count++;
+  if (f.leagueTier !== "ALL") count++;
+  if (f.capedRdc) count++;
+  if (f.uncotedOnly) count++;
+  if (f.withStats) count++;
   if (f.withPhoto) count++;
   if (f.withActiveContract) count++;
   return count;

@@ -119,6 +119,14 @@ export interface DBPlayer {
   // Sprint 3 — Score composite de niveau de jeu (public, affiché sur fiche + cards)
   level_score?: number | null;
   level_band?: string | null;
+  // Sprint 4 (28/07/2026) — Re-score tier-aware : percentile par poste × facteur
+  // de tier, calculé sur le cohort des performers seniors (minutes≥500, note).
+  // Plus fiable que level_score là où il existe ; sinon fallback level_score.
+  score_leopards?: number | null;
+  score_band?: string | null;
+  score_pool?: string | null;
+  // Tier de ligue 1–4 (1 = top-5 euro … 4 = amateur/obscur), résolu via le club.
+  league_tier?: number | null;
 }
 
 export interface HomeStats {

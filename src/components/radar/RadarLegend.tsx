@@ -3,13 +3,13 @@
  *
  * WHY composant séparé : la légende est un contexte de lecture, pas un
  * ornement. Elle explique deux dimensions visuelles en même temps :
- * couleur (tier UEFA) et taille (valeur marchande).
+ * couleur (tier UEFA, signal de valeur secondaire) et taille (minutes jouées).
  */
 export function RadarLegend() {
   return (
     <div className="mt-5 flex flex-col gap-3">
       <p className="text-center text-xs md:text-[11px] font-mono text-muted-light uppercase tracking-[0.18em]">
-        Couleur = tier UEFA · Taille = valeur marchande
+        Couleur = tier UEFA (valeur) · Taille = minutes jouées
       </p>
       <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
         <TierSwatch tier="S" label="S · Champions League" />
