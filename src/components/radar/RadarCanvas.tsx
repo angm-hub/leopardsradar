@@ -34,19 +34,38 @@ const TOP_FEATURED = 3;
  * été retiré : chaque ornement supplémentaire dégradait la lisibilité
  * des joueurs, qui sont la donnée centrale.
  *
- * Algo de positionnement :
- *   - X (gauche → droite) : valeur marchande croissante
+ * Algo de positionnement (refonte 28/07/2026 — audit filtres/data-viz) :
+ *   - X (gauche → droite) : niveau de jeu croissant (score Léopards / level_score)
  *   - Y (haut → bas)      : âge croissant (jeune en haut)
- *   - jitter pseudo-aléatoire pour éviter les empilements
+ *   → le coin haut-droit = jeune ET déjà au niveau = la vraie pépite.
+ *   La valeur marchande n'est plus un axe (elle enterrait les 68% de non
+ *   cotés) — elle reste en signal secondaire via la couleur (tier UEFA).
+ *   Taille = minutes jouées. Halo = top 3 par niveau.
  */
+
+// Niveau de jeu unifié pour l'axe X : le re-score tier-aware là où il existe,
+// sinon le score composite historique (rempli à 100%). Cohérent avec le tri
+// "pertinence" de la liste (Radar.tsx).
+function levelOf(p: DBPlayer): number {
+  return p.score_leopards ?? p.level_score ?? 0;
+}
+
 export function RadarCanvas({ players, totalRoster }: RadarCanvasProps) {
   const [showAll, setShowAll] = useState(false);
   const displayLimit = showAll ? players.length : MAX_PILLS;
 
+  // Halo = les meilleurs talents par niveau (score Léopards prioritaire, puis
+  // level_score). Merite, plus argent : avant c'était le top 3 valeur.
   const featuredIds = useMemo(() => {
     const sorted = [...players]
-      .filter((p) => (p.market_value_eur ?? 0) > 0)
-      .sort((a, b) => (b.market_value_eur ?? 0) - (a.market_value_eur ?? 0))
+      .sort((a, b) => {
+        const sa = a.score_leopards ?? null;
+        const sb = b.score_leopards ?? null;
+        if (sa !== null && sb !== null && sa !== sb) return sb - sa;
+        if (sa !== null && sb === null) return -1;
+        if (sa === null && sb !== null) return 1;
+        return (b.level_score ?? 0) - (a.level_score ?? 0);
+      })
       .slice(0, TOP_FEATURED);
     return new Set(sorted.map((p) => p.id));
   }, [players]);
@@ -58,23 +77,21 @@ export function RadarCanvas({ players, totalRoster }: RadarCanvasProps) {
     // Rank-based positioning : chaque joueur prend la position de son
     // percentile dans la distribution. Garantit une répartition uniforme
     // sur tout le canvas, indépendamment de la forme de la distribution
-    // (l'âge se concentre autour de 25 ans, la valeur suit une power law
+    // (l'âge se concentre autour de 25 ans, le niveau est très asymétrique
     // — le rank-based corrige les deux d'un coup).
-    const byValue = [...subset].sort(
-      (a, b) => (a.market_value_eur ?? 0) - (b.market_value_eur ?? 0),
-    );
+    const byLevel = [...subset].sort((a, b) => levelOf(a) - levelOf(b));
     const byAge = [...subset].sort((a, b) => (a.age ?? 99) - (b.age ?? 99));
-    const valueRank = new Map(byValue.map((p, i) => [p.id, i]));
+    const levelRank = new Map(byLevel.map((p, i) => [p.id, i]));
     const ageRank = new Map(byAge.map((p, i) => [p.id, i]));
 
     const denom = Math.max(subset.length - 1, 1);
     const usable = 100 - 2 * SAFE_MARGIN;
 
     return subset.map((p) => {
-      const xRank = valueRank.get(p.id) ?? 0;
+      const xRank = levelRank.get(p.id) ?? 0;
       const yRank = ageRank.get(p.id) ?? 0;
 
-      // X : faible valeur à gauche (rank 0) → haute valeur à droite (rank N-1)
+      // X : faible niveau à gauche (rank 0) → haut niveau à droite (rank N-1)
       const xRaw = (xRank / denom) * usable + SAFE_MARGIN;
       // Y : jeune en haut (rank 0) → confirmé en bas (rank N-1)
       const yRaw = (yRank / denom) * usable + SAFE_MARGIN;
@@ -208,7 +225,7 @@ export function RadarCanvas({ players, totalRoster }: RadarCanvasProps) {
         <LegendDot color="bg-pos-att" label="Attaquant" />
         <span className="text-muted/50">·</span>
         <span className="text-muted">
-          Halo doré = top {TOP_FEATURED} valeur
+          Halo doré = top {TOP_FEATURED} niveau
         </span>
       </div>
 

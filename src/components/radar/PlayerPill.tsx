@@ -55,13 +55,18 @@ function getTierStyle(tier: TierUEFA): { bg: string; color: string; border: stri
 }
 
 // ── Taille proportionnelle ────────────────────────────────────────────────────
+// Taille = temps de jeu (minutes saison), pas la valeur marchande (refonte
+// 28/07/2026). racine carrée pour étaler les nombreux joueurs à faibles minutes ;
+// plafond ~2700 min (≈ saison pleine de titulaire). 0/aucune minute → MIN_SIZE.
 
 const MIN_SIZE = 8;
-const MAX_SIZE = 32;
+const MAX_SIZE = 28;
+const MINUTES_FULL = 2700;
 
-function getPillSize(value: number | null): number {
-  const v = Math.max(value ?? 0, 1);
-  const raw = MIN_SIZE + (MAX_SIZE - MIN_SIZE) * (Math.log10(v) / Math.log10(100_000_000));
+function getPillSize(minutes: number | null): number {
+  const m = Math.max(minutes ?? 0, 0);
+  const norm = Math.min(m / MINUTES_FULL, 1);
+  const raw = MIN_SIZE + (MAX_SIZE - MIN_SIZE) * Math.sqrt(norm);
   return Math.min(MAX_SIZE, Math.max(MIN_SIZE, raw));
 }
 
@@ -111,7 +116,7 @@ export function PlayerPill({
 
   const tier = getTierUEFA(player);
   const tierStyle = getTierStyle(tier);
-  const pillSize = getPillSize(player.market_value_eur);
+  const pillSize = getPillSize(player.season_minutes);
 
   // Drift animation
   const seed = (player.id * 9301 + 49297) % 233280;

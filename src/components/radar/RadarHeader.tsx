@@ -27,9 +27,9 @@ export function RadarHeader({ shown, total, totalValue }: RadarHeaderProps) {
           La galaxie des Léopards
         </h2>
         <p className="mt-2 text-sm text-muted-light max-w-xl">
-          Chaque pastille est un joueur. Position selon valeur marchande (axe X) et
-          jeunesse (axe Y). Lignes jaunes : coéquipiers en club. Survole pour le
-          détail.
+          Chaque pastille est un joueur. Position selon le niveau de jeu (axe X) et
+          la jeunesse (axe Y). Le coin haut-droit réunit les jeunes déjà au niveau.
+          Taille = temps de jeu. Survole pour le détail.
         </p>
       </div>
 

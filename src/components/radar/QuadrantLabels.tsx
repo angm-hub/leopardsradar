@@ -1,36 +1,35 @@
 /**
  * QuadrantLabels — 4 zones nommees avec sous-titre explicatif.
+ * Axes : X = niveau de jeu (gauche faible → droite haut), Y = âge (haut jeune
+ * → bas confirmé). Refonte 28/07/2026 (audit filtres/data-viz).
  *
- * Haut-gauche   : Pepites       (jeune + faible valeur)
- * Haut-droit    : Future stars  (jeune + haute valeur)
- * Bas-gauche    : Oubliés       (age + faible valeur)
- * Bas-droit     : Cracks        (age + haute valeur)
- *
- * Chaque label a un nom + un sous-titre court pour que le visiteur
- * comprenne la semantique sans lire la legende.
+ * Haut-gauche   : À polir   (jeune + faible niveau)
+ * Haut-droit    : Pépites   (jeune + haut niveau)  ← le quadrant en or
+ * Bas-gauche    : En retrait (confirmé + faible niveau)
+ * Bas-droit     : Cadres    (confirmé + haut niveau)
  */
 export function QuadrantLabels() {
   return (
     <>
       <Quadrant
         position="top-4 left-6"
-        label="Pépites"
-        sub="Jeunes à suivre"
+        label="À polir"
+        sub="Jeunes bruts"
       />
       <Quadrant
         position="top-4 right-6"
-        label="Future Stars"
-        sub="Jeunes à forte valeur"
+        label="Pépites"
+        sub="Jeunes déjà au niveau"
         align="right"
       />
       <Quadrant
         position="bottom-8 left-6"
-        label="Oubliés"
-        sub="Exp. sans spotlight"
+        label="En retrait"
+        sub="Temps de jeu à part"
       />
       <Quadrant
         position="bottom-8 right-6"
-        label="Cracks"
+        label="Cadres"
         sub="Références du vivier"
         align="right"
       />

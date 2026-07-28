@@ -19,6 +19,7 @@ import { ProStatsBlock } from "@/components/radar/ProStatsBlock";
 import {
   AdvancedFilters,
   ADVANCED_FILTERS_DEFAULT,
+  AGE_SLIDER_MIN,
   type AdvancedFilterState,
 } from "@/components/radar/AdvancedFilters";
 import {
@@ -48,6 +49,63 @@ const TIER_OPTIONS: { value: TierFilter; label: string }[] = [
   { value: "tier1", label: "Tier 1 · Top clubs" },
   { value: "tier2", label: "Tier 2" },
 ];
+
+// Tri du Radar. Défaut = "pertinence" : d'abord les talents au meilleur niveau
+// de jeu (score_leopards, le re-score tier-aware), puis les plus jeunes espoirs.
+// La valeur marchande ne trie plus par défaut — elle enterrait les 68% de non
+// cotés, qui sont la vraie cible (cf. audit filtres/data-viz du 28/07/2026).
+type SortMode = "pertinence" | "jeunes" | "score" | "valeur";
+
+const SORT_OPTIONS: { value: SortMode; label: string }[] = [
+  { value: "pertinence", label: "Pertinence" },
+  { value: "jeunes", label: "Plus jeunes" },
+  { value: "score", label: "Meilleur score" },
+  { value: "valeur", label: "Valeur marchande" },
+];
+
+// Score de niveau utilisé pour le tri : le re-score tier-aware là où il existe,
+// sinon le score composite historique (rempli à 100%).
+function levelOf(p: DBPlayer): number {
+  return p.score_leopards ?? p.level_score ?? 0;
+}
+
+function cmpByMode(mode: SortMode, a: DBPlayer, b: DBPlayer): number {
+  const nameTie = () => a.name.localeCompare(b.name);
+  const ageAsc = () => (a.age ?? 999) - (b.age ?? 999);
+
+  if (mode === "valeur") {
+    const d = (b.market_value_eur ?? 0) - (a.market_value_eur ?? 0);
+    return d !== 0 ? d : nameTie();
+  }
+  if (mode === "jeunes") {
+    // Plus jeune d'abord ; âge inconnu en dernier ; niveau en départage.
+    const d = ageAsc();
+    if (d !== 0) return d;
+    const l = levelOf(b) - levelOf(a);
+    return l !== 0 ? l : nameTie();
+  }
+  if (mode === "score") {
+    const d = levelOf(b) - levelOf(a);
+    return d !== 0 ? d : nameTie();
+  }
+  // "pertinence" (défaut) :
+  //  1. les joueurs avec un vrai score Léopards (performers seniors) d'abord,
+  //     classés par ce score ;
+  //  2. puis tout le reste, du plus jeune au plus âgé (les espoirs remontent
+  //     au lieu d'être coulés) ;
+  //  3. départage par score composite puis nom.
+  const sa = a.score_leopards ?? null;
+  const sb = b.score_leopards ?? null;
+  if (sa !== null && sb !== null && sa !== sb) return sb - sa;
+  if (sa !== null && sb === null) return -1;
+  if (sa === null && sb !== null) return 1;
+  if (sa === null && sb === null) {
+    const d = ageAsc();
+    if (d !== 0) return d;
+  }
+  const l = levelOf(b) - levelOf(a);
+  return l !== 0 ? l : nameTie();
+}
 
 // ── URL state helpers ────────────────────────────────────────────────────────
 
@@ -99,6 +157,11 @@ function RadarCard({ player }: { player: DBPlayer }) {
       <div className="absolute top-3 inset-x-3 flex items-start justify-between gap-2">
         <div className="flex min-w-0 flex-col gap-1.5 items-start">
           <CategoryBadge category={player.player_category} />
+          {player.caps_rdc > 0 ? (
+            <span className="inline-flex items-center gap-1 rounded-full border border-primary/40 bg-primary/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary backdrop-blur-md">
+              Capé RDC
+            </span>
+          ) : null}
           {player.position ? (
             <span
               className={cn(
@@ -169,7 +232,9 @@ export default function Radar() {
   const { players, loading, error } = usePlayers({
     categories: ["radar", "heritage"],
     excludeEligibilityStatus: "ineligible",
-    orderBy: { column: "market_value_eur", ascending: false },
+    // Ordre de base côté serveur : le score tier-aware (nulls en dernier).
+    // Le tri d'affichage réel est appliqué côté client selon SortMode.
+    orderBy: { column: "score_leopards", ascending: false },
   });
 
   const { stats } = useHomeStats();
@@ -187,13 +252,20 @@ export default function Radar() {
   const tier = (readSearchParam(searchParams, "tier", "ALL")) as TierFilter;
   const nation = readSearchParam(searchParams, "nat", "ALL");
   const query = readSearchParam(searchParams, "q", "");
+  const sort = (readSearchParam(searchParams, "sort", "pertinence")) as SortMode;
 
   const advancedState: AdvancedFilterState = {
     ageMin: readNumParam(searchParams, "ageMin", ADVANCED_FILTERS_DEFAULT.ageMin),
     ageMax: readNumParam(searchParams, "ageMax", ADVANCED_FILTERS_DEFAULT.ageMax),
+    includeUnknownAge: searchParams.get("sansage") !== "0",
     valueMin: readNumParam(searchParams, "valMin", ADVANCED_FILTERS_DEFAULT.valueMin),
     valueMax: readNumParam(searchParams, "valMax", ADVANCED_FILTERS_DEFAULT.valueMax),
     foot: (readSearchParam(searchParams, "foot", "ALL")) as AdvancedFilterState["foot"],
+    levelBand: (readSearchParam(searchParams, "level", "ALL")) as AdvancedFilterState["levelBand"],
+    leagueTier: (readSearchParam(searchParams, "ligue", "ALL")) as AdvancedFilterState["leagueTier"],
+    capedRdc: searchParams.get("cape") === "1",
+    uncotedOnly: searchParams.get("noncote") === "1",
+    withStats: searchParams.get("stats") === "1",
     withPhoto: searchParams.get("photo") === "1",
     withActiveContract: searchParams.get("contrat") === "1",
   };
@@ -212,7 +284,8 @@ export default function Radar() {
               (k === "ageMin" && v === String(ADVANCED_FILTERS_DEFAULT.ageMin)) ||
               (k === "ageMax" && v === String(ADVANCED_FILTERS_DEFAULT.ageMax)) ||
               (k === "valMin" && v === String(ADVANCED_FILTERS_DEFAULT.valueMin)) ||
-              (k === "valMax" && v === String(ADVANCED_FILTERS_DEFAULT.valueMax));
+              (k === "valMax" && v === String(ADVANCED_FILTERS_DEFAULT.valueMax)) ||
+              (k === "sort" && v === "pertinence");
             if (isDefault) {
               next.delete(k);
             } else {
@@ -230,6 +303,7 @@ export default function Radar() {
   const setPosition = (v: PositionFilter) => updateParams({ pos: v });
   const setTier = (v: TierFilter) => updateParams({ tier: v });
   const setNation = (v: string) => updateParams({ nat: v });
+  const setSort = (v: SortMode) => updateParams({ sort: v });
 
   // Debounce sur le champ search — on garde un état local pour la saisie
   const [localQuery, setLocalQuery] = useState(query);
@@ -249,9 +323,15 @@ export default function Radar() {
       updateParams({
         ageMin: next.ageMin !== ADVANCED_FILTERS_DEFAULT.ageMin ? String(next.ageMin) : null,
         ageMax: next.ageMax !== ADVANCED_FILTERS_DEFAULT.ageMax ? String(next.ageMax) : null,
+        sansage: next.includeUnknownAge ? null : "0",
         valMin: next.valueMin !== ADVANCED_FILTERS_DEFAULT.valueMin ? String(next.valueMin) : null,
         valMax: next.valueMax !== ADVANCED_FILTERS_DEFAULT.valueMax ? String(next.valueMax) : null,
         foot: next.foot !== "ALL" ? next.foot : null,
+        level: next.levelBand !== "ALL" ? next.levelBand : null,
+        ligue: next.leagueTier !== "ALL" ? next.leagueTier : null,
+        cape: next.capedRdc ? "1" : null,
+        noncote: next.uncotedOnly ? "1" : null,
+        stats: next.withStats ? "1" : null,
         photo: next.withPhoto ? "1" : null,
         contrat: next.withActiveContract ? "1" : null,
       });
@@ -299,15 +379,15 @@ export default function Radar() {
       if (debouncedQuery && !p.name.toLowerCase().includes(debouncedQuery)) return false;
 
       // Filtres avancés — âge
+      // Le min au plancher du slider = aucune borne basse : on garde les rares
+      // U14 (cible scouting précoce) plutôt que de les couper au défaut.
       if (p.age !== null) {
-        if (p.age < advancedState.ageMin || p.age > advancedState.ageMax) return false;
-      } else {
-        // Si l'âge est null et le slider a bougé, exclure le joueur
-        if (
-          advancedState.ageMin !== ADVANCED_FILTERS_DEFAULT.ageMin ||
-          advancedState.ageMax !== ADVANCED_FILTERS_DEFAULT.ageMax
-        )
-          return false;
+        const effAgeMin = advancedState.ageMin <= AGE_SLIDER_MIN ? 0 : advancedState.ageMin;
+        if (p.age < effAgeMin || p.age > advancedState.ageMax) return false;
+      } else if (!advancedState.includeUnknownAge) {
+        // Âge inconnu : inclus par défaut (95 profils sans DOB) ; exclu seulement
+        // si l'utilisateur décoche explicitement "inclure les joueurs sans âge".
+        return false;
       }
 
       // Valeur marchande (en M€, player.market_value_eur est en €)
@@ -320,6 +400,23 @@ export default function Radar() {
       if (advancedState.foot !== "ALL") {
         if (!p.foot || p.foot !== advancedState.foot) return false;
       }
+
+      // Niveau de jeu = bande du re-score tier-aware (score_band). Ne matche
+      // que les joueurs notés — attendu : filtrer l'élite, pas les prospects
+      // non encore mesurés.
+      if (advancedState.levelBand !== "ALL" && p.score_band !== advancedState.levelBand) return false;
+
+      // Tier de ligue (1–4) — n'exclut que si l'utilisateur choisit un tier précis
+      if (advancedState.leagueTier !== "ALL" && p.league_tier !== Number(advancedState.leagueTier)) return false;
+
+      // Déjà capé RDC
+      if (advancedState.capedRdc && (p.caps_rdc ?? 0) <= 0) return false;
+
+      // Non cotés uniquement (diamants bruts)
+      if (advancedState.uncotedOnly && (p.market_value_eur ?? 0) > 0) return false;
+
+      // Avec stats saison
+      if (advancedState.withStats && !(p.season_minutes && p.season_minutes > 0)) return false;
 
       // Avec photo
       if (advancedState.withPhoto && !p.image_url && !p.image_url_alt) return false;
@@ -339,18 +436,31 @@ export default function Radar() {
     debouncedQuery,
     advancedState.ageMin,
     advancedState.ageMax,
+    advancedState.includeUnknownAge,
     advancedState.valueMin,
     advancedState.valueMax,
     advancedState.foot,
+    advancedState.levelBand,
+    advancedState.leagueTier,
+    advancedState.capedRdc,
+    advancedState.uncotedOnly,
+    advancedState.withStats,
     advancedState.withPhoto,
     advancedState.withActiveContract,
   ]);
 
-  // Retour au premier lot quand le filtre change (sinon on garde un
+  // Tri d'affichage — appliqué après le filtre, selon le mode choisi.
+  // La valeur marchande n'est plus le tri par défaut (elle coulait les 68%
+  // de joueurs non cotés, qui sont la cible du scouting).
+  const sorted = useMemo(() => {
+    return [...filtered].sort((a, b) => cmpByMode(sort, a, b));
+  }, [filtered, sort]);
+
+  // Retour au premier lot quand le filtre ou le tri change (sinon on garde un
   // compteur gonfle par un "Voir plus" d'une recherche precedente).
   useEffect(() => {
     setVisibleCount(40);
-  }, [position, tier, nation, debouncedQuery, advancedState.ageMin, advancedState.ageMax, advancedState.valueMin, advancedState.valueMax, advancedState.foot, advancedState.withPhoto, advancedState.withActiveContract]);
+  }, [position, tier, nation, debouncedQuery, sort, advancedState.ageMin, advancedState.ageMax, advancedState.includeUnknownAge, advancedState.valueMin, advancedState.valueMax, advancedState.foot, advancedState.levelBand, advancedState.leagueTier, advancedState.capedRdc, advancedState.uncotedOnly, advancedState.withStats, advancedState.withPhoto, advancedState.withActiveContract]);
 
   // ── Etat actif ────────────────────────────────────────────────────────────
   const basicFiltersActive =
@@ -359,9 +469,15 @@ export default function Radar() {
   const advancedFiltersActive =
     advancedState.ageMin !== ADVANCED_FILTERS_DEFAULT.ageMin ||
     advancedState.ageMax !== ADVANCED_FILTERS_DEFAULT.ageMax ||
+    advancedState.includeUnknownAge !== ADVANCED_FILTERS_DEFAULT.includeUnknownAge ||
     advancedState.valueMin !== ADVANCED_FILTERS_DEFAULT.valueMin ||
     advancedState.valueMax !== ADVANCED_FILTERS_DEFAULT.valueMax ||
     advancedState.foot !== "ALL" ||
+    advancedState.levelBand !== "ALL" ||
+    advancedState.leagueTier !== "ALL" ||
+    advancedState.capedRdc ||
+    advancedState.uncotedOnly ||
+    advancedState.withStats ||
     advancedState.withPhoto ||
     advancedState.withActiveContract;
 
@@ -416,6 +532,12 @@ export default function Radar() {
               options={nationOptions}
               value={nation}
               onChange={(e) => setNation(e.target.value)}
+            />
+            <Select
+              label="Trier par"
+              options={SORT_OPTIONS}
+              value={sort}
+              onChange={(e) => setSort(e.target.value as SortMode)}
             />
 
             {/* Filtres avancés */}
@@ -502,24 +624,24 @@ export default function Radar() {
               )}
             </div>
           ) : view === "carte" ? (
-            <RadarCanvas players={filtered} totalRoster={players.length} />
+            <RadarCanvas players={sorted} totalRoster={players.length} />
           ) : (
             /* Rendu par lots : la vue liste peut contenir ~1000 fiches. Tout
                rendre d'un coup produisait une page mobile de ~120 000 px
                (audit responsivite du 16/07/2026). */
             <div>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                {filtered.slice(0, visibleCount).map((p) => (
+                {sorted.slice(0, visibleCount).map((p) => (
                   <RadarCard key={p.slug} player={p} />
                 ))}
               </div>
-              {filtered.length > visibleCount && (
+              {sorted.length > visibleCount && (
                 <div className="mt-8 flex justify-center">
                   <Button
                     variant="outline"
                     onClick={() => setVisibleCount((c) => c + 40)}
                   >
-                    Voir plus ({filtered.length - visibleCount} restants)
+                    Voir plus ({sorted.length - visibleCount} restants)
                   </Button>
                 </div>
               )}

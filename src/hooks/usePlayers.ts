@@ -83,31 +83,46 @@ export function usePlayers(filters: Filters = {}) {
         "season_games", "season_goals", "season_assists",
         "season_minutes", "season_rating",
         "verified", "level_score", "level_band",
+        "score_leopards", "score_band", "score_pool", "league_tier",
         "created_at", "updated_at",
       ].join(",");
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      let query: any = (supabase as any).from("players").select(LIST_COLUMNS);
+      // PostgREST plafonne CHAQUE réponse à ~1000 lignes (db-max-rows) et
+      // `.limit(5000)` est IGNORÉ côté serveur (leçon du moteur de stats, 26/07).
+      // Le Radar perdait donc ~245 joueurs visibles au-delà de la 1000e ligne.
+      // Fix : pagination par pages de 1000 via .range(), avec un tri stable
+      // garanti par un tiebreak sur `id` (sinon les nombreux nulls du tri
+      // principal ont un ordre indéfini entre pages → doublons/trous).
+      const PAGE = 1000;
+      const hardLimit = limit ?? Number.POSITIVE_INFINITY;
+      const buildQuery = () => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        let q: any = (supabase as any).from("players").select(LIST_COLUMNS);
+        if (category) q = q.eq("player_category", category);
+        if (categoriesKey) q = q.in("player_category", categoriesKey.split(","));
+        if (position) q = q.eq("position", position);
+        if (tier) q = q.eq("tier", tier);
+        if (search) q = q.ilike("name", `%${search}%`);
+        if (excludeEligibilityStatus) q = q.neq("eligibility_status", excludeEligibilityStatus);
+        if (publicVisibilityOnly) q = applyPublicVisibilityFilter(q);
+        if (orderBy)
+          q = q.order(orderBy.column as string, {
+            ascending: orderBy.ascending ?? false,
+            nullsFirst: false,
+          });
+        q = q.order("id", { ascending: true });
+        return q;
+      };
 
-      if (category) query = query.eq("player_category", category);
-      if (categoriesKey) query = query.in("player_category", categoriesKey.split(","));
-      if (position) query = query.eq("position", position);
-      if (tier) query = query.eq("tier", tier);
-      if (search) query = query.ilike("name", `%${search}%`);
-      if (excludeEligibilityStatus) query = query.neq("eligibility_status", excludeEligibilityStatus);
-      if (publicVisibilityOnly) query = applyPublicVisibilityFilter(query);
-      if (orderBy)
-        query = query.order(orderBy.column as string, {
-          ascending: orderBy.ascending ?? false,
-          nullsFirst: false,
-        });
-      // PostgREST a une limite hardcodee a 1000 rows par defaut.
-      // Sans cap explicite, le Radar affichait seulement 1000/1166 joueurs.
-      // On passe a 5000 par defaut (largement au-dessus du pool RDC actuel ~2.2k).
-      query = query.limit(limit ?? 5000);
-
-      const { data, error: err } = await query;
-      if (err) throw err;
-      setPlayers(((data ?? []) as Record<string, unknown>[]).map(normalize));
+      const rows: Record<string, unknown>[] = [];
+      for (let offset = 0; rows.length < hardLimit; offset += PAGE) {
+        const { data, error: err } = await buildQuery().range(offset, offset + PAGE - 1);
+        if (err) throw err;
+        const batch = (data ?? []) as Record<string, unknown>[];
+        rows.push(...batch);
+        if (batch.length < PAGE) break;
+      }
+      const capped = Number.isFinite(hardLimit) ? rows.slice(0, hardLimit) : rows;
+      setPlayers(capped.map(normalize));
     } catch (e) {
       const msg = e instanceof Error ? e.message : "Erreur inconnue";
       console.error("[usePlayers]", msg);

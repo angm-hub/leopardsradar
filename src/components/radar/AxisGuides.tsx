@@ -41,13 +41,13 @@ export function AxisGuides() {
       {/* Axe X — etiquette bas, centree horizontalement */}
       <div className="pointer-events-none absolute bottom-1.5 left-0 right-0 z-[2] flex items-center justify-between px-12">
         <span className="rounded-sm bg-background/60 backdrop-blur-sm px-2 py-0.5 text-xs md:text-[9px] font-mono uppercase tracking-[0.2em] text-foreground/55 whitespace-nowrap">
-          Faible valeur
+          Faible niveau
         </span>
         <span className="text-xs md:text-[10px] text-foreground/25 font-mono" aria-hidden>
-          ←&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Valeur marchande&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→
+          ←&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Niveau de jeu&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→
         </span>
         <span className="rounded-sm bg-background/60 backdrop-blur-sm px-2 py-0.5 text-xs md:text-[9px] font-mono uppercase tracking-[0.2em] text-foreground/55 whitespace-nowrap">
-          Haute valeur
+          Haut niveau
         </span>
       </div>
     </>
