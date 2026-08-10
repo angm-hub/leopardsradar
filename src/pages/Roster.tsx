@@ -11,6 +11,8 @@ import { RosterHero } from "@/components/roster/RosterHero";
 import { PositionSection } from "@/components/roster/PositionSection";
 import { PlayerTable } from "@/components/roster/PlayerTable";
 import { RosterModeToggle, type RosterMode } from "@/components/roster/RosterModeToggle";
+import { EmpreinteCard } from "@/components/roster/EmpreinteCard";
+import { useRosterGradebars } from "@/hooks/useRosterGradebars";
 import { RosterMoversSection } from "@/components/roster/RosterMoversSection";
 import { TopScorersBlock } from "@/components/roster/TopScorersBlock";
 import { TopGABlock } from "@/components/roster/TopGABlock";
@@ -59,8 +61,11 @@ function parseSortKey(raw: string | null): SortKey {
 }
 
 function parseMode(raw: string | null): RosterMode {
-  return raw === "liste" || raw === "editorial" ? raw : "editorial";
+  return raw === "liste" || raw === "editorial" || raw === "empreintes" ? raw : "editorial";
 }
+
+// Plafond d'empreintes rendues d'un coup (perf + un seul batch RPC).
+const EMPREINTE_CAP = 60;
 
 const Roster = () => {
   useDocumentMeta({
@@ -106,7 +111,7 @@ const Roster = () => {
     if (typeof window === "undefined") return "editorial";
     try {
       const saved = window.localStorage.getItem("lr_roster_mode");
-      return saved === "liste" || saved === "editorial" ? saved : "editorial";
+      return saved === "liste" || saved === "editorial" || saved === "empreintes" ? saved : "editorial";
     } catch {
       return "editorial";
     }
@@ -237,7 +242,17 @@ const Roster = () => {
   // - filtre Tri non-VALUE_DESC : le hero est défini par la valeur
   // - search : on veut voir les résultats à plat
   const forcedListe = filtersActive;
-  const effectiveMode: RosterMode = forcedListe ? "liste" : mode;
+  // L'éditorial exige le pool non filtré (sections par poste) : on le rabat sur
+  // liste quand un filtre est actif. Empreintes et liste lisent `filtered`,
+  // donc ils cohabitent avec les filtres.
+  const effectiveMode: RosterMode = forcedListe && mode === "editorial" ? "liste" : mode;
+
+  // Mode Empreintes : percentiles de la page en un batch (auto-frais).
+  const empreinteSlugs = useMemo(
+    () => (effectiveMode === "empreintes" ? filtered.slice(0, EMPREINTE_CAP).map((p) => p.slug) : []),
+    [effectiveMode, filtered],
+  );
+  const { gradebarsBySlug } = useRosterGradebars(empreinteSlugs);
 
   // Group by position pour le mode éditorial — utilise `players` (non filtré)
   // car en éditorial il n'y a pas de filtre poste/search
@@ -390,6 +405,26 @@ const Roster = () => {
                   players={grouped.get(pos) ?? []}
                 />
               ))}
+            </div>
+          ) : effectiveMode === "empreintes" ? (
+            // Mode Empreintes : mur de signatures statistiques (percentiles vs
+            // poste), même vérité que la fiche, auto-fraîche.
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+                {filtered.slice(0, EMPREINTE_CAP).map((p) => (
+                  <EmpreinteCard
+                    key={p.id}
+                    player={p}
+                    gradebars={gradebarsBySlug.get(p.slug)}
+                  />
+                ))}
+              </div>
+              {filtered.length > EMPREINTE_CAP ? (
+                <p className="text-center text-xs text-muted">
+                  {EMPREINTE_CAP} empreintes affichées sur {filtered.length}. Affine
+                  avec les filtres pour explorer le reste du vivier.
+                </p>
+              ) : null}
             </div>
           ) : (
             // Mode Liste : tables denses Transfermarkt-style par poste,

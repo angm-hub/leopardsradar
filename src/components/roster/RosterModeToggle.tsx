@@ -1,7 +1,7 @@
-import { LayoutTemplate, LayoutGrid } from "lucide-react";
+import { LayoutTemplate, LayoutGrid, Fingerprint } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export type RosterMode = "editorial" | "liste";
+export type RosterMode = "editorial" | "liste" | "empreintes";
 
 interface RosterModeToggleProps {
   current: RosterMode;
@@ -12,6 +12,7 @@ interface RosterModeToggleProps {
 
 const TABS: { value: RosterMode; label: string; Icon: typeof LayoutGrid }[] = [
   { value: "editorial", label: "Éditorial", Icon: LayoutTemplate },
+  { value: "empreintes", label: "Empreintes", Icon: Fingerprint },
   { value: "liste", label: "Liste", Icon: LayoutGrid },
 ];
 

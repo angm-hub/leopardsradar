@@ -19,7 +19,7 @@ import { usePlayer } from "@/hooks/usePlayer";
 import { usePlayerAttributes } from "@/hooks/usePlayerAttributes";
 import { useDocumentMeta } from "@/hooks/useDocumentMeta";
 import { cn } from "@/lib/utils";
-import { PlayerGradeBars } from "@/components/player/PlayerGradeBars";
+import { PlayerEmpreinte } from "@/components/player/PlayerEmpreinte";
 import {
   POSITION_LABEL,
   formatMarketValue,
@@ -208,13 +208,13 @@ export default function PlayerPage() {
             />
           </section>
 
-          {/* ── Radar de potentiel (gradebars percentiles) ──
-              Toujours affiché, y compris pour les profils creux : les axes
-              niveau de jeu + ancrage Léopards couvrent tout le pool. C'est
-              la signature data de la fiche (F2 de la thèse produit). */}
+          {/* ── Empreinte (percentiles vs poste) ──
+              Signature data de la fiche. Toujours affichée, y compris pour les
+              profils creux : les axes niveau de jeu + ancrage Léopards couvrent
+              tout le pool. Composant partagé avec le mode Empreintes du roster. */}
           <section className="container-site py-10 border-b border-border/40">
             <div className="max-w-3xl">
-              <PlayerGradeBars slug={player.slug} />
+              <PlayerEmpreinte slug={player.slug} />
             </div>
           </section>
 

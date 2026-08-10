@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 .vercel
 .env*
+
+# Caches de scrapers (données volatiles, jamais versionnées)
+scripts/cache/

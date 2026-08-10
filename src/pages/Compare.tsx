@@ -8,7 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import type { DBPlayer } from "@/types/dbPlayer";
 import { computePlayerScores } from "@/lib/playerScores";
 import { PlayerPicker } from "@/components/compare/PlayerPicker";
-import { HexagonCompare, CompareLegend } from "@/components/compare/HexagonCompare";
+import { EmpreinteCompare } from "@/components/compare/EmpreinteCompare";
 import { CompareDeltas } from "@/components/compare/CompareDeltas";
 import { useDocumentMeta } from "@/hooks/useDocumentMeta";
 
@@ -182,14 +182,7 @@ function CompareBody({
       <section className="container-site py-12 border-t border-border">
         <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-10 lg:gap-16 items-start">
           <div className="flex flex-col items-center lg:items-start gap-6">
-            <HexagonCompare
-              scoresA={scoresA}
-              scoresB={scoresB}
-              nameA={playerA.name}
-              nameB={playerB.name}
-              size={380}
-            />
-            <CompareLegend nameA={playerA.name} nameB={playerB.name} />
+            <EmpreinteCompare playerA={playerA} playerB={playerB} />
             {crossPosition ? (
               <p className="max-w-sm text-[11px] text-muted-light leading-relaxed">
                 <span className="text-foreground/80">{scoresA.positionLabel}</span> face à{" "}
