@@ -18,6 +18,7 @@ import { TopScorersBlock } from "@/components/roster/TopScorersBlock";
 import { TopGABlock } from "@/components/roster/TopGABlock";
 import { DesabreXI } from "@/components/roster/DesabreXI";
 import { SquadFIFA26Block } from "@/components/roster/SquadFIFA26Block";
+import { RosterCardFC } from "@/components/roster/RosterCardFC";
 import { usePlayers } from "@/hooks/usePlayers";
 import { useHomeStats } from "@/hooks/useHomeStats";
 import { useDocumentMeta } from "@/hooks/useDocumentMeta";
@@ -29,6 +30,15 @@ const POSITION_ORDER: DBPosition[] = [
   "Midfield",
   "Attack",
 ];
+
+// Libellés pluriels propres pour les en-têtes de ligne du mode Cartes
+// (POSITION_LABEL est au singulier et "Milieu"+"s" donnerait "Milieus").
+const POSITION_PLURAL: Record<DBPosition, string> = {
+  Goalkeeper: "Gardiens",
+  Defender: "Défenseurs",
+  Midfield: "Milieux",
+  Attack: "Attaquants",
+};
 
 type PositionFilter = "ALL" | DBPosition;
 type SortKey = "VALUE_DESC" | "CAPS_DESC" | "NAME_ASC" | "AGE_ASC" | "AGE_DESC";
@@ -61,7 +71,9 @@ function parseSortKey(raw: string | null): SortKey {
 }
 
 function parseMode(raw: string | null): RosterMode {
-  return raw === "liste" || raw === "editorial" || raw === "empreintes" ? raw : "editorial";
+  return raw === "liste" || raw === "editorial" || raw === "empreintes" || raw === "cartes"
+    ? raw
+    : "cartes";
 }
 
 // Plafond d'empreintes rendues d'un coup (perf + un seul batch RPC).
@@ -108,12 +120,14 @@ const Roster = () => {
     const fromUrl = parseMode(searchParams.get("mode"));
     // Si l'URL contient un mode explicite, il prime sur localStorage.
     if (searchParams.has("mode")) return fromUrl;
-    if (typeof window === "undefined") return "editorial";
+    if (typeof window === "undefined") return "cartes";
     try {
       const saved = window.localStorage.getItem("lr_roster_mode");
-      return saved === "liste" || saved === "editorial" || saved === "empreintes" ? saved : "editorial";
+      return saved === "liste" || saved === "editorial" || saved === "empreintes" || saved === "cartes"
+        ? saved
+        : "cartes";
     } catch {
-      return "editorial";
+      return "cartes";
     }
   });
 
@@ -156,7 +170,7 @@ const Roster = () => {
         if (!qTrimmed) next.delete("q");
         else next.set("q", qTrimmed);
 
-        if (newMode === "editorial") next.delete("mode");
+        if (newMode === "cartes") next.delete("mode");
         else next.set("mode", newMode);
 
         return next;
@@ -293,14 +307,15 @@ const Roster = () => {
             masquée dès qu'un filtre est actif. WHY : en mode filtré, la section
             movers n'a plus de contexte global ; l'utilisateur cherche quelque
             chose de précis, on ne distrait pas. */}
+        {/* Couche éditoriale (movers + blocs stats) réservée au mode Éditorial.
+            En Cartes / Liste / Empreintes, l'utilisateur veut l'outil : on ne
+            l'enterre pas sous 5 blocs. Masquée aussi dès qu'un filtre est actif
+            (une recherche précise n'a que faire des agrégats globaux). */}
         <div className="container-site">
-          <RosterMoversSection hidden={filtersActive} />
+          <RosterMoversSection hidden={filtersActive || effectiveMode !== "editorial"} />
         </div>
 
-        {/* Blocs éditoriaux stats — top buteurs, top G+A, 11 Desabre.
-            Masqués dès qu'un filtre est actif : l'utilisateur cherche un joueur
-            précis, les blocs agrégés n'ont plus de sens. */}
-        {!filtersActive && (
+        {!filtersActive && effectiveMode === "editorial" && (
           <div className="container-site mt-2 mb-6">
             <SquadFIFA26Block />
             <TopScorersBlock players={players} />
@@ -394,6 +409,32 @@ const Roster = () => {
                   </Button>
                 </>
               )}
+            </div>
+          ) : effectiveMode === "cartes" ? (
+            // Mode Cartes — grille de cartes joueur inspirée FUT/FC26 pensée
+            // SaaS, groupée par ligne. Lit `filtered` (respecte poste/tri/search).
+            <div className="space-y-12">
+              {POSITION_ORDER.map((pos) => {
+                const group = filtered.filter((p) => p.position === pos);
+                if (group.length === 0) return null;
+                return (
+                  <section key={pos} className="space-y-4">
+                    <div className="flex items-baseline justify-between gap-3 border-b border-border/60 pb-2">
+                      <h2 className="font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-cobalt-mist">
+                        {POSITION_PLURAL[pos]}
+                      </h2>
+                      <span className="font-mono text-[11px] text-muted">
+                        {group.length}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-4 xl:grid-cols-5">
+                      {group.map((p) => (
+                        <RosterCardFC key={p.slug} player={p} />
+                      ))}
+                    </div>
+                  </section>
+                );
+              })}
             </div>
           ) : effectiveMode === "editorial" ? (
             <div className="space-y-16">
