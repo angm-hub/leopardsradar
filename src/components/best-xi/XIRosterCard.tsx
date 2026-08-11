@@ -1,28 +1,31 @@
 import { Link } from "react-router-dom";
 import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
-import { POSITION_LABEL, flagFor, formatMarketValue } from "@/lib/playerHelpers";
+import { flagFor, formatMarketValue } from "@/lib/playerHelpers";
 import type { BestXIPlayer } from "@/hooks/useBestXI";
-import type { DBPosition } from "@/types/dbPlayer";
 
 interface XIRosterCardProps {
   player: BestXIPlayer;
-  /** numéro de slot (1-11) */
+  /** numéro d'ordre du onze (1-11), rendu en filigrane. */
   number: string;
-  /** position tactique précise (RB, RCB, ST, etc.) */
+  /** code de position tactique court (RB, RCB, ST, GK…). */
   tacticalPosition: string;
+  /** libellé de rôle complet et lisible (« Défenseur central »…). */
+  roleName?: string;
 }
 
 /**
  * XIRosterCard — fiche enrichie d'un joueur du onze.
  *
- * Lecture en 5 dimensions : photo, nom, position tactique, club + poste,
- * âge + valeur + drapeau diaspora. Remplace l'ancienne card pauvre
- * (photo + nom + club seulement).
+ * Lecture : photo, code + rôle tactique lisible, nom, club, âge + valeur +
+ * drapeau diaspora. Le filigrane porte le numéro d'ordre (1-11) — avant, il
+ * recevait le nom de rôle complet rendu en 48px, qui débordait la carte et
+ * bleedait sur les voisines (bug lisibilité corrigé le 11/08/2026).
  */
 export function XIRosterCard({
   player,
   number,
   tacticalPosition,
+  roleName,
 }: XIRosterCardProps) {
   const primaryFlag =
     player.other_nationalities?.[0] ??
@@ -49,14 +52,12 @@ export function XIRosterCard({
       />
 
       <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2">
-          <span className="font-mono text-[10px] text-primary uppercase tracking-wider">
+        <div className="flex items-center gap-1.5 min-w-0">
+          <span className="font-mono text-[10px] text-primary uppercase tracking-wider shrink-0">
             {tacticalPosition}
           </span>
-          {player.position ? (
-            <span className="text-[10px] text-muted">
-              · {POSITION_LABEL[player.position as DBPosition] ?? player.position}
-            </span>
+          {roleName ? (
+            <span className="text-[10px] text-muted truncate">· {roleName}</span>
           ) : null}
         </div>
         <p className="font-serif text-base text-foreground truncate group-hover:text-primary transition-colors">
