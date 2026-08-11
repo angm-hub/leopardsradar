@@ -69,8 +69,8 @@ export function StatsSection() {
           </div>
           <p className="mt-6 max-w-md italic text-lg md:text-xl text-foreground/75 leading-snug">
             {tier1Ratio !== null
-              ? `${tier1Ratio}% du roster joue dans un top 5 européen.`
-              : "Roster réparti entre clubs européens et africains."}
+              ? `${tier1Ratio}% du vivier suivi joue dans un top 5 européen.`
+              : "Vivier réparti entre clubs européens et africains."}
           </p>
 
           <div className="mt-6 max-w-sm">

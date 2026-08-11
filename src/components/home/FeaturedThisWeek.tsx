@@ -12,6 +12,44 @@ const POSITION_FR: Record<string, string> = {
 };
 
 /**
+ * Garde-fou crédibilité (règle data kAIra : jamais un chiffre non crédible).
+ *
+ * Le delta hebdo vient de `current − snapshot dimanche`. Après un refresh
+ * batch des stats (enrichissement en masse vs snapshot périmé), ce delta
+ * gonfle jusqu'au total saison : "+16 buts cette semaine" est un artefact,
+ * pas un mouvement d'une semaine. Au-delà de ces plafonds, on ne prétend
+ * jamais "cette semaine" — on retombe sur la narration saison, honnête et
+ * vérifiable. Même logique que le cap +30 du badge hero.
+ */
+// Population diaspora : ~1 match/semaine. Une grande semaine = un doublé,
+// exceptionnellement un triplé. Au-delà de 3 buts, 3 passes, ou 4
+// contributions G+A cumulées sur 7 jours, ce n'est pas un mouvement hebdo
+// crédible — c'est un artefact de batch. On retombe sur la saison.
+const WEEKLY_GOAL_CEILING = 3;
+const WEEKLY_ASSIST_CEILING = 3;
+const WEEKLY_COMBINED_CEILING = 4;
+
+function isCrediblyWeekly(m: WeeklyMover): boolean {
+  if (!m.has_weekly_delta) return false;
+  const g = m.delta_goals ?? 0;
+  const a = m.delta_assists ?? 0;
+  return (
+    g <= WEEKLY_GOAL_CEILING &&
+    a <= WEEKLY_ASSIST_CEILING &&
+    g + a <= WEEKLY_COMBINED_CEILING
+  );
+}
+
+/** Narration saison, composée côté client quand le delta hebdo n'est pas crédible. */
+function seasonSignal(m: WeeklyMover): string {
+  const parts: string[] = [];
+  if (m.season_goals) parts.push(`${m.season_goals}B`);
+  if (m.season_assists) parts.push(`${m.season_assists}PD`);
+  const stat = parts.join(" · ") || "0B";
+  return m.season_games ? `${stat} · ${m.season_games} matchs` : stat;
+}
+
+/**
  * Le 5 du dimanche — section signature alimentée par player_stats_weekly.
  *
  * Évolution depuis l'audit : on ne sert plus une liste statique des "joueurs
@@ -34,7 +72,7 @@ export function FeaturedThisWeek() {
 
   if (!loading && movers.length === 0) return null;
 
-  const hasAnyWeekly = movers.some((m) => m.has_weekly_delta);
+  const hasAnyWeekly = movers.some(isCrediblyWeekly);
 
   return (
     <section className="container-site py-16 border-t border-border/40">
@@ -115,15 +153,20 @@ function MoverCard({ mover, index }: { mover: WeeklyMover | null; index: number 
               </>
             ) : null}
           </div>
-          <div
-            className={`mt-2 inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-mono uppercase tracking-[0.12em] ${
-              mover.has_weekly_delta
-                ? "border-success/40 bg-success/15 text-success"
-                : "border-primary/30 bg-primary/10 text-primary"
-            }`}
-          >
-            {mover.signal}
-          </div>
+          {(() => {
+            const credWeekly = isCrediblyWeekly(mover);
+            return (
+              <div
+                className={`mt-2 inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-mono uppercase tracking-[0.12em] ${
+                  credWeekly
+                    ? "border-success/40 bg-success/15 text-success"
+                    : "border-primary/30 bg-primary/10 text-primary"
+                }`}
+              >
+                {credWeekly ? mover.signal : seasonSignal(mover)}
+              </div>
+            );
+          })()}
         </div>
       </Link>
     </motion.div>

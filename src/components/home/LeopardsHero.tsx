@@ -43,6 +43,16 @@ export function LeopardsHero() {
   const rosterCount = stats?.roster_count ?? null;
   const countries = stats?.total_countries ?? null;
 
+  // Garde-fou crédibilité (règle data kAIra) : "N profils enrichis cette
+  // semaine" n'est un signal éditorial que si le volume est crédible pour
+  // 7 jours. Au-delà, c'est un reprocess batch (updated_at bumpé en masse)
+  // et l'afficher gonfle la métrique. On retombe alors sur la ligne édition.
+  const ENRICH_CEILING = 80;
+  const crediblyEnriched =
+    !!weekly &&
+    weekly.enrichedSinceSunday > 0 &&
+    weekly.enrichedSinceSunday <= ENRICH_CEILING;
+
   return (
     <section className="relative min-h-[100dvh] overflow-hidden bg-background">
       {/* Unique couche atmosphere : shader Paper Design (grain gradient blob WebGL).
@@ -158,9 +168,9 @@ export function LeopardsHero() {
             <span className="text-[11px] uppercase tracking-[0.2em] text-foreground/40 font-mono">
               Mis à jour chaque dimanche
             </span>
-            {weekly && weekly.enrichedSinceSunday > 0 ? (
+            {crediblyEnriched ? (
               <span className="text-xs text-foreground/40">
-                {weekly.enrichedSinceSunday} profils enrichis cette semaine
+                {weekly!.enrichedSinceSunday} profils enrichis cette semaine
                 {edition && formattedDate ? ` · Best XI #${edition} publié ${formattedDate}` : ""}
               </span>
             ) : edition && formattedDate ? (
