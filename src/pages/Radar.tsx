@@ -570,15 +570,11 @@ export default function Radar() {
           </div>
         </div>
 
-        {/* Pepites de la semaine — ancrage editorial (top valeurs) */}
-        <RadarHighlights />
-
-        {/* Diamants bruts — jeunes sans prix TM, contre-poids au tri par valeur */}
-        <RadarProspects players={players} />
-
-        {/* Bloc stats saison — top G+A, buts, temps de jeu parmi les talents radar */}
-        <ProStatsBlock players={players} loading={loading} />
-
+        {/* Résultats de l'exploration — directement sous la barre de filtres.
+            Les blocs éditoriaux (Pépites, Diamants, Stats) sont passés SOUS la
+            grille : avant, ils s'intercalaient entre le contrôle et son effet,
+            donc filtrer ne changeait rien de visible près des filtres (audit
+            lisibilité 11/08/2026). Ordre : outil d'abord, regard curé ensuite. */}
         <section className="container-site py-12">
           {loading ? (
             view === "carte" ? (
@@ -648,6 +644,30 @@ export default function Radar() {
             </div>
           )}
         </section>
+
+        {/* ── Le regard Léopards ─────────────────────────────────────────────
+            Curation éditoriale, sous l'explorateur. Signposté par un intitulé
+            de groupe pour marquer le passage « base de données » → « ce que la
+            data fait ressortir ». */}
+        <div className="border-t border-border/60 mt-6">
+          <div className="container-site pt-12 pb-2">
+            <span className="label-mono text-cobalt-mist">Le regard Léopards</span>
+            <p className="mt-2 max-w-xl text-sm md:text-base text-muted-light">
+              Trois lectures curées du vivier, au-delà des filtres : les plus
+              belles valeurs, les diamants bruts que le prix cache, et les
+              performances de la saison.
+            </p>
+          </div>
+
+          {/* Pepites de la semaine — ancrage editorial (top valeurs) */}
+          <RadarHighlights />
+
+          {/* Diamants bruts — jeunes sans prix TM, contre-poids au tri par valeur */}
+          <RadarProspects players={players} />
+
+          {/* Bloc stats saison — top G+A, buts, temps de jeu parmi les talents radar */}
+          <ProStatsBlock players={players} loading={loading} />
+        </div>
       </main>
 
       <Footer />
