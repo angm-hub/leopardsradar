@@ -52,7 +52,15 @@ jobs:
       # le dist gh-pages, on delegue le build a Vercel via le CLI.
       # Connexion Git native impossible tant que le compte Vercel n'a pas
       # de Login Connection GitHub : ce step fait le meme travail.
+      #
+      # continue-on-error : le plan gratuit Vercel plafonne les uploads a
+      # 5000/jour (api-upload-free). Un jour a gros volume de merges sature
+      # la limite et fait echouer ce step ~24h. Comme gh-pages (au-dessus)
+      # est la cible verifiee et bloquante, on ne veut pas que ce plafond
+      # transitoire fasse virer tout le workflow au rouge. Le build et le
+      # deploy gh-pages restent bloquants ; seul Vercel est tolere en echec.
       - name: Deploy to Vercel (production)
+        continue-on-error: true
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: team_WgOfSMY7ogd7xGB0x3wLq71C
