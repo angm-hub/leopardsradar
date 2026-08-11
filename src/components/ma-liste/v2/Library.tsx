@@ -3,10 +3,27 @@ import { Search, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
 import { POSITION_LABEL } from "@/lib/playerHelpers";
-import type { DBPlayer } from "@/types/dbPlayer";
+import type { DBPlayer, DBPosition } from "@/types/dbPlayer";
 import { useMaListeV2Store } from "@/store/maListeV2Store";
 
 type FilterTab = "all" | "roster" | "radar";
+type PosFilter = "all" | DBPosition;
+
+// Filtre par poste — sert à retrouver les candidats d'un poste précis sans
+// scroller tout le pool (on compose une convocation, on raisonne par ligne).
+const POS_TABS: { value: PosFilter; label: string }[] = [
+  { value: "all", label: "Tous" },
+  { value: "Goalkeeper", label: "GK" },
+  { value: "Defender", label: "DEF" },
+  { value: "Midfield", label: "MID" },
+  { value: "Attack", label: "ATT" },
+];
+
+// Cap de rendu : la pioche peut contenir ~1000 joueurs. Tout monter d'un coup
+// = surcharge de choix + DOM lourd (audit lisibilité 11/08/2026). On rend un
+// premier lot, « Voir plus » révèle la suite. La recherche/les filtres
+// resserrent bien en-deçà du cap dans le cas courant.
+const PAGE_SIZE = 60;
 
 interface LibraryProps {
   allPlayers: DBPlayer[];
@@ -25,6 +42,8 @@ export function Library({
 }: LibraryProps) {
   const [search, setSearch] = useState("");
   const [tab, setTab] = useState<FilterTab>("all");
+  const [posFilter, setPosFilter] = useState<PosFilter>("all");
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const starters = useMaListeV2Store((s) => s.starters);
   const bench = useMaListeV2Store((s) => s.bench);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -61,6 +80,7 @@ export function Library({
     });
     if (tab === "roster") list = list.filter((p) => p.player_category === "roster");
     else if (tab === "radar") list = list.filter((p) => p.player_category === "radar");
+    if (posFilter !== "all") list = list.filter((p) => p.position === posFilter);
     const q = search.trim().toLowerCase();
     if (q) {
       list = list.filter(
@@ -78,7 +98,16 @@ export function Library({
       }
       return (b.market_value_eur ?? 0) - (a.market_value_eur ?? 0);
     });
-  }, [allPlayers, tab, search]);
+  }, [allPlayers, tab, posFilter, search]);
+
+  // Revenir au premier lot dès qu'un filtre change (sinon un « Voir plus »
+  // d'une recherche précédente laisse un cap gonflé sur un pool resserré).
+  useEffect(() => {
+    setVisibleCount(PAGE_SIZE);
+  }, [tab, posFilter, search]);
+
+  const visible = filtered.slice(0, visibleCount);
+  const remaining = filtered.length - visible.length;
 
   const handlePick = (p: DBPlayer) => {
     if (placedSlugs.has(p.slug)) return;
@@ -133,6 +162,25 @@ export function Library({
         ))}
       </div>
 
+      {/* Filtre par poste — segmented compact */}
+      <div className="flex gap-1 border-b border-border/60 bg-background/20 p-2">
+        {POS_TABS.map((pt) => (
+          <button
+            key={pt.value}
+            type="button"
+            onClick={() => setPosFilter(pt.value)}
+            className={cn(
+              "flex-1 rounded-md py-1.5 font-mono text-[10px] uppercase tracking-[0.1em] font-semibold transition-colors",
+              posFilter === pt.value
+                ? "bg-primary/15 text-primary"
+                : "text-foreground/45 hover:text-foreground/80 hover:bg-background/50",
+            )}
+          >
+            {pt.label}
+          </button>
+        ))}
+      </div>
+
       {/* List */}
       <div className="flex-1 overflow-y-auto">
         {loading ? (
@@ -162,7 +210,7 @@ export function Library({
           </div>
         ) : (
           <ul>
-            {filtered.map((p) => {
+            {visible.map((p) => {
               const placed = placedSlugs.has(p.slug);
               return (
                 <li key={p.slug} className="px-2">
@@ -225,13 +273,26 @@ export function Library({
                 </li>
               );
             })}
+            {remaining > 0 && (
+              <li className="px-2 py-3">
+                <button
+                  type="button"
+                  onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
+                  className="w-full rounded-lg border border-border/60 bg-background/40 py-2.5 font-mono text-[10px] uppercase tracking-[0.1em] font-semibold text-foreground/60 hover:text-foreground hover:border-border-hover hover:bg-background/70 transition-colors"
+                >
+                  Voir {Math.min(remaining, PAGE_SIZE)} de plus
+                </button>
+              </li>
+            )}
           </ul>
         )}
       </div>
 
       {/* Footer count */}
       <div className="border-t border-border bg-background/40 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.08em] text-foreground/45">
-        {filtered.length} disponible{filtered.length > 1 ? "s" : ""}
+        {remaining > 0
+          ? `${visible.length} sur ${filtered.length} affichés`
+          : `${filtered.length} disponible${filtered.length > 1 ? "s" : ""}`}
       </div>
     </div>
   );
