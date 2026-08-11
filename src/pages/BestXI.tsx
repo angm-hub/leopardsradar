@@ -432,8 +432,9 @@ export default function BestXI() {
                       <XIRosterCard
                         key={`${slot.position}-${i}`}
                         player={player}
-                        number={slot.label}
+                        number={String(i + 1)}
                         tacticalPosition={slot.position}
+                        roleName={slot.label}
                       />
                     );
                   })}
