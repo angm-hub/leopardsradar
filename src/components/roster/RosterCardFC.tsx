@@ -62,7 +62,7 @@ export function RosterCardFC({ player }: { player: DBPlayer }) {
   const value =
     player.market_value_eur && player.market_value_eur > 0
       ? formatMarketValueCompact(player.market_value_eur)
-      : "—";
+      : "n.d.";
 
   const tierLabel =
     player.tier === "tier1" ? "Tier 1" : player.tier === "tier2" ? "Tier 2" : null;
