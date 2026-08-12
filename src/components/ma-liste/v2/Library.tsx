@@ -35,14 +35,28 @@ interface LibraryProps {
   onPickForBench: (player: DBPlayer) => void;
   onDragStart: (player: DBPlayer) => void;
   onDragEnd: () => void;
+  /** Poste à focaliser (déclenché en cliquant un slot vide du terrain). */
+  focusPosition?: DBPosition | null;
+  /** Nonce bumpé à chaque demande de focus, pour re-déclencher sur re-clic. */
+  focusKey?: number;
 }
 
 export function Library({
   allPlayers, loading, error, onPickForSlot, onDragStart, onDragEnd,
+  focusPosition, focusKey,
 }: LibraryProps) {
   const [search, setSearch] = useState("");
   const [tab, setTab] = useState<FilterTab>("all");
   const [posFilter, setPosFilter] = useState<PosFilter>("all");
+
+  // Le terrain pilote la pioche : un slot vide cliqué focalise le poste.
+  useEffect(() => {
+    if (focusPosition) {
+      setPosFilter(focusPosition);
+      setSearch("");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focusKey]);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const starters = useMaListeV2Store((s) => s.starters);
   const bench = useMaListeV2Store((s) => s.bench);
