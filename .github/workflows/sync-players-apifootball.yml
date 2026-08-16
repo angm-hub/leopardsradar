@@ -1,0 +1,69 @@
+name: Sync players via API-Football (stats saison)
+
+# Appelle l'edge function sync-players-apifootball (stats saison -> players.season_*)
+# puis relance le scoring Leopards. Token partage : secret PLAYERS_SYNC_TOKEN.
+
+on:
+  schedule:
+    - cron: '0 5 * * 2'   # mardi 05:00 UTC
+  workflow_dispatch:
+    inputs:
+      season:
+        description: 'Saison API-Football (annee de debut, ex 2025)'
+        required: false
+        default: '2025'
+      limit:
+        description: 'Nb de joueurs par run (max 300)'
+        required: false
+        default: '80'
+      only_confirmed:
+        description: 'Limiter aux TIER1/TIER2'
+        required: false
+        default: 'true'
+        type: choice
+        options: ['true', 'false']
+      only_missing_stats:
+        description: 'Uniquement ceux sans stats'
+        required: false
+        default: 'true'
+        type: choice
+        options: ['true', 'false']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sync-players-apifootball
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Invoke edge function
+        env:
+          FN_URL: https://pvpshyoaregroihwglye.supabase.co/functions/v1/sync-players-apifootball
+          TOKEN: ${{ secrets.PLAYERS_SYNC_TOKEN }}
+          SEASON: ${{ github.event.inputs.season || '2025' }}
+          LIMIT: ${{ github.event.inputs.limit || '80' }}
+          ONLY_CONFIRMED: ${{ github.event.inputs.only_confirmed || 'true' }}
+          ONLY_MISSING: ${{ github.event.inputs.only_missing_stats || 'true' }}
+        run: |
+          echo "Sync API-Football : season=$SEASON limit=$LIMIT confirmed=$ONLY_CONFIRMED missing=$ONLY_MISSING"
+          resp=$(curl -sS -X POST "$FN_URL" \
+            -H "Content-Type: application/json" \
+            -H "x-sync-token: $TOKEN" \
+            --max-time 280 \
+            -d "{\"season\":$SEASON,\"limit\":$LIMIT,\"only_confirmed\":$ONLY_CONFIRMED,\"only_missing_stats\":$ONLY_MISSING}")
+          echo "$resp" | python3 -c "import sys,json; d=json.load(sys.stdin); print('processed',d.get('processed'),'matched',d.get('matched'),'updated',d.get('updated'),'errors',d.get('errors'))"
+
+      - name: Rescore Leopards
+        if: success()
+        env:
+          SUPABASE_URL: https://pvpshyoaregroihwglye.supabase.co
+          SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          curl -sS -X POST "$SUPABASE_URL/rest/v1/rpc/compute_leopards_scores_all" \
+            -H "apikey: $SERVICE_KEY" -H "Authorization: Bearer $SERVICE_KEY" \
+            -H "Content-Type: application/json" -d '{}' --max-time 180 \
+            && echo " -> rescoring ok" || echo " -> rescoring skipped"
