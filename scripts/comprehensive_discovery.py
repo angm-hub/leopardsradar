@@ -173,6 +173,19 @@ TOP_LEAGUE_CLUBS = [
     {"id": "12321",  "name": "Atalanta",              "league": "ITA1"},
     {"id": "398",    "name": "AS Roma",               "league": "ITA1"},
     {"id": "506",    "name": "SS Lazio",              "league": "ITA1"},
+    # ── Swiss Super League (diaspora congolaise/africaine importante) ──
+    {"id": "452",    "name": "BSC Young Boys",        "league": "SUI1"},
+    {"id": "26",     "name": "FC Basel 1893",         "league": "SUI1"},
+    {"id": "2790",   "name": "FC Lugano",             "league": "SUI1"},
+    {"id": "257",    "name": "FC St. Gallen 1879",    "league": "SUI1"},
+    {"id": "321",    "name": "FC Sion",               "league": "SUI1"},
+    {"id": "527",    "name": "FC Lausanne-Sport",     "league": "SUI1"},
+    {"id": "434",    "name": "FC Luzern",             "league": "SUI1"},
+    {"id": "61",     "name": "Servette FC",           "league": "SUI1"},
+    {"id": "938",    "name": "FC Thun",               "league": "SUI1"},
+    {"id": "504",    "name": "Grasshopper Club Zürich", "league": "SUI1"},
+    {"id": "260",    "name": "FC Zürich",             "league": "SUI1"},
+    {"id": "163",    "name": "FC Vaduz",              "league": "SUI1"},
 ]
 
 # ─────────────────────────────────────────────────────────────────────────────
