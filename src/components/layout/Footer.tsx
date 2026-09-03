@@ -121,6 +121,14 @@ export function Footer() {
               </li>
               <li>
                 <Link
+                  to="/contributeurs"
+                  className="inline-block py-1 text-sm text-muted-light hover:text-foreground transition-colors"
+                >
+                  Contributeurs
+                </Link>
+              </li>
+              <li>
+                <Link
                   to="/pro"
                   className="inline-block py-1 text-sm text-muted-light hover:text-foreground transition-colors"
                 >
