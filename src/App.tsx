@@ -30,6 +30,7 @@ const NewsletterUnsubscribe = lazy(
 );
 const Auth = lazy(() => import("./pages/Auth.tsx"));
 const AdminPhotos = lazy(() => import("./pages/AdminPhotos.tsx"));
+const AdminContributions = lazy(() => import("./pages/AdminContributions.tsx"));
 const MaListe = lazy(() => import("./pages/MaListe.tsx"));
 const MaListePublic = lazy(() => import("./pages/MaListePublic.tsx"));
 const MaListeV2 = lazy(() => import("./pages/MaListeV2.tsx"));
@@ -108,6 +109,7 @@ const App = () => (
             />
             <Route path="/auth" element={<Auth />} />
             <Route path="/admin/photos" element={<AdminPhotos />} />
+            <Route path="/admin/contributions" element={<AdminContributions />} />
             <Route path="/ma-liste" element={<MaListeV2 />} />
             <Route path="/ma-liste-v2" element={<MaListeV2 />} />
             <Route path="/ma-liste-v1" element={<MaListe />} />
