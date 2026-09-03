@@ -111,12 +111,12 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <a
-                  href="mailto:alexandre@withkaira.com?subject=Source / piste"
+                <Link
+                  to="/contribuer"
                   className="inline-block py-1 text-sm text-muted-light hover:text-foreground transition-colors"
                 >
-                  Proposer une source
-                </a>
+                  Contribuer une info
+                </Link>
               </li>
               <li>
                 <Link
