@@ -48,6 +48,7 @@ const Pro = lazy(() => import("./pages/Pro.tsx"));
 const Contribuer = lazy(() => import("./pages/Contribuer.tsx"));
 const Clubs = lazy(() => import("./pages/Clubs.tsx"));
 const Contributeurs = lazy(() => import("./pages/Contributeurs.tsx"));
+const Switchables = lazy(() => import("./pages/Switchables.tsx"));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 
 const queryClient = new QueryClient();
@@ -129,6 +130,7 @@ const App = () => (
             <Route path="/contribuer" element={<Contribuer />} />
             <Route path="/clubs" element={<Clubs />} />
             <Route path="/contributeurs" element={<Contributeurs />} />
+            <Route path="/switchables" element={<Switchables />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
