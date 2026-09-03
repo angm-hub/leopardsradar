@@ -79,6 +79,10 @@ export function usePlayers(filters: Filters = {}) {
         "is_binational", "nationalities", "other_nationalities",
         "player_category", "tier", "caps_rdc",
         "eligibility_status", "eligibility_note",
+        // Champ canonique du moteur d'éligibilité (le manuel `eligibility_status`
+        // reste lu pour rétro-compat, mais les gates croisent désormais le
+        // computed pour éviter toute désync liste/fiche — clean 03/09/2026).
+        "computed_eligibility_status",
         "market_value_eur",
         "season_games", "season_goals", "season_assists",
         "season_minutes", "season_rating",

@@ -244,7 +244,10 @@ const POSITION_COUNT: Record<DBPosition, number> = {
 
 function selectAlgoXI(players: DBPlayer[]): Array<{ player: DBPlayer; slot: FormationSlot }> {
   const roster = players.filter(
-    (p) => p.player_category === "roster" && p.eligibility_status !== "ineligible",
+    (p) =>
+      p.player_category === "roster" &&
+      p.eligibility_status !== "ineligible" &&
+      p.computed_eligibility_status !== "INELIGIBLE",
   );
   const selected: Array<{ player: DBPlayer; slot: FormationSlot }> = [];
   const usedIds = new Set<number>();

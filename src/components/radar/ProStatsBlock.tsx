@@ -101,7 +101,8 @@ export function ProStatsBlock({ players, loading = false }: ProStatsBlockProps) 
       players.filter(
         (p) =>
           (p.player_category === "radar" || p.player_category === "heritage") &&
-          p.eligibility_status !== "ineligible",
+          p.eligibility_status !== "ineligible" &&
+          p.computed_eligibility_status !== "INELIGIBLE",
       ),
     [players],
   );
