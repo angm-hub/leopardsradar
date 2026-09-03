@@ -20,10 +20,13 @@ export interface ClubRow {
   switchables: number;
   avgValueM: number | null;
   topValueM: number | null;
+  /** Id Transfermarkt du club (le plus fréquent), pour le crest. */
+  tmId: string | null;
 }
 
 interface RawRow {
   current_club: string | null;
+  current_club_id: string | null;
   market_value_eur: number | null;
   computed_eligibility_status: string | null;
 }
@@ -73,7 +76,7 @@ export function useClubRanking() {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           let q: any = (supabase as any)
             .from("players")
-            .select("current_club, market_value_eur, computed_eligibility_status");
+            .select("current_club, current_club_id, market_value_eur, computed_eligibility_status");
           q = applyPublicVisibilityFilter(q)
             .not("current_club", "is", null)
             .range(from, from + 999);
@@ -88,7 +91,13 @@ export function useClubRanking() {
         // Agrégation par clé normalisée.
         const acc = new Map<
           string,
-          { labels: Map<string, number>; count: number; switchables: number; values: number[] }
+          {
+            labels: Map<string, number>;
+            ids: Map<string, number>;
+            count: number;
+            switchables: number;
+            values: number[];
+          }
         >();
         for (const r of all) {
           const raw = (r.current_club ?? "").trim();
@@ -98,11 +107,14 @@ export function useClubRanking() {
           if (!key) continue;
           let e = acc.get(key);
           if (!e) {
-            e = { labels: new Map(), count: 0, switchables: 0, values: [] };
+            e = { labels: new Map(), ids: new Map(), count: 0, switchables: 0, values: [] };
             acc.set(key, e);
           }
           e.count += 1;
           e.labels.set(raw, (e.labels.get(raw) ?? 0) + 1);
+          if (r.current_club_id) {
+            e.ids.set(r.current_club_id, (e.ids.get(r.current_club_id) ?? 0) + 1);
+          }
           if (r.computed_eligibility_status === "SWITCHABLE") e.switchables += 1;
           if (typeof r.market_value_eur === "number" && r.market_value_eur > 0) {
             e.values.push(r.market_value_eur);
@@ -120,6 +132,15 @@ export function useClubRanking() {
               label = name;
             }
           }
+          // Id TM = le plus fréquent (l'équipe première domine ses réserves).
+          let tmId: string | null = null;
+          let bestId = -1;
+          for (const [id, n] of e.ids) {
+            if (n > bestId) {
+              bestId = n;
+              tmId = id;
+            }
+          }
           const avg = e.values.length
             ? e.values.reduce((a, b) => a + b, 0) / e.values.length
             : null;
@@ -130,6 +151,7 @@ export function useClubRanking() {
             switchables: e.switchables,
             avgValueM: avg != null ? Math.round((avg / 1_000_000) * 10) / 10 : null,
             topValueM: top != null ? Math.round((top / 1_000_000) * 10) / 10 : null,
+            tmId,
           });
         }
         out.sort((a, b) => b.count - a.count || (b.topValueM ?? 0) - (a.topValueM ?? 0));

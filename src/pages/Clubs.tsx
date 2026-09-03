@@ -9,6 +9,33 @@ import { cn } from "@/lib/utils";
 
 const INITIAL = 30;
 
+/** Crest Transfermarkt dérivé de l'id club, avec fallback monogramme propre
+ * (jamais de trou visible) si l'id manque ou si l'image ne charge pas. */
+function ClubBadge({ tmId, name }: { tmId: string | null; name: string }) {
+  const [failed, setFailed] = useState(false);
+  const initials = name
+    .replace(/^(AS|FC|CS|DC|TP|RC|AC|SC|US|CD|SA)\s+/i, "")
+    .trim()
+    .slice(0, 2)
+    .toUpperCase();
+  if (!tmId || failed) {
+    return (
+      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary/10 font-mono text-[11px] text-primary ring-1 ring-primary/20">
+        {initials || "?"}
+      </span>
+    );
+  }
+  return (
+    <img
+      src={`https://tmssl.akamaized.net/images/wappen/head/${tmId}.png`}
+      alt=""
+      loading="lazy"
+      onError={() => setFailed(true)}
+      className="h-8 w-8 shrink-0 rounded-md bg-white/5 object-contain"
+    />
+  );
+}
+
 function fmtM(v: number | null): string {
   if (v == null) return "n.d.";
   const s = v % 1 === 0 ? String(v) : v.toFixed(1).replace(".", ",");
@@ -85,15 +112,18 @@ export default function Clubs() {
                       >
                         {String(rank).padStart(2, "0")}
                       </span>
-                      <div className="min-w-0">
-                        <span className="block truncate text-[15px] font-medium text-foreground">
-                          {c.club}
-                        </span>
-                        {c.switchables > 0 && (
-                          <span className="text-xs text-emerald-400/90">
-                            {c.switchables} switchable{c.switchables > 1 ? "s" : ""}
+                      <div className="min-w-0 flex items-center gap-3">
+                        <ClubBadge tmId={c.tmId} name={c.club} />
+                        <div className="min-w-0">
+                          <span className="block truncate text-[15px] font-medium text-foreground">
+                            {c.club}
                           </span>
-                        )}
+                          {c.switchables > 0 && (
+                            <span className="text-xs text-emerald-400/90">
+                              {c.switchables} switchable{c.switchables > 1 ? "s" : ""}
+                            </span>
+                          )}
+                        </div>
                       </div>
                       <div className="text-right sm:text-left">
                         <span className="font-mono text-base font-semibold text-foreground">
