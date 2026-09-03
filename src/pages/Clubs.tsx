@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 const INITIAL = 30;
 
 function fmtM(v: number | null): string {
-  if (v == null) return "—";
+  if (v == null) return "n.d.";
   const s = v % 1 === 0 ? String(v) : v.toFixed(1).replace(".", ",");
   return `${s} M€`;
 }
