@@ -5,6 +5,7 @@ import { PRESSE_PUBLIEE } from "@/config/editorial";
 const NAV_LINKS = [
   { label: "Roster", href: "/roster" },
   { label: "Radar", href: "/radar" },
+  { label: "Clubs", href: "/clubs" },
   { label: "Best XI", href: "/best-xi" },
   ...(PRESSE_PUBLIEE ? [{ label: "Revue de presse", href: "/revue-de-presse" }] : []),
   { label: "Histoires", href: "/histoires" },
