@@ -30,6 +30,7 @@ export function useTier1Clubs() {
           .eq("tier", "tier1")
           .not("archived", "is", true)
           .neq("eligibility_status", "ineligible")
+          .or("computed_eligibility_status.is.null,computed_eligibility_status.neq.INELIGIBLE")
           .not("current_club", "is", null);
         if (error) throw error;
         const unique = Array.from(

@@ -53,7 +53,10 @@ export function usePlayerSearch({
           .select("*")
           .not("archived", "is", true)
           .ilike("name", `%${trimmed}%`)
-          .neq("eligibility_status", "ineligible");
+          .neq("eligibility_status", "ineligible")
+          // Croise le champ canonique : un joueur INELIGIBLE côté moteur ne doit
+          // pas fuiter en recherche, même si le legacy n'est pas resync (clean 03/09).
+          .or("computed_eligibility_status.is.null,computed_eligibility_status.neq.INELIGIBLE");
         const { data, error } = await applyPublicVisibilityFilter(baseQuery)
           .order("market_value_eur", { ascending: false, nullsFirst: false })
           .limit(limit);

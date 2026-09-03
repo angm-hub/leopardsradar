@@ -108,6 +108,24 @@ Deno.serve(async (req: Request) => {
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
   );
 
+  // Auth : token partagé stocké en base (même schéma que sync-matches-apifootball).
+  // Sans cette gate, cet endpoint d'écriture publique laissait n'importe qui
+  // déclencher des upserts sur `matches` (audit 03/09/2026). NB : cette fonction
+  // semble supersédée par sync_matches_rdc.py / sync-matches-apifootball —
+  // candidate à la suppression si confirmée inutilisée.
+  const { data: cfg } = await supabase
+    .from("app_config")
+    .select("value")
+    .eq("key", "matches_sync_token")
+    .maybeSingle();
+  const token = (cfg as { value?: string } | null)?.value;
+  if (!token || req.headers.get("x-sync-token") !== token) {
+    return new Response(JSON.stringify({ error: "unauthorized" }), {
+      status: 401,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
   try {
     const [next, last] = await Promise.all([
       fetchTsdb(`eventsnext.php?id=${RDC_TEAM_ID}`),
