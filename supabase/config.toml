@@ -1,1 +1,5 @@
-project_id = "dpykmhmdgvmqcehjuusn"
+# Projet PROD (source de verite du frontend). Corrige le 2026-09-03 : pointait
+# par erreur sur l'ancien projet Lovable dpykmhmdgvmqcehjuusn.
+# ATTENTION : le dossier migrations/ est PERIME — ne pas `supabase db push`.
+# Voir supabase/SCHEMA-STATE.md avant toute operation CLI.
+project_id = "pvpshyoaregroihwglye"
