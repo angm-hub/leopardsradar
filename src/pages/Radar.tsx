@@ -371,6 +371,7 @@ export default function Radar() {
     const today = new Date().toISOString().slice(0, 10);
     return players.filter((p) => {
       if (p.eligibility_status === "ineligible") return false;
+      if (p.computed_eligibility_status === "INELIGIBLE") return false;
 
       // Filtres de base
       if (position !== "ALL" && p.position !== position) return false;

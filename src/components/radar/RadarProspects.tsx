@@ -42,6 +42,7 @@ export function RadarProspects({ players }: { players: DBPlayer[] }) {
         p.age <= 20 &&
         (p.market_value_eur == null || p.market_value_eur === 0) &&
         p.eligibility_status !== "ineligible" &&
+        p.computed_eligibility_status !== "INELIGIBLE" &&
         !!p.slug,
     )
     .sort((a, b) => rank(a) - rank(b))
