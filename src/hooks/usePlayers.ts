@@ -73,7 +73,7 @@ export function usePlayers(filters: Filters = {}) {
         "id", "transfermarkt_id", "name", "slug",
         "image_url", "image_url_alt",
         "date_of_birth", "age", "place_of_birth", "country_of_birth",
-        "height_cm", "position", "foot",
+        "height_cm", "position", "position_code", "position_detail", "foot",
         "current_club", "current_club_id", "contract_expires",
         "on_loan_from", "agent",
         "is_binational", "nationalities", "other_nationalities",
