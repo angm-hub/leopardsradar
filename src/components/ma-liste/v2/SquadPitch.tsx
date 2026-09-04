@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Crown, X, ArrowDownUp, Trash2, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
@@ -13,6 +13,7 @@ import {
   FORMATION_433,
   noteOf,
   posCodeFr,
+  type PlacedSlot,
 } from "./squadFormation";
 
 function lastName(name: string): string {
@@ -86,6 +87,20 @@ export function SquadPitch({
   const isStarter = (slug: string) => starters.some((p) => p.slug === slug);
   const closeMenu = () => setSelected(null);
 
+  // Célébration one-shot quand le XI passe à 11/11 (front montant).
+  const [celebrate, setCelebrate] = useState(false);
+  const wasComplete = useRef(false);
+  useEffect(() => {
+    const complete = starters.length >= 11;
+    const was = wasComplete.current;
+    wasComplete.current = complete;
+    if (complete && !was && !reduced) {
+      setCelebrate(true);
+      const t = setTimeout(() => setCelebrate(false), 1700);
+      return () => clearTimeout(t);
+    }
+  }, [starters.length, reduced]);
+
   return (
     <div className="space-y-4">
       {/* Terrain — zone de dépôt (desktop drag) : lâcher ici titularise. */}
@@ -107,9 +122,13 @@ export function SquadPitch({
         )}
       >
         <PitchSVG />
+        {/* Lignes de chimie : relie les titulaires d'un même club (alchimie). */}
+        <ChemistryLinks placed={placed} reduced={!!reduced} />
         <span className="absolute left-3 top-3 z-20 font-mono text-[10px] uppercase tracking-[0.25em] text-white/40">
           4-3-3
         </span>
+        {/* Célébration XI complet */}
+        <AnimatePresence>{celebrate ? <Celebration /> : null}</AnimatePresence>
         {/* Invite de dépôt pendant le drag */}
         {isDragging ? (
           <div
@@ -378,6 +397,121 @@ function PlayerToken({
         </span>
       ) : null}
     </motion.button>
+  );
+}
+
+/**
+ * Lignes de chimie — relie les titulaires d'un même club, façon FUT.
+ * Rendu en SVG au-dessus de la pelouse mais sous les cartes (z-[5]).
+ * vector-effect non-scaling-stroke : trait d'épaisseur constante malgré le
+ * viewBox 0-100 étiré (preserveAspectRatio none).
+ */
+function ChemistryLinks({
+  placed,
+  reduced,
+}: {
+  placed: PlacedSlot[];
+  reduced: boolean;
+}) {
+  const links = useMemo(() => {
+    const pts = placed
+      .filter((p) => p.player && (p.player.current_club ?? "").trim())
+      .map((p) => ({ x: p.slot.x, y: p.slot.y, club: p.player!.current_club! }));
+    const out: { x1: number; y1: number; x2: number; y2: number; key: string }[] = [];
+    for (let i = 0; i < pts.length; i++) {
+      for (let j = i + 1; j < pts.length; j++) {
+        if (pts[i].club === pts[j].club) {
+          out.push({ x1: pts[i].x, y1: pts[i].y, x2: pts[j].x, y2: pts[j].y, key: `${i}-${j}` });
+        }
+      }
+    }
+    return out;
+  }, [placed]);
+
+  if (!links.length) return null;
+  return (
+    <svg
+      aria-hidden
+      className="pointer-events-none absolute inset-0 z-[5] h-full w-full"
+      viewBox="0 0 100 100"
+      preserveAspectRatio="none"
+    >
+      {links.map((l) => (
+        <motion.line
+          key={l.key}
+          x1={l.x1}
+          y1={l.y1}
+          x2={l.x2}
+          y2={l.y2}
+          stroke="rgba(0,166,81,0.6)"
+          strokeWidth={1.5}
+          strokeLinecap="round"
+          vectorEffect="non-scaling-stroke"
+          style={{ filter: "drop-shadow(0 0 3px rgba(0,166,81,0.55))" }}
+          initial={reduced ? false : { pathLength: 0, opacity: 0 }}
+          animate={{ pathLength: 1, opacity: 1 }}
+          transition={reduced ? { duration: 0 } : { duration: 0.5, ease: "easeOut" }}
+        />
+      ))}
+    </svg>
+  );
+}
+
+/**
+ * Célébration one-shot quand le XI est complet (11/11) : flash or radial +
+ * confettis sobres or/cobalt/vert qui jaillissent du centre, et un tag
+ * "XI complet". Sobre, ~1,6 s, respecte prefers-reduced-motion (non monté).
+ */
+function Celebration() {
+  const parts = useMemo(
+    () =>
+      Array.from({ length: 24 }, (_, i) => {
+        const ang = (Math.PI * 2 * i) / 24 + (Math.random() - 0.5) * 0.4;
+        const dist = 70 + Math.random() * 90;
+        return {
+          x: Math.cos(ang) * dist,
+          y: Math.sin(ang) * dist,
+          rot: Math.random() * 220 - 110,
+          dur: 1.1 + Math.random() * 0.5,
+          color: ["#F5C518", "#2563B8", "#00A651"][i % 3],
+        };
+      }),
+    [],
+  );
+  return (
+    <div className="pointer-events-none absolute inset-0 z-40 overflow-hidden">
+      <motion.div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(circle at 50% 44%, rgba(245,197,24,0.38), transparent 62%)",
+        }}
+        initial={{ opacity: 0.8, scale: 0.65 }}
+        animate={{ opacity: 0, scale: 1.5 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.95, ease: "easeOut" }}
+      />
+      <div className="absolute left-1/2 top-[44%]">
+        {parts.map((p, i) => (
+          <motion.span
+            key={i}
+            className="absolute block h-1.5 w-1.5 rounded-[1px]"
+            style={{ background: p.color }}
+            initial={{ x: 0, y: 0, opacity: 1, rotate: 0 }}
+            animate={{ x: p.x, y: p.y, opacity: 0, rotate: p.rot }}
+            transition={{ duration: p.dur, ease: "easeOut" }}
+          />
+        ))}
+      </div>
+      <motion.span
+        className="absolute left-1/2 top-4 -translate-x-1/2 rounded-full border border-primary/50 bg-cobalt-deep/85 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.2em] text-primary backdrop-blur-sm"
+        initial={{ opacity: 0, y: 8, scale: 0.9 }}
+        animate={{ opacity: [0, 1, 1, 0], y: 0, scale: 1 }}
+        transition={{ duration: 1.6, times: [0, 0.18, 0.8, 1] }}
+      >
+        XI complet
+      </motion.span>
+    </div>
   );
 }
 
