@@ -38,14 +38,14 @@ export function MaListeCTA() {
       <div className="container-site max-w-3xl text-center relative z-10">
         <span className="inline-flex items-center gap-2 label-mono-sm text-primary border border-primary/30 rounded-full px-3 py-1 bg-primary/10">
           <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-primary animate-pulse-subtle" />
-          Nouveau · Mondial 2026
+          Compose ta sélection
         </span>
         <h2 className="mt-6 display-heading text-4xl md:text-5xl text-foreground">
           Et toi, ta{" "}
-          <span className="italic text-primary">liste des 26</span> ?
+          <span className="italic text-primary">sélection idéale</span> ?
         </h2>
         <p className="mt-4 text-foreground/70 text-base md:text-lg max-w-xl mx-auto">
-          Compose ta sélection Léopards pour le Mondial 2026. Compare aux
+          Compose ta sélection idéale des Léopards. Compare aux
           autres fans. Partage.
         </p>
         <Link

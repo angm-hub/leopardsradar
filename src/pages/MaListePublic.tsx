@@ -104,11 +104,11 @@ export default function MaListePublic() {
     : "";
   const permalink = `${typeof window !== "undefined" ? window.location.origin : ""}/ma-liste/${slug}`;
   const title = list?.pseudo
-    ? `Ma liste des 26 · ${list.pseudo} | Léopards Radar`
-    : "Ma liste des 26 | Léopards Radar";
+    ? `Ma sélection · ${list.pseudo} | Léopards Radar`
+    : "Ma sélection | Léopards Radar";
   const description = list
     ? `Sélection ${list.formation}, âge moyen ${list.avg_age}, ${list.radar_count} joueurs du Radar. Compose la tienne sur leopardsradar.com.`
-    : "Compose ta sélection des 26 Léopards pour le Mondial 2026.";
+    : "Compose ta sélection idéale des Léopards.";
 
   const handleCopy = () => {
     navigator.clipboard.writeText(permalink);
@@ -196,7 +196,7 @@ export default function MaListePublic() {
                 <h1 className="mt-3 font-serif text-4xl md:text-5xl text-foreground">
                   {list.pseudo
                     ? `La sélection de ${list.pseudo}`
-                    : "Une sélection des 26"}
+                    : "Une sélection"}
                 </h1>
                 <p className="mt-3 text-muted-light">
                   Formation {list.formation} · âge moyen {list.avg_age} ·{" "}

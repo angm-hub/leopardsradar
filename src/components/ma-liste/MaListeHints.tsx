@@ -112,7 +112,7 @@ export function MaListeHints() {
       return {
         id: "no-gk-bench",
         icon: Shield,
-        text: "Aucun gardien remplaçant sur le banc. Risqué pour un Mondial.",
+        text: "Aucun gardien remplaçant sur le banc. Risqué pour une sélection.",
         tone: "warn",
       };
     }
@@ -191,7 +191,7 @@ export function MaListeHints() {
       return {
         id: "all-good",
         icon: CheckCircle2,
-        text: "Liste des 26 complète. Direction le récap pour partager.",
+        text: "Sélection complète. Direction le récap pour partager.",
         tone: "success",
       };
     }

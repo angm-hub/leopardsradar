@@ -613,7 +613,7 @@ export function ShareCard({
               }}
             />
             <Eyebrow color={PRIMARY} size={10} letter="0.2em">
-              MA LISTE · MONDIAL 2026
+              MA LISTE · LÉOPARDS
             </Eyebrow>
           </div>
         </div>
@@ -635,7 +635,7 @@ export function ShareCard({
           >
             Ma sélection
             <br />
-            <span style={{ color: PRIMARY }}>des 26.</span>
+            <span style={{ color: PRIMARY }}>idéale.</span>
           </h1>
           <div
             style={{
@@ -910,7 +910,7 @@ export function ShareCard({
               </Eyebrow>
               <span style={{ width: 1, height: 12, background: BORDER }} />
               <Eyebrow color={PRIMARY} size={10}>
-                MONDIAL 2026
+                MA SÉLECTION
               </Eyebrow>
             </div>
 
@@ -928,7 +928,7 @@ export function ShareCard({
             >
               Ma sélection
               <br />
-              <span style={{ color: PRIMARY }}>des 26.</span>
+              <span style={{ color: PRIMARY }}>idéale.</span>
             </h1>
 
             <div

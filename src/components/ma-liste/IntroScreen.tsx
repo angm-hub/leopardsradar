@@ -10,7 +10,7 @@ interface IntroScreenProps {
 
 const STEPS = [
   { step: "1", label: "Formation" },
-  { step: "2", label: "Compose ton 26" },
+  { step: "2", label: "Compose ta sélection" },
   { step: "3", label: "Partage" },
 ];
 
@@ -31,21 +31,21 @@ export function IntroScreen({ totalListsCreated = 247 }: IntroScreenProps) {
           {/* Pill badge */}
           <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-primary backdrop-blur-md">
             <Sparkles className="h-3 w-3" />
-            Nouveau · Mondial 2026
+            Compose ta sélection
           </span>
 
           {/* Main title */}
           <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-semibold tracking-tight text-balance text-foreground leading-[1.05]">
             Et toi, ta{" "}
             <span className="bg-gradient-to-r from-primary via-foreground to-primary/70 bg-clip-text text-transparent">
-              liste des 26
+              sélection idéale
             </span>{" "}
             ?
           </h1>
 
           {/* Subtitle */}
           <p className="text-lg md:text-xl text-foreground/70 max-w-xl text-balance">
-            Compose ta sélection Léopards pour le Mondial 2026.
+            Compose ta sélection idéale des Léopards.
             <br />
             Partage. Compare aux autres fans.
           </p>
