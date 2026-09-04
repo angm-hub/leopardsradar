@@ -36,6 +36,16 @@ import { cn } from "@/lib/utils";
 import type { DBPlayer } from "@/types/dbPlayer";
 import { useMaListeStore } from "@/store/maListeStore";
 
+// Pill de statut d'éligibilité FIFA, dans l'en-tête de fiche. Le statut
+// différenciant (ni Transfermarkt ni Wyscout ne l'exposent), lisible en tête,
+// pas enterré dans un onglet. INELIGIBLE n'est pas affiché (hors public).
+const ELIG_PILL: Record<string, { label: string; cls: string }> = {
+  SWITCHABLE: { label: "Switchable", cls: "border-emerald-500/40 bg-emerald-500/10 text-emerald-400" },
+  ELIGIBLE: { label: "Éligible", cls: "border-emerald-500/30 bg-emerald-500/10 text-emerald-400" },
+  SELECTED: { label: "Sélectionné", cls: "border-primary/40 bg-primary/10 text-primary" },
+  POTENTIALLY: { label: "À instruire", cls: "border-border bg-card/60 text-muted-light" },
+};
+
 interface PlayerHeaderDenseProps {
   player: DBPlayer;
   /** Override nombre de matchs (si différent de player.season_games) */
@@ -142,6 +152,17 @@ export function PlayerHeaderDense({ player, games }: PlayerHeaderDenseProps) {
                   {POSITION_LABEL[player.position]}
                 </span>
               )}
+              {player.computed_eligibility_status &&
+                ELIG_PILL[player.computed_eligibility_status] && (
+                  <span
+                    className={cn(
+                      "inline-flex items-center rounded-full border px-2.5 py-0.5 text-[10px] font-mono uppercase tracking-[0.18em]",
+                      ELIG_PILL[player.computed_eligibility_status].cls,
+                    )}
+                  >
+                    {ELIG_PILL[player.computed_eligibility_status].label}
+                  </span>
+                )}
               {player.current_club && (
                 <span className="text-sm text-foreground/80 font-medium">
                   {player.current_club}
