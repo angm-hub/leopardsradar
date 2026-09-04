@@ -6,7 +6,7 @@ import { useMondialCountdown } from "@/hooks/useMondialCountdown";
 
 // Bumped after audit day 1 — copy changed (J-N + 11 juin) so previous
 // dismissals shouldn't suppress the new banner.
-const STORAGE_KEY = "promo_banner_mondial_dismissed_2026_05_03";
+const STORAGE_KEY = "promo_banner_switchables_dismissed_2026_09_04";
 // 24h was too short — users dismissed the banner thinking it would stay
 // down for at least a few days. 7 days is the standard "respect" window
 // for promotional bars (Linear, Stripe). Re-surface after a week so users
@@ -108,7 +108,7 @@ export function PromoBanner() {
           exit={{ height: 0, opacity: 0 }}
           transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
           role="banner"
-          aria-label="Promotion Mondial 2026"
+          aria-label="Annonce"
           className="fixed top-0 inset-x-0 z-[70] overflow-hidden border-b border-cobalt-500/30 pt-[env(safe-area-inset-top)]"
           style={{
             // Pivot DA Cobalt : gradient cobalt 700 → 900 → void deep
@@ -119,13 +119,13 @@ export function PromoBanner() {
           }}
         >
           <Link
-            to={phase === "before" ? "/ma-liste" : "/mondial-2026"}
+            to={phase === "before" ? "/ma-liste" : phase === "during" ? "/mondial-2026" : "/switchables"}
             onClick={handleClickThrough}
             className="group relative block"
           >
             <div className="mx-auto flex w-full min-w-0 max-w-7xl items-center justify-center gap-3 px-4 py-2 pr-12 text-center lg:px-8">
               <span className="inline-flex shrink-0 items-center rounded-full bg-primary px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.18em] text-primary-foreground">
-                {phase === "before" ? `J-${daysUntilKickoff}` : phase === "during" ? "EN COURS" : "MONDIAL"}
+                {phase === "before" ? `J-${daysUntilKickoff}` : phase === "during" ? "EN COURS" : "SWITCHABLES"}
               </span>
               <p className="min-w-0 truncate text-[12px] leading-snug text-white md:text-[13px]">
                 {phase === "before" ? (
@@ -143,7 +143,7 @@ export function PromoBanner() {
                   </span>
                 ) : (
                   <span className="font-medium">
-                    Mondial 2026 · le bilan des Léopards.
+                    Le vivier récupérable · les Léopards encore basculables vers la RDC.
                   </span>
                 )}
                 <span

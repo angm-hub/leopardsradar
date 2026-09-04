@@ -114,7 +114,7 @@ export function LeopardsHero() {
               ? `Mondial 2026 · J-${daysUntilKickoff}.`
               : phase === "during"
                 ? "Le Mondial des Léopards, match par match."
-                : "Bilan et héritage du Mondial 2026."}
+                : "Des locaux du championnat à la diaspora, en continu."}
           </motion.p>
 
           {phase === "before" ? (
@@ -137,10 +137,10 @@ export function LeopardsHero() {
               </Button>
             </Link>
             <Link
-              to={phase === "before" ? "/roster" : "/mondial-2026"}
+              to={phase === "before" ? "/roster" : "/switchables"}
               className="group inline-flex items-center gap-1.5 text-sm font-medium text-foreground/65 transition-colors hover:text-foreground"
             >
-              {phase === "before" ? "Voir le Roster" : "Le bilan du Mondial"}
+              {phase === "before" ? "Voir le Roster" : "Le vivier récupérable"}
               <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
             </Link>
           </motion.div>
