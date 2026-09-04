@@ -150,7 +150,7 @@ export function BuilderUnified() {
         <div className="mt-6 mb-4 flex flex-wrap items-end justify-between gap-4">
           <div>
             <h2 className="font-serif text-3xl md:text-4xl text-foreground tracking-tight">
-              Compose ton 26.
+              Compose ta sélection.
             </h2>
             <p className="mt-2 text-sm text-muted-light">
               {activeSlot

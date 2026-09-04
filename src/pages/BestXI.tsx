@@ -455,7 +455,7 @@ export default function BestXI() {
               À ton tour
             </span>
             <h3 className="mt-4 display-heading text-2xl md:text-3xl text-foreground">
-              Compose ta sélection des 26.
+              Compose ta sélection.
             </h3>
             <p className="mt-3 text-muted-light max-w-md mx-auto">
               Notre Best XI t'inspire ? Bâtis le tien · ton onze, ton banc, ton

@@ -27,7 +27,7 @@ export default function MaListeV2() {
   useDocumentMeta({
     title: "Ma Liste · Léopards Radar",
     description:
-      "Compose ta convocation des 26 pour les Léopards au Mondial 2026 : place ton XI sur le terrain, complète ton banc, désigne ton capitaine.",
+      "Compose ta sélection idéale des Léopards : place ton XI sur le terrain, complète ton banc, désigne ton capitaine.",
   });
 
   const { players: allPlayers, loading, error } = usePlayers({
@@ -101,7 +101,7 @@ export default function MaListeV2() {
                 <div className="mb-4 flex items-center gap-3">
                   <span className="h-px w-12 bg-primary" />
                   <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-primary/85">
-                    Convocation · Mondial 2026
+                    Ta sélection idéale
                   </span>
                 </div>
                 <h1
@@ -113,9 +113,9 @@ export default function MaListeV2() {
                     letterSpacing: "-0.04em",
                   }}
                 >
-                  Tes 26<br />
+                  Ta sélection<br />
                   <span className="italic font-light text-foreground/70">
-                    pour les Léopards.
+                    des Léopards.
                   </span>
                 </h1>
                 <p className="mt-5 max-w-xl font-sans text-[15px] leading-relaxed text-foreground/55">

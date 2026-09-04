@@ -115,7 +115,7 @@ export function ListRecap() {
     : `${window.location.origin}/ma-liste`;
 
   const handleShare = (platform: "twitter" | "whatsapp" | "copy" | "permalink") => {
-    const text = `Voici ma liste des 26 pour les Léopards au Mondial 2026 🐆`;
+    const text = `Voici ma sélection idéale des Léopards 🐆`;
     if (platform === "twitter") {
       window.open(
         `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(permalink)}`,
@@ -204,7 +204,7 @@ export function ListRecap() {
         {/* Title */}
         <div className="text-center">
           <h1 className="font-serif text-4xl md:text-5xl text-foreground">
-            Ta liste des 26 est prête.
+            Ta sélection est prête.
           </h1>
           <p className="mt-3 text-muted-light">
             Télécharge-la, partage-la, compare-la quand Desabre annoncera la sienne.

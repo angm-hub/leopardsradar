@@ -72,7 +72,7 @@ export default function Confidentialite() {
             « Ma Liste » et compositions partagées
           </h3>
           <p>
-            Lorsque tu composes ta liste des 26 et que tu la partages, le contenu
+            Lorsque tu composes ta sélection et que tu la partages, le contenu
             de la liste (joueurs sélectionnés, formation, capitaine, pseudo
             optionnel) est stocké dans notre base. Aucune donnée d'identification
             personnelle n'est requise pour utiliser cette fonctionnalité.
