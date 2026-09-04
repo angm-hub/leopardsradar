@@ -56,9 +56,20 @@ function PitchSVG() {
 interface SquadPitchProps {
   /** Un slot vide est cliqué : focalise la pioche sur ce poste. */
   onPickPosition: (bucket: DBPosition) => void;
+  /** Un joueur est en cours de glisser depuis la pioche (desktop). */
+  isDragging?: boolean;
+  /** Dépôt sur le terrain → titulaire. */
+  onDropStarter?: (e: React.DragEvent) => void;
+  /** Dépôt sur le banc → remplaçant. */
+  onDropBench?: (e: React.DragEvent) => void;
 }
 
-export function SquadPitch({ onPickPosition }: SquadPitchProps) {
+export function SquadPitch({
+  onPickPosition,
+  isDragging = false,
+  onDropStarter,
+  onDropBench,
+}: SquadPitchProps) {
   const starters = useMaListeV2Store((s) => s.starters);
   const bench = useMaListeV2Store((s) => s.bench);
   const captain = useMaListeV2Store((s) => s.captain);
@@ -75,12 +86,39 @@ export function SquadPitch({ onPickPosition }: SquadPitchProps) {
 
   return (
     <div className="space-y-4">
-      {/* Terrain */}
-      <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl border border-border shadow-2xl">
+      {/* Terrain — zone de dépôt (desktop drag) : lâcher ici titularise. */}
+      <div
+        onDragOver={
+          onDropStarter
+            ? (e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = "move";
+              }
+            : undefined
+        }
+        onDrop={onDropStarter}
+        className={cn(
+          "relative aspect-[4/5] w-full overflow-hidden rounded-2xl border shadow-2xl transition-[border-color,box-shadow]",
+          isDragging
+            ? "border-primary/70 shadow-[0_0_0_2px_rgba(245,197,24,0.35),0_0_40px_rgba(245,197,24,0.18)]"
+            : "border-border",
+        )}
+      >
         <PitchSVG />
         <span className="absolute left-3 top-3 z-20 font-mono text-[10px] uppercase tracking-[0.25em] text-white/40">
           4-3-3
         </span>
+        {/* Invite de dépôt pendant le drag */}
+        {isDragging ? (
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 z-30 flex items-start justify-center pt-6"
+          >
+            <span className="rounded-full border border-primary/50 bg-cobalt-deep/85 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-primary backdrop-blur-sm">
+              Lâche pour titulariser
+            </span>
+          </div>
+        ) : null}
 
         {placed.map(({ slot, player }, i) =>
           player ? (
@@ -168,11 +206,29 @@ export function SquadPitch({ onPickPosition }: SquadPitchProps) {
         </p>
       ) : null}
 
-      {/* Banc */}
-      <div>
+      {/* Banc — zone de dépôt (desktop drag) : lâcher ici met au banc. */}
+      <div
+        onDragOver={
+          onDropBench
+            ? (e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = "move";
+              }
+            : undefined
+        }
+        onDrop={onDropBench}
+        className={cn(
+          "rounded-xl transition-colors",
+          isDragging &&
+            "bg-primary/[0.06] ring-1 ring-inset ring-primary/40 p-2 -m-2",
+        )}
+      >
         <div className="mb-2 flex items-baseline justify-between">
           <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-cobalt-mist">
             Banc
+            {isDragging ? (
+              <span className="ml-2 text-primary/80">· lâche ici pour le banc</span>
+            ) : null}
           </span>
           <span className="font-mono text-[10px] text-muted">
             {bench.length}/{MAX_BENCH}
