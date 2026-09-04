@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
@@ -68,11 +69,28 @@ function seasonSignal(m: WeeklyMover): string {
  * Pas de curating manuel nécessaire — la data fait l'éditorial.
  */
 export function FeaturedThisWeek() {
-  const { movers, loading } = useWeeklyMovers(5);
+  const { movers, loading } = useWeeklyMovers(12);
 
-  if (!loading && movers.length === 0) return null;
+  // Priorité aux joueurs avec photo : une section signature ne montre pas des
+  // initiales tant qu'un mouvementeur suivant a un visage. On préserve le
+  // classement à l'intérieur de chaque groupe, on remonte juste les photos.
+  const display = useMemo(() => {
+    // "Photo fiable" = URL non vide et non FotMob : images.fotmob.com bloque
+    // le hotlink (ne charge jamais hors de leur site), alors que Transfermarkt
+    // et le bucket Supabase se chargent. On remonte donc les visages qui
+    // s'affichent vraiment, plutôt que des initiales.
+    const hasRealPhoto = (m: WeeklyMover) => {
+      const u = (m.image_url ?? "").trim();
+      return !!u && !u.includes("images.fotmob.com");
+    };
+    const withImg = movers.filter(hasRealPhoto);
+    const rest = movers.filter((m) => !hasRealPhoto(m));
+    return [...withImg, ...rest].slice(0, 5);
+  }, [movers]);
 
-  const hasAnyWeekly = movers.some(isCrediblyWeekly);
+  if (!loading && display.length === 0) return null;
+
+  const hasAnyWeekly = display.some(isCrediblyWeekly);
 
   return (
     <section className="container-site py-16 border-t border-border/40">
@@ -101,7 +119,7 @@ export function FeaturedThisWeek() {
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
-        {(loading ? Array.from({ length: 5 }).map(() => null) : movers).map((m, i) => (
+        {(loading ? Array.from({ length: 5 }).map(() => null) : display).map((m, i) => (
           <MoverCard key={m?.player_id ?? `skel-${i}`} mover={m} index={i} />
         ))}
       </div>
