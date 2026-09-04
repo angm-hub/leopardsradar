@@ -48,7 +48,9 @@ export default function MaListeGuided() {
   const { players, loading } = usePlayers({
     categories: ["roster", "radar"],
     excludeEligibilityStatus: "ineligible",
-    limit: 1000,
+    // Charge tout le vivier éligible et visible (~1900) : sinon les postes
+    // les plus fournis (attaquants, milieux) perdent des centaines de joueurs.
+    limit: 3000,
     publicVisibilityOnly: true,
   });
 
@@ -428,6 +430,8 @@ function GroupStep({
   loading: boolean;
 }) {
   const [q, setQ] = useState("");
+  const PAGE = 60;
+  const [visible, setVisible] = useState(PAGE);
   const picked = new Set(selections);
   const filtered = useMemo(() => {
     const s = q.trim().toLowerCase();
@@ -444,8 +448,13 @@ function GroupStep({
     return [...sel, ...rest];
   }, [candidates, q, selections]);
 
-  const CAP = 60;
-  const shown = filtered.slice(0, CAP);
+  // Revenir au 1er lot quand la recherche ou le groupe change.
+  useEffect(() => {
+    setVisible(PAGE);
+  }, [q, meta.key]);
+
+  const shown = filtered.slice(0, visible);
+  const remaining = filtered.length - shown.length;
   const count = selections.length;
 
   return (
@@ -501,10 +510,19 @@ function GroupStep({
           Aucun candidat pour ce poste. Affine ou passe à l'étape suivante.
         </p>
       ) : null}
-      {!loading && filtered.length > CAP ? (
-        <p className="mt-4 text-center font-mono text-[11px] uppercase tracking-[0.12em] text-foreground/35">
-          {filtered.length - CAP} de plus · affine avec la recherche
-        </p>
+      {!loading && remaining > 0 ? (
+        <div className="mt-5 flex flex-col items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setVisible((v) => v + PAGE)}
+            className="rounded-full border border-border bg-card/50 px-5 py-2.5 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground/70 transition-colors hover:border-border-hover hover:bg-card hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+          >
+            Voir {Math.min(remaining, PAGE)} de plus
+          </button>
+          <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-foreground/35">
+            {shown.length} sur {filtered.length}
+          </span>
+        </div>
       ) : null}
       <div className="h-4" />
     </div>
