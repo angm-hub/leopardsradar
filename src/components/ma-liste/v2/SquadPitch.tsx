@@ -9,6 +9,7 @@ import type { DBPlayer, DBPosition } from "@/types/dbPlayer";
 import {
   assignStarters,
   BUCKET_LABEL,
+  BUCKET_CODE_FR,
   FORMATION_433,
   noteOf,
 } from "./squadFormation";
@@ -135,7 +136,7 @@ export function SquadPitch({
           ) : (
             <EmptySlot
               key={slot.id}
-              code={slot.code}
+              bucket={slot.bucket}
               x={slot.x}
               y={slot.y}
               onClick={() => onPickPosition(slot.bucket)}
@@ -290,7 +291,7 @@ function PlayerToken({
   onSelect,
   reduced,
 }: {
-  slot: { code: string; x: number; y: number };
+  slot: { code: string; bucket: DBPosition; x: number; y: number };
   player: DBPlayer;
   index: number;
   isCaptain: boolean;
@@ -299,6 +300,8 @@ function PlayerToken({
   reduced: boolean;
 }) {
   const note = noteOf(player);
+  // Vrai poste du joueur en FR (jamais le code tactique fin, souvent faux).
+  const posCode = BUCKET_CODE_FR[player.position ?? slot.bucket];
   return (
     <motion.button
       type="button"
@@ -313,7 +316,7 @@ function PlayerToken({
       whileTap={reduced ? undefined : { scale: 0.94 }}
       className="absolute z-10 w-[52px] -translate-x-1/2 -translate-y-1/2 sm:w-[64px]"
       style={{ left: `${slot.x}%`, top: `${slot.y}%` }}
-      aria-label={`${player.name} · ${slot.code}${note != null ? ` · ${Math.round(note)}` : ""}`}
+      aria-label={`${player.name} · ${posCode}${note != null ? ` · ${Math.round(note)}` : ""}`}
     >
       {/* Halo or : flash à la pose puis lueur douce permanente. */}
       <motion.span
@@ -338,7 +341,7 @@ function PlayerToken({
               {note != null ? Math.round(note) : "–"}
             </span>
             <span className="mt-px font-mono text-[7px] font-bold tracking-wide sm:text-[8px]">
-              {slot.code}
+              {posCode}
             </span>
           </div>
           <PlayerAvatar
@@ -376,25 +379,26 @@ function PlayerToken({
 }
 
 function EmptySlot({
-  code,
+  bucket,
   x,
   y,
   onClick,
   reduced,
 }: {
-  code: string;
+  bucket: DBPosition;
   x: number;
   y: number;
   onClick: () => void;
   reduced: boolean;
 }) {
+  const code = BUCKET_CODE_FR[bucket];
   return (
     <button
       type="button"
       onClick={onClick}
       className="group absolute z-10 w-[52px] -translate-x-1/2 -translate-y-1/2 sm:w-[64px]"
       style={{ left: `${x}%`, top: `${y}%` }}
-      aria-label={`Ajouter un ${code}`}
+      aria-label={`Ajouter un ${BUCKET_LABEL[bucket].toLowerCase()}`}
     >
       {/* Silhouette de carte vide — même gabarit que la carte FUT. */}
       <span

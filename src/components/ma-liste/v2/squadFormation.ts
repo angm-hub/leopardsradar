@@ -51,6 +51,21 @@ export const BUCKET_LABEL: Record<DBPosition, string> = {
   Attack: "Attaquant",
 };
 
+/**
+ * Code court FR du poste, affiché sur les cartes et les slots.
+ *
+ * On n'affiche PAS le code tactique fin du slot (LB/CB/ST/LW…) : il est
+ * assigné par ordre d'ajout dans la ligne, donc un défenseur central pouvait
+ * s'afficher "LB". On montre le vrai poste général du joueur (les 4 buckets
+ * fiables de la base) en français : jamais faux, jamais en anglais.
+ */
+export const BUCKET_CODE_FR: Record<DBPosition, string> = {
+  Goalkeeper: "GAR",
+  Defender: "DÉF",
+  Midfield: "MIL",
+  Attack: "ATT",
+};
+
 export interface PlacedSlot {
   slot: FormationSlot;
   player: DBPlayer | null;

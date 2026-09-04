@@ -13,9 +13,9 @@ type PosFilter = "all" | DBPosition;
 // scroller tout le pool (on compose une convocation, on raisonne par ligne).
 const POS_TABS: { value: PosFilter; label: string }[] = [
   { value: "all", label: "Tous" },
-  { value: "Goalkeeper", label: "GK" },
-  { value: "Defender", label: "DEF" },
-  { value: "Midfield", label: "MID" },
+  { value: "Goalkeeper", label: "GAR" },
+  { value: "Defender", label: "DÉF" },
+  { value: "Midfield", label: "MIL" },
   { value: "Attack", label: "ATT" },
 ];
 
