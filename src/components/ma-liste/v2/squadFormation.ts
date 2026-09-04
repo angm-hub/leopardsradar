@@ -106,7 +106,7 @@ const DETAIL_TO_CODE: Record<string, string> = {
 };
 
 /** Résout le code TM anglais exact, ou null si la base ne le sait pas. */
-function canonCode(p: DBPlayer): string | null {
+export function canonCode(p: DBPlayer): string | null {
   const c = (p.position_code ?? "").toUpperCase().trim();
   if (CODE_FR[c]) return c;
   const d = (p.position_detail ?? "").toLowerCase().trim();
