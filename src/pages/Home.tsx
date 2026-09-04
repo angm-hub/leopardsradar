@@ -15,6 +15,11 @@ const PressReviewSection = lazy(() =>
     default: m.PressReviewSection,
   })),
 );
+const ProductShowcase = lazy(() =>
+  import("@/components/home/ProductShowcase").then((m) => ({
+    default: m.ProductShowcase,
+  })),
+);
 const FeaturedThisWeek = lazy(() => import("@/components/home/FeaturedThisWeek"));
 const StatsSection = lazy(() => import("@/components/home/StatsSection"));
 const BestXIPreviewSection = lazy(
@@ -60,6 +65,11 @@ const Home = () => {
       <RoutePrefetch />
       <main className="flex-1">
         <LeopardsHero />
+        {/* "Montre le produit" juste après le hero (structure Ballogy) :
+            on donne à voir la matière avant de dérouler l'éditorial. */}
+        <Suspense fallback={<SectionFallback minH={720} />}>
+          <ProductShowcase />
+        </Suspense>
         {PRESSE_PUBLIEE && (
           <Suspense fallback={<SectionFallback minH={640} />}>
             <PressReviewSection />
