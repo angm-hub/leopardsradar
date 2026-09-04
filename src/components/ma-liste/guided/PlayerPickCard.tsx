@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import { Check } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -15,33 +16,37 @@ function lastName(name: string) {
  * l'effectif. Hover composé (élévation + or), état sélectionné net (ring or +
  * check). Photo + nom + club + poste exact FR + note.
  */
-export function PlayerPickCard({
-  player,
-  picked,
-  onToggle,
-  index,
-}: {
-  player: DBPlayer;
-  picked: boolean;
-  onToggle: () => void;
-  index: number;
-}) {
+export const PlayerPickCard = forwardRef<
+  HTMLButtonElement,
+  {
+    player: DBPlayer;
+    picked: boolean;
+    onToggle: () => void;
+    index: number;
+  }
+>(function PlayerPickCard({ player, picked, onToggle, index }, ref) {
   const note = noteOf(player);
   return (
     <motion.button
+      ref={ref}
       type="button"
       role="checkbox"
       aria-checked={picked}
       onClick={onToggle}
-      initial={{ opacity: 0, y: 14 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35, delay: Math.min(index * 0.025, 0.4), ease: [0.16, 1, 0.3, 1] }}
+      layout
+      initial={{ opacity: 0, scale: 0.96 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.96 }}
+      whileHover={{ y: -2 }}
+      whileTap={{ scale: 0.98 }}
+      transition={{
+        layout: { type: "spring", stiffness: 380, damping: 34 },
+        default: { duration: 0.3, delay: Math.min(index * 0.02, 0.3), ease: [0.16, 1, 0.3, 1] },
+      }}
       className={cn(
-        "group relative flex items-center gap-3 rounded-2xl border p-3 text-left transition-[transform,border-color,background-color,box-shadow] duration-200",
+        "group relative flex items-center gap-3 rounded-2xl p-3 text-left",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-        picked
-          ? "border-primary/60 bg-primary/[0.08] shadow-[0_0_0_1px_rgba(245,197,24,0.25),0_10px_30px_-12px_rgba(245,197,24,0.35)]"
-          : "border-border bg-card/50 hover:-translate-y-0.5 hover:border-border-hover hover:bg-card",
+        picked ? "liquid-glass-gold" : "liquid-glass hover:border-white/20",
       )}
     >
       <div className="relative shrink-0">
@@ -91,6 +96,6 @@ export function PlayerPickCard({
       </span>
     </motion.button>
   );
-}
+});
 
 export default PlayerPickCard;
