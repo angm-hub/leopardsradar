@@ -47,6 +47,25 @@ export default function MaListeV2() {
   const [mobileLibraryOpen, setMobileLibraryOpen] = useState(false);
   const [focusPosition, setFocusPosition] = useState<DBPosition | null>(null);
   const [focusKey, setFocusKey] = useState(0);
+  // Glisser-déposer (desktop, HTML5 natif) : joueur en cours de drag depuis
+  // la pioche. Mobile reste au tap (naturel dans la bottom sheet).
+  const [draggingPlayer, setDraggingPlayer] = useState<DBPlayer | null>(null);
+
+  // Résout le joueur déposé : slug du dataTransfer (fiable) puis fallback état.
+  const resolveDropped = (e: React.DragEvent): DBPlayer | null => {
+    const slug = e.dataTransfer.getData("text/plain");
+    return allPlayers.find((p) => p.slug === slug) ?? draggingPlayer;
+  };
+  const handleDropStarter = (e: React.DragEvent) => {
+    const p = resolveDropped(e);
+    if (p) addToStarters(p);
+    setDraggingPlayer(null);
+  };
+  const handleDropBench = (e: React.DragEvent) => {
+    const p = resolveDropped(e);
+    if (p) addToBench(p);
+    setDraggingPlayer(null);
+  };
 
   // Hydrate depuis l'URL hash au premier load
   useEffect(() => {
@@ -129,7 +148,12 @@ export default function MaListeV2() {
               <div className="grid gap-8 lg:grid-cols-[1fr_380px] lg:gap-12">
                 <div className="min-w-0 space-y-6">
                   <SquadHUD />
-                  <SquadPitch onPickPosition={handlePickPosition} />
+                  <SquadPitch
+                    onPickPosition={handlePickPosition}
+                    isDragging={!!draggingPlayer}
+                    onDropStarter={handleDropStarter}
+                    onDropBench={handleDropBench}
+                  />
                 </div>
 
                 <aside
@@ -147,10 +171,10 @@ export default function MaListeV2() {
                     activeSlot={null}
                     onPickForSlot={handlePick}
                     onPickForBench={handlePick}
-                    onDragStart={() => {}}
-                    onDragEnd={() => {}}
                     focusPosition={focusPosition}
                     focusKey={focusKey}
+                    onDragStart={(p) => setDraggingPlayer(p)}
+                    onDragEnd={() => setDraggingPlayer(null)}
                   />
                 </aside>
               </div>

@@ -9,6 +9,7 @@ import type { DBPlayer, DBPosition } from "@/types/dbPlayer";
 import {
   assignStarters,
   BUCKET_LABEL,
+  BUCKET_CODE_FR,
   FORMATION_433,
   noteOf,
 } from "./squadFormation";
@@ -56,9 +57,20 @@ function PitchSVG() {
 interface SquadPitchProps {
   /** Un slot vide est cliqué : focalise la pioche sur ce poste. */
   onPickPosition: (bucket: DBPosition) => void;
+  /** Un joueur est en cours de glisser depuis la pioche (desktop). */
+  isDragging?: boolean;
+  /** Dépôt sur le terrain → titulaire. */
+  onDropStarter?: (e: React.DragEvent) => void;
+  /** Dépôt sur le banc → remplaçant. */
+  onDropBench?: (e: React.DragEvent) => void;
 }
 
-export function SquadPitch({ onPickPosition }: SquadPitchProps) {
+export function SquadPitch({
+  onPickPosition,
+  isDragging = false,
+  onDropStarter,
+  onDropBench,
+}: SquadPitchProps) {
   const starters = useMaListeV2Store((s) => s.starters);
   const bench = useMaListeV2Store((s) => s.bench);
   const captain = useMaListeV2Store((s) => s.captain);
@@ -75,12 +87,39 @@ export function SquadPitch({ onPickPosition }: SquadPitchProps) {
 
   return (
     <div className="space-y-4">
-      {/* Terrain */}
-      <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl border border-border shadow-2xl">
+      {/* Terrain — zone de dépôt (desktop drag) : lâcher ici titularise. */}
+      <div
+        onDragOver={
+          onDropStarter
+            ? (e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = "move";
+              }
+            : undefined
+        }
+        onDrop={onDropStarter}
+        className={cn(
+          "relative aspect-[4/5] w-full overflow-hidden rounded-2xl border shadow-2xl transition-[border-color,box-shadow]",
+          isDragging
+            ? "border-primary/70 shadow-[0_0_0_2px_rgba(245,197,24,0.35),0_0_40px_rgba(245,197,24,0.18)]"
+            : "border-border",
+        )}
+      >
         <PitchSVG />
         <span className="absolute left-3 top-3 z-20 font-mono text-[10px] uppercase tracking-[0.25em] text-white/40">
           4-3-3
         </span>
+        {/* Invite de dépôt pendant le drag */}
+        {isDragging ? (
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 z-30 flex items-start justify-center pt-6"
+          >
+            <span className="rounded-full border border-primary/50 bg-cobalt-deep/85 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-primary backdrop-blur-sm">
+              Lâche pour titulariser
+            </span>
+          </div>
+        ) : null}
 
         {placed.map(({ slot, player }, i) =>
           player ? (
@@ -97,7 +136,7 @@ export function SquadPitch({ onPickPosition }: SquadPitchProps) {
           ) : (
             <EmptySlot
               key={slot.id}
-              code={slot.code}
+              bucket={slot.bucket}
               x={slot.x}
               y={slot.y}
               onClick={() => onPickPosition(slot.bucket)}
@@ -168,11 +207,29 @@ export function SquadPitch({ onPickPosition }: SquadPitchProps) {
         </p>
       ) : null}
 
-      {/* Banc */}
-      <div>
+      {/* Banc — zone de dépôt (desktop drag) : lâcher ici met au banc. */}
+      <div
+        onDragOver={
+          onDropBench
+            ? (e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = "move";
+              }
+            : undefined
+        }
+        onDrop={onDropBench}
+        className={cn(
+          "rounded-xl transition-colors",
+          isDragging &&
+            "bg-primary/[0.06] ring-1 ring-inset ring-primary/40 p-2 -m-2",
+        )}
+      >
         <div className="mb-2 flex items-baseline justify-between">
           <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-cobalt-mist">
             Banc
+            {isDragging ? (
+              <span className="ml-2 text-primary/80">· lâche ici pour le banc</span>
+            ) : null}
           </span>
           <span className="font-mono text-[10px] text-muted">
             {bench.length}/{MAX_BENCH}
@@ -234,7 +291,7 @@ function PlayerToken({
   onSelect,
   reduced,
 }: {
-  slot: { code: string; x: number; y: number };
+  slot: { code: string; bucket: DBPosition; x: number; y: number };
   player: DBPlayer;
   index: number;
   isCaptain: boolean;
@@ -243,6 +300,8 @@ function PlayerToken({
   reduced: boolean;
 }) {
   const note = noteOf(player);
+  // Vrai poste du joueur en FR (jamais le code tactique fin, souvent faux).
+  const posCode = BUCKET_CODE_FR[player.position ?? slot.bucket];
   return (
     <motion.button
       type="button"
@@ -257,7 +316,7 @@ function PlayerToken({
       whileTap={reduced ? undefined : { scale: 0.94 }}
       className="absolute z-10 w-[52px] -translate-x-1/2 -translate-y-1/2 sm:w-[64px]"
       style={{ left: `${slot.x}%`, top: `${slot.y}%` }}
-      aria-label={`${player.name} · ${slot.code}${note != null ? ` · ${Math.round(note)}` : ""}`}
+      aria-label={`${player.name} · ${posCode}${note != null ? ` · ${Math.round(note)}` : ""}`}
     >
       {/* Halo or : flash à la pose puis lueur douce permanente. */}
       <motion.span
@@ -282,7 +341,7 @@ function PlayerToken({
               {note != null ? Math.round(note) : "–"}
             </span>
             <span className="mt-px font-mono text-[7px] font-bold tracking-wide sm:text-[8px]">
-              {slot.code}
+              {posCode}
             </span>
           </div>
           <PlayerAvatar
@@ -320,25 +379,26 @@ function PlayerToken({
 }
 
 function EmptySlot({
-  code,
+  bucket,
   x,
   y,
   onClick,
   reduced,
 }: {
-  code: string;
+  bucket: DBPosition;
   x: number;
   y: number;
   onClick: () => void;
   reduced: boolean;
 }) {
+  const code = BUCKET_CODE_FR[bucket];
   return (
     <button
       type="button"
       onClick={onClick}
       className="group absolute z-10 w-[52px] -translate-x-1/2 -translate-y-1/2 sm:w-[64px]"
       style={{ left: `${x}%`, top: `${y}%` }}
-      aria-label={`Ajouter un ${code}`}
+      aria-label={`Ajouter un ${BUCKET_LABEL[bucket].toLowerCase()}`}
     >
       {/* Silhouette de carte vide — même gabarit que la carte FUT. */}
       <span
