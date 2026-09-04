@@ -18,6 +18,7 @@ import { cn } from "@/lib/utils";
 import { useDocumentMeta } from "@/hooks/useDocumentMeta";
 import { usePlayers } from "@/hooks/usePlayers";
 import { StrongGradient } from "@/components/ui/GradientBackgrounds";
+import { noteOf } from "@/components/ma-liste/v2/squadFormation";
 import { PlayerPickCard } from "@/components/ma-liste/guided/PlayerPickCard";
 import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
 import {
@@ -36,6 +37,14 @@ import {
 import type { DBPlayer } from "@/types/dbPlayer";
 
 type Phase = "intro" | "formation" | "group" | "recap";
+type SortKey = "rel" | "caps" | "value" | "note" | "name";
+const SORT_OPTIONS: { key: SortKey; label: string }[] = [
+  { key: "rel", label: "Pertinence" },
+  { key: "caps", label: "Sélections" },
+  { key: "value", label: "Valeur" },
+  { key: "note", label: "Note" },
+  { key: "name", label: "A→Z" },
+];
 
 export default function MaListeGuided() {
   useDocumentMeta({
@@ -364,10 +373,8 @@ function FormationStep({
               type="button"
               onClick={() => onSelect(f)}
               className={cn(
-                "group relative flex flex-col items-center gap-5 overflow-hidden rounded-3xl border p-8 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-                active
-                  ? "border-primary/60 bg-primary/[0.07] shadow-[0_0_0_1px_rgba(245,197,24,0.25),0_20px_50px_-24px_rgba(245,197,24,0.4)]"
-                  : "border-border bg-card/40 hover:-translate-y-0.5 hover:border-border-hover hover:bg-card/70",
+                "group relative flex flex-col items-center gap-5 overflow-hidden rounded-3xl p-8 transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                active ? "liquid-glass-gold" : "liquid-glass hover:-translate-y-0.5 hover:border-white/20",
               )}
             >
               {active ? (
@@ -430,10 +437,11 @@ function GroupStep({
   loading: boolean;
 }) {
   const [q, setQ] = useState("");
+  const [sortKey, setSortKey] = useState<SortKey>("rel");
   const PAGE = 60;
   const [visible, setVisible] = useState(PAGE);
   const picked = new Set(selections);
-  const filtered = useMemo(() => {
+  const sorted = useMemo(() => {
     const s = q.trim().toLowerCase();
     const base = s
       ? candidates.filter(
@@ -442,19 +450,24 @@ function GroupStep({
             (p.current_club ?? "").toLowerCase().includes(s),
         )
       : candidates;
-    // Les sélectionnés remontent en tête pour rester visibles.
-    const sel = base.filter((p) => picked.has(p.slug));
-    const rest = base.filter((p) => !picked.has(p.slug));
-    return [...sel, ...rest];
-  }, [candidates, q, selections]);
+    const arr = [...base];
+    if (sortKey === "caps") arr.sort((a, b) => (b.caps_rdc ?? 0) - (a.caps_rdc ?? 0));
+    else if (sortKey === "value")
+      arr.sort((a, b) => (b.market_value_eur ?? 0) - (a.market_value_eur ?? 0));
+    else if (sortKey === "note")
+      arr.sort((a, b) => (noteOf(b) ?? -1) - (noteOf(a) ?? -1));
+    else if (sortKey === "name") arr.sort((a, b) => a.name.localeCompare(b.name, "fr"));
+    // "rel" conserve l'ordre pertinence déjà appliqué en amont.
+    return arr;
+  }, [candidates, q, sortKey]);
 
-  // Revenir au 1er lot quand la recherche ou le groupe change.
+  // Revenir au 1er lot quand la recherche, le tri ou le groupe change.
   useEffect(() => {
     setVisible(PAGE);
-  }, [q, meta.key]);
+  }, [q, sortKey, meta.key]);
 
-  const shown = filtered.slice(0, visible);
-  const remaining = filtered.length - shown.length;
+  const shown = sorted.slice(0, visible);
+  const remaining = sorted.length - shown.length;
   const count = selections.length;
 
   return (
@@ -484,17 +497,46 @@ function GroupStep({
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Cherche un nom, un club…"
-          className="w-full rounded-2xl border border-border bg-card/50 py-3 pl-11 pr-4 text-sm text-foreground placeholder:text-foreground/40 transition-colors focus:border-primary/60 focus:bg-card focus:outline-none focus:ring-2 focus:ring-primary/15"
+          className="liquid-glass w-full rounded-2xl py-3 pl-11 pr-4 text-sm text-foreground placeholder:text-foreground/40 focus:border-primary/60 focus:outline-none focus:ring-2 focus:ring-primary/15"
         />
       </div>
 
-      {/* Grille de candidats */}
-      <div className="mt-5 grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
-        {loading
-          ? Array.from({ length: 9 }).map((_, i) => (
-              <div key={i} className="h-[76px] animate-pulse rounded-2xl border border-border/50 bg-card/40" />
-            ))
-          : shown.map((p, i) => (
+      {/* Tri */}
+      <div className="mt-4 flex items-center gap-2 overflow-x-auto pb-1">
+        <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.16em] text-foreground/40">
+          Classer par
+        </span>
+        <div className="flex gap-1.5">
+          {SORT_OPTIONS.map((o) => {
+            const active = sortKey === o.key;
+            return (
+              <button
+                key={o.key}
+                type="button"
+                onClick={() => setSortKey(o.key)}
+                className={cn(
+                  "shrink-0 rounded-full px-3 py-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.1em] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60",
+                  active
+                    ? "liquid-glass-gold text-primary"
+                    : "liquid-glass text-foreground/55 hover:text-foreground",
+                )}
+              >
+                {o.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Grille de candidats — reflow animé au tri (layout spring). */}
+      <motion.div layout className="mt-5 grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
+        {loading ? (
+          Array.from({ length: 9 }).map((_, i) => (
+            <div key={i} className="liquid-glass h-[76px] animate-pulse rounded-2xl" />
+          ))
+        ) : (
+          <AnimatePresence mode="popLayout" initial={false}>
+            {shown.map((p, i) => (
               <PlayerPickCard
                 key={p.slug}
                 player={p}
@@ -503,9 +545,11 @@ function GroupStep({
                 index={i}
               />
             ))}
-      </div>
+          </AnimatePresence>
+        )}
+      </motion.div>
 
-      {!loading && filtered.length === 0 ? (
+      {!loading && sorted.length === 0 ? (
         <p className="mt-8 text-center text-sm text-foreground/45">
           Aucun candidat pour ce poste. Affine ou passe à l'étape suivante.
         </p>
@@ -520,7 +564,7 @@ function GroupStep({
             Voir {Math.min(remaining, PAGE)} de plus
           </button>
           <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-foreground/35">
-            {shown.length} sur {filtered.length}
+            {shown.length} sur {sorted.length}
           </span>
         </div>
       ) : null}
