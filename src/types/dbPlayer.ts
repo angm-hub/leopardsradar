@@ -84,6 +84,10 @@ export interface DBPlayer {
   country_of_birth: string | null;
   height_cm: number | null;
   position: DBPosition | null;
+  /** Code tactique exact (Transfermarkt) : GK/RB/LB/CB/DM/CM/AM/RM/LM/RW/LW/ST… */
+  position_code?: string | null;
+  /** Poste exact en toutes lettres FR (Transfermarkt) : "Arrière gauche", "Milieu défensif"… */
+  position_detail?: string | null;
   foot: DBFoot | null;
   current_club: string | null;
   current_club_id: string | null;

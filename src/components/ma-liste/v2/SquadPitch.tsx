@@ -9,9 +9,10 @@ import type { DBPlayer, DBPosition } from "@/types/dbPlayer";
 import {
   assignStarters,
   BUCKET_LABEL,
-  BUCKET_CODE_FR,
+  SLOT_CODE_FR,
   FORMATION_433,
   noteOf,
+  posCodeFr,
 } from "./squadFormation";
 
 function lastName(name: string): string {
@@ -136,6 +137,7 @@ export function SquadPitch({
           ) : (
             <EmptySlot
               key={slot.id}
+              code={SLOT_CODE_FR[slot.code] ?? slot.code}
               bucket={slot.bucket}
               x={slot.x}
               y={slot.y}
@@ -300,8 +302,9 @@ function PlayerToken({
   reduced: boolean;
 }) {
   const note = noteOf(player);
-  // Vrai poste du joueur en FR (jamais le code tactique fin, souvent faux).
-  const posCode = BUCKET_CODE_FR[player.position ?? slot.bucket];
+  // Poste EXACT du joueur en FR (position_code/detail Transfermarkt), sinon
+  // poste général. Jamais le code tactique du slot (souvent faux).
+  const posCode = posCodeFr(player);
   return (
     <motion.button
       type="button"
@@ -379,19 +382,20 @@ function PlayerToken({
 }
 
 function EmptySlot({
+  code,
   bucket,
   x,
   y,
   onClick,
   reduced,
 }: {
+  code: string;
   bucket: DBPosition;
   x: number;
   y: number;
   onClick: () => void;
   reduced: boolean;
 }) {
-  const code = BUCKET_CODE_FR[bucket];
   return (
     <button
       type="button"

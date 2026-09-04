@@ -52,12 +52,8 @@ export const BUCKET_LABEL: Record<DBPosition, string> = {
 };
 
 /**
- * Code court FR du poste, affiché sur les cartes et les slots.
- *
- * On n'affiche PAS le code tactique fin du slot (LB/CB/ST/LW…) : il est
- * assigné par ordre d'ajout dans la ligne, donc un défenseur central pouvait
- * s'afficher "LB". On montre le vrai poste général du joueur (les 4 buckets
- * fiables de la base) en français : jamais faux, jamais en anglais.
+ * Code court FR du poste GÉNÉRAL (4 buckets) — fallback quand on n'a pas le
+ * poste exact du joueur. Jamais faux, jamais en anglais.
  */
 export const BUCKET_CODE_FR: Record<DBPosition, string> = {
   Goalkeeper: "GAR",
@@ -66,12 +62,117 @@ export const BUCKET_CODE_FR: Record<DBPosition, string> = {
   Attack: "ATT",
 };
 
+// ──────────────────────────────────────────────────────────────────────
+// Postes EXACTS (Transfermarkt : position_code + position_detail).
+// On affiche le vrai poste du joueur en français court quand la base le
+// connaît (roster = couverture quasi totale), sinon on retombe sur le poste
+// général (BUCKET_CODE_FR). Jamais de code tactique inventé.
+// ──────────────────────────────────────────────────────────────────────
+
+/** Code TM anglais → code FR court affiché sur la carte. */
+const CODE_FR: Record<string, string> = {
+  GK: "GB", // gardien de but
+  RB: "DD", // arrière (défenseur) droit
+  LB: "DG", // arrière (défenseur) gauche
+  CB: "DC", // défenseur central
+  RWB: "DD",
+  LWB: "DG",
+  DM: "MDF", // milieu défensif
+  CM: "MC", // milieu central
+  AM: "MOC", // milieu offensif (central)
+  RM: "MD", // milieu droit
+  LM: "MG", // milieu gauche
+  RW: "AD", // ailier droit
+  LW: "AG", // ailier gauche
+  ST: "BU", // buteur / avant-centre
+  CF: "BU",
+  SS: "SA", // second attaquant
+};
+
+/** Libellé FR long de position_detail (lowercased) → code TM anglais. */
+const DETAIL_TO_CODE: Record<string, string> = {
+  "gardien de but": "GK",
+  "arrière droit": "RB",
+  "arrière gauche": "LB",
+  "défenseur central": "CB",
+  "milieu défensif": "DM",
+  "milieu central": "CM",
+  "milieu offensif": "AM",
+  "milieu droit": "RM",
+  "milieu gauche": "LM",
+  "ailier droit": "RW",
+  "ailier gauche": "LW",
+  "avant-centre": "ST",
+};
+
+/** Résout le code TM anglais exact, ou null si la base ne le sait pas. */
+function canonCode(p: DBPlayer): string | null {
+  const c = (p.position_code ?? "").toUpperCase().trim();
+  if (CODE_FR[c]) return c;
+  const d = (p.position_detail ?? "").toLowerCase().trim();
+  if (DETAIL_TO_CODE[d]) return DETAIL_TO_CODE[d];
+  return null;
+}
+
+/** Code FR court affiché : poste exact si connu, sinon poste général. */
+export function posCodeFr(p: DBPlayer): string {
+  const c = canonCode(p);
+  if (c) return CODE_FR[c] ?? "?";
+  return p.position ? BUCKET_CODE_FR[p.position] : "?";
+}
+
+/** Poste exact en toutes lettres FR (aria / infobulle), sinon poste général. */
+export function posLabelFr(p: DBPlayer): string {
+  if (p.position_detail && p.position_detail.trim() && DETAIL_TO_CODE[p.position_detail.toLowerCase().trim()]) {
+    return p.position_detail.trim();
+  }
+  return p.position ? BUCKET_LABEL[p.position] : "n.d.";
+}
+
+/**
+ * Rang latéral pour placer le joueur sur le bon côté du terrain :
+ * 0 = gauche, 1 = axe, 2 = droite. Déduit du code exact ; axe par défaut.
+ */
+export function sideRank(p: DBPlayer): 0 | 1 | 2 {
+  const c = canonCode(p);
+  if (!c) return 1;
+  if (c === "LB" || c === "LM" || c === "LW" || c === "LWB") return 0;
+  if (c === "RB" || c === "RM" || c === "RW" || c === "RWB") return 2;
+  return 1;
+}
+
+/** Code FR court attendu par un slot de la formation (slot vide). */
+export const SLOT_CODE_FR: Record<string, string> = {
+  GK: "GB",
+  LB: "DG",
+  CB: "DC",
+  RB: "DD",
+  CM: "MC",
+  LW: "AG",
+  ST: "BU",
+  RW: "AD",
+};
+
 export interface PlacedSlot {
   slot: FormationSlot;
   player: DBPlayer | null;
 }
 
-/** Auto-assigne les titulaires aux slots du 4-3-3 par ligne, ordre d'ajout. */
+/** Côté d'un slot de la formation : 0 gauche, 1 axe, 2 droite. */
+function slotSide(code: string): 0 | 1 | 2 {
+  if (code === "LB" || code === "LW" || code === "LM") return 0;
+  if (code === "RB" || code === "RW" || code === "RM") return 2;
+  return 1;
+}
+
+/**
+ * Auto-assigne les titulaires aux slots du 4-3-3 en appariant chaque joueur
+ * au slot dont le CÔTÉ colle le mieux à son poste exact : un arrière gauche
+ * va au slot gauche, un ailier droit au slot droit, un central à l'axe. Les
+ * postes latéraux sont placés d'abord (ils ont une contrainte de côté forte),
+ * les axiaux comblent le reste. Si une ligne est incomplète, ce sont les slots
+ * du bon côté qui restent vides, pas un joueur mal placé.
+ */
 export function assignStarters(starters: DBPlayer[]): {
   placed: PlacedSlot[];
   overflow: DBPlayer[];
@@ -87,17 +188,39 @@ export function assignStarters(starters: DBPlayer[]): {
     if (p.position && byBucket[p.position]) byBucket[p.position].push(p);
     else overflow.push(p);
   }
-  const cursor: Record<string, number> = {};
-  const placed = FORMATION_433.map((slot) => {
-    const arr = byBucket[slot.bucket];
-    const i = cursor[slot.bucket] ?? 0;
-    cursor[slot.bucket] = i + 1;
-    return { slot, player: arr[i] ?? null };
-  });
-  // Titulaires au-delà du quota de leur ligne (débordement) : hors terrain.
+
+  const placed: PlacedSlot[] = FORMATION_433.map((slot) => ({ slot, player: null }));
+  const slotsByBucket: Record<DBPosition, PlacedSlot[]> = {
+    Goalkeeper: [],
+    Defender: [],
+    Midfield: [],
+    Attack: [],
+  };
+  for (const ps of placed) slotsByBucket[ps.slot.bucket].push(ps);
+
   (Object.keys(byBucket) as DBPosition[]).forEach((b) => {
-    overflow.push(...byBucket[b].slice(BUCKET_QUOTA[b]));
+    const slots = slotsByBucket[b];
+    // Latéraux d'abord (contrainte de côté forte : |side-1| = 1), axiaux ensuite.
+    const players = byBucket[b]
+      .slice()
+      .sort((a, c) => Math.abs(sideRank(c) - 1) - Math.abs(sideRank(a) - 1));
+    for (const p of players) {
+      const ps = sideRank(p);
+      let best: PlacedSlot | null = null;
+      let bestScore = Infinity;
+      for (const entry of slots) {
+        if (entry.player) continue;
+        const score = Math.abs(ps - slotSide(entry.slot.code));
+        if (score < bestScore) {
+          bestScore = score;
+          best = entry;
+        }
+      }
+      if (best) best.player = p;
+      else overflow.push(p); // ligne pleine (au-delà du quota)
+    }
   });
+
   return { placed, overflow };
 }
 
