@@ -23,8 +23,9 @@ export const PlayerPickCard = forwardRef<
     picked: boolean;
     onToggle: () => void;
     index: number;
+    disabled?: boolean;
   }
->(function PlayerPickCard({ player, picked, onToggle, index }, ref) {
+>(function PlayerPickCard({ player, picked, onToggle, index, disabled = false }, ref) {
   const note = noteOf(player);
   return (
     <motion.button
@@ -32,13 +33,16 @@ export const PlayerPickCard = forwardRef<
       type="button"
       role="checkbox"
       aria-checked={picked}
-      onClick={onToggle}
+      aria-disabled={disabled}
+      onClick={() => {
+        if (!disabled) onToggle();
+      }}
       layout
       initial={{ opacity: 0, scale: 0.96 }}
-      animate={{ opacity: 1, scale: 1 }}
+      animate={{ opacity: disabled ? 0.4 : 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.96 }}
-      whileHover={{ y: -2 }}
-      whileTap={{ scale: 0.98 }}
+      whileHover={disabled ? undefined : { y: -2 }}
+      whileTap={disabled ? undefined : { scale: 0.98 }}
       transition={{
         layout: { type: "spring", stiffness: 380, damping: 34 },
         default: { duration: 0.3, delay: Math.min(index * 0.02, 0.3), ease: [0.16, 1, 0.3, 1] },
@@ -47,6 +51,7 @@ export const PlayerPickCard = forwardRef<
         "group relative flex items-center gap-3 rounded-2xl p-3 text-left",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         picked ? "liquid-glass-gold" : "liquid-glass hover:border-white/20",
+        disabled && "cursor-not-allowed",
       )}
     >
       <div className="relative shrink-0">

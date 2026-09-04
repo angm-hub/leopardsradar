@@ -31,8 +31,12 @@ import {
   groupKeyOf,
   FORMATION_META,
   GROUP_TITLE,
+  GROUP_BUCKET,
+  BUCKET_QUOTA,
+  SQUAD_SIZE,
   type Formation,
   type GroupKey,
+  type Bucket,
 } from "@/components/ma-liste/guided/guidedGroups";
 import type { DBPlayer } from "@/types/dbPlayer";
 
@@ -103,6 +107,17 @@ export default function MaListeGuided() {
         : phase === "group"
           ? 2 + groupIndex
           : 2 + (groups.length || 0);
+
+  // Suivi d'effectif : comptes par ligne (GAR/DÉF/MIL/ATT) vs quotas Desabre.
+  const bucketCounts = useMemo(() => {
+    const c: Record<Bucket, number> = { GAR: 0, DEF: 0, MIL: 0, ATT: 0 };
+    (Object.keys(selections) as GroupKey[]).forEach((g) => {
+      c[GROUP_BUCKET[g]] += selections[g]?.length ?? 0;
+    });
+    return c;
+  }, [selections]);
+  const activeBucket: Bucket | null =
+    phase === "group" && groups[groupIndex] ? GROUP_BUCKET[groups[groupIndex].key] : null;
 
   // Candidats indexés par groupe, triés par pertinence.
   const candidatesByGroup = useMemo(() => {
@@ -217,9 +232,9 @@ export default function MaListeGuided() {
               Léopards <span className="text-foreground/45">Radar</span>
             </Link>
             <div className="flex items-center gap-4">
-              {totalPicked() > 0 ? (
-                <span className="font-mono text-[11px] uppercase tracking-[0.15em] text-foreground/45">
-                  {totalPicked()} choisis
+              {phase !== "intro" && phase !== "formation" ? (
+                <span className="font-mono text-[11px] uppercase tracking-[0.15em] text-foreground/55">
+                  <span className="text-primary">{totalPicked()}</span> / {SQUAD_SIZE}
                 </span>
               ) : null}
               <button
@@ -236,6 +251,13 @@ export default function MaListeGuided() {
               </button>
             </div>
           </div>
+
+          {/* Suivi d'effectif permanent (logique Desabre : 26) */}
+          {phase === "group" || phase === "recap" ? (
+            <div className="container-site pb-3">
+              <SquadTracker counts={bucketCounts} total={totalPicked()} active={activeBucket} />
+            </div>
+          ) : null}
         </div>
 
         {/* Contenu de l'étape */}
@@ -483,8 +505,13 @@ function GroupStep({
             {count}
             <span className="text-foreground/35">/{meta.target}</span>
           </div>
-          <div className="font-mono text-[10px] uppercase tracking-[0.15em] text-foreground/45">
-            conseillé
+          <div
+            className={cn(
+              "font-mono text-[10px] uppercase tracking-[0.15em]",
+              count >= meta.target ? "text-primary" : "text-foreground/45",
+            )}
+          >
+            {count >= meta.target ? "groupe complet" : "à retenir"}
           </div>
         </div>
       </div>
@@ -543,6 +570,7 @@ function GroupStep({
                 picked={picked.has(p.slug)}
                 onToggle={() => onToggle(p.slug)}
                 index={i}
+                disabled={count >= meta.target && !picked.has(p.slug)}
               />
             ))}
           </AnimatePresence>
@@ -645,6 +673,70 @@ function RecapStep({
         ) : null}
       </div>
       <div className="h-6" />
+    </div>
+  );
+}
+
+/* ─────────────── Suivi d'effectif (logique Desabre : 26) ─────────────── */
+function SquadTracker({
+  counts,
+  total,
+  active,
+}: {
+  counts: Record<Bucket, number>;
+  total: number;
+  active: Bucket | null;
+}) {
+  const rows: { key: Bucket; label: string }[] = [
+    { key: "GAR", label: "Gar" },
+    { key: "DEF", label: "Déf" },
+    { key: "MIL", label: "Mil" },
+    { key: "ATT", label: "Att" },
+  ];
+  return (
+    <div className="liquid-glass flex flex-wrap items-center gap-x-5 gap-y-2 rounded-2xl px-4 py-2.5">
+      {rows.map((r) => {
+        const c = counts[r.key];
+        const q = BUCKET_QUOTA[r.key];
+        const full = c >= q;
+        const isActive = active === r.key;
+        return (
+          <div
+            key={r.key}
+            className={cn(
+              "flex items-center gap-2 rounded-full px-1.5 py-0.5 transition-colors",
+              isActive && "bg-primary/10",
+            )}
+          >
+            <span
+              className={cn(
+                "font-mono text-[10px] font-semibold uppercase tracking-[0.14em]",
+                isActive ? "text-primary" : "text-foreground/45",
+              )}
+            >
+              {r.label}
+            </span>
+            <span
+              className={cn(
+                "font-mono text-[13px] tabular-nums",
+                full ? "text-primary" : "text-foreground/80",
+              )}
+            >
+              {c}
+              <span className="text-foreground/30">/{q}</span>
+            </span>
+          </div>
+        );
+      })}
+      <div className="ml-auto flex items-center gap-2">
+        <span className="hidden font-mono text-[10px] uppercase tracking-[0.15em] text-foreground/40 sm:inline">
+          Effectif
+        </span>
+        <span className="font-display text-lg tabular-nums text-foreground">
+          {total}
+          <span className="text-foreground/30">/{SQUAD_SIZE}</span>
+        </span>
+      </div>
     </div>
   );
 }
