@@ -108,13 +108,13 @@ export function LeopardsHero() {
             variants={itemVariants}
             className="text-lg md:text-xl text-foreground/75 max-w-2xl text-balance"
           >
-            {totalPlayers ?? "…"} joueurs trackés. Diaspora éligible cartographiée.
-            Statut FIFA recalculé chaque dimanche.{" "}
+            Le seul endroit où chaque Léopard, du championnat local à la
+            diaspora, est répertorié et qualifié en éligibilité.{" "}
             {phase === "before"
               ? `Mondial 2026 · J-${daysUntilKickoff}.`
               : phase === "during"
                 ? "Le Mondial des Léopards, match par match."
-                : "Des locaux du championnat à la diaspora, en continu."}
+                : ""}
           </motion.p>
 
           {phase === "before" ? (
