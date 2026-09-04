@@ -50,6 +50,16 @@ const TIER_OPTIONS: { value: TierFilter; label: string }[] = [
   { value: "tier2", label: "Tier 2" },
 ];
 
+// Filtre éligibilité FIFA (sur computed_eligibility_status). Le statut que ni
+// Transfermarkt ni Wyscout n'exposent : on le rend filtrable pour les scouts.
+const ELIG_OPTIONS: { value: string; label: string }[] = [
+  { value: "ALL", label: "Toute éligibilité" },
+  { value: "SWITCHABLE", label: "Switchable" },
+  { value: "ELIGIBLE", label: "Éligible" },
+  { value: "SELECTED", label: "Sélectionné" },
+  { value: "POTENTIALLY", label: "À instruire" },
+];
+
 // Tri du Radar. Défaut = "pertinence" : d'abord les talents au meilleur niveau
 // de jeu (score_leopards, le re-score tier-aware), puis les plus jeunes espoirs.
 // La valeur marchande ne trie plus par défaut — elle enterrait les 68% de non
@@ -251,6 +261,7 @@ export default function Radar() {
   const position = (readSearchParam(searchParams, "pos", "ALL")) as PositionFilter;
   const tier = (readSearchParam(searchParams, "tier", "ALL")) as TierFilter;
   const nation = readSearchParam(searchParams, "nat", "ALL");
+  const elig = readSearchParam(searchParams, "elig", "ALL");
   const query = readSearchParam(searchParams, "q", "");
   const sort = (readSearchParam(searchParams, "sort", "pertinence")) as SortMode;
 
@@ -303,6 +314,7 @@ export default function Radar() {
   const setPosition = (v: PositionFilter) => updateParams({ pos: v });
   const setTier = (v: TierFilter) => updateParams({ tier: v });
   const setNation = (v: string) => updateParams({ nat: v });
+  const setElig = (v: string) => updateParams({ elig: v });
   const setSort = (v: SortMode) => updateParams({ sort: v });
 
   // Debounce sur le champ search — on garde un état local pour la saisie
@@ -377,6 +389,7 @@ export default function Radar() {
       if (position !== "ALL" && p.position !== position) return false;
       if (tier !== "ALL" && p.tier !== tier) return false;
       if (nation !== "ALL" && !p.other_nationalities.includes(nation)) return false;
+      if (elig !== "ALL" && p.computed_eligibility_status !== elig) return false;
       if (debouncedQuery && !p.name.toLowerCase().includes(debouncedQuery)) return false;
 
       // Filtres avancés — âge
@@ -434,6 +447,7 @@ export default function Radar() {
     position,
     tier,
     nation,
+    elig,
     debouncedQuery,
     advancedState.ageMin,
     advancedState.ageMax,
@@ -461,11 +475,11 @@ export default function Radar() {
   // compteur gonfle par un "Voir plus" d'une recherche precedente).
   useEffect(() => {
     setVisibleCount(40);
-  }, [position, tier, nation, debouncedQuery, sort, advancedState.ageMin, advancedState.ageMax, advancedState.includeUnknownAge, advancedState.valueMin, advancedState.valueMax, advancedState.foot, advancedState.levelBand, advancedState.leagueTier, advancedState.capedRdc, advancedState.uncotedOnly, advancedState.withStats, advancedState.withPhoto, advancedState.withActiveContract]);
+  }, [position, tier, nation, elig, debouncedQuery, sort, advancedState.ageMin, advancedState.ageMax, advancedState.includeUnknownAge, advancedState.valueMin, advancedState.valueMax, advancedState.foot, advancedState.levelBand, advancedState.leagueTier, advancedState.capedRdc, advancedState.uncotedOnly, advancedState.withStats, advancedState.withPhoto, advancedState.withActiveContract]);
 
   // ── Etat actif ────────────────────────────────────────────────────────────
   const basicFiltersActive =
-    position !== "ALL" || tier !== "ALL" || nation !== "ALL" || debouncedQuery !== "";
+    position !== "ALL" || tier !== "ALL" || nation !== "ALL" || elig !== "ALL" || debouncedQuery !== "";
 
   const advancedFiltersActive =
     advancedState.ageMin !== ADVANCED_FILTERS_DEFAULT.ageMin ||
@@ -527,6 +541,12 @@ export default function Radar() {
               options={TIER_OPTIONS}
               value={tier}
               onChange={(e) => setTier(e.target.value as TierFilter)}
+            />
+            <Select
+              label="Éligibilité"
+              options={ELIG_OPTIONS}
+              value={elig}
+              onChange={(e) => setElig(e.target.value)}
             />
             <Select
               label="Nationalité"
