@@ -3,6 +3,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { Crown, X, ArrowDownUp, Trash2, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PlayerAvatar } from "@/components/ui/PlayerAvatar";
+import { ClubBadge } from "@/components/clubs/ClubBadge";
 import { useMaListeV2Store, MAX_BENCH } from "@/store/maListeV2Store";
 import type { DBPlayer, DBPosition } from "@/types/dbPlayer";
 import {
@@ -213,6 +214,17 @@ export function SquadPitch({ onPickPosition }: SquadPitchProps) {
   );
 }
 
+/**
+ * Carte joueur type FUT (refonte FC/2K, 04/09) — remplace la pastille ronde.
+ *
+ * Layout carte or : note + poste en haut-gauche (encre navy sur or), photo
+ * à droite, bandeau sombre en bas avec nom + écusson club. Le capitaine porte
+ * l'écusson C or. Interaction inchangée : clic → barre d'action du parent.
+ *
+ * A la pose, la carte monte en spring (pop) et un halo or flashe une fois
+ * (feedback satisfaisant). La note du XI qui grimpe est portée par le HUD
+ * (useCountUp), on ne double pas ici.
+ */
 function PlayerToken({
   slot,
   player,
@@ -235,51 +247,74 @@ function PlayerToken({
     <motion.button
       type="button"
       onClick={onSelect}
-      initial={reduced ? false : { opacity: 0, scale: 0.6, y: 10 }}
+      initial={reduced ? false : { opacity: 0, scale: 0.55, y: 12 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={
         reduced
           ? { duration: 0 }
-          : { delay: 0.05 + index * 0.05, type: "spring", stiffness: 240, damping: 18 }
+          : { delay: 0.04 + index * 0.045, type: "spring", stiffness: 260, damping: 17 }
       }
-      className="absolute z-10 -translate-x-1/2 -translate-y-1/2"
+      whileTap={reduced ? undefined : { scale: 0.94 }}
+      className="absolute z-10 w-[52px] -translate-x-1/2 -translate-y-1/2 sm:w-[64px]"
       style={{ left: `${slot.x}%`, top: `${slot.y}%` }}
-      aria-label={`${player.name} · ${slot.code}`}
+      aria-label={`${player.name} · ${slot.code}${note != null ? ` · ${Math.round(note)}` : ""}`}
     >
-      <div className="flex flex-col items-center gap-1">
-        <div className="relative">
-          <div
-            aria-hidden
-            className={cn(
-              "absolute inset-0 -m-1.5 rounded-full blur-md transition-opacity",
-              isCaptain ? "bg-primary/60 opacity-90" : "bg-primary/35 opacity-60",
-            )}
-          />
+      {/* Halo or : flash à la pose puis lueur douce permanente. */}
+      <motion.span
+        aria-hidden
+        initial={reduced ? false : { opacity: 0.9, scale: 1.25 }}
+        animate={{ opacity: isCaptain ? 0.7 : 0.45, scale: 1 }}
+        transition={reduced ? { duration: 0 } : { duration: 0.6, ease: "easeOut" }}
+        className="absolute inset-0 -m-1 rounded-[11px] bg-primary/50 blur-md"
+      />
+
+      <div
+        className={cn(
+          "relative flex flex-col overflow-hidden rounded-[10px] shadow-[0_6px_16px_rgba(0,0,0,0.45)] ring-1 transition-transform",
+          "bg-gradient-to-b from-star-soft via-primary to-star-deep",
+          active ? "scale-[1.06] ring-2 ring-white" : "ring-star-deep/70",
+        )}
+      >
+        {/* Zone or : note + poste (encre navy) à gauche, photo à droite. */}
+        <div className="relative h-[42px] sm:h-[52px]">
+          <div className="absolute left-1 top-0.5 z-10 flex flex-col items-center leading-none text-cobalt-deep">
+            <span className="font-mono text-[13px] font-extrabold tabular-nums sm:text-[15px]">
+              {note != null ? Math.round(note) : "–"}
+            </span>
+            <span className="mt-px font-mono text-[7px] font-bold tracking-wide sm:text-[8px]">
+              {slot.code}
+            </span>
+          </div>
           <PlayerAvatar
             name={player.name}
             src={player.image_url}
             srcAlt={player.image_url_alt}
-            className={cn(
-              "relative h-11 w-11 rounded-full border-[3px] shadow-lg transition-transform sm:h-14 sm:w-14",
-              active ? "scale-110 border-white" : "border-primary",
-            )}
-            initialsClassName="text-xs sm:text-sm"
+            className="absolute bottom-0 right-0 h-full w-[62%] object-cover object-top [mask-image:linear-gradient(to_left,black_72%,transparent)]"
+            initialsClassName="text-[11px] text-cobalt-deep sm:text-[13px]"
           />
-          {isCaptain ? (
-            <span className="absolute -left-1 -top-1 z-10 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-primary-foreground shadow">
-              <Crown className="h-3 w-3" />
-            </span>
-          ) : null}
-          {note != null ? (
-            <span className="absolute -bottom-1.5 left-1/2 z-10 -translate-x-1/2 rounded-full border border-primary/70 bg-background/95 px-1 py-px font-mono text-[8px] font-bold leading-none text-primary tabular-nums shadow-md sm:text-[9px]">
-              {Math.round(note)}
-            </span>
-          ) : null}
         </div>
-        <span className="mt-1 max-w-[92px] truncate font-serif text-[10px] font-semibold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.95)] sm:text-xs">
-          {lastName(player.name)}
-        </span>
+
+        {/* Bandeau sombre : nom + écusson club. */}
+        <div className="flex flex-col items-center gap-px bg-cobalt-deep/95 px-1 pb-1 pt-0.5">
+          <span className="w-full truncate text-center font-serif text-[8px] font-semibold uppercase tracking-[-0.01em] text-bone sm:text-[10px]">
+            {lastName(player.name)}
+          </span>
+          <span className="flex items-center gap-1 opacity-90">
+            <ClubBadge
+              tmId={player.current_club_id}
+              name={player.current_club ?? ""}
+              size={11}
+              className="rounded-[3px]"
+            />
+          </span>
+        </div>
       </div>
+
+      {isCaptain ? (
+        <span className="absolute -right-1 -top-1 z-20 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-primary-foreground shadow ring-2 ring-cobalt-deep">
+          <Crown className="h-3 w-3" />
+        </span>
+      ) : null}
     </motion.button>
   );
 }
@@ -301,23 +336,22 @@ function EmptySlot({
     <button
       type="button"
       onClick={onClick}
-      className="group absolute z-10 -translate-x-1/2 -translate-y-1/2"
+      className="group absolute z-10 w-[52px] -translate-x-1/2 -translate-y-1/2 sm:w-[64px]"
       style={{ left: `${x}%`, top: `${y}%` }}
       aria-label={`Ajouter un ${code}`}
     >
-      <div className="flex flex-col items-center gap-1">
-        <span
-          className={cn(
-            "flex h-11 w-11 items-center justify-center rounded-full border-2 border-dashed border-white/35 bg-background/30 text-white/70 backdrop-blur-sm transition-all group-hover:border-primary group-hover:bg-primary/15 group-hover:text-primary sm:h-14 sm:w-14",
-            !reduced && "animate-pulse-subtle",
-          )}
-        >
-          <Plus className="h-5 w-5" />
-        </span>
-        <span className="font-mono text-[9px] font-bold uppercase tracking-wider text-white/55">
+      {/* Silhouette de carte vide — même gabarit que la carte FUT. */}
+      <span
+        className={cn(
+          "flex aspect-[3/4] w-full flex-col items-center justify-center gap-1 rounded-[10px] border-2 border-dashed border-white/30 bg-background/25 text-white/70 backdrop-blur-sm transition-all group-hover:border-primary group-hover:bg-primary/12 group-hover:text-primary",
+          !reduced && "animate-pulse-subtle",
+        )}
+      >
+        <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
+        <span className="font-mono text-[9px] font-bold uppercase tracking-wider">
           {code}
         </span>
-      </div>
+      </span>
     </button>
   );
 }
